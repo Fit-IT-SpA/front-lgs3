@@ -136,11 +136,11 @@
             }
           }
         },
-        "devrefcuba": {
+        "dev-refcuba": {
                             "fileReplacements": [
                                 {
                                     "replace": "src/environments/environment.ts",
-                                    "with": "src/environments/environment.devrefcuba.ts"
+                                    "with": "src/environments/environment.dev-refcuba.ts"
                                 }
                             ],
                             "optimization": true,
