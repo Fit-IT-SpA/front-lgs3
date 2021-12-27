@@ -133,8 +133,7 @@
                   "maximumError": "9mb"
                 }
               ]
-            }
-          },"dev-refcuba": {
+            }, "dev-refcuba": {
                             "fileReplacements": [
                                 {
                                     "replace": "src/environments/environment.ts",
@@ -161,9 +160,8 @@
                                     "maximumWarning": "300kb",
                                     "maximumError": "500kb"
                                 }
-                            ]
-                        },
-
+                            ]       
+          },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
