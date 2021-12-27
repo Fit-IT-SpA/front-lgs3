@@ -134,9 +134,7 @@
                 }
               ]
             }
-          }
-        },
-        "dev-refcuba": {
+          },"dev-refcuba": {
                             "fileReplacements": [
                                 {
                                     "replace": "src/environments/environment.ts",
