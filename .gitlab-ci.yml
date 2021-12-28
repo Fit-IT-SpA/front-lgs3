@@ -7,6 +7,9 @@ build-VoltF0.3-Project:
   - echo "Iniciando la compilación del código"
  #- cd frontend-nielsen-dev/frontend-nielsen-dev
   - npm ci
+  - GENERATE_SOURCEMAP=false
+  - NODE_OPTIONS=\"--max_old_space_size=8192\"
+  - node --max-old-space-size=8192
  script:
   - ng build --configuration=dev-refcuba
   - echo "$PRIVATE_KEY_DEVREFCUBA" > devrefcuba.key
