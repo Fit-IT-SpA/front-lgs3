@@ -9,7 +9,7 @@ build-VoltF0.3-Project:
   - npm ci
   - GENERATE_SOURCEMAP=false
  script:
-  - ng build --configuration=dev-refcuba
+  - node --max_old_space_size=3072 node_modules/@angular/cli/bin/ng build --configuration=dev-refcuba
   - echo "$PRIVATE_KEY_DEVREFCUBA" > devrefcuba.key
   - chmod 600 devrefcuba.key 
   - cd dist/app-nielsen/
