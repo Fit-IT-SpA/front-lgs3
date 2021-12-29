@@ -6,6 +6,9 @@ build-VoltF0.3-Project:
  before_script:
   - echo "Iniciando la compilación del código"
  #- cd frontend-nielsen-dev/frontend-nielsen-dev
+  - npm -v
+  - node -v
+  - ng -v
   - npm ci
   - GENERATE_SOURCEMAP=false
  script:
