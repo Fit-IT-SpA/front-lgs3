@@ -16,5 +16,5 @@ build-VoltF0.3-Project:
   - nvm exec npm run-script build --configuration=dev-refcuba
   - echo "$PRIVATE_KEY_DEVREFCUBA" > devrefcuba.key
   - chmod 600 devrefcuba.key 
-  - cd dist/app-nielsen/
+  - cd dist/cuba/
   - ssh-agent bash -c -v 'ssh-add ../../devrefcuba.key; scp -o StrictHostKeyChecking=no -r * developer@143.198.16.105:/var/www/html/'
