@@ -1,6 +1,6 @@
 build-VoltF0.3-Project:
  stage: build
- image: trion/ng-cli
+ image: trion/ng-cli-karma:12.22.8
  only:
  - Volt-F0.3
  before_script:
