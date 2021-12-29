@@ -1,18 +1,17 @@
 build-VoltF0.3-Project:
  stage: build
- image: trion/ng-cli-karma:12.22.8
+ image: ubuntu:18.04
  only:
  - Volt-F0.3
  before_script:
-  - echo "Iniciando la compilación del código"
- #- cd frontend-nielsen-dev/frontend-nielsen-dev
-  - npm -v
-  - node -v
-  - ng version
-  - npm ci
-  - GENERATE_SOURCEMAP=false
+  - apt-get update 
+  - apt-get install curl  -y
+  # Install Node Version Manager (NVM) so we can change the node version 
+  - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
+  - echo "12.22.8" > .nvmrc
+  - nvm exec npm ci
  script:
-  - node --max_old_space_size=3072 node_modules/@angular/cli/bin/ng build --configuration=dev-refcuba
+  - nvm exec npm run-script build --configuration=dev-refcuba
   - echo "$PRIVATE_KEY_DEVREFCUBA" > devrefcuba.key
   - chmod 600 devrefcuba.key 
   - cd dist/app-nielsen/
