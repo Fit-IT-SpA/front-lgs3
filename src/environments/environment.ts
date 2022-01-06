@@ -12,7 +12,7 @@ export const environment = {
     storageBucket: "Your StorageBucket url",
     messagingSenderId: "Your Sender Id"
   },
-  serverUrl: "https://devrefcuba.fittedit.com/api"
+  serverUrl: "https://devref.fittedit.com/api"
 };
 /*
  * For easier debugging in development mode, you can import the following file
