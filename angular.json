@@ -162,7 +162,9 @@
                                     "maximumError": "500kb"
                                 }
                             ]       
-          },
+          }
+          }
+        },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
@@ -234,6 +236,4 @@
       "styleext": "scss"
     }
   }
-}
-}
 }
