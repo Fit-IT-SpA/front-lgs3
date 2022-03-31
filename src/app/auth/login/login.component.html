@@ -11,8 +11,8 @@
           </div>
           <div class="login-main"> 
             <form class="theme-form" [formGroup]="loginForm">
-              <h4>Sign in to account</h4>
-              <p>Enter your email & password to login</p>
+              <h4>Ingrese a su cuenta</h4>
+              <p>Introduzca su Rut y contraseña</p>
               <div class="form-group">
                 <label class="col-form-label">Rut</label>
                 <input class="form-control" type="text" required=""
@@ -30,7 +30,7 @@
                   </div>
               </div>
               <div class="form-group">
-                <label class="col-form-label">Password</label>
+                <label class="col-form-label">Contraseña</label>
                 <input class="form-control" [type]="show ? 'text' : 'password'" formControlName="password" required="" placeholder="****">
                 <div class="show-hide" (click)="showPassword()" *ngIf="!show"><span class="show"></span></div>
                 <div class="show-hide" (click)="showPassword()" *ngIf="show"><span class="Hide"></span></div>
@@ -49,7 +49,7 @@
                   [class.loader--text]="authService.showLoader"
                   [disabled]="!loginForm.valid || authService.showLoader"
                   (click)="doLogin()"
-                  type="button"><span>{{ authService.showLoader ? '' : 'Login' }}</span>
+                  type="button"><span>{{ authService.showLoader ? '' : 'Ingresar' }}</span>
                 </button>
               </div>
               <h6 class="text-muted mt-4 or">Or Sign in with</h6>
