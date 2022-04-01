@@ -134,12 +134,12 @@
 
     &.show {
       &:before {
-        content: "show";
+        content: "mostrar";
       }
     }
 
     &:before {
-      content: "hide";
+      content: "ocultar";
     }
   }
 }
