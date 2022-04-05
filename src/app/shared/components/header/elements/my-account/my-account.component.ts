@@ -9,9 +9,12 @@ import { Router } from '@angular/router';
 })
 export class MyAccountComponent implements OnInit {
 
+    public perfil =  JSON.parse(localStorage.getItem("profile"));
+
   constructor(public authService: AuthService, private _router: Router,) { }
 
   ngOnInit() {
+     // console.log(this.perfil);
   }
 
   logout(){

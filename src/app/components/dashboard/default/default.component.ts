@@ -23,12 +23,12 @@ export class DefaultComponent implements OnInit {
   public knob = chartData.knob;
   public knobRight = chartData.knobRight;
 
-  constructor() { 
+  constructor() {
+
   }
 
   ngOnInit() {
       
-    console.log("AAAAAAAAAAA");
     if (this.currentHour >= 0 && this.currentHour < 4) {
       this.greeting = 'Good Night'
     } else if (this.currentHour >= 4 && this.currentHour < 12) {
