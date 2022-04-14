@@ -83,8 +83,52 @@ export class NavService implements OnDestroy {
 
 	MENUITEMS: Menu[] = [
 		{
-			headTitle1: 'General', headTitle2: 'Dashboards & widgets.',
+			headTitle1: 'Menu',
 		},
+		{
+			title: 'Referidos', icon: 'users', type: 'sub', active: true, children: [
+				{ path: '', title: 'Mis referidos', type: 'link' },
+				{ path: '', title: 'Agregar referido', type: 'link' },
+				{ path: '', title: 'Mis comisiones', type: 'link' },
+				{ path: '', title: 'Gestionar ventas', type: 'link' },
+				{ path: '', title: 'Mis ventas', type: 'link' },
+				{ path: '', title: 'Agregar pregunta frecuente', type: 'link' },
+				{ path: '', title: 'Preguntas frecuentes', type: 'link' },
+
+			]
+		},
+		{
+			title: 'Servicios', icon: 'checked', type: 'sub', active: false, children: [
+				{ path: '', title: 'Listar servicios', type: 'link' },
+				{ path: '', title: 'Agregar tipo', type: 'link' },
+				{ path: '', title: 'Agregar servicio', type: 'link' },
+			]
+		},
+		{
+			title: 'Promociones', icon: 'sale-discount', type: 'sub', active: false, children: [
+				{ path: '', title: 'Agregar promocion', type: 'link' },
+				{ path: '', title: 'Promociones moviles', type: 'link' },
+				{ path: '', title: 'Promociones hogar', type: 'link' },
+			]
+		},
+		{
+			title: 'Administracion', icon: 'settings-alt', type: 'sub', active: false, children: [
+				{ path: '', title: 'Usuario', type: 'link' },
+				{ path: '', title: 'Perfil', type: 'link' },
+				{ path: '', title: 'Privilegio', type: 'link' },
+			]
+		},
+		{
+			title: 'Reporte', icon: 'file-spreadsheet', type: 'sub', active: false, children: [
+				{ path: '', title: 'Reporte', type: 'link' },
+			]
+		},
+
+/**
+		{
+			headTitle1: 'Cosas que quitar',
+		},
+
 		{
 			title: 'Dashboards', icon: 'home', type: 'sub', badgeType: 'success', badgeValue: '2', active: true, children: [
 				{ path: '/dashboard/default', title: 'Default', type: 'link' },
@@ -391,6 +435,7 @@ export class NavService implements OnDestroy {
 		{ path: '/editor', title: 'Editor', icon: 'edit', type: 'link' },
 		{ path: '/knowledgebase', title: 'Knowledgebase', icon: 'sunrise', type: 'link' },
 		{ path: '/support-ticket', title: 'Support Ticket', icon: 'users', type: 'link' }
+		*/
 	];
 
 	MEGAMENUITEMS: Menu[] = [
