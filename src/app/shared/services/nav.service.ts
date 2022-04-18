@@ -87,7 +87,7 @@ export class NavService implements OnDestroy {
 		},
 		{
 			title: 'Referidos', icon: 'users', type: 'sub', active: true, children: [
-				{ path: '', title: 'Mis referidos', type: 'link' },
+				{ path: '/referidos/mis-referidos', title: 'Mis referidos', type: 'link' },
 				{ path: '', title: 'Agregar referido', type: 'link' },
 				{ path: '', title: 'Mis comisiones', type: 'link' },
 				{ path: '', title: 'Gestionar ventas', type: 'link' },
