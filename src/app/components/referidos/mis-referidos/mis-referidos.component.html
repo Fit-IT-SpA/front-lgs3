@@ -1,4 +1,57 @@
-<app-breadcrumb [title]="'Default'" [items]="['Dashboard']" [active_item]="'Default'"></app-breadcrumb>
+<app-breadcrumb [title]="'Mis Referidos'"></app-breadcrumb>
 <div class="container-fluid">
-    <p>alo</p>
+    <form class="form-inline theme-form mt-3 billing-info">
+        <div class="form-group">
+            <div class="input-group-prepend"><span class="input-group-text"><i class="icofont icofont-pencil-alt-5"></i></span></div>
+            <input class="form-control" type="text" placeholder="Rut">
+        </div>
+        <div class="form-group">
+            <div class="input-group-prepend"><span class="input-group-text"><i class="icofont icofont-pencil-alt-5"></i></span></div>
+            <input class="form-control" type="text" placeholder="Nombre">
+        </div>
+
+        <div class="form-group"><span class="input-group-text"><i class="icofont icofont-pencil-alt-5"></i></span>
+                <select class="custom-select form-control">
+                    <option selected="">Todos los tipos</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                </select>
+        </div>
+        <div class="form-group"><span class="input-group-text"><i class="icofont icofont-pencil-alt-5"></i></span>
+            <select class="custom-select form-control">
+                <option selected="">Todos los servicios</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+            </select>
+        </div>
+        <div class="form-group"><span class="input-group-text"><i class="icofont icofont-pencil-alt-5"></i></span>
+            <select class="custom-select form-control">
+                <option selected="">Todos los estados</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+            </select>
+        </div>
+        <div class="form-group"><span class="input-group-text"><i class="icofont icofont-pencil-alt-5"></i></span>
+            <select class="custom-select form-control">
+                <option selected="">Periodo........</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+            </select>
+        </div>
+
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group ">
+                    <button class="btn btn-primary">Buscar</button>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
 </div>

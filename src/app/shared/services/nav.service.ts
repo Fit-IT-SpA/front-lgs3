@@ -88,43 +88,42 @@ export class NavService implements OnDestroy {
 		{
 			title: 'Referidos', icon: 'users', type: 'sub', active: true, children: [
 				{ path: '/referidos/mis-referidos', title: 'Mis referidos', type: 'link' },
-				{ path: '', title: 'Agregar referido', type: 'link' },
-				{ path: '', title: 'Mis comisiones', type: 'link' },
-				{ path: '', title: 'Gestionar ventas', type: 'link' },
-				{ path: '', title: 'Mis ventas', type: 'link' },
-				{ path: '', title: 'Agregar pregunta frecuente', type: 'link' },
-				{ path: '', title: 'Preguntas frecuentes', type: 'link' },
+				{ path: '/referidos/agregar-referido', title: 'Agregar referido', type: 'link' },
+				{ path: '/referidos/mis-comisiones', title: 'Mis comisiones', type: 'link' },
+				{ path: '/referidos/gestionar-ventas', title: 'Gestionar ventas', type: 'link' },
+				{ path: '/referidos/mis-ventas', title: 'Mis ventas', type: 'link' },
+				{ path: '/referidos/agragar-pregunta-frecuente', title: 'Agregar pregunta frecuente', type: 'link' },
+				{ path: '/referidos/preguntas-frecuentes', title: 'Preguntas frecuentes', type: 'link' },
 
 			]
 		},
 		{
 			title: 'Servicios', icon: 'checked', type: 'sub', active: false, children: [
-				{ path: '', title: 'Listar servicios', type: 'link' },
-				{ path: '', title: 'Agregar tipo', type: 'link' },
-				{ path: '', title: 'Agregar servicio', type: 'link' },
+				{ path: '/servicios/listar-servicios', title: 'Listar servicios', type: 'link' },
+				{ path: '/servicios/agregar-tipo', title: 'Agregar tipo', type: 'link' },
+				{ path: '/servicios/agregar-servicio', title: 'Agregar servicio', type: 'link' },
 			]
 		},
 		{
 			title: 'Promociones', icon: 'sale-discount', type: 'sub', active: false, children: [
-				{ path: '', title: 'Agregar promocion', type: 'link' },
-				{ path: '', title: 'Promociones moviles', type: 'link' },
-				{ path: '', title: 'Promociones hogar', type: 'link' },
+				{ path: '/promociones/agregar-promocion', title: 'Agregar promocion', type: 'link' },
+				{ path: '/promociones/promociones-moviles', title: 'Promociones moviles', type: 'link' },
+				{ path: '/promociones/promociones-hogar', title: 'Promociones hogar', type: 'link' },
 			]
 		},
 		{
 			title: 'Administracion', icon: 'settings-alt', type: 'sub', active: false, children: [
-				{ path: '', title: 'Usuario', type: 'link' },
-				{ path: '', title: 'Perfil', type: 'link' },
-				{ path: '', title: 'Privilegio', type: 'link' },
+				{ path: '/administracion/usuario', title: 'Usuario', type: 'link' },
+				{ path: '/administracion/perfil', title: 'Perfil', type: 'link' },
+				{ path: '/administracion/privilegio', title: 'Privilegio', type: 'link' },
 			]
 		},
 		{
 			title: 'Reporte', icon: 'file-spreadsheet', type: 'sub', active: false, children: [
-				{ path: '', title: 'Reporte', type: 'link' },
+				{ path: '/reporte/reporte', title: 'Reporte', type: 'link' },
 			]
 		},
-
-/**
+/*
 		{
 			headTitle1: 'Cosas que quitar',
 		},
@@ -435,7 +434,7 @@ export class NavService implements OnDestroy {
 		{ path: '/editor', title: 'Editor', icon: 'edit', type: 'link' },
 		{ path: '/knowledgebase', title: 'Knowledgebase', icon: 'sunrise', type: 'link' },
 		{ path: '/support-ticket', title: 'Support Ticket', icon: 'users', type: 'link' }
-		*/
+*/
 	];
 
 	MEGAMENUITEMS: Menu[] = [

@@ -3,8 +3,8 @@ import { Routes } from '@angular/router';
 
 export const content: Routes = [
   {
-    path: 'mis-referidos',
-    loadChildren: () => import('../../components/referidos/referidos.module').then(m => m.DashboardModule)
+    path: 'referidos',
+    loadChildren: () => import('../../components/referidos/referidos.module').then(m => m.ReferidosModule)
   },
   {
     path: 'dashboard',

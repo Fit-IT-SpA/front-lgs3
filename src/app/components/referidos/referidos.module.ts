@@ -33,4 +33,4 @@ import { MisReferidosComponent } from './mis-referidos/mis-referidos.component';
         ReferidosRoutingModule
     ]
 })
-export class DashboardModule { }
+export class ReferidosModule { }
