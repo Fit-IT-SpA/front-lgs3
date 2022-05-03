@@ -98,28 +98,28 @@ export class NavService implements OnDestroy {
 			]
 		},
 		{
-			title: 'Servicios', icon: 'checked', type: 'sub', active: false, children: [
+			title: 'Servicios', icon: 'box', type: 'sub', active: false, children: [
 				{ path: '/servicios/listar-servicios', title: 'Listar servicios', type: 'link' },
 				{ path: '/servicios/agregar-tipo', title: 'Agregar tipo', type: 'link' },
 				{ path: '/servicios/agregar-servicio', title: 'Agregar servicio', type: 'link' },
 			]
 		},
 		{
-			title: 'Promociones', icon: 'sale-discount', type: 'sub', active: false, children: [
+			title: 'Promociones', icon: 'shopping-bag', type: 'sub', active: false, children: [
 				{ path: '/promociones/agregar-promocion', title: 'Agregar promocion', type: 'link' },
 				{ path: '/promociones/promociones-moviles', title: 'Promociones moviles', type: 'link' },
 				{ path: '/promociones/promociones-hogar', title: 'Promociones hogar', type: 'link' },
 			]
 		},
 		{
-			title: 'Administracion', icon: 'settings-alt', type: 'sub', active: false, children: [
+			title: 'Administracion', icon: 'edit', type: 'sub', active: false, children: [
 				{ path: '/administracion/usuario', title: 'Usuario', type: 'link' },
 				{ path: '/administracion/perfil', title: 'Perfil', type: 'link' },
 				{ path: '/administracion/privilegio', title: 'Privilegio', type: 'link' },
 			]
 		},
 		{
-			title: 'Reporte', icon: 'file-spreadsheet', type: 'sub', active: false, children: [
+			title: 'Reporte', icon: 'file-text', type: 'sub', active: false, children: [
 				{ path: '/reporte/reporte', title: 'Reporte', type: 'link' },
 			]
 		},
