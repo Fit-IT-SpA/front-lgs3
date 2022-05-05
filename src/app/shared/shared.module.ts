@@ -5,6 +5,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DragulaModule } from 'ng2-dragula';
 import { TranslateModule } from '@ngx-translate/core';
+import {
+    MatDialog,
+    MatDialogRef,
+    MAT_DIALOG_DATA,
+    MatDialogModule
+} from '@angular/material/dialog';
+import { OverlayModule } from '@angular/cdk/overlay';
 // Components
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 import { CustomizerComponent } from './components/customizer/customizer.component';
@@ -34,6 +41,11 @@ import { ShowOptionsDirective } from './directives/show-options.directive';
 import { ChatService } from './services/chat.service';
 import { LayoutService } from './services/layout.service';
 import { NavService } from './services/nav.service';
+
+import { UserService } from './services/user.service';
+import { ServiceTypeService } from './services/service-type.service';
+import { ReferersService } from './services/referers.service';
+
 
 @NgModule({
   declarations: [
@@ -67,12 +79,19 @@ import { NavService } from './services/nav.service';
     ReactiveFormsModule,
     NgbModule,
     DragulaModule.forRoot(),
-    TranslateModule
+    TranslateModule,
+    OverlayModule,
+    MatDialogModule
+    
   ],
   providers: [
     NavService,
     ChatService,
-    LayoutService
+    LayoutService,
+    MatDialog,
+    UserService,
+    ServiceTypeService,
+    ReferersService
   ],
   exports: [
     NgbModule,

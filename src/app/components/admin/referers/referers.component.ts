@@ -9,7 +9,7 @@ import { Group } from '../../../shared/model/group';
 import { Customer } from '../../../shared/model/costumer';
 import { Router } from '@angular/router';
 import { UtilService } from '../../../shared/services/util.service';
-// import { ReferersService } from '../../../shared/services/referers.service';
+ import { ReferersService } from '../../../shared/services/referers.service';
 import { Referer } from '../../../shared/model/referer';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ClipboardService } from 'ngx-clipboard';
@@ -71,7 +71,7 @@ export class ReferersComponent implements OnInit, OnDestroy  {
     constructor(
 
     public formBuilder: FormBuilder,
-   // private srv: ReferersService,
+    private srv: ReferersService,
     private srv2: ServiceTypeService,
     private router: Router,
     private utilSrv: UtilService,
@@ -86,7 +86,9 @@ export class ReferersComponent implements OnInit, OnDestroy  {
 ngOnInit(): void {
 console.log('2')
         this.profile = JSON.parse(localStorage.getItem('profile'));
-      /*  this.filterForm = this.formBuilder.group({
+        
+        
+        this.filterForm = this.formBuilder.group({
             rut: '',
             fullname: '',
             service: '',
@@ -95,17 +97,17 @@ console.log('2')
             date: ''
         });
 
-       */
+       
         this.parameters.referent = this.profile.rut;
         this.parameters.date = (new Date()).toISOString().
         replace(/T/, ' ').      // replace T with a space
             replace(/\..+/, '');     // delete the dot and everything after
- //       this.getCount();
- //       this.getPeriods();
+        this.getCount();
+        this.getPeriods();
     }
 
     private find() {
-        /*
+        
         this.subscription.add(
             this.srv.findWithParams(this.parameters, this.currentPage).subscribe(
                 (response) => {
@@ -119,10 +121,10 @@ console.log('2')
             )
         );
 
-         */
+         
     }
     private getPeriods() {
-        /*
+        
         this.subscription.add(
             this.srv.getPeriods().subscribe(
                 (response) => {
@@ -143,13 +145,13 @@ console.log('2')
             )
         );
 
-         */
+         
     }
 
 
     private findUser() {
         let profile = JSON.parse(localStorage.getItem('profile'));
-        /*
+        
         this.subscription.add(
             this.userSrv.findByRut(profile.rut).subscribe(
                 (response) => {
@@ -159,12 +161,11 @@ console.log('2')
             )
         );
 
-         */
     }
 
 
     private getCount() {
-        /*
+        
         this.subscription.add(
             this.srv.countWithParams(this.parameters).subscribe(
                 (response) => {
@@ -178,7 +179,7 @@ console.log('2')
             )
         );
 
-         */
+         
     }
     ngOnDestroy() {
         if (this.subscription) this.subscription.unsubscribe();

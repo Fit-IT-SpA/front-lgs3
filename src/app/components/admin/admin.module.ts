@@ -11,7 +11,6 @@ import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 import { AgmCoreModule } from '@agm/core';
 import { AdminRoutingModule } from './admin-routing.module';
-import { ServiceTypeService } from '../../shared/services/service-type.service';
 
 import { ReferersComponent } from './referers/referers.component';
 
@@ -32,9 +31,6 @@ import { ReferersComponent } from './referers/referers.component';
             apiKey: ''
         }),
         AdminRoutingModule
-    ],
-    providers: [
-        {provide: ServiceTypeService},
     ]
 })
 export class AdminModule { }
