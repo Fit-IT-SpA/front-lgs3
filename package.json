@@ -13,7 +13,9 @@
   "dependencies": {
     "@agm/core": "^1.1.0",
     "@angular/animations": "~12.0.0",
-    "@angular/cdk": "^11.0.1",
+    "@angular/cdk": "12.2.13",
+    "ngx-clipboard": "^14.0.1",
+    "@angular/material": "12.2.13",
     "@angular/common": "~12.0.0",
     "@angular/compiler": "~12.0.0",
     "@angular/core": "~12.0.0",

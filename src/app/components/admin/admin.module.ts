@@ -6,16 +6,17 @@ import { ChartistModule } from 'ng-chartist';
 import { ChartsModule } from 'ng2-charts';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { NgApexchartsModule } from 'ng-apexcharts';
-import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 import { AgmCoreModule } from '@agm/core';
-import { ReferidosRoutingModule } from './referidos-routing.module';
+import { AdminRoutingModule } from './admin-routing.module';
+import { ServiceTypeService } from '../../shared/services/service-type.service';
 
-import { MisReferidosComponent } from './mis-referidos/mis-referidos.component';
+import { ReferersComponent } from './referers/referers.component';
 
 @NgModule({
-    declarations: [MisReferidosComponent],
+    declarations: [ReferersComponent],
     imports: [
         CommonModule,
         ChartistModule,
@@ -30,7 +31,10 @@ import { MisReferidosComponent } from './mis-referidos/mis-referidos.component';
         AgmCoreModule.forRoot({
             apiKey: ''
         }),
-        ReferidosRoutingModule
+        AdminRoutingModule
+    ],
+    providers: [
+        {provide: ServiceTypeService},
     ]
 })
-export class ReferidosModule { }
+export class AdminModule { }

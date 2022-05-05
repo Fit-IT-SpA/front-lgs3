@@ -3,8 +3,8 @@ import { Routes } from '@angular/router';
 
 export const content: Routes = [
   {
-    path: 'referidos',
-    loadChildren: () => import('../../components/referidos/referidos.module').then(m => m.ReferidosModule)
+    path: 'admin',
+    loadChildren: () => import('../../components/admin/admin.module').then(m => m.AdminModule)
   },
   {
     path: 'dashboard',

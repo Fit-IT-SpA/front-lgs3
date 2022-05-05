@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { MisReferidosComponent } from './mis-referidos/mis-referidos.component';
+import { ReferersComponent } from './referers/referers.component';
 import {AgregarReferidoComponent} from './agregar-referido/agregar-referido.component';
 
 
@@ -9,8 +9,8 @@ const routes: Routes = [
         path: '',
         children: [
             {
-                path: 'mis-referidos',
-                component: MisReferidosComponent
+                path: 'referers',
+                component: ReferersComponent
             },
             {
                 path: 'agregar-referido',
@@ -23,4 +23,4 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]
 })
-export class ReferidosRoutingModule { }
+export class AdminRoutingModule { }

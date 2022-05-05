@@ -87,13 +87,13 @@ export class NavService implements OnDestroy {
 		},
 		{
 			title: 'Referidos', icon: 'users', type: 'sub', active: true, children: [
-				{ path: '/referidos/mis-referidos', title: 'Mis referidos', type: 'link' },
-				{ path: '/referidos/agregar-referido', title: 'Agregar referido', type: 'link' },
-				{ path: '/referidos/mis-comisiones', title: 'Mis comisiones', type: 'link' },
-				{ path: '/referidos/gestionar-ventas', title: 'Gestionar ventas', type: 'link' },
-				{ path: '/referidos/mis-ventas', title: 'Mis ventas', type: 'link' },
-				{ path: '/referidos/agragar-pregunta-frecuente', title: 'Agregar pregunta frecuente', type: 'link' },
-				{ path: '/referidos/preguntas-frecuentes', title: 'Preguntas frecuentes', type: 'link' },
+				{ path: '/admin/referers', title: 'Mis referidos', type: 'link' },
+				{ path: '/admin/agregar-referido', title: 'Agregar referido', type: 'link' },
+				{ path: '/admin/mis-comisiones', title: 'Mis comisiones', type: 'link' },
+				{ path: '/admin/gestionar-ventas', title: 'Gestionar ventas', type: 'link' },
+				{ path: '/admin/mis-ventas', title: 'Mis ventas', type: 'link' },
+				{ path: '/admin/agragar-pregunta-frecuente', title: 'Agregar pregunta frecuente', type: 'link' },
+				{ path: '/admin/preguntas-frecuentes', title: 'Preguntas frecuentes', type: 'link' },
 
 			]
 		},
