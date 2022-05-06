@@ -123,6 +123,15 @@ console.log('2')
 
          
     }
+    changeFilter() {
+        this.parameters.rut = clean(this.filterForm.controls.rut.value);
+        this.parameters.fullname = this.filterForm.controls.fullname.value;
+        this.parameters.service = this.filterForm.controls.service.value;
+        this.parameters.serviceType = this.filterForm.controls.serviceType.value;
+        this.parameters.status = this.filterForm.controls.status.value;
+        this.parameters.date = this.filterForm.controls.date.value + "-01 00:00:00";
+        this.getCount();
+    }
     private getPeriods() {
         
         this.subscription.add(
@@ -178,10 +187,134 @@ console.log('2')
                 }
             )
         );
+    }
 
-         
+
+
+    verObservacion(referer: Referer, accion: number): void {
+        /*
+        const dialogRef = this.dialog.open(DialogRefererDetails, {
+            data: {
+                referer: referer,
+                accion: accion,
+            },
+            autoFocus: false,
+            maxHeight: "90vh",
+        });
+
+         */
     }
     ngOnDestroy() {
         if (this.subscription) this.subscription.unsubscribe();
     }
 }
+/*
+    @Component({
+        selector: "referers-seller-sells-information",
+        templateUrl: "./referers-detail/referers-info-details.component.html",
+        styleUrls: ["./referers-detail/referers-info-details.component.scss"],
+        providers: [ReferersService, ServiceTypeService]
+    })
+
+
+    export class DialogRefererDetails {
+    private subscription: Subscription = new Subscription();
+    services: Service[] = null;
+    serviceTypes: ServiceType[] = null;
+    refererFinal: Referer;
+    public toster: ToastrService;
+        constructor(
+        public dialogRef: MatDialogRef<DialogRefererDetails>,
+        @Inject(MAT_DIALOG_DATA) public data: { referer: Referer; accion: number},
+        private srv: ReferersService,
+        private srv2: ServiceTypeService,
+        //private snack: MatSnackBar,
+    ) {
+        this.refererFinal = this.data.referer;
+        this.getServiceTypes();
+        this.cargarServicios(this.data.referer.serviceType);
+    }
+    private getServiceTypes() {
+        this.subscription.add(
+            this.srv2.findAll().subscribe(
+                (response) => {
+                    this.serviceTypes = response;
+                }
+            )
+        );
+    }
+
+    public cargarServicios(serviceType: string) {
+        this.subscription.add(
+            this.srv.findServices(serviceType).subscribe(
+                (response) => {
+                    this.services = response;
+                }
+            )
+        );
+}
+    public actualizarServicios(serviceType: string) {
+        this.subscription.add(
+            this.srv.findServices(serviceType).subscribe(
+                (response) => {
+                    this.refererFinal.serviceType = serviceType;
+                    this.refererFinal.service = null;
+                    this.services = response;
+                }
+            )
+        );
+    }
+
+    public seleccionarServicio(service:string) {
+        this.srv.findServiceById(service).subscribe(
+            (response) => {
+                if (response.length != 0) {
+                    this.refererFinal.service = response[0].id;
+                    this.refererFinal.serviceName = response[0].serviceName;
+                    this.refererFinal.profit = response[0].profit;
+                }
+            }
+        )
+    }
+
+    public confirmarServicio() {
+        if(this.refererFinal.service != null && this.refererFinal.serviceType != null && this.refererFinal.cantidadServicios != null) {
+            this.refererFinal.profitOriginal = this.refererFinal.profit;
+            this.refererFinal.profit = this.refererFinal.profit * this.refererFinal.cantidadServicios;
+            this.confirmarActualizacionEstadoVenta(this.refererFinal);
+        }
+    }
+
+    public seleccionarCantidadVendidos($event:any){
+        let regex: RegExp = new RegExp(/^[0-9]{1,}$/g);
+        let specialKeys: Array<string> = ['Backspace', 'Tab', 'End', 'Home', 'ArrowRight','ArrowLeft','backspace'];//enter code here
+        if (specialKeys.indexOf($event.key) !== -1) {
+            this.refererFinal.cantidadServicios = parseInt($event.target.value);
+            return true;
+        } else {
+            if (regex.test($event.key)) {
+                this.refererFinal.cantidadServicios = parseInt($event.target.value);
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    confirmarActualizacionEstadoVenta(referer: Referer) {
+        this.subscription.add(
+            this.srv.update(referer.id, referer).subscribe(
+                (response) => {
+                    this.toster.error('Se ha actualizado el estado de la venta.');
+                    this.onCloseClick();
+                }
+            )
+        );
+    }
+
+    onCloseClick(): void {
+        this.dialogRef.close();
+    }
+
+}
+*/

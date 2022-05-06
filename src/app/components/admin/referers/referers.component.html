@@ -1,53 +1,80 @@
 <app-breadcrumb [title]="'Mis Referidos'"></app-breadcrumb>
 <div class="container-fluid">
-    <form [formGroup]="filterForm" class="form-inline theme-form mt-3 billing-info">
-        <div class="form-group">
-            <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-credit-card"></i></span></div>
-            <input formControlName="rut" class="form-control" type="text" placeholder="Rut">
-        </div>
-        <div class="form-group">
-            <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-user"></i></span></div>
-            <input formControlName="fullname" class="form-control" type="text" placeholder="Nombre">
-        </div>
+        <form [formGroup]="filterForm" class="form-inline theme-form mt-3 billing-info">
+            <div class="form-group">
+                <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-credit-card"></i></span></div>
+                <input formControlName="rut" class="form-control" type="text" placeholder="Rut">
+            </div>
+            <div class="form-group">
+                <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-user"></i></span></div>
+                <input formControlName="fullname" class="form-control" type="text" placeholder="Nombre">
+            </div>
 
-        <div class="form-group"><span class="input-group-text"><i class="fa fa-file-text-o"></i></span>
-                <select formControlName="serviceType" class="custom-select form-control">
-                    <option selected="">Todos los tipos</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+            <div class="form-group"><span class="input-group-text"><i class="fa fa-file-text-o"></i></span>
+                    <select formControlName="serviceType" class="custom-select form-control">
+                        <option value="">Todos los tipos</option>
+                    </select>
+            </div>
+            <div class="form-group"><span class="input-group-text"><i class="icofont icofont-pencil-alt-5"></i></span>
+                <select formControlName="service"  class="custom-select form-control">
+                    <option value="">Todos los servicios</option>
+                    <option *ngFor="let service of services" value="{{service.id}}">
+                        {{service.serviceName}}</option>
                 </select>
-        </div>
-        <div class="form-group"><span class="input-group-text"><i class="icofont icofont-pencil-alt-5"></i></span>
-            <select formControlName="service"  class="custom-select form-control">
-                <option selected="">Todos los servicios</option>
-                <option *ngFor="let service of services" value="{{service.id}}">{{service.serviceName}}</option>
-            </select>
-        </div>
-        <div class="form-group"><span class="input-group-text"><i class="fa fa-circle-o"></i></span>
-            <select formControlName="status" class="custom-select form-control">
-                <option selected="">Todos los estados</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">{{perfil.role.name}}</option>
-            </select>
-        </div>
-        <div class="form-group"><span class="input-group-text"><i class="fa fa-calendar"></i></span>
-            <select formControlName="date" class="custom-select form-control">
-                <option *ngFor="let period of this.periods" value="{{period}}" >{{period}}</option>
+            </div>
+            <div class="form-group"><span class="input-group-text"><i class="fa fa-circle-o"></i></span>
+                <select formControlName="status" class="custom-select form-control">
+                    <option value="">Todos los Estados</option>
+                    <option value="-1">Venta Rechazada</option>
+                    <option value="1">En Gestion</option>
+                    <option value="2">Venta Finalizada</option>
+                </select>
+            </div>
+            <div class="form-group"><span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                <select formControlName="date" class="custom-select form-control">
+                    <option *ngFor="let period of this.periods" value="{{period}}" >{{period}}</option>
 
-            </select>
-        </div>
+                </select>
+            </div>
 
 
-        <div class="row">
-            <div class="col">
-                <div class="form-group ">
-                    <button class="btn btn-primary">Buscar</button>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group ">
+                        <button class="btn btn-primary" (click)="changeFilter()" >Buscar </button>
+                    </div>
                 </div>
             </div>
+        </form>
+
+    <div class="col-sm-12"></div>
+    <div class="row-">
+        <div class="col-sm-12">
+            <h5>Referidos Encontrados</h5>
         </div>
-
-    </form>
-
+        <div class="table-responsive" >
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Apellido</th>
+                    <th scope="col">Rut</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Telefono</th>
+                </tr>
+                </thead>
+                    <tbody *ngFor="let referer of referers">
+                    <tr>
+                        <th scope="row">-</th>
+                        <td>{{referer.name}}</td>
+                        <td>{{referer.lastName}}</td>
+                        <td>{{referer.rut}}</td>
+                        <td>{{referer.email}}</td>
+                        <td>{{referer.phone}}</td>
+                    </tr>
+                    </tbody>
+            </table>
+        </div>
+    </div>
 </div>
