@@ -9,7 +9,7 @@ import { Group } from '../../../shared/model/group';
 import { Customer } from '../../../shared/model/costumer';
 import { Router } from '@angular/router';
 import { UtilService } from '../../../shared/services/util.service';
- import { ReferersService } from '../../../shared/services/referers.service';
+import { ReferersService } from '../../../shared/services/referers.service';
 import { Referer } from '../../../shared/model/referer';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ClipboardService } from 'ngx-clipboard';
@@ -86,8 +86,6 @@ export class ReferersComponent implements OnInit, OnDestroy  {
 ngOnInit(): void {
 console.log('2')
         this.profile = JSON.parse(localStorage.getItem('profile'));
-        
-        
         this.filterForm = this.formBuilder.group({
             rut: '',
             fullname: '',

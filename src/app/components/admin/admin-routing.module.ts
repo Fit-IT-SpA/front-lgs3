@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ReferersComponent } from './referers/referers.component';
-import {AgregarReferidoComponent} from './agregar-referido/agregar-referido.component';
+import {AddComponent} from './referers/add/add.component';
 
 
 const routes: Routes = [
@@ -13,8 +13,8 @@ const routes: Routes = [
                 component: ReferersComponent
             },
             {
-                path: 'agregar-referido',
-                component: AgregarReferidoComponent
+                path: 'referers/add',
+                component: AddComponent
             }
         ],
     }

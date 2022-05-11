@@ -13,9 +13,10 @@ import { AgmCoreModule } from '@agm/core';
 import { AdminRoutingModule } from './admin-routing.module';
 
 import { ReferersComponent } from './referers/referers.component';
+import { AddComponent } from './referers/add/add.component';
 
 @NgModule({
-    declarations: [ReferersComponent],
+    declarations: [ReferersComponent, AddComponent],
     imports: [
         CommonModule,
         ChartistModule,

@@ -1,0 +1,106 @@
+<app-breadcrumb [title]="'Agregar Referidos'"></app-breadcrumb>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Informacion del referido</h5>
+                </div>
+                <form class="form theme-form" [formGroup]="formAdd">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <input class="form-control" id="exampleFormControlInput16" type="text"
+                                           placeholder="Nombre" formControlName="name">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <input class="form-control" id="exampleInputPassword2" type="text"
+                                           placeholder="Apellido Paterno" formControlName="lastName">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <input class="form-control" id="exampleFormControlInput15" type="text"
+                                           placeholder="Apellido Materno" formControlName="secondLastName">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <input class="form-control" id="exampleFormControlInput14" type="text"
+                                           placeholder="Rut" formControlName="rut">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <input class="form-control" id="exampleFormControlInput13" type="email"
+                                           placeholder="Email" formControlName="email">
+                                </div>
+                            </div>
+                        </div><div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <input class="form-control" id="exampleFormControlInput12" type="text"
+                                       placeholder="Celular" formControlName="phone">
+                            </div>
+                        </div>
+                    </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <select class="form-control digits" placeholder="Tipo de Servicio" formControlName="service" (change)="actualizarServicios($any($event.target).value)">
+                                        <option value ="">Tipo de servicio</option>
+                                        <option *ngFor="let serviceType of servicesTypes" value="{{serviceType.id}}">{{serviceType.description}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div><div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <select class="form-control digits" id="exampleFormControlSelect91" placeholder="Tipo de Servicio" formControlName="serviceType" (change)="actualizarPromociones($any($event.target).value)">
+                                    <option value="">Servicio</option>
+                                    <option *ngFor="let service of services" value="{{service.id}}">{{service.serviceName}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div><div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <select class="form-control digits" id="exampleFormControlSelect92" placeholder="Tipo de Servicio" formControlName="promotion">
+                                    <option value="">Promocion</option>
+                                    <option *ngFor="let promotion of promotions" value="{{promotion.name}}">{{promotion.name}}</option>
+                                    <option  value="Sin Promoción">Sin Promoción</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                        <div class="row">
+                            <div class="col"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group mb-0">
+                                    <label>Observaciones opcionales</label>
+                                    <textarea class="form-control" id="exampleFormControlTextarea4" rows="3" palceholder="Observacion" formControlName="information"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-primary" type="button" (click)="add()">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
