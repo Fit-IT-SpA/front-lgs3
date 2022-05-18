@@ -32,7 +32,7 @@ export class NavService implements OnDestroy {
 
 	// Language
 	public language: boolean = false;
-	
+
 	// Mega Menu
 	public megaMenu: boolean = false;
 	public levelMenu: boolean = false;
@@ -64,7 +64,7 @@ export class NavService implements OnDestroy {
 			}
 		});
 		if(window.innerWidth < 991) { // Detect Route change sidebar close
-			this.router.events.subscribe(event => { 
+			this.router.events.subscribe(event => {
 				this.collapseSidebar = true;
 				this.megaMenu = false;
 				this.levelMenu = false;
@@ -83,6 +83,12 @@ export class NavService implements OnDestroy {
 
 	MENUITEMS: Menu[] = [
 		{
+			headTitle1: 'Usuario',
+		},
+		{
+			title: 'Mi Perfil', icon: 'user', type: 'link', active: false, path: '/admin/my-profile'
+		},
+		{
 			headTitle1: 'Menu',
 		},
 		{
@@ -90,7 +96,7 @@ export class NavService implements OnDestroy {
 				{ path: '/admin/referers', title: 'Mis referidos', type: 'link' },
 				{ path: '/admin/referers/add', title: 'Agregar referido', type: 'link' },
 				{ path: '/admin/referers/mis-comisiones', title: 'Mis comisiones', type: 'link' },
-				{ path: '/admin/referers/gestionar-ventas', title: 'Gestionar ventas', type: 'link' },
+				{ path: '/admin/referers/seller', title: 'Gestionar ventas', type: 'link' },
 				{ path: '/admin/referers/mis-ventas', title: 'Mis ventas', type: 'link' },
 				{ path: '/admin/referers/agragar-pregunta-frecuente', title: 'Agregar pregunta frecuente', type: 'link' },
 				{ path: '/admin/referers/preguntas-frecuentes', title: 'Preguntas frecuentes', type: 'link' },

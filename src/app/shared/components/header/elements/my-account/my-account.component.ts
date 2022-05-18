@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../../services/firebase/auth.service';
 import { Router } from '@angular/router';
 
+
 @Component({
   selector: 'app-my-account',
   templateUrl: './my-account.component.html',

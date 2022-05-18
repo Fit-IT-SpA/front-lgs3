@@ -14,9 +14,12 @@ import { AdminRoutingModule } from './admin-routing.module';
 
 import { ReferersComponent } from './referers/referers.component';
 import { AddComponent } from './referers/add/add.component';
+import { SellerComponent } from './referers/seller/seller.component';
+import { MyProfileComponent } from './my-profile/my-profile.component';
+
 
 @NgModule({
-    declarations: [ReferersComponent, AddComponent],
+    declarations: [ReferersComponent, AddComponent, SellerComponent],
     imports: [
         CommonModule,
         ChartistModule,

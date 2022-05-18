@@ -1,0 +1,76 @@
+<app-breadcrumb [title]="'Gestionar ventas'"></app-breadcrumb>
+<div class="card">
+    <div class="container-fluid mt-4 ">
+        <h5>Buscar Referidos</h5>
+        <form [formGroup]="filterForm" class="form-inline theme-form mt-3 billing-info mb-2">
+            <div class="form-group">
+                <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-credit-card"></i></span></div>
+                <input formControlName="rut" class="form-control flex-grow-1" type="text" placeholder="Rut">
+            </div>
+            <div class="form-group">
+                <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-user"></i></span></div>
+                <input formControlName="fullname" class="form-control flex-grow-1" type="text" placeholder="Nombre">
+            </div>
+
+            <div class="form-group"><span class="input-group-text"><i class="fa fa-file-text-o"></i></span>
+                <select formControlName="serviceType" class="custom-select form-control flex-grow-1">
+                    <option value="">Todos los tipos</option>
+                </select>
+            </div>
+            <div class="form-group"><span class="input-group-text"><i class="icofont icofont-pencil-alt-5"></i></span>
+                <select formControlName="service"  class="custom-select form-control flex-grow-1">
+                    <option value="">Todos los servicios</option>
+                    <option *ngFor="let service of services" value="{{service.id}}">
+                        {{service.serviceName}}</option>
+                </select>
+            </div>
+            <div class="form-group"><span class="input-group-text"><i class="fa fa-circle-o"></i></span>
+                <select formControlName="status" class="custom-select form-control flex-grow-1 ">
+                    <option class="mat-select-placeholder" value="">Todos los Estados</option>
+                    <option value="-1">Venta Rechazada</option>
+                    <option value="1">En Gestion</option>
+                    <option value="2">Venta Finalizada</option>
+                </select>
+            </div>
+            <div class="form-group flex-grow-1"><span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                <select formControlName="date" class="custom-select form-control flex-grow-1">
+                    <option value="">Periodo</option>
+                    <option class="flex-grow-1" *ngFor="let period of this.periods" value="{{period}}" >{{period}}</option>
+
+                </select>
+            </div>
+
+
+            <div class="row">
+                <div class="col">
+                    <div class="form-group ">
+                        <button class="btn btn-primary" (click)="changeFilter()" >Buscar </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="card">
+            <div *ngFor="let referer of referers" class="col-md-6 col-xl-4 box-col-6 xl-50">
+                <div class="card custom-card mx-4 ...">
+                    <ul class="list-group">
+                        <li class="list-group-item card-header"><h5>{{referer.name}} {{referer.lastName}}</h5></li>
+                        <div class="card-body">
+                            <li class="list-group-item">{{formatRut(referer.rut)}}</li>
+                            <li class="list-group-item">{{referer.email}}</li>
+                            <li class="list-group-item">{{referer.phone}}</li>
+                            <li class="list-group-item" *ngIf="referer.serviceType == '619c32e43415a25ccc7e4b02'">Servicio Móvil</li>
+                            <li class="list-group-item" *ngIf="referer.serviceType == '619c32ed3415a25ccc7e4b03'">Servicio Hogar</li>
+                            <li class="list-group-item">{{referer.promotion}}</li>
+                            <li class="list-group-item">Comision base: {{referer.profit}}</li>
+                            <li class="list-group-item">{{referer.updatedAt | date: 'dd-MM-yyyy HH:mm'}}</li>
+
+                        </div>
+                    </ul>
+                    <button class="btn btn-primary m-2 mx-3 " (click)="gestionarVenta(referer.id)">Gestionar Venta</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -34,6 +34,7 @@
                 </div>
                 <div class="form-group flex-grow-1"><span class="input-group-text"><i class="fa fa-calendar"></i></span>
                     <select formControlName="date" class="custom-select form-control flex-grow-1">
+                        <option value="">Periodo</option>
                         <option class="flex-grow-1" *ngFor="let period of this.periods" value="{{period}}" >{{period}}</option>
 
                     </select>

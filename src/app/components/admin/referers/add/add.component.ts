@@ -257,15 +257,28 @@ export class AddComponent implements OnInit {
     }
 
 add() {
+        console.log('Guradaste?');
         let invalid = false;
         Object.keys(this.formAdd.controls).forEach((key) => {
             this.formAdd.controls[key].markAsTouched();
             if (this.formAdd.controls[key].status == 'INVALID') {
+                console.log(key);
+                if (key == 'name'){
+                    this.toster.show('Error: el nombre debe tener entre 3 y 40 letras.');
+                } else if (key == 'lastName'){
+                    this.toster.show('Error: el apellido paterno debe tener entre 3 y 40 letras.');
+                } else if (key == 'secondLastName'){
+                    this.toster.show('Error: el apellido materno debe tener entre 3 y 40 letras.');
+                } else if (key == 'email'){
+                    this.toster.show('Error: el email debe tener entre 10 y 40 caracteres.');
+                } else if (key == 'phone'){
+                    this.toster.show('Error: el numero de telefono debe tener 9 digitos.');
+                }
                 invalid = true;
                 return;
             }
         });
-
+        console.log(invalid);
         if (invalid == false) {
             this.save();
         }
