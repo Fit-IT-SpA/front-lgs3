@@ -1,2 +1,61 @@
+<app-breadcrumb [title]="'Mi perfil'"></app-breadcrumb>
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="pull-left">Usuario</h5>
+        </div>
+        <div class="card-body">
+            <ngb-tabset type="pills" class="tabbed-card">
+                <ngb-tab>
+                    <ng-template ngbTabTitle class="pull-right nav nav-pills nav-primary"><i
+                            class="icofont icofont-ui-home"></i>Informacion usuario</ng-template>
+                    <ng-template ngbTabContent class="tab-content">
+                        <div class="tab-pane fade show">
+                            <div class= "card-body card-columns grid grid-rows-3 gap-2">
+                                <div class="mb-2"><label class="col-form-label">Nombre</label> <button class="btn btn-light"style="min-width: 100%;" type="button"><span class="pull-left"><i class="icofont icofont-user"></i> {{perfil.role}} 1</span></button></div>
+                                <div class="mb-2"><label class="col-form-label">Apellido paterno</label> <button class="btn btn-light"style="min-width: 100%;" type="button"><span class="pull-left"><i class="icofont icofont-user"></i> {{perfil.role}} 1</span></button></div>
+                                <div class="mb-2"><label class="col-form-label">Apellido materno</label> <button class="btn btn-light"style="min-width: 100%;" type="button"><span class="pull-left"><i class="icofont icofont-user"></i> {{perfil.role}} 1</span></button></div>
+                                <div class="mb-2"><label class="col-form-label">Rut</label> <button class="btn btn-light"style="min-width: 100%;" type="button"><span class="pull-left"><i class="icofont icofont-card"></i> {{perfil.role}} 1</span></button></div>
+                                <div class="mb-2"><label class="col-form-label">Email</label> <button class="btn btn-light"style="min-width: 100%;" type="button"><span class="pull-left"><i class="icofont icofont-mail"></i> {{perfil.role}} 1</span></button></div>
+                                <div class="mb-2"><label class="col-form-label">Celular</label> <button class="btn btn-light"style="min-width: 100%;" type="button"><span class="pull-left"><i class="icofont icofont-phone"></i> {{perfil.role}} 1</span></button></div>
+                                <div class="mb-2"><label class="col-form-label">Nacionalidad</label> <button class="btn btn-light"style="min-width: 100%;" type="button"><span class="pull-left"><i class="icofont icofont-flag"></i> {{perfil.role}} 1</span></button></div>
+                                <div class="mb-2"><label class="col-form-label">Fecha de nacimiento</label> <button class="btn btn-light"style="min-width: 100%;" type="button"><span class="pull-left"><i class="icofont icofont-calendar"></i> {{perfil.role}} 1</span></button></div>
+                                <div class="mb-2"><label class="col-form-label">Rol</label> <button class="btn btn-light"style="min-width: 100%;" type="button"><span class="pull-left"><i class="icofont icofont-hat"></i> {{perfil.role}} 1</span></button></div>
+                            </div>
+                            <div class="col-start-2 col-span-1"><button class ="btn btn-primary col-start-2 col-span-1" (click)="logout()">Log Out</button></div>
+                        </div>
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab>
+                    <ng-template ngbTabTitle class="pull-right nav nav-pills nav-primary"><i
+                            class="icofont icofont-man-in-glasses"></i>Informacion laboral</ng-template>
+                    <ng-template ngbTabContent class="tab-content">
+                        <div class="tab-pane fade show">
+                            <div class= "card-body card-columns grid grid-rows-3 gap-2">
+                                <div class="mb-2"><label class="col-form-label">Compañia</label> <button class="btn btn-light"style="min-width: 100%;" type="button"><span class="pull-left"><i class="icofont icofont-building"></i> {{perfil.role}} 1</span></button></div>
+                                <div class="mb-2"><label class="col-form-label">Departamento</label> <button class="btn btn-light"style="min-width: 100%;" type="button"><span class="pull-left"><i class="icofont icofont-hat"></i> {{perfil.role}} 1</span></button></div>
+                                <div class="mb-2"><label class="col-form-label">Cargo</label> <button class="btn btn-light"style="min-width: 100%;" type="button"><span class="pull-left"><i class="icofont icofont-worker"></i> {{perfil.role}} 1</span></button></div>
+                            </div>
+                            <div class="col-start-2 col-span-1"><button class ="btn btn-primary col-start-2 col-span-1" (click)="logout()">Log Out</button></div>
+                        </div>
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab>
+                    <ng-template ngbTabTitle class="pull-right nav nav-pills nav-primary"><i
+                            class="icofont icofont-contacts"></i>Informacion cuenta</ng-template>
+                    <ng-template ngbTabContent class="tab-content">
+                        <div class="tab-pane fade show">
+                            <div class= "card-body card-columns grid grid-rows-3 gap-2">
+                                <div class="mb-2"><label class="col-form-label">Grupos</label> <button class="btn btn-light"style="min-width: 100%;" type="button"><span class="pull-left"><i class="icofont icofont-users"></i> {{perfil.role}} 1</span></button></div>
+                                <div class="mb-2"><label class="col-form-label">Actividad</label> <button class="btn btn-light"style="min-width: 100%;" type="button"><span class="pull-left"><i class="icofont icofont-tick-boxed"></i> {{perfil.role}} 1</span></button></div>
+                            </div>
+                            <div class="col-start-2 col-span-1"><button class ="btn btn-primary col-start-2 col-span-1" (click)="logout()">Log Out</button></div>
+                        </div>
+                    </ng-template>
+                </ngb-tab>
 
-<button class ='btn btn-primary' (click)="logout()">Log Out</button>
+            </ngb-tabset>
+        </div>
+    </div>
+</div>
+

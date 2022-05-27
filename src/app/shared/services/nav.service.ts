@@ -97,7 +97,7 @@ export class NavService implements OnDestroy {
 				{ path: '/admin/referers/add', title: 'Agregar referido', type: 'link' },
 				{ path: '/admin/referers/mis-comisiones', title: 'Mis comisiones', type: 'link' },
 				{ path: '/admin/referers/seller', title: 'Gestionar ventas', type: 'link' },
-				{ path: '/admin/referers/mis-ventas', title: 'Mis ventas', type: 'link' },
+				{ path: '/admin/referers/seller/sells', title: 'Mis ventas', type: 'link' },
 				{ path: '/admin/referers/agragar-pregunta-frecuente', title: 'Agregar pregunta frecuente', type: 'link' },
 				{ path: '/admin/referers/preguntas-frecuentes', title: 'Preguntas frecuentes', type: 'link' },
 

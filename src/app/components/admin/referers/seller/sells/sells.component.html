@@ -1,4 +1,4 @@
-<app-breadcrumb [title]="'Gestionar ventas'"></app-breadcrumb>
+<app-breadcrumb [title]="'Ventas en Gestion'"></app-breadcrumb>
 <div class="card">
     <div class="container-fluid mt-4 ">
         <h5>Buscar Referidos</h5>
@@ -55,7 +55,7 @@
     <div *ngFor="let referer of referers" class="col-md-6 col-xl-4 box-col-6 xl-50 mt-4 ">
         <div class="card custom-card -columns grid grid-cols-3">
             <ul class="list-group">
-                <li class="card-header mb-4"><h5>{{referer.name}} {{referer.lastName}}</h5></li>
+                <li class="card-header mb-4"><h5 class="">{{referer.name}} {{referer.lastName}}</h5></li>
                 <div class="card-body">
                     <li class="list-group-item">{{formatRut(referer.rut)}}</li>
                     <li class="list-group-item">{{referer.email}}</li>
@@ -67,7 +67,8 @@
                     <li class="list-group-item">{{referer.updatedAt | date: 'dd-MM-yyyy HH:mm'}}</li>
                 </div>
             </ul>
-            <button class="btn btn-primary m-2 mx-3 " (click)="gestionarVenta(referer.id)">Gestionar Venta</button>
+            <div><button class="btn btn-primary m-2 mx-3" (click)="actualizarEstadoVenta(referer, 2)">Aprobar Pre-Evaluacion</button></div>
+            <div><button class="btn btn-primary m-2 mx-3" (click)="actualizarEstadoVenta(referer, -2)">Rechazar Pre-Evaluacion</button></div>
         </div>
     </div>
 </div>
