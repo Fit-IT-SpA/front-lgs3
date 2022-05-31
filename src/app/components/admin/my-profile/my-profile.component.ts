@@ -4,7 +4,7 @@ import {ServiceTypeService} from '../../../shared/services/service-type.service'
 import {UserService} from '../../../shared/services/user.service';
 import { AuthService } from '../../../shared/services/firebase/auth.service';
 import { Router } from '@angular/router';
-import {BreadcrumbComponent} from '../../../shared/components/breadcrumb/breadcrumb.component';
+
 
 @Component({
     selector: 'app-default',
@@ -14,12 +14,20 @@ import {BreadcrumbComponent} from '../../../shared/components/breadcrumb/breadcr
 })
 
 export class MyProfileComponent implements OnInit{
+    user: any;
     public perfil =  JSON.parse(localStorage.getItem('profile'));
-    constructor(public authService: AuthService, private _router: Router,) { }
+    constructor(public authService: AuthService, private _router: Router, private userSrv: UserService) { }
     ngOnInit() {
+        console.log(this.perfil)
+        this.userSrv.findByRut(this.perfil.rut).subscribe(
+            (response) => {
+                this.user = response[0];
+                console.log(this.user);
+                console.log(this.perfil);
+            });
     }
     logout(){
-        localStorage.removeItem('profile')
+        localStorage.removeItem('profile');
         this._router.navigate(['/auth/login']);
     }
 }
