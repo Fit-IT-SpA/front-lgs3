@@ -89,6 +89,9 @@ export class NavService implements OnDestroy {
 			title: 'Mi Perfil', icon: 'user', type: 'link', active: false, path: '/admin/my-profile'
 		},
 		{
+			title: 'Desconectar', icon: 'radio', type: 'link', active: false, path: '/admin/desconectar'
+		},
+		{
 			headTitle1: 'Menu',
 		},
 		{

@@ -17,10 +17,18 @@ import { AddComponent } from './referers/add/add.component';
 import { SellerComponent } from './referers/seller/seller.component';
 import { MyProfileComponent } from './my-profile/my-profile.component';
 import {ReferersSellersSellsComponent} from './referers/seller/sells/sells.component';
+import {DesconectarComponent} from './desconectar/desconectar.component';
 
 
 @NgModule({
-    declarations: [ReferersComponent, AddComponent, SellerComponent, MyProfileComponent, ReferersSellersSellsComponent],
+    declarations: [
+        ReferersComponent,
+        AddComponent,
+        SellerComponent,
+        MyProfileComponent,
+        ReferersSellersSellsComponent,
+        DesconectarComponent
+    ],
     imports: [
         CommonModule,
         ChartistModule,

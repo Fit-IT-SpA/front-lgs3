@@ -5,6 +5,7 @@ import {AddComponent} from './referers/add/add.component';
 import {SellerComponent} from './referers/seller/seller.component';
 import {MyProfileComponent} from './my-profile/my-profile.component';
 import {ReferersSellersSellsComponent} from './referers/seller/sells/sells.component';
+import {DesconectarComponent} from './desconectar/desconectar.component';
 
 
 const routes: Routes = [
@@ -28,9 +29,14 @@ const routes: Routes = [
                 component: SellerComponent
             },
             {
+                path: 'desconectar',
+                component: DesconectarComponent
+            },
+            {
                 path: 'referers/seller/sells',
                 component: ReferersSellersSellsComponent
             }
+
         ],
     }
 ];

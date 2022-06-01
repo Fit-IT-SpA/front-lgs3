@@ -62,14 +62,14 @@ export class AuthService implements OnInit {
         }
       }).catch((error) => {
         this.toster.error('You have enter Wrong Email or Password.');
-      })
+      });
   }
 
   // main verification function
   SendVerificationMail() {
     return this.afAuth.auth.currentUser.sendEmailVerification()
       .then(() => {
-        this.router.navigate(['/dashboard/default']);
+        this.router.navigate(['/admin/referers']);
       })
   }
 
@@ -102,7 +102,7 @@ export class AuthService implements OnInit {
     return this.afAuth.auth.signInWithPopup(provider)
       .then((result) => {
         this.ngZone.run(() => {
-          this.router.navigate(['/dashboard/default']);
+          this.router.navigate(['/admin/referers']);
         });
         this.SetUserData(result.user);
       }).catch((error) => {
