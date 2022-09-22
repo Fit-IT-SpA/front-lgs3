@@ -2,7 +2,7 @@ build-VoltF0.3-Project:
  stage: build
  image: ubuntu:18.04
  only:
- - Volt-F0.3
+ - dev
  before_script:
   - apt-get update 
   - apt-get install curl  -y
@@ -14,8 +14,8 @@ build-VoltF0.3-Project:
   - echo "12.22.8" > .nvmrc
   - nvm exec npm ci
  script:
-  - nvm exec npm run-script build --configuration=dev-refcuba
-  - echo "$PRIVATE_KEY_DEVREFCUBA" > devrefcuba.key
-  - chmod 600 devrefcuba.key 
+  - nvm exec npm run-script build --configuration=dev
+  - echo "$PRIVATE_KEY_SUBDEV" > subdev.key
+  - chmod 600 subdev.key 
   - cd dist/cuba/
-  - ssh-agent bash -c -v 'ssh-add ../../devrefcuba.key; scp -o StrictHostKeyChecking=no -r * developer@143.198.16.105:/var/www/html/'
+  - ssh-agent bash -c -v 'ssh-add ../../devrefcuba.key; scp -o StrictHostKeyChecking=no -r * developer@138.197.2.119:/var/www/html/'
