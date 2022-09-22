@@ -1,4 +1,4 @@
 export const environment = {
     production: false,
-    serverUrl: "https://devrefcuba.fittedit.com/api"
+    serverUrl: "https://subdev.fittedit.com/api"
 };
