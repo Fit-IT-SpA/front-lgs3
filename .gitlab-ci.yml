@@ -19,3 +19,47 @@ build-dev-Project:
   - chmod 600 subdev.key 
   - cd dist/cuba/
   - ssh-agent bash -c -v 'ssh-add ../../subdev.key; scp -o StrictHostKeyChecking=no -r * developer@138.197.2.119:/var/www/html/'
+
+build-Lux1-Project:
+ stage: build
+ image: ubuntu:18.04
+ only:
+ - Lux1
+ before_script:
+  - apt-get update 
+  - apt-get install curl  -y
+  - apt-get install openssh-client -y
+  # Install Node Version Manager (NVM) so we can change the node version 
+  - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
+  - ". ~/.nvm/nvm.sh"
+  - nvm install v12.22.8
+  - echo "12.22.8" > .nvmrc
+  - nvm exec npm ci
+ script:
+  - nvm exec npm run-script build --configuration=Lux1
+  - echo "$PRIVATE_KEY_SUBDEV" > subdev.key
+  - chmod 600 subdev.key 
+  - cd dist/cuba/
+  - ssh-agent bash -c -v 'ssh-add ../../subdev.key; scp -o StrictHostKeyChecking=no -r * developer@138.197.2.119:/var/www/html/'
+
+build-Lux2-Project:
+ stage: build
+ image: ubuntu:18.04
+ only:
+ - Lux2
+ before_script:
+  - apt-get update 
+  - apt-get install curl  -y
+  - apt-get install openssh-client -y
+  # Install Node Version Manager (NVM) so we can change the node version 
+  - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
+  - ". ~/.nvm/nvm.sh"
+  - nvm install v12.22.8
+  - echo "12.22.8" > .nvmrc
+  - nvm exec npm ci
+ script:
+  - nvm exec npm run-script build --configuration=Lux2
+  - echo "$PRIVATE_KEY_SUBDEV" > subdev.key
+  - chmod 600 subdev.key 
+  - cd dist/cuba/
+  - ssh-agent bash -c -v 'ssh-add ../../subdev.key; scp -o StrictHostKeyChecking=no -r * developer@138.197.2.119:/var/www/html/'
