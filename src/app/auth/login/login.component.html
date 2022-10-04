@@ -14,19 +14,17 @@
               <h4>Ingrese a su cuenta</h4>
               <p>Refiera más, gane más!</p>
               <div class="form-group">
-                <label class="col-form-label">Rut</label>
-                <input class="form-control" type="text" required=""
+                <label class="col-form-label">Correo Electrónico</label>
+                <input class="form-control" type="email" required email 
                        autocomplete="new-password"
-                        minlength="11" maxlength="12"
-                        (blur)="onBlurRut()" (focus)="onFocusRut()"
-                        placeholder="Escriba su rut sin puntos ni guión" formControlName="email">
-                  <div *ngIf="loginForm.controls.email.touched && loginForm.controls.email.errors?.required"
+                        placeholder="Escriba su Correo" formControlName="email">
+                  <div *ngIf="loginForm.controls.email.errors && loginForm.controls.email.touched && loginForm.controls.email.errors.required"
                       class="text text-danger mt-1">
-                      Rut is required
+                      El Correo es requerido
                   </div>
-                  <div *ngIf="loginForm.controls.email.touched && loginForm.controls.email.errors?.email"
+                  <div *ngIf="loginForm.controls.email.errors && loginForm.controls.email.touched && loginForm.controls.email.errors?.email"
                       class="text text-danger mt-1">
-                      Invalid Rut
+                      Correo con formato invalido
                   </div>
               </div>
               <div class="form-group">
@@ -36,23 +34,25 @@
                 <div class="show-hide" (click)="showPassword()" *ngIf="show"><span class="Hide"></span></div>
                 <div *ngIf="loginForm.controls.password.touched && loginForm.controls.password.errors?.required"
                       class="text text-danger mt-1">
-                      Password is required
+                      La Contraseña es requerida
                 </div>
               </div>
-              <div class="form-group mb-0">
+              <div class="form-group">
                 <!--
                 <div class="checkbox p-0">
                   <input id="checkbox1" type="checkbox">
                   <label class="text-muted" for="checkbox1">Remember password</label>
-                </div>
-                <a [routerLink]="'/authentication/forgot-password'" class="link">Forgot password?</a>
-                -->
+                </div>-->
+                
                 <button class="btn btn-primary btn-block"
                   [class.loader--text]="authService.showLoader"
                   [disabled]="!loginForm.valid || authService.showLoader"
                   (click)="doLogin()"
                   type="button"><span>{{ authService.showLoader ? '' : 'Ingresar' }}</span>
                 </button>
+              </div>
+              <div class="mt-4 mb-0">
+                <a [routerLink]="'/auth/forgot-password'" class="link">Olvido su contraseña?</a>
               </div>
               <!--
               <h6 class="text-muted mt-4 or">Or Sign in with</h6>
@@ -69,10 +69,10 @@
                   </a>
                 </div>
               </div>
-              <p class="mt-4 mb-0">Don't have account?
-                <a [routerLink]="'/authentication/register/simple'" class="ml-2">Create Account</a>
-              </p>
               -->
+              <p class="mt-4 mb-0">No tiene una cuenta?
+                <a [routerLink]="'/auth/register'" class="ml-2">Crear Cuenta</a>
+              </p>
             </form>
           </div>
         </div>
