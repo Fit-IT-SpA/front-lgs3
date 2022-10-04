@@ -7,6 +7,7 @@ export class EndpointService {
   public static Acc_CheckStatus                                 = EndpointService.Api + "/recover-passwords/check/"
   public static Auth_IsLoggedIn                                 = EndpointService.Api + "/users/logged-in"
   public static Auth_Authenticate                               = EndpointService.Api + "/users/authentication";
+  public static Account_Regist                                  = EndpointService.Api + "/users/regist";
   public static Account_Profile                                 = EndpointService.Api + "/users/me";
   public static Recover_Request                                 = EndpointService.Api + "/recover-passwords"
   public static Recover_Check                                   = EndpointService.Api + "/recover-passwords/check/"

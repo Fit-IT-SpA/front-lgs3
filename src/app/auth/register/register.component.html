@@ -1,0 +1,104 @@
+<div class="container-fluid p-0">
+    <div class="row">
+      <div class="col-12">     
+        <div class="login-card">
+          <div>
+            <div class="login-main"> 
+              <form class="theme-form" [formGroup]="loginForm">
+                <h4>Crear Cuenta</h4>
+                <div class="form-group">
+                  <label class="col-form-label">Email</label>
+                  <input class="form-control" type="email" required email 
+                         autocomplete="new-password"
+                          placeholder="Escriba su email" formControlName="email">
+                    <div *ngIf="loginForm.controls.email.errors && loginForm.controls.email.touched && loginForm.controls.email.errors.required"
+                        class="text text-danger mt-1">
+                        El Email es requerido
+                    </div>
+                    <div *ngIf="loginForm.controls.email.errors && loginForm.controls.email.touched && loginForm.controls.email.errors?.email"
+                        class="text text-danger mt-1">
+                        Email con formato invalido
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-form-label">Nombre</label>
+                  <input class="form-control" type="text"
+                          placeholder="" formControlName="name">
+                    <div *ngIf="loginForm.controls.name.errors && loginForm.controls.name.touched && loginForm.controls.name.errors.required"
+                        class="text text-danger mt-1">
+                        El Nombre es requerido
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-form-label">Apellidos</label>
+                  <input class="form-control" type="text"
+                          placeholder="" formControlName="lastName">
+                    <div *ngIf="loginForm.controls.lastName.errors && loginForm.controls.lastName.touched && loginForm.controls.lastName.errors.required"
+                        class="text text-danger mt-1">
+                        Los Apellidos son requeridos
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-form-label">Tipo de Usuario</label>
+                  <select formControlName="typeUser"> 
+                      <option value="taller">Taller</option>
+                      <option value="comercio">Comercio</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="col-form-label">Contraseña</label>
+                  <input class="form-control" [type]="show ? 'text' : 'password'" formControlName="password1" required="" placeholder="">
+                  <div class="show-hide" (click)="showPassword()" *ngIf="!show"><span class="show"></span></div>
+                  <div class="show-hide" (click)="showPassword()" *ngIf="show"><span class="Hide"></span></div>
+                  <div *ngIf="loginForm.controls.password1.touched && loginForm.controls.password1.errors?.required"
+                        class="text text-danger mt-1">
+                        La Contraseña es requerida
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-form-label">Contraseña</label>
+                  <input class="form-control" [type]="show ? 'text' : 'password'" formControlName="password2" required="" placeholder="">
+                  <div class="show-hide" (click)="showPassword()" *ngIf="!show"><span class="show"></span></div>
+                  <div class="show-hide" (click)="showPassword()" *ngIf="show"><span class="Hide"></span></div>
+                  <div *ngIf="loginForm.controls.password2.touched && loginForm.controls.password2.errors?.required"
+                        class="text text-danger mt-1">
+                        La Contraseña es requerida
+                  </div>
+                </div>
+                <div class="form-group">
+                  <!--
+                  <div class="checkbox p-0">
+                    <input id="checkbox1" type="checkbox">
+                    <label class="text-muted" for="checkbox1">Remember password</label>
+                  </div>-->
+                  
+                  <button class="btn btn-primary btn-block"
+                    [class.loader--text]="authService.showLoader"
+                    [disabled]="!loginForm.valid || authService.showLoader"
+                    (click)="doLogin()"
+                    type="button"><span>{{ authService.showLoader ? '' : 'Crear Cuenta' }}</span>
+                  </button>
+                </div>
+                <!--
+                <h6 class="text-muted mt-4 or">Or Sign in with</h6>
+                <div class="social mt-4">
+                  <div class="btn-showcase">
+                    <a class="btn btn-light" (click)="loginFacebook()" target="_blank">
+                        <app-feather-icons [icon]="'facebook'" class="txt-fb"></app-feather-icons>Facebook
+                    </a>
+                    <a class="btn btn-light" (click)="loginTwitter()" target="_blank">
+                      <app-feather-icons [icon]="'twitter'" class="txt-twitter"></app-feather-icons>twitter
+                    </a>
+                    <a class="btn btn-light" (click)="loginGoogle()" target="_blank">
+                        <app-feather-icons [icon]="'log-in'" class="txt-google"></app-feather-icons>Google +
+                    </a>
+                  </div>
+                </div>
+                -->
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
