@@ -10,27 +10,27 @@ import { Router } from '@angular/router';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 
-export interface User {
+/*export interface User {
   uid: string;
   token?: string;
   email: string;
   displayName: string;
   photoURL: string;
   emailVerified: boolean;
-}
+}*/
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class RegisterComponent implements OnInit {
 
   public show: boolean = false;
   public loginForm: FormGroup;
-  public errorMessage: any;
-  public userData: any;
-  public user: firebase.User;
+  //public errorMessage: any;
+  //public userData: any;
+  //public user: firebase.User;
   public showLoader: boolean = false;
 
   private subscription: Subscription = new Subscription();
@@ -45,7 +45,11 @@ export class LoginComponent implements OnInit {
       public toster: ToastrService) {
       this.loginForm = this.fb.group({
         email: ['', [Validators.required]],
-        password: ['', [Validators.required]]
+        name: ['', [Validators.required]],
+        lastName: ['', [Validators.required]],
+        typeUser: ['', [Validators.required]],
+        password1: ['', [Validators.required]],
+        password2: ['', [Validators.required]]
       });
   }
 
@@ -103,15 +107,20 @@ export class LoginComponent implements OnInit {
     doLogin(){
         //this.loadingSrv = true;
         //this.message = null;
-        this.loginForm.disable();
+        //this.loginForm.disable();
         let credentials = {
             email : this.loginForm.controls.email.value,
-            password: this.loginForm.controls.password.value
+            name : this.loginForm.controls.name.value,
+            lastName : this.loginForm.controls.lastName.value,
+            typeUser: this.loginForm.controls.typeUser.value,
+            //typeUser: 'taller',
+            password: this.loginForm.controls.password2.value
         }
-        this.subscription.add(this._authSrv.signIn(credentials).subscribe(
+        console.log(credentials);
+        this.subscription.add(this._authSrv.register(credentials).subscribe(
             response => {
-                this._router.navigate(['/admin/referers']);
-            },
+                this._router.navigate(['/auth/login']);
+            }/*,
             response =>    { 
                 this.loginForm.enable();
                 //this.loadingSrv = false;
@@ -121,12 +130,12 @@ export class LoginComponent implements OnInit {
                 } else {
                     this.toster.error(this._i18n.getKeyWithParameters(error[0], { attempts: error[1]}));
                 }
-            })
+            }*/)
         );
     }
     
     // Set user
-  SetUserData(user) {
+  /*SetUserData(user) {
       console.log(user);
     const userRef:  AngularFirestoreDocument<any> =  this.afs.doc(`users/${user.token}`);
     console.log(userRef);
@@ -142,6 +151,6 @@ export class LoginComponent implements OnInit {
     return userRef.set(userData, {
       merge: true
     });
-  }
+  }*/
 
 }

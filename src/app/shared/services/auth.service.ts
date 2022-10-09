@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, switchMap, map } from 'rxjs/operators';
 import { AuthUtils } from '../../core/auth/auth.utils';
@@ -51,17 +51,29 @@ export class AuthServiceNielsen extends AbstractHttpService
      *
      * @param credentials
      */
-    signIn(credentials: { rut: string, password: string }): Observable<any>
+    signIn(credentials: { email: string, password: string }): Observable<any>
     {
         // Throw error, if the user is already logged in
         if ( this._authenticated )
         {
             return throwError('User is already logged in.');
         }
-        return this._httpClient.post<any>(this.apiUrl + EndpointService.Auth_Authenticate, credentials)
+        return this._httpClient.post<any>(this.apiUrl + EndpointService.Auth_Authenticate, credentials,)
         .pipe(map( response => { 
             localStorage.setItem('profile', JSON.stringify(response));
             return of(response);
+          })
+        );
+    }
+    register(credentials: { email: string, name: string, lastName: string, typeUser: string, password: string }): Observable<any> {
+        const httpOptions = {
+            headers: new HttpHeaders({
+              'Content-Type': 'application/json'
+            })
+          };
+        return this._httpClient.post<any>(this.apiUrl + EndpointService.Account_Regist, credentials, httpOptions)
+        .pipe(map( response => { 
+            return response;
           })
         );
     }
