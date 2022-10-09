@@ -3,9 +3,16 @@
       <div class="col-12">     
         <div class="login-card">
           <div>
-            <div class="login-main"> 
+            <div>
+              <a class="logo" routerLink='/'>
+                <img class="img-fluid for-light" src="assets/images/logo/Fit%20IT%20LOGOTIPO%20(color)%202021.png" style=" max-width: 200px  !important; " alt="looginpage">
+                <img class="img-fluid for-dark" src="assets/images/logo/Fit%20IT%20LOGOTIPO%20(color)%202021.png" style=" max-width: 200px" alt="looginpage">
+              </a>
+            </div>
+            <div class="login-main">
+              <h4 class="mb-4 ">Crear Cuenta</h4>
               <form class="theme-form" [formGroup]="loginForm">
-                <h4>Crear Cuenta</h4>
+
                 <div class="form-group">
                   <label class="col-form-label">Email</label>
                   <input class="form-control" type="email" required email 
@@ -40,7 +47,7 @@
                 </div>
                 <div class="form-group">
                   <label class="col-form-label">Tipo de Usuario</label>
-                  <select formControlName="typeUser"> 
+                  <select class="form-control" formControlName="typeUser">
                       <option value="taller">Taller</option>
                       <option value="comercio">Comercio</option>
                   </select>
@@ -65,14 +72,14 @@
                         La Contraseña es requerida
                   </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group mt-4">
                   <!--
                   <div class="checkbox p-0">
                     <input id="checkbox1" type="checkbox">
                     <label class="text-muted" for="checkbox1">Remember password</label>
                   </div>-->
                   
-                  <button class="btn btn-primary btn-block"
+                  <button class="btn btn-primary btn-block "
                     [class.loader--text]="authService.showLoader"
                     [disabled]="!loginForm.valid || authService.showLoader"
                     (click)="doLogin()"
