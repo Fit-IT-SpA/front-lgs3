@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { AuthService } from '../../shared/services/firebase/auth.service';
 import { AuthServiceNielsen } from '../../shared/services/auth.service';
@@ -22,7 +23,7 @@ import * as firebase from 'firebase/app';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+  styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent implements OnInit {
 
@@ -48,16 +49,20 @@ export class RegisterComponent implements OnInit {
         name: ['', [Validators.required]],
         lastName: ['', [Validators.required]],
         typeUser: ['', [Validators.required]],
-        password1: ['', [Validators.required]],
-        password2: ['', [Validators.required]]
-      });
+        password: ['', [Validators.required]],
+        confirmPassword: ['', [Validators.required]]
+      },
+    );
   }
 
   ngOnInit() {
+
   }
 
   showPassword() {
     this.show = !this.show;
+    console.log(this.loginForm.controls.confirmPassword.value);
+    console.log(this.loginForm.controls.password.value)
   }
   
   // Login With Google
@@ -103,7 +108,6 @@ export class RegisterComponent implements OnInit {
             this.loginForm.controls.email.markAsDirty();
         }
     }
-    
     doLogin(){
         //this.loadingSrv = true;
         //this.message = null;
