@@ -54,22 +54,22 @@
                 </div>
                 <div class="form-group">
                   <label class="col-form-label">Contraseña</label>
-                  <input class="form-control" [type]="show ? 'text' : 'password'" formControlName="password1" required="" placeholder="">
+                  <input class="form-control" [type]="show ? 'text' : 'password'" formControlName="password" required="" placeholder="">
                   <div class="show-hide" (click)="showPassword()" *ngIf="!show"><span class="show"></span></div>
                   <div class="show-hide" (click)="showPassword()" *ngIf="show"><span class="Hide"></span></div>
-                  <div *ngIf="loginForm.controls.password1.touched && loginForm.controls.password1.errors?.required"
+                  <div *ngIf="loginForm.controls.password.touched && loginForm.controls.password.errors?.required"
                         class="text text-danger mt-1">
                         La Contraseña es requerida
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="col-form-label">Contraseña</label>
-                  <input class="form-control" [type]="show ? 'text' : 'password'" formControlName="password2" required="" placeholder="">
+                  <label class="col-form-label">Confirmar Contraseña</label>
+                  <input class="form-control" [type]="show ? 'text' : 'password'" formControlName="confirmPassword" required="" placeholder="">
                   <div class="show-hide" (click)="showPassword()" *ngIf="!show"><span class="show"></span></div>
                   <div class="show-hide" (click)="showPassword()" *ngIf="show"><span class="Hide"></span></div>
-                  <div *ngIf="loginForm.controls.password2.touched && loginForm.controls.password2.errors?.required"
+                  <div *ngIf="loginForm.controls.confirmPassword.touched && loginForm.controls.confirmPassword.errors?.required || loginForm.controls.confirmPassword.value != loginForm.controls.password.value"
                         class="text text-danger mt-1">
-                        La Contraseña es requerida
+                        Confirmar Contraseña es requerido y debe ser igual a Contraseña
                   </div>
                 </div>
                 <div class="form-group mt-4">
@@ -79,13 +79,16 @@
                     <label class="text-muted" for="checkbox1">Remember password</label>
                   </div>-->
                   
-                  <button class="btn btn-primary btn-block "
+                  <button  class="btn btn-primary btn-block "
                     [class.loader--text]="authService.showLoader"
-                    [disabled]="!loginForm.valid || authService.showLoader"
+                    [disabled]="!loginForm.valid || authService.showLoader || loginForm.controls.confirmPassword.value != loginForm.controls.password.value"
                     (click)="doLogin()"
                     type="button"><span>{{ authService.showLoader ? '' : 'Crear Cuenta' }}</span>
                   </button>
                 </div>
+                <p class="mt-4 mb-0">
+                  <a [routerLink]="'/auth/login'" class="ml-2">Iniciar Sesion</a>
+                </p>
                 <!--
                 <h6 class="text-muted mt-4 or">Or Sign in with</h6>
                 <div class="social mt-4">
