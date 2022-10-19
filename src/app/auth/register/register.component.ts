@@ -118,7 +118,7 @@ export class RegisterComponent implements OnInit {
             lastName : this.loginForm.controls.lastName.value,
             typeUser: this.loginForm.controls.typeUser.value,
             //typeUser: 'taller',
-            password: this.loginForm.controls.password2.value
+            password: this.loginForm.controls.confirmPassword.value
         }
         console.log(credentials);
         this.subscription.add(this._authSrv.register(credentials).subscribe(
