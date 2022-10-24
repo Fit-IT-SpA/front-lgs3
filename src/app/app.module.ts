@@ -33,6 +33,8 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
+import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
+import { ActivatePasswordComponent } from './auth/activate-password/activate-password.component';
 
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -43,7 +45,9 @@ export function HttpLoaderFactory(http: HttpClient) {
   declarations: [
     AppComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    ForgotPasswordComponent,
+    ActivatePasswordComponent
   ],
   imports: [
     BrowserModule,
