@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
+import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
+import { ActivatePasswordComponent } from './auth/activate-password/activate-password.component';
 import { ContentComponent } from "./shared/components/layout/content/content.component";
 import { FullComponent } from "./shared/components/layout/full/full.component";
 import { full } from "./shared/routes/full.routes";
@@ -22,6 +24,14 @@ const routes: Routes = [
   {
     path: 'auth/register',
     component: RegisterComponent
+  },
+  {
+    path: 'auth/forgot-password',
+    component: ForgotPasswordComponent
+  },
+  {
+    path: 'auth/activate-password/:hash',
+    component: ActivatePasswordComponent
   },
   {
     path: '',
