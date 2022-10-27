@@ -11,26 +11,36 @@
                             class="icofont icofont-man-in-glasses"></i>Mi Cuenta</ng-template>
                     <ng-template ngbTabContent class="tab-content">
                         <div class="tab-pane fade show">
-                            <div class= "card-body row">
-                                <div class="col-md-4"><label class="col-form-label">Nombre Completo</label> <button class="btn btn-light"style="min-width: 100%;" type="button"><span class="pull-left"><i class="icofont icofont-user"></i>{{perfil.name}} {{user.secondLastName}}</span></button></div>
-                                <div class="col-md-4"><label class="col-form-label">Rut</label> <button class="btn btn-light"style="min-width: 100%;" type="button"><span class="pull-left"><i class="icofont icofont-card"></i> {{perfil.rut}}</span></button></div>
-                                <div class="col-md-4"><label class="col-form-label">Email</label> <button class="btn btn-light"style="min-width: 100%;" type="button"><span class="pull-left"><i class="icofont icofont-mail"></i> {{perfil.email}}</span></button></div>
-                                <div class="col-md-4"><label class="col-form-label">Celular</label> <button class="btn btn-light"style="min-width: 100%;" type="button"><span class="pull-left"><i class="icofont icofont-phone"></i> {{user.phone}}</span></button></div>
-                                <div class="col-md-4"><label class="col-form-label">Fecha de nacimiento</label> <button class="btn btn-light"style="min-width: 100%;" type="button"><span class="pull-left"><i class="icofont icofont-calendar"></i> {{user.birthdate}}</span></button></div>
-                                <div class="col-md-4"><label class="col-form-label">Rol</label> <button class="btn btn-light"style="min-width: 100%;" type="button"><span class="pull-left"><i class="icofont icofont-hat"></i> {{perfil.role.name}}</span></button></div>
+                            <div class= "card-body">
+                                <div class="row">
+                                    <div class="col col-md-4"><label class="col-form-label">Nombre Completo</label> <div class="btn btn-light" style="min-width: 100%;"><span class="pull-left"><i class="icofont icofont-user"></i></span>{{this.user.name}}{{this.user.lastName}}{{this.user.secondLastname}}</div></div>
+                                    <div class="col col-md-4"><label class="col-form-label">Email</label> <div class="btn btn-light"style="min-width: 100%;" ><span class="pull-left"><i class="icofont icofont-email"></i></span> {{this.user.email}} </div></div>
+                                    <div class="col col-md-4"><label class="col-form-label">Rol</label> <div class="btn btn-light"style="min-width: 100%;" ><span class="pull-left"><i class="icofont icofont-hat"></i></span>{{this.user.role}}</div></div>
+                                </div>
                             </div>
                         </div>
                     </ng-template>
                 </ngb-tab>
                 <ngb-tab>
-                    <ng-template ngbTabTitle class="pull-right nav nav-pills nav-primary"><i
-                            class="icofont icofont-contacts"></i>Mis comisiones</ng-template>
-                    <ng-template ngbTabContent class="tab-content">
+                    <ng-template *ngIf="this.user.companies.length > 0" ngbTabTitle class="pull-right nav nav-pills nav-primary"><i
+                            class="icofont icofont-contacts"></i>Mis Negocios</ng-template>
+                    <ng-template  ngbTabContent class="tab-content">
                         <div class="tab-pane fade show">
-                            <div class= "card-body card-columns grid grid-rows-3 gap-2">
-                                <div class="mb-2"><label class="col-form-label">Referencias mensulaes</label> <button class="btn btn-light"style="min-width: 100%;" type="button"><span class="pull-left"><i class="icon-medall"></i>999</span></button></div>
-                                <div class="mb-2"><label class="col-form-label">Comision base</label> <button class="btn btn-light"style="min-width: 100%;" type="button"><span class="pull-left"><i class="icon-money"></i>Mucho dinero</span></button></div>
-                                <div class="mb-2"><label class="col-form-label">Proyeccion estimada</label> <button class="btn btn-light"style="min-width: 100%;" type="button"><span class="pull-left"><i class="icon-money"></i>999999999</span></button></div>
+                            <div *ngFor="let company of user.companies" class= "card-body ">
+                                <div class="border mb-4"></div>
+                                <div class="row">
+                                    <div class="mb-2 col-md-4"><label class="col-form-label">Nombre Empresa</label> <button class="btn btn-light "style="min-width: 100%;" type="button"><span class="pull-left"><i class="icon-user"></i></span>{{company.name}}</button></div>
+                                    <div class="mb-2 col-md-4"><label class="col-form-label">Telefono</label> <button class="btn btn-light"style="min-width: 100%;" type="button"><span class="pull-left"><i class="icon-mobile"></i></span>{{company.phone}}</button></div>
+                                    <div class="mb-2 col-md-4"><label class="col-form-label">Direccion</label> <button class="btn btn-light"style="min-width: 100%;" type="button"><span class="pull-left"><i class="icon-direction"></i></span>{{company.direction}}</button></div>
+                                </div>
+                                <div class="row">
+                                    <div class="mb-2 col-md-4"><label class="col-form-label">Rut</label> <button class="btn btn-light"style="min-width: 100%;" type="button"><span class="pull-left"><i class="icofont icofont-mail"></i></span>{{company.rut}}</button></div>
+                                </div>
+                                <div class="row">
+                                    <div class="mb-2 col-md-4"><label class="col-form-label">Banco</label> <button class="btn btn-light"style="min-width: 100%;" type="button"><span class="pull-left"><i class="icon-home"></i></span>{{company.bank}}</button></div>
+                                    <div class="mb-2 col-md-4"><label class="col-form-label">Tipo de Cuenta</label> <button class="btn btn-light"style="min-width: 100%;" type="button"><span class="pull-left"><i class="icon-credit-card"></i></span>{{company.accountType}}</button></div>
+                                    <div class="mb-2 col-md-4"><label class="col-form-label">Numero de Cuenta</label> <button class="btn btn-light"style="min-width: 100%;" type="button"><span class="pull-left"><i class="icon-credit-card"></i></span>{{company.accountNumber}}</button></div>
+                                </div>
                             </div>
                         </div>
                     </ng-template>
