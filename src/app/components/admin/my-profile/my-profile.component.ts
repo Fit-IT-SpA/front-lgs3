@@ -4,7 +4,6 @@ import {ServiceTypeService} from '../../../shared/services/service-type.service'
 import {UserService} from '../../../shared/services/user.service';
 import { AuthService } from '../../../shared/services/firebase/auth.service';
 import { Router } from '@angular/router';
-import { Company } from '../../../shared/model/company';
 
 
 @Component({
