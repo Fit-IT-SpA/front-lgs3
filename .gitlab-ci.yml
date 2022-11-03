@@ -14,7 +14,7 @@ build-dev-Project:
   - echo "12.22.8" > .nvmrc
   - nvm exec npm ci
  script:
-  - nvm exec npm run-script ng build -- --configuration=dev
+  - nvm exec npm run-script build -- --configuration=dev
   - echo "$PRIVATE_KEY_SUBDEV" > subdev.key
   - chmod 600 subdev.key 
   - cd dist/cuba/
