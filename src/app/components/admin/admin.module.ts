@@ -18,6 +18,10 @@ import { SellerComponent } from './referers/seller/seller.component';
 import { MyProfileComponent } from './my-profile/my-profile.component';
 import {ReferersSellersSellsComponent} from './referers/seller/sells/sells.component';
 import {DesconectarComponent} from './desconectar/desconectar.component';
+import {CompaniesComponent} from './companies/companies.component';
+import {CompaniesAddComponent} from './companies/companies-add/companies-add.component';
+import {CompaniesEditComponent} from './companies/companies-edit/companies-edit.component';
+import {CompaniesViewComponent} from './companies/companies-view/companies-view.component';
 
 
 @NgModule({
@@ -27,7 +31,11 @@ import {DesconectarComponent} from './desconectar/desconectar.component';
         SellerComponent,
         MyProfileComponent,
         ReferersSellersSellsComponent,
-        DesconectarComponent
+        DesconectarComponent,
+        CompaniesComponent,
+        CompaniesAddComponent,
+        CompaniesEditComponent,
+        CompaniesViewComponent
     ],
     imports: [
         CommonModule,

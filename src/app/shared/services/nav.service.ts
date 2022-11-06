@@ -47,6 +47,8 @@ export class NavService implements OnDestroy {
 	// Full screen
 	public fullScreen: boolean = false;
 
+	public perfil =  JSON.parse(localStorage.getItem('profile'));
+
 	constructor(private router: Router) {
 		this.setScreenWidth(window.innerWidth);
 		fromEvent(window, 'resize').pipe(
@@ -93,6 +95,9 @@ export class NavService implements OnDestroy {
 		},
 		{
 			headTitle1: 'Menu',
+		},
+		{
+			path: '/admin/companies', title: this.perfil.role.slug == 'taller' ? 'Talleres' : this.perfil.role.slug == 'comercio' ? 'Comercios' : 'No posee', icon: 'git-pull-request', type: 'link'
 		},
 		{
 			title: 'Referidos', icon: 'users', type: 'sub', active: true, children: [

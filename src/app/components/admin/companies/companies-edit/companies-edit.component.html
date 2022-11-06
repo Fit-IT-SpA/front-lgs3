@@ -1,0 +1,78 @@
+<ng-template #quickViewCompaniesEdit let-modal>
+  <div class="card">
+      <div class="card-header">
+          <h5>Agregar {{this.perfil.role.name}}</h5>
+      </div>
+      <form class="form theme-form" [formGroup]="companiesForm">
+          <div class="card-body">
+              <div>
+                  <div class="col">
+                      <div class="form-group">
+                          <label for="rut">Rut</label>
+                          <input class="form-control btn-pill" id="rut" type="rut"
+                              placeholder="18.004.523-6" formControlName="rut">  
+                      </div>
+                  </div>
+              </div>
+              <div>
+                  <div class="col">
+                      <div class="form-group">
+                          <label for="name">Nombre</label>
+                          <input class="form-control btn-pill" id="name" type="name"
+                              placeholder="Nombre del {{this.perfil.role.name}}" formControlName="name">  
+                      </div>
+                  </div>
+              </div>
+              <div>
+                  <div class="col">
+                      <div class="form-group">
+                          <label for="direction">Dirección</label>
+                          <input class="form-control btn-pill" id="direction" type="direction"
+                              placeholder="Dirección del {{this.perfil.role.name}}" formControlName="direction">  
+                      </div>
+                  </div>
+              </div>
+              <div>
+                  <div class="col">
+                      <div class="form-group">
+                          <label for="phone">Teléfono</label>
+                          <input class="form-control btn-pill" id="phone" type="phone"
+                              placeholder="Teléfono del {{this.perfil.role.name}}" formControlName="phone">  
+                      </div>
+                  </div>
+              </div>
+              <div>
+                  <div class="col">
+                      <div class="form-group">
+                          <label for="accountNumber">Número de Cuenta</label>
+                          <input class="form-control btn-pill" id="accountNumber" type="accountNumber"
+                              placeholder="Número de Cuenta del {{this.perfil.role.name}}" formControlName="accountNumber">  
+                      </div>
+                  </div>
+              </div>
+              <div>
+                  <div class="col">
+                      <div class="form-group">
+                          <label for="accountType">Tipo de Cuenta</label>
+                          <input class="form-control btn-pill" id="accountType" type="accountType"
+                              placeholder="Tipo de Cuenta del {{this.perfil.role.name}}" formControlName="accountType">  
+                      </div>
+                  </div>
+              </div>
+              <div>
+                  <div class="col">
+                      <div class="form-group">
+                          <label for="bank">Banco</label>
+                          <input class="form-control btn-pill" id="bank" type="bank"
+                              placeholder="Banco" formControlName="bank">  
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="card-footer">
+              <button class="btn btn-primary mr-1" type="submit" [disabled]="!companiesForm.valid" (click)="save()">Guardar</button>
+              <button class="btn btn-primary" type="cancel" (click)="modal.dismiss('Cross click')">Cancelar</button>
+          </div>
+      </form>
+  </div>
+</ng-template>
