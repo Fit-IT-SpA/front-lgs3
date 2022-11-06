@@ -1,0 +1,46 @@
+<app-breadcrumb [title]="'Lista de '+this.companiesName" [items]="[this.companiesName]" [active_item]="'Lista de '+this.companiesName"></app-breadcrumb>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-6 col-xl-4 box-col-6 xl-50">
+        <div class="card custom-card">
+          <div class="card-profile">
+          </div>
+          <div class="text-center profile-details">
+            <button class="btn btn-primary btn-lg btn-pill" type="button" placement="top" (click)="QuickViewCompaniesAdd.openModal(this.user)" >Agregar {{this.perfil.role.name}}</button>
+          </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-4 box-col-6 xl-50" *ngFor="let company of companies">
+        <div class="card custom-card">
+          <div class="row">
+              <div class="col-4 col-sm-4" *ngIf="this.canWrite()">
+                  <button class="btn btn-primary" (click)="QuickViewCompaniesEdit.openModal(this.user, company.rut)">
+                      <!--<i data-feather="edit"></i>-->
+                      <i class="fa fa-edit"></i>
+                  </button>
+              </div>
+              <div class="col-4 col-sm-4" *ngIf="this.canWrite()">
+                  <button class="btn btn-secondary" (click)="removeWithConfirmation(company.rut)">
+                      <!--<i data-feather="trash"></i>-->
+                      <i class="fa fa-trash"></i>
+                  </button>
+              </div>
+          </div>
+          <div class="card-profile">
+              <img class="rounded-circle" src="assets/images/companies/taller.jpg" alt="" *ngIf="this.perfil.role.slug == 'taller'" (click)="QuickViewCompaniesView.openModal(this.user, company.rut)"> 
+              <img class="rounded-circle" src="assets/images/companies/comercio.jpg" alt="" *ngIf="this.perfil.role.slug == 'comercio'" (click)="QuickViewCompaniesView.openModal(this.user, company.rut)">
+          </div>
+          <div class="text-center profile-details">
+              <h4>{{company.name}}</h4>  
+              <h6>{{company.rut}}</h6>
+          </div>
+        </div>
+    </div>
+
+    
+
+  </div>
+</div>
+<app-companies-add #quickViewCompaniesAdd></app-companies-add>
+<app-companies-edit #quickViewCompaniesEdit></app-companies-edit>
+<app-companies-view #quickViewCompaniesView></app-companies-view>

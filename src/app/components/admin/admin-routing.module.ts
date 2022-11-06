@@ -6,6 +6,8 @@ import {SellerComponent} from './referers/seller/seller.component';
 import {MyProfileComponent} from './my-profile/my-profile.component';
 import {ReferersSellersSellsComponent} from './referers/seller/sells/sells.component';
 import {DesconectarComponent} from './desconectar/desconectar.component';
+import { CompaniesComponent } from './companies/companies.component';
+import { CompaniesAddComponent } from './companies/companies-add/companies-add.component';
 
 
 const routes: Routes = [
@@ -35,6 +37,10 @@ const routes: Routes = [
             {
                 path: 'referers/seller/sells',
                 component: ReferersSellersSellsComponent
+            },
+            {
+                path: 'companies',
+                component: CompaniesComponent
             }
 
         ],

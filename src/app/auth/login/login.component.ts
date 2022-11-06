@@ -110,7 +110,7 @@ export class LoginComponent implements OnInit {
         }
         this.subscription.add(this._authSrv.signIn(credentials).subscribe(
             response => {
-                this._router.navigate(['/admin/referers']);
+                this._router.navigate(['/admin/companies']);
             },
             response =>    { 
                 this.loginForm.enable();

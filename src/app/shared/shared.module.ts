@@ -45,6 +45,7 @@ import { NavService } from './services/nav.service';
 import { UserService } from './services/user.service';
 import { ServiceTypeService } from './services/service-type.service';
 import { ReferersService } from './services/referers.service';
+import { CompaniesService } from './services/companies.service';
 
 
 @NgModule({
@@ -91,7 +92,8 @@ import { ReferersService } from './services/referers.service';
     MatDialog,
     UserService,
     ServiceTypeService,
-    ReferersService
+    ReferersService,
+    CompaniesService
   ],
   exports: [
     NgbModule,
