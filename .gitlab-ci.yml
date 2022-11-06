@@ -1,6 +1,6 @@
 build-dev-Project:
  stage: build
- image: ubuntu:18.04
+ image: ubuntu:20.04
  only:
  - dev
  before_script:

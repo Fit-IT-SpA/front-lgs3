@@ -3,7 +3,6 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
   firebase: {
     apiKey: "Your Api Key",
     authDomain: "Your Auth Domain",
@@ -12,7 +11,9 @@ export const environment = {
     storageBucket: "Your StorageBucket url",
     messagingSenderId: "Your Sender Id"
   },
-  serverUrl: "http://localhost:3000"
+
+  production: false,
+  serverUrl: "https://subdev.fittedit.com/api"
 };
 /*
  * For easier debugging in development mode, you can import the following file
