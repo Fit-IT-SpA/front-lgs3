@@ -55,6 +55,21 @@ export class CompaniesService extends AbstractHttpService {
                 })
             );
     }
+    checkStatusUser(email: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http
+            .get<any>(
+                this.apiUrl + '/status/user/'+email, httpOptions)
+            .pipe(
+                map(response => {
+                    return response;
+                })
+            );
+    }
     updateByRut(user: User, rut: string) {
         const httpOptions = {
             headers: new HttpHeaders({

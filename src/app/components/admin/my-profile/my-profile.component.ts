@@ -4,6 +4,8 @@ import {ServiceTypeService} from '../../../shared/services/service-type.service'
 import {UserService} from '../../../shared/services/user.service';
 import { AuthService } from '../../../shared/services/firebase/auth.service';
 import { Router } from '@angular/router';
+import { CompaniesService } from 'src/app/shared/services/companies.service';
+import { User } from 'src/app/shared/model/user';
 
 
 @Component({
@@ -14,18 +16,17 @@ import { Router } from '@angular/router';
 })
 
 export class MyProfileComponent implements OnInit{
-    user: any;
+    user: User;
     public perfil =  JSON.parse(localStorage.getItem('profile'));
-    constructor(public authService: AuthService, private _router: Router, private userSrv: UserService) { }
+    constructor(public authService: AuthService, private _router: Router, private userSrv: UserService, private companiesSrv: CompaniesService) { }
 
     ngOnInit() {
-        //console.log(this.perfil)
-        this.userSrv.findByEmail(this.perfil.email).subscribe(
+        console.log(this.perfil);
+        this.companiesSrv.findByEmail(this.perfil.email).subscribe(
             (response) => {
-                this.user = response[0];
-                console.log(this.user);
+                this.user = response;
+                //console.log(this.user);
             });
-        console.log('alo');
     //    console.log(this.companias.length);
 
 
