@@ -39,6 +39,7 @@ import { ServiceType } from '../../../../shared/model/service-type';
 import { ServicesService } from '../../../../shared/services/services.service'; // no estaba antes
 import { ServiceTypeService } from '../../../../shared/services/service-type.service';
 import { ToastrService } from 'ngx-toastr';
+import { CompaniesService } from 'src/app/shared/services/companies.service';
 
 
 export const MY_FORMATS = {
@@ -84,6 +85,7 @@ export class AddComponent implements OnInit {
     services: Service[];
     servicesTypes: ServiceType[];
     serviceName: string = null;
+    public perfil =  JSON.parse(localStorage.getItem('profile'));
 
     // @ViewChild("stepper") private myStepper: MatStepper;
 
@@ -96,6 +98,7 @@ export class AddComponent implements OnInit {
         private srv3: ServicesService,
         public toster: ToastrService,
         public formBuilder: FormBuilder,
+        private companiesSrv: CompaniesService
         // private _adapter: DateAdapter<any>
     ) {
         // this.splash.hide();
@@ -126,8 +129,20 @@ export class AddComponent implements OnInit {
                 })
             );
          */
+            this.checkStatusUser();
             this.initForms();
             this.getServicesTypes();
+    }
+    checkStatusUser() {
+        this.subscription.add(
+            this.companiesSrv.checkStatusUser(this.perfil.email).subscribe(
+                (response) => {
+                    if (response == 0) {
+                        this.router.navigate(['/admin/companies']);
+                    }
+                }
+            )
+        );
     }
     initForms() {
         this.formAdd = this.formBuilder.group({

@@ -97,7 +97,7 @@ export class NavService implements OnDestroy {
 			headTitle1: 'Menu',
 		},
 		{
-			path: '/admin/companies', title: this.perfil.role.slug == 'taller' ? 'Talleres' : this.perfil.role.slug == 'comercio' ? 'Comercios' : 'No posee', icon: 'git-pull-request', type: 'link'
+			path: '/admin/companies', title: this.perfil.role.slug == 'taller' ? 'Talleres' : this.perfil.role.slug == 'comercio' ? 'Comercios' : 'No posee', icon: 'home', type: 'link'
 		},
 		{
 			title: 'Referidos', icon: 'users', type: 'sub', active: true, children: [

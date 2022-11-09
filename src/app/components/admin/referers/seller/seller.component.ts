@@ -19,6 +19,7 @@ import { ServiceType } from '../../../../shared/model/service-type';
 import { ServiceTypeService } from '../../../../shared/services/service-type.service';
 import { UserService } from '../../../../shared/services/user.service';
 import {ToastrService} from 'ngx-toastr';
+import { CompaniesService } from 'src/app/shared/services/companies.service';
 
 @Component({
     selector: 'app-default',
@@ -61,6 +62,7 @@ export class SellerComponent implements OnInit{
     services: Service[];
     serviceTypes: ServiceType[];
     periods: String[];
+    public perfil =  JSON.parse(localStorage.getItem('profile'));
 
     constructor(
         public toster: ToastrService,
@@ -71,6 +73,7 @@ export class SellerComponent implements OnInit{
         private utilSrv: UtilService,
         private userSrv: UserService,
         private clipboardApi: ClipboardService,
+        private companiesSrv: CompaniesService
         // public dialog: DialogRefererDetails
     ) {
         this.screenType = this.utilSrv.getScreenSize();
@@ -91,8 +94,8 @@ export class SellerComponent implements OnInit{
         return access.length > 0;
     }
     ngOnInit(): void {
-
             this.profile = JSON.parse(localStorage.getItem('profile'));
+            this.checkStatusUser();
             this.filterForm = this.formBuilder.group({
                 rut: '',
                 fullname: '',
@@ -108,6 +111,17 @@ export class SellerComponent implements OnInit{
             this.getServiceTypes();
             this.getCount();
             this.getPeriods();
+    }
+    checkStatusUser() {
+        this.subscription.add(
+            this.companiesSrv.checkStatusUser(this.perfil.email).subscribe(
+                (response) => {
+                    if (response == 0) {
+                        this.router.navigate(['/admin/companies']);
+                    }
+                }
+            )
+        );
     }
 
     private find() {

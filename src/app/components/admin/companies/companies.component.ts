@@ -66,6 +66,9 @@ export class CompaniesComponent implements OnInit{
                 (response) => {
                     this.user = response;
                     this.companies = this.user.companies;
+                    if (this.user.status == 0) {
+                        this.toster.info('Para interactuar con el sistema, debe tener 1 o varios '+this.companiesName);   
+                    }
                     console.log(this.user);
                 },
                 (error) => {
@@ -78,7 +81,6 @@ export class CompaniesComponent implements OnInit{
         await this.subscription.add(
             this.srv.remove(this.perfil.email, rut).subscribe(
                 (response) => {
-                    console.log(response);
                     return response;
                 },
                 (error) => {

@@ -24,6 +24,7 @@ import { ServiceType } from '../../../shared/model/service-type';
 import { UserService } from '../../../shared/services/user.service';
 import { ToastrService } from 'ngx-toastr';
 import {I18nService} from '../../../shared/services/i18n.service';
+import { CompaniesService } from 'src/app/shared/services/companies.service';
 
 @Component({
     selector: 'app-default',
@@ -79,13 +80,15 @@ export class ReferersComponent implements OnInit, OnDestroy  {
     private userSrv: UserService,
     public _i18n: I18nService,
     public toster: ToastrService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private companiesSrv: CompaniesService
 )
 {console.log('1')}
 
 ngOnInit(): void {
 console.log('2')
         this.profile = JSON.parse(localStorage.getItem('profile'));
+        this.checkStatusUser();
         this.filterForm = this.formBuilder.group({
             rut: '',
             fullname: '',
@@ -94,7 +97,6 @@ console.log('2')
             status: '',
             date: ''
         });
-
        
         this.parameters.referent = this.profile.rut;
         this.parameters.date = (new Date()).toISOString().
@@ -102,6 +104,18 @@ console.log('2')
             replace(/\..+/, '');     // delete the dot and everything after
         this.getCount();
         this.getPeriods();
+    }
+
+    checkStatusUser() {
+        this.subscription.add(
+            this.companiesSrv.checkStatusUser(this.perfil.email).subscribe(
+                (response) => {
+                    if (response == 0) {
+                        this.router.navigate(['/admin/companies']);
+                    }
+                }
+            )
+        );
     }
 
     private find() {
