@@ -48,6 +48,9 @@ export class NavService implements OnDestroy {
 	public fullScreen: boolean = false;
 
 	public perfil =  JSON.parse(localStorage.getItem('profile'));
+	public myOrder = this.perfil.role.slug == 'taller' ? {
+		title: 'Mis Pedidos', icon: 'shopping-cart', type: 'link', active: false, path: '/admin/orders'
+	} : {};
 
 	constructor(private router: Router) {
 		this.setScreenWidth(window.innerWidth);
@@ -99,6 +102,7 @@ export class NavService implements OnDestroy {
 		{
 			path: '/admin/companies', title: this.perfil.role.slug == 'taller' ? 'Talleres' : this.perfil.role.slug == 'comercio' ? 'Comercios' : 'No posee', icon: 'home', type: 'link'
 		},
+		this.myOrder,
 		{
 			title: 'Referidos', icon: 'users', type: 'sub', active: true, children: [
 				{ path: '/admin/referers', title: 'Mis referidos', type: 'link' },
@@ -137,7 +141,7 @@ export class NavService implements OnDestroy {
 				{ path: '/reporte/reporte', title: 'Reporte', type: 'link' },
 			]
 		},
-/*
+
 		{
 			headTitle1: 'Cosas que quitar',
 		},
@@ -448,7 +452,7 @@ export class NavService implements OnDestroy {
 		{ path: '/editor', title: 'Editor', icon: 'edit', type: 'link' },
 		{ path: '/knowledgebase', title: 'Knowledgebase', icon: 'sunrise', type: 'link' },
 		{ path: '/support-ticket', title: 'Support Ticket', icon: 'users', type: 'link' }
-*/
+
 	];
 
 	MEGAMENUITEMS: Menu[] = [

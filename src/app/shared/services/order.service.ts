@@ -1,0 +1,101 @@
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { AbstractHttpService } from './abstract-http.service';
+import { map } from 'rxjs/operators';
+import { ConstantService } from './constant.service';
+import { User } from '../model/user';
+import { Order } from '../model/order.model';
+
+
+@Injectable()
+export class OrderService extends AbstractHttpService {
+
+    constructor(protected http: HttpClient) {
+        super(http);
+    }
+    add(order: Order) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http.post<any>(`${this.apiUrl}/order`, order, httpOptions).pipe(
+            map(response => {
+                return response;
+            })
+        );
+    }
+
+    findByEmail(email: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http
+            .get<any>(
+                this.apiUrl + '/order/'+email, httpOptions)
+            .pipe(
+                map(response => {
+                    return response;
+                })
+            );
+    }
+    findByEmailAndRut(email: string, rut: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http
+            .get<any>(
+                this.apiUrl + '/order/'+email+'/'+rut, httpOptions)
+            .pipe(
+                map(response => {
+                    return response;
+                })
+            );
+    }
+    updateById(order: Order, id: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http.put<any>(`${this.apiUrl}/order/update/`+id, order, httpOptions).pipe(
+            map(response => {
+                return response;
+            })
+        );
+    }
+    remove(id: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http
+            .put<any>(
+                this.apiUrl + '/order/delete/'+id, httpOptions)
+            .pipe(
+                map(response => {
+                    return response;
+                })
+            );
+    }
+    uploadFile(file: FormData) {
+        return this.http.post<any>(`${this.apiUrl}/files`, file).pipe(
+          map(response => {
+            return response;
+          })
+        );
+      }
+
+    private completeZero(value){
+        if (Number.parseInt(value) < 10){
+            return "0" + value;
+        }
+        return value;
+    }
+
+}

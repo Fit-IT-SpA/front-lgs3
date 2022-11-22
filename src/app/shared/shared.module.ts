@@ -46,6 +46,7 @@ import { UserService } from './services/user.service';
 import { ServiceTypeService } from './services/service-type.service';
 import { ReferersService } from './services/referers.service';
 import { CompaniesService } from './services/companies.service';
+import { OrderService } from './services/order.service';
 
 
 @NgModule({
@@ -93,7 +94,8 @@ import { CompaniesService } from './services/companies.service';
     UserService,
     ServiceTypeService,
     ReferersService,
-    CompaniesService
+    CompaniesService,
+    OrderService
   ],
   exports: [
     NgbModule,
