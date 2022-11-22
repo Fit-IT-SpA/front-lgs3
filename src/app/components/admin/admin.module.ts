@@ -7,7 +7,7 @@ import { ChartsModule } from 'ng2-charts';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 import { AgmCoreModule } from '@agm/core';
 import { AdminRoutingModule } from './admin-routing.module';
@@ -22,6 +22,12 @@ import {CompaniesComponent} from './companies/companies.component';
 import {CompaniesAddComponent} from './companies/companies-add/companies-add.component';
 import {CompaniesEditComponent} from './companies/companies-edit/companies-edit.component';
 import {CompaniesViewComponent} from './companies/companies-view/companies-view.component';
+import {OrdersComponent} from './orders/orders.component';
+import {OrdersAddComponent} from './orders/orders-add/orders-add.component';
+import {OrdersEditComponent} from './orders/orders-edit/orders-edit.component';
+import { OrdersViewComponent } from './orders/orders-view/orders-view.component';
+import { FormsRoutingModule } from '../forms/forms-routing.module';
+import { ArchwizardModule } from 'angular-archwizard';
 
 
 @NgModule({
@@ -35,7 +41,11 @@ import {CompaniesViewComponent} from './companies/companies-view/companies-view.
         CompaniesComponent,
         CompaniesAddComponent,
         CompaniesEditComponent,
-        CompaniesViewComponent
+        CompaniesViewComponent,
+        OrdersComponent,
+        OrdersAddComponent,
+        OrdersViewComponent,
+        OrdersEditComponent
     ],
     imports: [
         CommonModule,
@@ -48,6 +58,9 @@ import {CompaniesViewComponent} from './companies/companies-view/companies-view.
         CountToModule,
         NgbModule,
         FormsModule,
+        FormsRoutingModule,
+        ReactiveFormsModule,
+        ArchwizardModule,
         AgmCoreModule.forRoot({
             apiKey: ''
         }),

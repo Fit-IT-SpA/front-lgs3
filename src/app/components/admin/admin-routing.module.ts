@@ -8,6 +8,7 @@ import {ReferersSellersSellsComponent} from './referers/seller/sells/sells.compo
 import {DesconectarComponent} from './desconectar/desconectar.component';
 import { CompaniesComponent } from './companies/companies.component';
 import { CompaniesAddComponent } from './companies/companies-add/companies-add.component';
+import { OrdersComponent } from './orders/orders.component';
 
 
 const routes: Routes = [
@@ -41,6 +42,10 @@ const routes: Routes = [
             {
                 path: 'companies',
                 component: CompaniesComponent
+            },
+            {
+                path: 'orders',
+                component: OrdersComponent
             }
 
         ],
