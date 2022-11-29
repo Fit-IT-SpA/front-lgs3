@@ -65,12 +65,13 @@ export class ForgotPasswordComponent implements OnInit {
       this.subscription.add(this._accountSrv.forgotPassword(this.recoverForm.controls.email.value).subscribe(
         response => {
             //this.snack.open(this._i18n.getKeyWithParameters('sign-in.forgot_request', { email : response.email}), 'X', { panelClass: ['success'], verticalPosition: 'top', duration: ConstantService.snackDuration });
+            this.toster.success('Enviamos un correo a '+this.recoverForm.controls.email.value+'. Ingresa a tu correo y sigue las instrucciones para continuar con la recuperación de la contraseña');
             setTimeout (() => {
               this._router.navigate(['/sign-in']);
             }, 4000);
         },
         error =>    {
-            //this.snack.open(this._i18n.getKey(error.error.error.message), 'X', { panelClass: ['default'], verticalPosition: 'top', duration: ConstantService.snackDuration });
+            this.toster.error(error.error.error.message);
             this.showLoader = false;
         },
       ));

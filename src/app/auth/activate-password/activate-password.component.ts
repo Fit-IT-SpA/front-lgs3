@@ -46,8 +46,8 @@ export class ActivatePasswordComponent implements OnInit {
       private activatedRoute: ActivatedRoute,
       public toster: ToastrService) {
         this.registerForm = this.fb.group({
-          password: ['', [Validators.required]],
-          confirmPassword: ['', [Validators.required]]
+          password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(12)]],
+          confirmPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(12)]]
         });
   }
 
@@ -102,12 +102,14 @@ export class ActivatePasswordComponent implements OnInit {
       this.subscription.add(this.accountSrv.updatePassword(this.user, this.registerForm.controls.confirmPassword.value, this.token).subscribe(
         response => {
           //this.snack.open(this.i18n.getKey('sign-in.pass_changed'), "X", { panelClass: ['success'], verticalPosition: 'top', duration: ConstantService.snackDuration });
+          this.toster.success('Su contraseña se actualizo con éxito!!');
           setTimeout (() => {
             this._router.navigate(['/auth/login']);
           }, 4000);
         },
-        response =>    {
+        error =>    {
           //this.snack.open(this.i18n.getKey(response.error.error.message), "X", { panelClass: ['default'], verticalPosition: 'top', duration: ConstantService.snackDuration });
+          this.toster.error(error.error.error.message);
           this.showLoader = false;
         },
       ));

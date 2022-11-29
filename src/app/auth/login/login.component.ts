@@ -45,7 +45,7 @@ export class LoginComponent implements OnInit {
       public toster: ToastrService) {
       this.loginForm = this.fb.group({
         email: ['', [Validators.required]],
-        password: ['', [Validators.required]]
+        password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(12)]]
       });
   }
 
