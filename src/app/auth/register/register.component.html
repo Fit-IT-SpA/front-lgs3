@@ -61,6 +61,14 @@
                         class="text text-danger mt-1">
                         La Contraseña es requerida
                   </div>
+                  <div *ngIf="loginForm.controls.password.touched && loginForm.controls.password.errors?.minlength"
+                      class="text text-danger mt-1">
+                      La Contraseña debe tener minimo de 4 caracteres
+                  </div>
+                  <div *ngIf="loginForm.controls.password.touched && loginForm.controls.password.errors?.maxlength"
+                      class="text text-danger mt-1">
+                      La Contraseña debe tener un maximo de 12 caracteres
+                  </div>
                 </div>
                 <div class="form-group">
                   <label class="col-form-label">Confirmar Contraseña</label>
@@ -70,6 +78,14 @@
                   <div *ngIf="loginForm.controls.confirmPassword.touched && loginForm.controls.confirmPassword.errors?.required || loginForm.controls.confirmPassword.value != loginForm.controls.password.value"
                         class="text text-danger mt-1">
                         Confirmar Contraseña es requerido y debe ser igual a Contraseña
+                  </div>
+                  <div *ngIf="loginForm.controls.confirmPassword.touched && loginForm.controls.confirmPassword.errors?.minlength"
+                      class="text text-danger mt-1">
+                      La Contraseña debe tener minimo de 4 caracteres
+                  </div>
+                  <div *ngIf="loginForm.controls.confirmPassword.touched && loginForm.controls.confirmPassword.errors?.maxlength"
+                      class="text text-danger mt-1">
+                      La Contraseña debe tener un maximo de 12 caracteres
                   </div>
                 </div>
                 <div class="form-group mt-4">

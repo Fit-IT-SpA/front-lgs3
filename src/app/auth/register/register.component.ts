@@ -49,8 +49,8 @@ export class RegisterComponent implements OnInit {
         name: ['', [Validators.required]],
         lastName: ['', [Validators.required]],
         typeUser: ['', [Validators.required]],
-        password: ['', [Validators.required]],
-        confirmPassword: ['', [Validators.required]]
+        password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(12)]],
+        confirmPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(12)]]
       },
     );
   }
@@ -117,24 +117,17 @@ export class RegisterComponent implements OnInit {
             name : this.loginForm.controls.name.value,
             lastName : this.loginForm.controls.lastName.value,
             typeUser: this.loginForm.controls.typeUser.value,
-            //typeUser: 'taller',
             password: this.loginForm.controls.confirmPassword.value
         }
         console.log(credentials);
         this.subscription.add(this._authSrv.register(credentials).subscribe(
             response => {
                 this._router.navigate(['/auth/login']);
-            }/*,
-            response =>    { 
-                this.loginForm.enable();
-                //this.loadingSrv = false;
-                let error = response.error.error.message.toString().split("|");
-                if (error.length == 0){
-                    this.toster.error(this._i18n.getKey(response.error.error.message));
-                } else {
-                    this.toster.error(this._i18n.getKeyWithParameters(error[0], { attempts: error[1]}));
-                }
-            }*/)
+                this.toster.success('Se creó su cuenta con exito!!');
+            },
+            error => {
+              this.toster.error(error.error.error.message);
+            })
         );
     }
     
