@@ -28,6 +28,9 @@ import {OrdersEditComponent} from './orders/orders-edit/orders-edit.component';
 import { OrdersViewComponent } from './orders/orders-view/orders-view.component';
 import { FormsRoutingModule } from '../forms/forms-routing.module';
 import { ArchwizardModule } from 'angular-archwizard';
+import { UserModule } from './users/user/user.module';
+import { RoleModule } from './users/role/role.module';
+import { PrivilegeModule } from './users/privilege/privilege.module';
 
 
 @NgModule({
@@ -49,6 +52,9 @@ import { ArchwizardModule } from 'angular-archwizard';
     ],
     imports: [
         CommonModule,
+        UserModule,
+        RoleModule,
+        PrivilegeModule,
         ChartistModule,
         ChartsModule,
         NgApexchartsModule,

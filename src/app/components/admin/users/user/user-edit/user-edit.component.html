@@ -1,0 +1,123 @@
+<app-breadcrumb [title]="'Editar Usuario'"></app-breadcrumb>
+<div class="flex flex-col flex-auto" *ngIf="loading">
+	<div class="loader-box">
+	  <div class="loader-3"></div>
+	</div>
+</div>
+<div class="container-fluid" *ngIf="!loading">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <form class="needs-validation" novalidate [formGroup]="formEdit">
+                        <div class="form-row">
+                            <div class="col-md-4 mb-3">
+                                <label>Nombre</label>
+                                <input class="form-control" required="true" type="text" placeholder="(*) Nombre" formControlName="name">
+                                <div *ngIf="formEdit.controls.name.errors && formEdit.controls.name.touched && formEdit.controls.name.errors.required"
+                                    class="text text-danger mt-1">
+                                    Es requerido
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>Apellido Paterno</label>
+                                <input class="form-control" required="true" type="text" placeholder="(*) Apellido Paterno" formControlName="lastName">
+                                <div *ngIf="formEdit.controls.lastName.errors && formEdit.controls.lastName.touched && formEdit.controls.lastName.errors.required"
+                                    class="text text-danger mt-1">
+                                    Es requerido
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>Apellido Materno</label>
+                                <input class="form-control" required="true" type="text" placeholder="(*) Apellido Materno" formControlName="secondLastName">
+                                <div *ngIf="formEdit.controls.secondLastName.errors && formEdit.controls.secondLastName.touched && formEdit.controls.secondLastName.errors.required"
+                                    class="text text-danger mt-1">
+                                    Es requerido
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class="form-row">
+                            <div class="col-md-4 mb-3">
+                                <label>Rut</label>
+                                <input class="form-control" required="true" type="text" placeholder="(*) Rut" formControlName="rut" (blur)="onBlurRut()" (focus)="onFocusRut()">
+                                <div *ngIf="formEdit.controls.rut.errors && formEdit.controls.rut.touched && formEdit.controls.rut.errors.required"
+                                    class="text text-danger mt-1">
+                                    Es requerido
+                                </div>
+                                <div *ngIf="formEdit.controls.rut.errors && formEdit.controls.rut.touched && formEdit.controls.rut.errors?.rut"
+                                    class="text text-danger mt-1">
+                                    Formato invalido
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>Email</label>
+                                <input class="form-control" required="true" type="text" placeholder="(*) Email" formControlName="email" required email>
+                                <div *ngIf="formEdit.controls.email.errors && formEdit.controls.email.touched && formEdit.controls.email.errors.required"
+                                    class="text text-danger mt-1">
+                                    Es requerido
+                                </div>
+                                <div *ngIf="formEdit.controls.email.errors && formEdit.controls.email.touched && formEdit.controls.email.errors?.email"
+                                    class="text text-danger mt-1">
+                                    Formato invalido
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>Celular</label>
+                                <input class="form-control" required="true" type="text" placeholder="(*) Celular" formControlName="phone">
+                                <div *ngIf="formEdit.controls.phone.errors && formEdit.controls.phone.touched && formEdit.controls.phone.errors.required"
+                                    class="text text-danger mt-1">
+                                    Es requerido
+                                </div>
+                                <div *ngIf="formEdit.controls.phone.errors && formEdit.controls.phone.touched && formEdit.controls.phone.errors?.invalidMobileNumber"
+                                    class="text text-danger mt-1">
+                                    Formato invalido, ejemplo: 912341234
+                                </div>
+                                <div *ngIf="formEdit.controls.phone.errors && formEdit.controls.phone.touched && formEdit.controls.phone.errors?.invalidNumber"
+                                    class="text text-danger mt-1">
+                                    Solo se admiten números
+                                </div>
+                            </div>
+                        </div>-->
+                        <div class="form-row">
+                            <!--<div class="col-md-6 mb-3">
+                                <label>País</label>
+                                <ng-select [items]="countriesFilter" placeholder="Seleccionar País"
+                                    class="js-example-placeholder-multiple" formControlName="nationality">
+                                </ng-select>
+                            </div>-->
+                            <div class="col-md-6 mb-3">
+                                <label>Email</label>
+                                <input class="form-control" required="true" type="text" placeholder="(*) Email" formControlName="email" required email>
+                                <div *ngIf="formEdit.controls.email.errors && formEdit.controls.email.touched && formEdit.controls.email.errors.required"
+                                    class="text text-danger mt-1">
+                                    Es requerido
+                                </div>
+                                <div *ngIf="formEdit.controls.email.errors && formEdit.controls.email.touched && formEdit.controls.email.errors?.email"
+                                    class="text text-danger mt-1">
+                                    Formato invalido
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Perfil</label>
+                                <ng-select 
+                                    [items]="rolesFilter" 
+                                    placeholder="(*) Seleccionar Perfil"
+                                    class="js-example-placeholder-multiple" 
+                                    formControlName="role">
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="flex align-middle font-medium text-md mt-1 mb-3">
+                            <i class="flex align-middle" data-feather="info"></i>
+                            <span class="font-semibold ml-1 text-base">Los campos marcados con (*) son de caracter obligatorio.</span>
+                          </div>
+                          <div class="card-footer">
+                            <button class="btn btn-primary" type="button" [disabled]="formEdit.invalid" (click)="add()">Guardar</button>
+                            <button class="btn btn-info ml-1" type="button" (click)="goBack()">Volver</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -9,6 +9,7 @@ import {DesconectarComponent} from './desconectar/desconectar.component';
 import { CompaniesComponent } from './companies/companies.component';
 import { CompaniesAddComponent } from './companies/companies-add/companies-add.component';
 import { OrdersComponent } from './orders/orders.component';
+import { AdminGuard } from '../../shared/guard/admin.guard';
 
 
 const routes: Routes = [
@@ -38,6 +39,21 @@ const routes: Routes = [
             {
                 path: 'referers/seller/sells',
                 component: ReferersSellersSellsComponent
+            },
+            {
+                path: '',
+                canActivate: [AdminGuard],
+                loadChildren: () => import('./users/user/user.module').then(m => m.UserModule)
+            },
+            {
+                path: '',
+                canActivate: [AdminGuard],
+                loadChildren: () => import('./users/role/role.module').then(m => m.RoleModule)
+            },
+            {
+                path: '',
+                canActivate: [AdminGuard],
+                loadChildren: () => import('./users/privilege/privilege.module').then(m => m.PrivilegeModule)
             },
             {
                 path: 'companies',

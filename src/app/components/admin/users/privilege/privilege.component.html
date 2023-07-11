@@ -1,0 +1,57 @@
+<app-breadcrumb [title]="'Mis Privilegios'"></app-breadcrumb>
+<div class="container-fluid" *ngIf="access">
+    <!-- VOLT-F0.3 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA-->
+    <div class="flex flex-col flex-auto" *ngIf="loading">
+        <div class="showLoading">
+            <mat-progress-spinner [diameter]="60" [mode]="'indeterminate'">
+            </mat-progress-spinner>
+            <div class="mt-2 font-medium">Procesando...</div>
+        </div>
+    </div>
+
+    <div class="main" *ngIf="!loading">
+        <div class="content" *ngIf="privileges !== null">
+            <div class="main-actions mb-4">
+
+                <!-- Add contact button -->
+                <button class="btn btn-primary" *ngIf="canWrite()" [color]="'primary'" (click)="add()">
+                    Agregar
+                </button>
+            </div>
+            <div class="row-container">
+							<div
+								*ngFor="let privilege of privileges; let i = index"
+								class="custom-card mb-4"
+							>
+								<div>
+									<a routerLink="/admin/users/privilege/view/{{ privilege.slug }}">
+										<div class="text-2xl font-semibold leading-tight">
+											{{ privilege.page }} -
+											{{ privilege.canRead ? "Lectura" : "Escritura" }}
+										</div>
+									</a>
+									<div class="text-secondary font-medium text-md mt-1">
+										{{ privilege.description }}
+									</div>
+								</div>
+								<div class="custom-button-group">
+									<button
+										(click)="edit(privilege.slug)"
+										*ngIf="canWrite()"
+										class="btn btn-primary rounded"
+									>
+										Editar
+									</button>
+									<button
+										(click)="removeWithConfirmation(privilege.slug)"
+										*ngIf="canWrite()"
+										class="btn btn-primary rounded"
+									>
+										Eliminar
+									</button>
+								</div>
+							</div>
+						</div>
+        </div>
+    </div>
+</div>

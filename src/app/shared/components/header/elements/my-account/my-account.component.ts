@@ -21,6 +21,9 @@ export class MyAccountComponent implements OnInit {
   logout(){
         localStorage.removeItem("profile")
         this._router.navigate(['/auth/login']);
-    }
-
+  }
+  
+  myProfile() {
+    this._router.navigate(['/admin/my-profile']);
+  }
 }
