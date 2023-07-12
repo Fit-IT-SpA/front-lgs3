@@ -97,5 +97,21 @@ export class OrderService extends AbstractHttpService {
         }
         return value;
     }
+    
+    findByAll() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http
+            .get<any>(
+                this.apiUrl + '/order/', httpOptions)
+            .pipe(
+                map(response => {
+                    return response;
+                })
+            );
+    }
 
 }

@@ -141,8 +141,16 @@ export class NavService implements OnDestroy {
 				{ path: '/reporte/reporte', title: 'Reporte', type: 'link' },
 			]
 		},
+                
+                
+                {
+			title: 'Ver requerimientos', icon: 'file-text', type: 'sub', active: false, children: [
+				{ path: '/admin/offers', title: 'Pedidos no Ofertados', type: 'link' },
+			]
+		},
+                
 
-		{
+		/*{
 			headTitle1: 'Cosas que quitar',
 		},
 
@@ -451,7 +459,7 @@ export class NavService implements OnDestroy {
 		},
 		{ path: '/editor', title: 'Editor', icon: 'edit', type: 'link' },
 		{ path: '/knowledgebase', title: 'Knowledgebase', icon: 'sunrise', type: 'link' },
-		{ path: '/support-ticket', title: 'Support Ticket', icon: 'users', type: 'link' }
+		{ path: '/support-ticket', title: 'Support Ticket', icon: 'users', type: 'link' }*/
 
 	];
 
