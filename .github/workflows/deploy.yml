@@ -26,4 +26,4 @@ jobs:
           known_hosts: ${{ secrets.SUBDEV_KNOWN_HOSTS }}
 
       - name: Deploy using rsync
-        run: rsync -avz ./dist/cuba/ ${{ secrets.SUBDEV_SSH_USER }}@${{ secrets.SUBDEV_SSH_HOST }}:/var/www/html/
+        run: rsync -avz README.md ${{ secrets.SUBDEV_SSH_USER }}@${{ secrets.SUBDEV_SSH_HOST }}:/var/www/html/
