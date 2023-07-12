@@ -23,9 +23,12 @@ import {CompaniesAddComponent} from './companies/companies-add/companies-add.com
 import {CompaniesEditComponent} from './companies/companies-edit/companies-edit.component';
 import {CompaniesViewComponent} from './companies/companies-view/companies-view.component';
 import {OrdersComponent} from './orders/orders.component';
+import {OffersComponent} from './offers/offers.component';
 import {OrdersAddComponent} from './orders/orders-add/orders-add.component';
 import {OrdersEditComponent} from './orders/orders-edit/orders-edit.component';
 import { OrdersViewComponent } from './orders/orders-view/orders-view.component';
+import { OffersViewComponent } from './offers/offers-view/offers-view.component';
+import {OffersAddComponent} from './offers/offers-add/offers-add.component';
 import { FormsRoutingModule } from '../forms/forms-routing.module';
 import { ArchwizardModule } from 'angular-archwizard';
 
@@ -45,7 +48,10 @@ import { ArchwizardModule } from 'angular-archwizard';
         OrdersComponent,
         OrdersAddComponent,
         OrdersViewComponent,
-        OrdersEditComponent
+        OrdersEditComponent,
+        OffersAddComponent,
+        OffersViewComponent,
+        OffersComponent
     ],
     imports: [
         CommonModule,

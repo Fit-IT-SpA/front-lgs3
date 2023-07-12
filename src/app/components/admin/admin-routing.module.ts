@@ -9,6 +9,7 @@ import {DesconectarComponent} from './desconectar/desconectar.component';
 import { CompaniesComponent } from './companies/companies.component';
 import { CompaniesAddComponent } from './companies/companies-add/companies-add.component';
 import { OrdersComponent } from './orders/orders.component';
+import { OffersComponent } from './offers/offers.component';
 
 
 const routes: Routes = [
@@ -42,6 +43,10 @@ const routes: Routes = [
             {
                 path: 'companies',
                 component: CompaniesComponent
+            },
+            {
+                path: 'offers',
+                component: OffersComponent
             },
             {
                 path: 'orders',
