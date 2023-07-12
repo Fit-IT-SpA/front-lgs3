@@ -2,7 +2,7 @@ name: Angular deployment
 on:
   push:
     branches:
-      - prod-cuba
+      - dev
 
 jobs:
   deploy-prod:
