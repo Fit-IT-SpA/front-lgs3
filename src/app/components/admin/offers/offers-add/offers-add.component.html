@@ -11,6 +11,7 @@
                     
                      <div class="row">
                             <div class="col">
+                                <label>Imagen Repuesto</label>
                                 <div class="form-group">
                                     <input class="btn btn-outline-primary" (change)="checkImageFile()" 
                                     #fileInput type="file" id="file" (click)="fileInput.click()">
@@ -31,12 +32,12 @@
                         <div class="row">
                             <div class="col-sm-8">
                          <fieldset>
-                            <label>Cantidad:</label>
+                             <label>Cantidad: <i>(requeridos {{this.maxQty}})</i></label>
                             <div class="input-group bootstrap-touchspin">
                               <button class="btn btn-primary btn-square bootstrap-touchspin-down" type="button" (click)=decrement()>
                                 <i class="fa fa-minus"></i>
                               </button>
-                              <input formControlName="cantidad" class="touchspin form-control" type="text" value={{counter}}>
+                                <input readonly="" formControlName="cantidad" class="touchspin form-control" type="text" value={{counter}}>
                               <div class="input-group-append ml-0">
                                 <button class="btn btn-primary btn-square bootstrap-touchspin-up" type="button" (click)=increment()>
                                   <i class="fa fa-plus"></i>
@@ -87,20 +88,6 @@
                                         </div>
                                       </div>
                                     </div>
-                                    <div class="col-sm-6">
-                                      <div class="card">
-                                        <div class="media p-20">
-                                          <div class="radio radio-secondary mr-3 ml-2">
-                                            <input id="radio13" type="radio" formControlName="despacho" name="despacho" value="despacho_por_pagar">
-                                            <label for="radio13"></label>
-                                          </div>
-                                          <div class="media-body">
-                                            <h6 class="mt-0 mega-title-badge">Despacho por Pagar</h6>
-                                            <p>Lorem Ipsum "Neque porro quisquam est qui dolorem.....</p>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
                                   </div>
                                 </div>
                             </div>
@@ -114,12 +101,13 @@
                             </div>
                         </div>
                     
-                    <div class="card-footer">
-                        <button (click)="add()" [disabled]="offersFormGroup.invalid" class="btn btn-primary" type="submit">Crear</button>
-                        <input (click)="modal.dismiss('Cross click')"  class="btn btn-secondary ml-4" type="button" value="Cancelar">
-                    </div>
+                    
                 </form>
                 </div>
+              <div class="card-footer">
+                        <button (click)="add()" [disabled]="offersFormGroup.invalid" class="btn btn-primary" type="submit">Crear</button>
+                        <input (click)="modal.dismiss('Cross click')"  class="btn btn-secondary ml-2" type="button" value="Cancelar">
+                    </div>
           </div>
         </div>
       </div>
