@@ -39,6 +39,7 @@ export class OffersAddComponent implements OnInit {
   public filePath: string;
   public imgFile: any;
   public idOrder: string
+  public maxQty: number;
 
   constructor(
     private modalService: NgbModal,
@@ -48,17 +49,8 @@ export class OffersAddComponent implements OnInit {
     private srvOffer: OfferService,
     private router: Router,
     public toster: ToastrService,) {
-        this.offersFormGroup = this.fb.group({
-            photo: ['', Validators.required],
-            estado: ['', Validators.required],
-            origen: ['', Validators.required],
-            price: [0, Validators.required],
-            cantidad: [0, Validators.required],
-            despacho: ['', Validators.required],
-            comentario: ['']
-          });
-     }
-
+    }
+        
   ngOnInit(): void {
   }
   /**
@@ -68,12 +60,23 @@ export class OffersAddComponent implements OnInit {
   openModal(order: any) {
     //this.user = user;
    // this.companies = user.companies;
-    
-    this.idOrder = order.id;
 
+    this.idOrder = order.id;
+    this.maxQty = order.qty
     //console.log(this.user);
     //console.log(this.companies);
     this.modalOpen = true;
+    
+    this.offersFormGroup = this.fb.group({
+        photo: ['', Validators.required],
+        estado: ['', Validators.required],
+        origen: ['', Validators.required],
+        price: [0, [Validators.required, Validators.min(200)]],
+        cantidad: [1, [Validators.required, Validators.min(1), Validators.max(this.maxQty)]],
+        despacho: ['retiro_tienda', Validators.required],
+        comentario: ['']
+      });
+    
       this.modalService.open(this.QuickViewOffersAdd, { 
         size: 'lg',
         ariaLabelledBy: 'modal-basic-title',
