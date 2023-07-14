@@ -1,5 +1,4 @@
-export interface Order {
-    id: string,
+export interface OrderAdd {
     idOrder: string,
     createBy: string,
     company: string,

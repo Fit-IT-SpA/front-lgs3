@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 import { OrderService } from 'src/app/shared/services/order.service';
 import { Order } from 'src/app/shared/model/order.model';
 import { OrdersEditComponent } from './orders-edit/orders-edit.component';
+import { ConstantService } from 'src/app/shared/services/constant.service';
 declare var require;
 const Swal = require('sweetalert2');
 
@@ -38,9 +39,9 @@ export class OrdersComponent implements OnInit {
   public col: string = '3';
   public companiesName = this.perfil.role.slug == 'taller' ? 'Talleres' : this.perfil.role.slug == 'comercio' ? 'Comercios' : 'No posee';
   public orders: Order[];
+  public loading: boolean = true;
   
   // Ventanas Popup
-  @ViewChild("quickViewOrdersAdd") QuickViewOrdersAdd: OrdersAddComponent;
   @ViewChild("quickViewOrdersView") QuickViewOrdersView: OrdersViewComponent;
   @ViewChild("quickViewOrdersEdit") QuickViewOrdersEdit: OrdersEditComponent;
 
@@ -56,11 +57,21 @@ export class OrdersComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.haveAccess()) {
-      this.findUser();
+      this.getUser();
+    } else {
+      this.router.navigate(['/admin/unauthorized']);
     }
   }
   private haveAccess() {
-    return true;
+    let permissions = JSON.parse(localStorage.getItem("profile")).privilege;
+    if (permissions) {
+      let access = permissions.filter((perm: string) => {
+        return perm === ConstantService.PERM_MIS_PEDIDOS_LECTURA;
+      });
+      return access.length > 0;
+    } else {
+      return false;
+    }
   }
   checkStatusUser() {
     this.subscription.add(
@@ -73,7 +84,7 @@ export class OrdersComponent implements OnInit {
         )
     );
   }
-  private findUser() {
+  private getUser() {
     this.subscription.add(
         this.companiesSrv.findByEmail(this.perfil.email).subscribe(
             (response) => {
@@ -90,7 +101,11 @@ export class OrdersComponent implements OnInit {
     this.subscription.add(this.srv.findByEmail(this.perfil.email).subscribe(
       response => {
         this.orders = response;
-        console.log(this.orders);
+        //console.log(this.orders);
+        this.loading = false;
+      }, error => {
+        console.log(error);
+        this.toster.error('Se a producido un error al intentar buscar los pedidos');
       }
     ))
   }
@@ -111,8 +126,16 @@ export class OrdersComponent implements OnInit {
   gridColumn(val) {
     this.col = val;
   }
-  public canWrite() {
-    return true;
+  canWrite() {
+    let permissions = JSON.parse(localStorage.getItem("profile")).privilege;
+    if (permissions) {
+      let access = permissions.filter((perm: string) => {
+        return perm === ConstantService.PERM_MIS_PEDIDOS_ESCRITURA;
+      });
+      return access.length > 0;
+    } else {
+      return false;
+    }
   }
   private async remove(id: string) {
     this.subscription.add(this.srv.remove(id).subscribe(
@@ -121,10 +144,13 @@ export class OrdersComponent implements OnInit {
       }
     ))
     return false;
-}
+  }
+  orderView(id: string) {
+    this.router.navigate(['/admin/orders/'+id+'/products']);
+  }
   removeWithConfirmation(id: string) {
     Swal.fire({
-      title: 'Estas seguro que deseas eliminar tu pedido?',
+      title: 'Estas seguro que deseas cancelar tu pedido?',
       text: "No podras revertir esto despues!",
       type: 'warning',
       showCancelButton: true,
@@ -133,25 +159,29 @@ export class OrdersComponent implements OnInit {
       confirmButtonText: 'Si, quiero hacerlo!',
       cancelButtonText: 'No, cancelar!'
     }).then((result) => {
+      this.loading = true;
       if (result.value) {
         let confirm = this.remove(id);
         if (confirm) {
             Swal.fire(
-                'Eliminado!',
-                'Tu pedido se a eliminado.',
+                'Pedido cancelado',
+                'Tu pedido se a cancelado.',
                 'success'
             )
-            this.findOrders();
+            this.ngOnInit();
         } else {
             Swal.fire(
                 'Ups.. algo salio mal!',
-                'Tu pedido no se a eliminado.',
+                'Tu pedido no se a cancelado.',
                 'error'
             )
         }
         
       }
     })
+  }
+  add() {
+    this.router.navigate(['/admin/orders/add']);
   }
 
 }

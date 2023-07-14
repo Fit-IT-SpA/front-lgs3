@@ -56,13 +56,15 @@ const routes: Routes = [
                 loadChildren: () => import('./users/privilege/privilege.module').then(m => m.PrivilegeModule)
             },
             {
-                path: 'companies',
-                component: CompaniesComponent
+                path: '',
+                canActivate: [AdminGuard],
+                loadChildren: () => import('./companies/companies.module').then(m => m.CompaniesModule)
             },
             {
-                path: 'orders',
-                component: OrdersComponent
-            }
+                path: '',
+                canActivate: [AdminGuard],
+                loadChildren: () => import('./orders/orders.module').then(m => m.OrdersModule)
+            },
 
         ],
     }

@@ -70,4 +70,12 @@ export class ConstantService {
     public static PERM_PERFIL_ADMIN_ESCRITURA             = "perfil-admin-escritura";
     public static PERM_PRIVILEGIO_ADMIN_LECTURA             = "privilegio-admin-lectura";
     public static PERM_PRIVILEGIO_ADMIN_ESCRITURA             = "privilegio-admin-escritura";
+    public static PERM_MIS_PEDIDOS_LECTURA            = "mis-pedidos-lectura";
+    public static PERM_MIS_PEDIDOS_ESCRITURA            = "mis-pedidos-escritura";
+    public static PERM_MIS_OFERTAS_LECTURA            = "mis-ofertas-lectura";
+    public static PERM_MIS_OFERTAS_ESCRITURA            = "mis-ofertas-escritura";
+    public static PERM_MIS_TALLERES_LECTURA            = "mis-talleres-lectura";
+    public static PERM_MIS_TALLERES_ESCRITURA            = "mis-talleres-escritura";
+    public static PERM_MIS_COMERCIOS_LECTURA            = "mis-comercios-lectura";
+    public static PERM_MIS_COMERCIOS_ESCRITURA            = "mis-comercios-escritura";
 }

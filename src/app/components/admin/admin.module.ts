@@ -22,15 +22,12 @@ import {CompaniesComponent} from './companies/companies.component';
 import {CompaniesAddComponent} from './companies/companies-add/companies-add.component';
 import {CompaniesEditComponent} from './companies/companies-edit/companies-edit.component';
 import {CompaniesViewComponent} from './companies/companies-view/companies-view.component';
-import {OrdersComponent} from './orders/orders.component';
-import {OrdersAddComponent} from './orders/orders-add/orders-add.component';
-import {OrdersEditComponent} from './orders/orders-edit/orders-edit.component';
-import { OrdersViewComponent } from './orders/orders-view/orders-view.component';
+import { OrdersModule } from './orders/orders.module';
 import { FormsRoutingModule } from '../forms/forms-routing.module';
-import { ArchwizardModule } from 'angular-archwizard';
 import { UserModule } from './users/user/user.module';
 import { RoleModule } from './users/role/role.module';
 import { PrivilegeModule } from './users/privilege/privilege.module';
+import { CompaniesModule } from './companies/companies.module';
 
 
 @NgModule({
@@ -41,20 +38,14 @@ import { PrivilegeModule } from './users/privilege/privilege.module';
         MyProfileComponent,
         ReferersSellersSellsComponent,
         DesconectarComponent,
-        CompaniesComponent,
-        CompaniesAddComponent,
-        CompaniesEditComponent,
-        CompaniesViewComponent,
-        OrdersComponent,
-        OrdersAddComponent,
-        OrdersViewComponent,
-        OrdersEditComponent
     ],
     imports: [
         CommonModule,
         UserModule,
         RoleModule,
         PrivilegeModule,
+        OrdersModule,
+        CompaniesModule,
         ChartistModule,
         ChartsModule,
         NgApexchartsModule,
@@ -66,7 +57,6 @@ import { PrivilegeModule } from './users/privilege/privilege.module';
         FormsModule,
         FormsRoutingModule,
         ReactiveFormsModule,
-        ArchwizardModule,
         AgmCoreModule.forRoot({
             apiKey: ''
         }),

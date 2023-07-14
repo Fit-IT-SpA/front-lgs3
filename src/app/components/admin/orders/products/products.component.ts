@@ -1,0 +1,240 @@
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { UserService } from '../../../../shared/services/user.service';
+import { CompaniesService } from '../../../../shared/services/companies.service';
+import { User } from '../../../../shared/model/user';
+import { Order } from '../../../../shared/model/order.model';
+import { Offer } from '../../../../shared/model/offer.model';
+import { Subscription } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
+import { validate, clean, format } from 'rut.js';
+import { Companies } from 'src/app/shared/model/companies.model';
+import { OrderService } from 'src/app/shared/services/order.service';
+import { ProductsService } from './products.service';
+import { Product } from 'src/app/shared/model/product.model';
+import { ProductAdd } from 'src/app/shared/model/product-add.model';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ConstantService } from 'src/app/shared/services/constant.service';
+declare var require;
+const Swal = require('sweetalert2');
+
+@Component({
+  selector: 'app-products',
+  templateUrl: './products.component.html',
+  styleUrls: ['./products.component.scss'],
+  providers: [UserService, CompaniesService, OrderService, ProductsService],
+})
+export class ProductsComponent implements OnInit {
+
+  private subscription: Subscription = new Subscription();
+  public closeResult: string;
+  public modalOpen: boolean = false;
+  public perfil =  JSON.parse(localStorage.getItem('profile'));
+  private productAdd: ProductAdd;
+  private products: Product[];
+  public order: Order;
+  private offers: Offer[] = [];
+  public companies: Companies[];
+  public counter: number = 1;
+  public filePath: string;
+  public imgFile: any;
+  public loading: boolean = true;
+  public brandFilter: { value: string, label: string, job: string }[] = [
+    { value: "CHEVROLET", label: "CHEVROLET", job: "" },
+    { value: "HYUNDAI", label: "HYUNDAI", job: "" },
+    { value: "KIA MOTORS", label: "KIA MOTORS", job: "" }
+  ];
+
+  constructor(
+    private modalService: NgbModal,
+    private fb: FormBuilder,
+    private userSrv: UserService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private srvOrder: OrderService,
+    public toster: ToastrService,
+    public srv: ProductsService) {}
+
+  ngOnInit(): void {
+    //this.findOffers();
+    if (this.haveAccess()) {
+        this.subscription.add(this.activatedRoute.params.subscribe(params => {
+            let id: string = params['id'];
+            this.getOrder(id);
+        }));
+    } else {
+        this.router.navigate(['/admin/unauthorized']);
+    }
+  }
+  private haveAccess() {
+    let permissions = JSON.parse(localStorage.getItem("profile")).privilege;
+    if (permissions) {
+      let access = permissions.filter((perm: string) => {
+        return perm === ConstantService.PERM_MIS_PEDIDOS_ESCRITURA;
+      });
+      return access.length > 0;
+    } else {
+      return false;
+    }
+  }
+  private getOrder(id: string) {
+    this.subscription.add(this.srvOrder.findById(id).subscribe(
+        response => {
+            this.order = response;
+            this.getProducts();
+        }, error => {
+            console.log(error);
+        }
+    ));
+  }
+  private getProducts() {
+    this.subscription.add(this.srv.findByOrder(this.order.id).subscribe(
+      response => {
+        console.log(response);
+        this.products = response;
+        this.loading = false;
+      }, error => {
+        console.log(error);
+      }
+    ));
+  }
+  public add() {
+    this.router.navigate(['/admin/orders/'+this.order.id+'/products/add']);
+    
+  }
+  public removeWithConfirmation(id: string, product: Product) {
+    Swal.fire({
+      title: 'Estas seguro que deseas eliminar tu repuesto?',
+      text: "No podras revertir esto despues!",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, quiero hacerlo!',
+      cancelButtonText: 'No, cancelar!'
+    }).then((result) => {
+      if (result.value) {
+        this.loading = true;
+        let confirm = this.removeProduct(id, product);
+        if (confirm) {
+            Swal.fire(
+                'Repuesto eliminado',
+                'Tu repuesto a sido eliminado.',
+                'success'
+            )
+            this.ngOnInit();
+        } else {
+            Swal.fire(
+                'Ups.. algo salio mal!',
+                'Tu repuesto no se pudo eliminar.',
+                'error'
+            )
+        }
+        
+      }
+    });
+  }
+  public cancelOrder() {
+    Swal.fire({
+      title: 'Estas seguro que deseas cancelar tu pedido?',
+      text: "No podras revertir esto despues!",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, quiero hacerlo!',
+      cancelButtonText: 'No, cancelar!'
+    }).then((result) => {
+      if (result.value) {
+        let confirm = this.removeOrder();
+        if (confirm) {
+            Swal.fire(
+                'Pedido cancelado',
+                'Tu pedido se a cancelado.',
+                'success'
+            )
+            this.goBack();
+        } else {
+            Swal.fire(
+                'Ups.. algo salio mal!',
+                'Tu pedido no se a cancelado.',
+                'error'
+            )
+        }
+        
+      }
+    });
+  }
+  public saveOrder() {
+    Swal.fire({
+      title: 'Estas seguro que deseas guardar tu pedido?',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, quiero hacerlo!',
+      cancelButtonText: 'No, cancelar!'
+    }).then((result) => {
+      if (result.value) {
+        this.loading = true;
+        let confirm = this.save();
+        if (confirm) {
+            Swal.fire(
+                'Pedido guardado',
+                'Tu pedido se a guardado con exito.',
+                'success'
+            )
+            this.goBack();
+        } else {
+            Swal.fire(
+                'Ups.. algo salio mal!',
+                'Tu pedido no se pudo guardar.',
+                'error'
+            )
+        }
+        
+      }
+    });
+  }
+  private async removeOrder() {
+    this.subscription.add(this.srvOrder.remove(this.order.id).subscribe(
+      response => {
+        return true;
+      }, error => {
+        console.log(error);
+        return false;
+      }
+    ));
+    return false;
+  }
+  private async removeProduct(id: string, product: Product) {
+    this.subscription.add(this.srv.remove(id, product).subscribe(
+      response => {
+        return true;
+      }, error => {
+        console.log(error);
+        return false;
+      }
+    ));
+    return false;
+  }
+  public goBack() {
+    this.router.navigate(['/admin/orders']);
+  }
+  private async save() {
+    this.order.status = 1;
+    this.subscription.add(this.srvOrder.updateById(this.order, this.order.id).subscribe(
+      response => {
+        return true
+      }, error => {
+        return false;
+      }
+    ));
+    return false;
+  }
+  public ngOnDestroy() {
+    if (this.subscription) this.subscription.unsubscribe();
+  }
+
+}
