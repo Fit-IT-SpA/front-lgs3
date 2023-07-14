@@ -1,5 +1,5 @@
 import { SparePart } from "./sparePart.model";
-
+import { Offer } from "./offer.model";
 export interface Order {
     idOrder: string,
     createBy: string,
@@ -9,7 +9,7 @@ export interface Order {
     productBrand: string,
     productDetails: string,
     status: number,
-    offers: string[],
+    offers: Offer[],
     limitPrice: number,
     qty: number,
     photo: string,

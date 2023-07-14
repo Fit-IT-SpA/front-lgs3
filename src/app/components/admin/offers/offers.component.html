@@ -1,4 +1,9 @@
 <app-breadcrumb [title]="'Pedidos no Ofertados'" [items]="['Requerimientos']" [active_item]="'Pedidos no Ofertados'"></app-breadcrumb>
+<style>
+    .ngx-datatable {
+  width: 100%;
+}
+    </style>
 <div class="product-grid">
     <div class="feature-products">
         <div class="row">
@@ -40,6 +45,9 @@
                       <li (click)="QuickViewOffersView.openModal(this.order)">
                         <button class="btn" type="button" data-toggle="modal" data-target="#exampleModalCenter22" ><i class="icon-eye"></i></button>
                       </li>
+                      <li *ngIf="this.order.offers.length > 0" (click)="quickViewOffersDetail.openModal(this.order)">
+                        <button  ngbTooltip="Ver Ofertas ({{this.order.offers.length}})"class="btn" type="button" data-toggle="modal" data-target="#exampleModalCenter23" ><i class="fa fa-money"></i></button>
+                      </li>
                     </ul>
                   </div>
                 </div>
@@ -56,6 +64,36 @@
         </div>
     </div>
 </div>
+<div class="container-fluid">
+  <div class="row">
+    <!-- Individual column searching (text inputs) Starts-->
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          <h5>Pedidos no Ofertados</h5><span>Search your product from here..</span>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive product-list-custom custom-datatable table-hover">
+            <div class="table-responsive table-hover" style="width:100%"> 
+                 <ngx-datatable class="bootstrap" [rows]="this.ordertable" [columns]="[
+                {prop:'photo',name: ''},
+                {prop:'productName',name: 'Producto'},
+                {prop:'productBrand',name: 'Marca'},
+                {prop:'idOrder',name: 'Pedido'},
+                {prop:'company',name: 'Company'}
+                ]"
+                 [columnMode]="'force'"
+                 [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10">
+              </ngx-datatable>
+            </div>
+            </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    </div>
+            
 
 <app-offers-add #quickViewOffersAdd></app-offers-add>
 <app-offers-view #quickViewOffersView></app-offers-view>
+<app-offers-detail #quickViewOffersDetail></app-offers-detail>

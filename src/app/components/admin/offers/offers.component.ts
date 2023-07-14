@@ -10,6 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { validate, clean, format } from 'rut.js';
 import { OffersAddComponent } from './offers-add/offers-add.component';
 import { OffersViewComponent } from './offers-view/offers-view.component';
+import { OffersDetailComponent } from './offers-detail/offers-detail.component';
 import { Router } from '@angular/router';
 import { OrderService } from 'src/app/shared/services/order.service';
 import { Order } from 'src/app/shared/model/order.model';
@@ -31,6 +32,7 @@ export class OffersComponent implements OnInit {
   public companiesForm: FormGroup;
   public perfil =  JSON.parse(localStorage.getItem('profile'));
   public count: number;
+  public ordertable: any[];
   public user: User;
   public uniqueId = (new Date()).getTime().toString();
   public openSidebar: boolean = false;
@@ -42,6 +44,8 @@ export class OffersComponent implements OnInit {
   // Ventanas Popup
   @ViewChild("quickViewOffersAdd") QuickViewOffersAdd: OffersAddComponent;
   @ViewChild("quickViewOffersView") QuickViewOffersView: OffersViewComponent;
+  @ViewChild("quickViewOffersDetail") QuickViewOffersDetail: OffersDetailComponent;
+  
   //@ViewChild("quickViewOrdersEdit") QuickViewOrdersEdit: OrdersEditComponent;
 
   constructor(
@@ -90,6 +94,21 @@ export class OffersComponent implements OnInit {
     this.subscription.add(this.srv.findByAll().subscribe(
       response => {
         this.orders = response;
+        console.log(this.orders.length);
+            let tmpOrders = [] 
+            for(let i=0;i < this.orders.length;i++){
+            tmpOrders.push({
+                photo : '<img width="50" src="'+this.orders[i].photo+'">',
+                productName : '<b>'+this.orders[i].productName+'</b>',
+                productBrand : this.orders[i].productBrand,
+                idOrder : this.orders[i].idOrder,
+                company : this.orders[i].company,
+                limitPrice : this.orders[i].limitPrice
+            });
+            }
+        this.ordertable = tmpOrders;
+            
+        console.log(this.ordertable);
         console.log(this.orders);
       }
     ))
