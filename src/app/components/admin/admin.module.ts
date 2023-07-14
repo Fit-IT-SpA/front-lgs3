@@ -29,6 +29,8 @@ import {OrdersEditComponent} from './orders/orders-edit/orders-edit.component';
 import { OrdersViewComponent } from './orders/orders-view/orders-view.component';
 import { OffersViewComponent } from './offers/offers-view/offers-view.component';
 import {OffersAddComponent} from './offers/offers-add/offers-add.component';
+import {OffersDetailComponent} from './offers/offers-detail/offers-detail.component';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { FormsRoutingModule } from '../forms/forms-routing.module';
 import { ArchwizardModule } from 'angular-archwizard';
 
@@ -49,6 +51,7 @@ import { ArchwizardModule } from 'angular-archwizard';
         OrdersAddComponent,
         OrdersViewComponent,
         OrdersEditComponent,
+        OffersDetailComponent,
         OffersAddComponent,
         OffersViewComponent,
         OffersComponent
@@ -61,6 +64,7 @@ import { ArchwizardModule } from 'angular-archwizard';
         SharedModule,
         CarouselModule,
         CKEditorModule,
+        NgxDatatableModule,
         CountToModule,
         NgbModule,
         FormsModule,
