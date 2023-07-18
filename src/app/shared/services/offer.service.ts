@@ -40,7 +40,7 @@ export class OfferService extends AbstractHttpService {
             })
         );
     }
-    remove(id: string) {
+    remove(id: string, order:string) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -48,7 +48,7 @@ export class OfferService extends AbstractHttpService {
         };
         return this.http
             .put<any>(
-                this.apiUrl + '/offer/delete/'+id, httpOptions)
+                this.apiUrl + '/offer/delete/'+id+'/'+order, httpOptions)
             .pipe(
                 map(response => {
                     return response;
