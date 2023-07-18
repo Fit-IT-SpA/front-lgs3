@@ -1,0 +1,50 @@
+<app-breadcrumb [title]="'Agregar Privilegio'"></app-breadcrumb>
+<div class="flex flex-col flex-auto" *ngIf="loading">
+    <div class="loader-box">
+        <div class="loader-3"></div>
+    </div>
+</div>
+<div class="card" *ngIf="!loading">
+    <div class="card-body" >
+        <form class="needs-validation" novalidate [formGroup]="privilegeForm">
+            <div class="form-row">
+                <div class="col-md-4 mb-3">
+                    <div class="form-group">
+                        <label>Página</label>
+                        <ng-select [items]="pageFilter" placeholder="(*) Página"
+                            class="js-example-placeholder-multiple" formControlName="page" (change)="setTitle()">
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="form-group">
+                        <label>Permiso</label>
+                        <ng-select [items]="modeFilter" placeholder="(*) Permiso"
+                            class="js-example-placeholder-multiple" formControlName="mode" (change)="setTitle()">
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label>Nombre</label>
+                    <input class="form-control" type="text" placeholder="Nombre" required="true" formControlName="name">
+                </div>
+            </div>
+            <div class="form-group mb-3">
+                <label>Descripción</label>
+                <textarea class="form-control" placeholder="(*) Descripción" rows="3" formControlName="description"></textarea>
+                <div *ngIf="privilegeForm.controls.description.errors && privilegeForm.controls.description.touched && privilegeForm.controls.description.errors.required"
+                    class="text text-danger mt-1">
+                    Es requerido
+                </div>
+            </div>
+            <div class="flex align-middle font-medium text-md mt-1 mb-3">
+                <i class="flex align-middle" data-feather="info"></i>
+                <span class="font-semibold ml-1 text-base">Los campos marcados con (*) son de caracter obligatorio.</span>
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-primary" type="button" [disabled]="privilegeForm.invalid" (click)="add()">Guardar</button>
+                <button class="btn btn-info ml-1" type="button" (click)="goBack()">Volver</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -6,6 +6,7 @@ import { UserService } from '../../../../shared/services/user.service';
 import { CompaniesService } from '../../../../shared/services/companies.service';
 import { User } from '../../../../shared/model/user';
 import { Order } from '../../../../shared/model/order.model';
+import { OrderAdd } from '../../../../shared/model/order-add.model';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { validate, clean, format } from 'rut.js';
@@ -28,7 +29,7 @@ export class OrdersEditComponent implements OnInit {
   public companiesForm: FormGroup;
   public perfil =  JSON.parse(localStorage.getItem('profile'));
   private user: User;
-  private order: Order;
+  private order: OrderAdd;
   public firstFormGroup: FormGroup;
   public secondFormGroup: FormGroup;
   public thirdFormGroup: FormGroup;
@@ -118,24 +119,14 @@ export class OrdersEditComponent implements OnInit {
   }
   createOrder() {
     return {
-        idOrder: (new Date().getTime()).toString(),
-        createBy: this.perfil.email,
-        company: this.firstFormGroup.controls.company.value,
-        sparePart: {
-            brand: this.secondFormGroup.controls.brand.value,
-            model: this.secondFormGroup.controls.model.value,
-            year: this.secondFormGroup.controls.year.value,
-            engine: this.secondFormGroup.controls.engine.value,
-        },
-        productName: this.thirdFormGroup.controls.productName.value,
-        productBrand: this.thirdFormGroup.controls.productBrand.value,
-        productDetails: this.thirdFormGroup.controls.productDetails.value,
-        limitPrice: parseInt(this.thirdFormGroup.controls.limitPrice.value),
-        offers: [],
-        status: 1,
-        qty: this.counter,
-        closingDate: this.createClosingDateTime(),
-        photo: this.filePath,
+      idOrder: (new Date().getTime()).toString(),
+      createBy: this.perfil.email,
+      company: this.firstFormGroup.controls.company.value,
+      products: [],
+      status: 1,
+      //closingDate: this.createClosingDateTime(),
+      closingDate: new Date(),
+      photo: this.filePath,
     }
 
   }
@@ -239,7 +230,7 @@ export class OrdersEditComponent implements OnInit {
     }
   }
   private setValuesForm() {
-    this.firstFormGroup.controls.company.setValue(this.order.company);
+    /*this.firstFormGroup.controls.company.setValue(this.order.company);
     this.secondFormGroup.controls.brand.setValue(this.order.sparePart.brand);
     this.secondFormGroup.controls.model.setValue(this.order.sparePart.model);
     this.secondFormGroup.controls.year.setValue(this.order.sparePart.year);
@@ -259,7 +250,7 @@ export class OrdersEditComponent implements OnInit {
     }
     this.thirdFormGroup.controls.closingDate.setValue(date);
     this.thirdFormGroup.controls.closingTime.setValue(time);
-    this.thirdFormGroup.controls.photo.setValue(this.order.photo);
+    this.thirdFormGroup.controls.photo.setValue(this.order.photo);*/
   }
 
 }

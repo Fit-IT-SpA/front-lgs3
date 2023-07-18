@@ -6,12 +6,14 @@ import { UserService } from '../../../../shared/services/user.service';
 import { CompaniesService } from '../../../../shared/services/companies.service';
 import { User } from '../../../../shared/model/user';
 import { Order } from '../../../../shared/model/order.model';
+import { OrderAdd } from '../../../../shared/model/order-add.model';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { validate, clean, format } from 'rut.js';
 import { Companies } from 'src/app/shared/model/companies.model';
 import { OrderService } from 'src/app/shared/services/order.service';
 import { Router } from '@angular/router';
+import { ConstantService } from 'src/app/shared/services/constant.service';
 
 @Component({
   selector: 'app-orders-add',
@@ -27,15 +29,20 @@ export class OrdersAddComponent implements OnInit {
   public modalOpen: boolean = false;
   public companiesForm: FormGroup;
   public perfil =  JSON.parse(localStorage.getItem('profile'));
+  public companiesTitle = this.perfil.role.slug == 'taller' ? 'Talleres' : this.perfil.role.slug == 'comercio' ? 'Comercios' : 'Negocios';
   private user: User;
-  private order: Order;
+  public orderAdd: OrderAdd;
+  public order: Order;
   public firstFormGroup: FormGroup;
-  public secondFormGroup: FormGroup;
-  public thirdFormGroup: FormGroup;
   public companies: Companies[];
   public counter: number = 1;
   public filePath: string;
   public imgFile: any;
+  public brandFilter: { value: string, label: string, job: string }[] = [
+    { value: "CHEVROLET", label: "CHEVROLET", job: "" },
+    { value: "HYUNDAI", label: "HYUNDAI", job: "" },
+    { value: "KIA MOTORS", label: "KIA MOTORS", job: "" }
+  ];
 
   constructor(
     private modalService: NgbModal,
@@ -43,35 +50,50 @@ export class OrdersAddComponent implements OnInit {
     private userSrv: UserService,
     private srv: OrderService,
     private router: Router,
-    public toster: ToastrService,) {
+    public toster: ToastrService,
+    private companiesSrv: CompaniesService) {
         this.firstFormGroup = this.fb.group({
             company: ['', Validators.required],
           });
-          this.secondFormGroup = this.fb.group({
-            brand: ['', Validators.required],
-            model: ['', Validators.required],
-            year: ['', Validators.required],
-            engine: ['', Validators.required],
-          });
-          this.thirdFormGroup = this.fb.group({
-            productName: ['', Validators.required],
-            productBrand: ['', Validators.required],
-            productDetails: ['', Validators.required],
-            limitPrice: ['', Validators.required],
-            qty: [this.counter, Validators.required],
-            closingDate: ['', Validators.required],
-            closingTime: [{hour: new Date().getHours(), minute: new Date().getMinutes()}, Validators.required],
-            photo: ['', Validators.required],
-          })
      }
 
   ngOnInit(): void {
+    if (this.haveAccess()) {
+      this.getUser();
+    } else {
+      this.router.navigate(['/admin/unauthorized']);
+    }
+  }
+  private haveAccess() {
+    let permissions = JSON.parse(localStorage.getItem("profile")).privilege;
+    if (permissions) {
+      let access = permissions.filter((perm: string) => {
+        return perm === ConstantService.PERM_MIS_PEDIDOS_ESCRITURA;
+      });
+      return access.length > 0;
+    } else {
+      return false;
+    }
+  }
+  private getUser() {
+    this.subscription.add(
+        this.companiesSrv.findByEmail(this.perfil.email).subscribe(
+            (response) => {
+                this.user = response;
+                this.companies = this.user.companies;
+                console.log(this.user);
+            },
+            (error) => {
+                this.toster.error('Se ha producido un error al intentar buscar los '+this.companiesTitle+' del usuario');
+            }
+        )
+    );
   }
   /**
    * open Dialog CUBA
    * @param user 
    */
-  openModal(user: User) {
+  /*openModal(user: User) {
     this.user = user;
     this.companies = user.companies;
     //console.log(this.user);
@@ -87,27 +109,16 @@ export class OrdersAddComponent implements OnInit {
       }, (reason) => {
         this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
       });
-  }
-
+  }*/
   add() {
-    this.order = this.createOrder();
-    this.subscription.add(this.srv.add(this.order).subscribe(
+    this.orderAdd = this.createOrder();
+    console.log(this.orderAdd);
+    this.subscription.add(this.srv.add(this.orderAdd).subscribe(
         response => {
             //console.log(response);
-            this.toster.success('Se creo correctamente su Pedido!!');
+            this.toster.success('Se creó correctamente su pedido');
             this.firstFormGroup.controls.company.setValue('');
-            this.secondFormGroup.controls.brand.setValue('');
-            this.secondFormGroup.controls.model.setValue('');
-            this.secondFormGroup.controls.year.setValue('');
-            this.secondFormGroup.controls.engine.setValue('');
-            this.thirdFormGroup.controls.productName.setValue('');
-            this.thirdFormGroup.controls.productBrand.setValue('');
-            this.thirdFormGroup.controls.productDetails.setValue('');
-            this.thirdFormGroup.controls.limitPrice.setValue('');
-            this.thirdFormGroup.controls.closingDate.setValue('');
-            this.thirdFormGroup.controls.closingTime.setValue({hour: new Date().getHours(), minute: new Date().getMinutes()});
-            this.thirdFormGroup.controls.photo.setValue('');
-            this.modalService.dismissAll();
+            this.product(response.id);
         },
         error => {
             console.log(error);
@@ -116,30 +127,22 @@ export class OrdersAddComponent implements OnInit {
     ));
     
   }
+  product(id: string) {
+    console.log(id);
+    this.router.navigate(['/admin/orders/'+id+'/products']);
+  }
   createOrder() {
     return {
         idOrder: (new Date().getTime()).toString(),
         createBy: this.perfil.email,
         company: this.firstFormGroup.controls.company.value,
-        sparePart: {
-            brand: this.secondFormGroup.controls.brand.value,
-            model: this.secondFormGroup.controls.model.value,
-            year: this.secondFormGroup.controls.year.value,
-            engine: this.secondFormGroup.controls.engine.value,
-        },
-        productName: this.thirdFormGroup.controls.productName.value,
-        productBrand: this.thirdFormGroup.controls.productBrand.value,
-        productDetails: this.thirdFormGroup.controls.productDetails.value,
-        limitPrice: parseInt(this.thirdFormGroup.controls.limitPrice.value),
-        offers: [],
-        status: 1,
-        qty: this.counter,
-        closingDate: this.createClosingDateTime(),
-        photo: this.filePath,
+        status: 0,
+        //closingDate: this.createClosingDateTime(),
+        closingDate: new Date(),
     }
 
   }
-  createClosingDateTime() {
+  /*createClosingDateTime() {
     let date: Date = new Date(
         this.thirdFormGroup.controls.closingDate.value.year, 
         this.thirdFormGroup.controls.closingDate.value.month - 1, 
@@ -148,7 +151,7 @@ export class OrdersAddComponent implements OnInit {
     date.setSeconds(0);
     date.setHours(date.getHours()-3);
     return date;
-  }
+  }*/
   /**
    * metodo para convertir cadena de caraceres en formato rut (puntos y guion)
    * @param rut rut de los talleres del usuario
@@ -172,33 +175,12 @@ export class OrdersAddComponent implements OnInit {
   public finish() {
     this.toster.success('Successfully Registered')
   }
-
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
-  }
-  public increment() {
-    this.counter += 1;
-    this.thirdFormGroup.controls.closingDate.setValue(this.counter);
-  }
-
-  public decrement() {
-    if (this.counter > 1) {
-        this.counter -= 1;
-        this.thirdFormGroup.controls.closingDate.setValue(this.counter);
-    }
-  }
-  checkImageFile() {
+  /*checkImageFile() {
     const inputNode: any = document.querySelector('#file');
     const fileTemp = inputNode.files[0];
-    var mimeType = fileTemp.type;
-    if (mimeType.match(/image\/*/) == null) {
-      this.toster.error('Formato de imagen no soportado. Formatos soportados: png, jpg, jpeg', 'X');
+    var mimeType = fileTemp.type;*/
+    //if (mimeType.match(/image\/*/) == null) {
+      /*this.toster.error('Formato de imagen no soportado. Formatos soportados: png, jpg, jpeg', 'X');
       return;
     } else {
       this.toster.success('¡Imagen subida correctamente!');
@@ -208,9 +190,9 @@ export class OrdersAddComponent implements OnInit {
       return;
     }
 
-  }
+  }*/
 
-  uploadFile() {
+  /*uploadFile() {
     
     const file = this.imgFile;
 
@@ -237,6 +219,6 @@ export class OrdersAddComponent implements OnInit {
       ));
 
     }
-  }
+  }*/
 
 }

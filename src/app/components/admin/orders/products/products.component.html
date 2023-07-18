@@ -1,0 +1,51 @@
+<app-breadcrumb [title]="'Repuestos'"></app-breadcrumb>
+<div class="flex flex-col flex-auto" *ngIf="loading">
+    <div class="showLoading">
+        <mat-progress-spinner [diameter]="60" [mode]="'indeterminate'">
+        </mat-progress-spinner>
+        <div class="mt-2 font-medium">Procesando...</div>
+    </div>
+</div>
+<div class="col-sm-12" *ngIf="!loading">
+    <div class="card">
+        <div class="card-header">
+            <h8>Debe agregar un repuesto al pedido</h8>
+        </div>
+        <div class="card-body">
+            <button class="btn btn-pill btn-primary pull-right mb-3" (click)="add()">Agregar Repuesto</button>
+            <div class="table-responsive" *ngIf="this.products && this.products.length > 0">
+                <table class="table">
+                    <thead class="table-primary">
+                        <tr>
+                            <th scope="col">Marca</th>
+                            <th scope="col">Modelo</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Chasis/VIN</th>
+                            <th scope="col">Cantidad</th>
+                            <th scope="col" *ngIf="this.order.status != 0">Ofertas</th>
+                            <th scope="col">Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let product of this.products">
+                            <td>{{product.brand}}</td>
+                            <td>{{product.model}}</td>
+                            <td>{{product.description}}</td>
+                            <td>{{product.chassis}}</td>
+                            <td>{{product.qty}}</td>
+                            <td *ngIf="this.order.status != 0">{{product.offer.length}}</td>
+                            <td><i class="icofont icofont-trash" (click)="removeWithConfirmation(product.id, product)"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-1">
+                <button class="btn btn-pill btn-primary m-r-15 mb-3" (click)="saveOrder()" *ngIf="this.products && this.products.length > 0">
+                    Guardar Pedido
+                </button>
+                <button class="btn btn-pill btn-info mb-3" (click)="cancelOrder()" *ngIf="this.order.status == 0">Cancelar Pedido</button>
+                <button class="btn btn-pill btn-info mb-3" (click)="goBack()" *ngIf="this.order.status != 0">Volver</button>
+            </div>
+        </div>
+    </div>
+</div>

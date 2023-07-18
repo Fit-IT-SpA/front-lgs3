@@ -1,4 +1,4 @@
-<app-breadcrumb [title]="'Lista de '+this.companiesName" [items]="[this.companiesName]" [active_item]="'Lista de '+this.companiesName"></app-breadcrumb>
+<app-breadcrumb [title]="'Lista de '+this.companiesTitle" [items]="[this.companiesTitle]" [active_item]="'Lista de '+this.companiesTitle"></app-breadcrumb>
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-6 col-xl-4 box-col-6 xl-50">
@@ -6,7 +6,7 @@
           <div class="card-profile">
           </div>
           <div class="text-center profile-details">
-            <button class="btn btn-primary btn-lg btn-pill" type="button" placement="top" (click)="QuickViewCompaniesAdd.openModal(this.user)" >Agregar {{this.perfil.role.name}}</button>
+            <button class="btn btn-primary btn-lg btn-pill" type="button" placement="top" (click)="QuickViewCompaniesAdd.openModal(this.user)" >Agregar {{this.companyTitle}}</button>
           </div>
         </div>
     </div>

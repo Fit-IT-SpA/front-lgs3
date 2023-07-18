@@ -28,7 +28,8 @@ export class CompaniesComponent implements OnInit{
     public user: User;
     public companies: Companies[];
     public perfil =  JSON.parse(localStorage.getItem('profile'));
-    public companiesName = this.perfil.role.slug == 'taller' ? 'Talleres' : this.perfil.role.slug == 'comercio' ? 'Comercios' : 'No posee';
+    public companiesTitle = this.perfil.role.slug == 'taller' ? 'Talleres' : this.perfil.role.slug == 'comercio' ? 'Comercios' : 'Negocios';
+    public companyTitle = this.perfil.role.slug == 'taller' ? 'Taller' : this.perfil.role.slug == 'comercio' ? 'Comercio' : 'Negocio';
 
     // Ventanas popup
     @ViewChild("quickViewCompaniesAdd") QuickViewCompaniesAdd: CompaniesAddComponent;
@@ -55,7 +56,7 @@ export class CompaniesComponent implements OnInit{
                     this.find();
                 },
                 (error) => {
-                    this.toster.error('Se ha producido un error al intentar buscar los '+this.companiesName);
+                    this.toster.error('Se ha producido un error al intentar buscar los '+this.companiesTitle);
                 }
             )
         );
@@ -67,12 +68,12 @@ export class CompaniesComponent implements OnInit{
                     this.user = response;
                     this.companies = this.user.companies;
                     if (this.user.status == 0) {
-                        this.toster.info('Para interactuar con el sistema, debe tener 1 o varios '+this.companiesName);   
+                        this.toster.info('Para interactuar con el sistema, debe tener 1 o varios '+this.companiesTitle);   
                     }
                     console.log(this.user);
                 },
                 (error) => {
-                    this.toster.error('Se ha producido un error al intentar buscar los '+this.companiesName);
+                    this.toster.error('Se ha producido un error al intentar buscar los '+this.companiesTitle);
                 }
             )
         );

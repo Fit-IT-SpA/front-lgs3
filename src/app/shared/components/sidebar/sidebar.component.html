@@ -32,9 +32,7 @@
           <i class="fa fa-angle-right pl-2" aria-hidden="true"></i>
         </div>
       </li>
-    
-      <li [class]="menuItem.headTitle1 ? 'sidebar-main-title' : 'sidebar-list'" 
-          *ngFor="let menuItem of menuItems" [ngClass]="{active: menuItem.active}">
+      <li [class]="menuItem.headTitle1 ? 'sidebar-main-title' : 'sidebar-list'" *ngFor="let menuItem of menuPrivilageItems" [ngClass]="{active: menuItem.active}">
         <div *ngIf="menuItem.headTitle1">
           <h6 class="lan-1">{{menuItem.headTitle1 | translate}}</h6>
           <p class="lan-2">{{menuItem.headTitle2 | translate}}</p>

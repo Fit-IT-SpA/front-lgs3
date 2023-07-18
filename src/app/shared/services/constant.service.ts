@@ -64,7 +64,18 @@ export class ConstantService {
     public static PERM_SERVICIOS_LECTURA               = "servicios-lectura";
     public static PERM_SERVICIOS_ESCRITURA             = "servicios-escritura";
     public static PERM_REFERIDOS_ADMIN_ESCRITURA             = "referidos-admin-escritura";
+    public static PERM_USUARIO_ADMIN_LECTURA             = "usuario-admin-lectura";
     public static PERM_USUARIO_ADMIN_ESCRITURA             = "usuario-admin-escritura";
+    public static PERM_PERFIL_ADMIN_LECTURA             = "perfil-admin-lectura";
     public static PERM_PERFIL_ADMIN_ESCRITURA             = "perfil-admin-escritura";
+    public static PERM_PRIVILEGIO_ADMIN_LECTURA             = "privilegio-admin-lectura";
     public static PERM_PRIVILEGIO_ADMIN_ESCRITURA             = "privilegio-admin-escritura";
+    public static PERM_MIS_PEDIDOS_LECTURA            = "mis-pedidos-lectura";
+    public static PERM_MIS_PEDIDOS_ESCRITURA            = "mis-pedidos-escritura";
+    public static PERM_MIS_OFERTAS_LECTURA            = "mis-ofertas-lectura";
+    public static PERM_MIS_OFERTAS_ESCRITURA            = "mis-ofertas-escritura";
+    public static PERM_MIS_TALLERES_LECTURA            = "mis-talleres-lectura";
+    public static PERM_MIS_TALLERES_ESCRITURA            = "mis-talleres-escritura";
+    public static PERM_MIS_COMERCIOS_LECTURA            = "mis-comercios-lectura";
+    public static PERM_MIS_COMERCIOS_ESCRITURA            = "mis-comercios-escritura";
 }

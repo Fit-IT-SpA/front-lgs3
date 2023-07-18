@@ -1,0 +1,96 @@
+<app-breadcrumb [title]="'Usuarios'"></app-breadcrumb>
+<div class="flex flex-col flex-auto" *ngIf="loading">
+	<div class="loader-box">
+	  <div class="loader-3"></div>
+	</div>
+</div>
+<div class="container-fluid" *ngIf="!loading">
+	<div class="card">
+		<div class="card-body">
+			<form [formGroup]="filterForm" class="needs-validation">
+				<div class="form-row">
+					<div class="col-md-4 mb-3">
+						<label>Rut</label>
+						<div class="input-group">
+							<div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-credit-card"></i></span></div>
+							<input formControlName="rut" class="form-control" type="text" placeholder="Rut" (blur)="onBlurRut()" (focus)="onFocusRut()">
+						</div>
+					</div>
+					<div class="col-md-4 mb-3">
+					  <label>Nombre</label>
+					  <div class="input-group">
+						<div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-user"></i></span></div>
+						<input formControlName="fullname" class="form-control" type="text" placeholder="Nombre">
+					  </div>
+					</div>
+					<div class="col-md-4 mb-3">
+						<label>Perfil</label>
+						<ng-select 
+							[items]="rolesFilter" 
+							placeholder="Perfil"
+							class="js-example-placeholder-multiple" 
+							formControlName="role">
+						</ng-select>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="col-md-4 mb-3">
+						<label>Email</label>
+						<div class="input-group">
+							<div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-user"></i></span></div>
+							<input formControlName="email" class="form-control" type="text" placeholder="Email">
+						</div>
+					</div>
+					<div class="col-md-4 mb-3">
+						<div class="form-group">
+							<label>Estado</label>
+							<select formControlName="status" class="form-control">
+								<option class="mat-select-placeholder" value="">Todos los Estados</option>
+								<option value="-1">Eliminado</option>
+								<option value="0">Pendiente Activación</option>
+								<option value="1">Activo</option>
+								<option value="2">Bloqueado</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-4 mb-3">
+						<div class="form-group">
+							<label>Teléfono</label>
+							<div class="input-group">
+								<div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-user"></i></span></div>
+								<input formControlName="phone" class="form-control" type="text" placeholder="Teléfono">
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+			<div class="col">
+                <button class="btn btn-primary" type="button" (click)="changeFilter()" >Buscar</button>
+            </div>
+		</div>
+	</div>
+	<div class="text-right mb-3" *ngIf="this.canWrite()">
+		<button class="btn btn-primary" type="button" (click)="add()">Agregar</button>
+	</div>
+	<table class="custom-table">
+		<thead>
+			<tr>
+				<th>Nombre</th>
+				<th>Email</th>
+				<th>Opciones</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let user of users">
+				<td>{{ user.name + " " + user.lastName }}</td>
+				<td>{{ user.email }}</td>
+				<td class="options-column">
+					<button class="btn btn-primary" *ngIf="canWrite()" (click)="edit(user.email)">Editar</button>
+					<button class="btn btn-danger" *ngIf="canWrite()" (click)="removeWithConfirmation(user.email, user.name+' '+user.lastName)">
+						Eliminar
+					</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
