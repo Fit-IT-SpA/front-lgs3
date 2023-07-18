@@ -233,6 +233,9 @@ export class ProductsComponent implements OnInit {
     ));
     return false;
   }
+  public view(id: string) {
+    this.router.navigate(['/admin/orders/'+this.order.id+'/products/view/'+id]);
+  }
   public ngOnDestroy() {
     if (this.subscription) this.subscription.unsubscribe();
   }

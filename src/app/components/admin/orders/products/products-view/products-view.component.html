@@ -1,0 +1,121 @@
+<app-breadcrumb [title]="'Detalle Repuesto'"></app-breadcrumb>
+<div class="flex flex-col flex-auto" *ngIf="loading">
+  <div class="showLoading">
+      <mat-progress-spinner [diameter]="60" [mode]="'indeterminate'">
+      </mat-progress-spinner>
+      <div class="mt-2 font-medium">Procesando...</div>
+  </div>
+</div>
+<div class="col-sm-12" *ngIf="!loading">
+    <div class="card">
+        <div class="card-body">
+            <form [formGroup]="form">
+                <div class="form-row">
+                    <div class="col-md-6 mb-3">
+                      <div class="form-group">
+                        <label>Marca</label>
+                        <ng-select [items]="brandFilter" placeholder="(*) Marca"
+                            class="js-example-placeholder-multiple" formControlName="brand">
+                        </ng-select>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <div class="form-group">
+                        <label>Modelo</label>
+                        <input class="form-control" type="text" placeholder="" formControlName="model">
+                        <div *ngIf="form.controls.model.touched && form.controls.model.errors?.minlength"
+                        class="text text-danger mt-1">
+                          Debe tener minimo de 3 caracteres
+                        </div>
+                        <div *ngIf="form.controls.model.touched && form.controls.model.errors?.maxlength"
+                        class="text text-danger mt-1">
+                          Debe tener un maximo de 40 caracteres
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                  <div class="col mb-3">
+                    <div class="form-group">
+                      <label>Descripción</label>
+                      <input class="form-control" type="text" placeholder="" formControlName="description">
+                      <div *ngIf="form.controls.description.touched && form.controls.description.errors?.minlength"
+                        class="text text-danger mt-1">
+                          Debe tener minimo de 3 caracteres
+                        </div>
+                      <div *ngIf="form.controls.description.touched && form.controls.description.errors?.maxlength"
+                        class="text text-danger mt-1">
+                          Debe tener un maximo de 40 caracteres
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col mb-3">
+                    <div class="form-group">
+                      <label>Chasis/VIN</label>
+                      <input class="form-control" type="text" placeholder="(*) Chasis/VIN" formControlName="chassis">
+                      <div *ngIf="form.controls.chassis.errors && form.controls.chassis.touched && form.controls.chassis.errors.required"
+                          class="text text-danger mt-1">
+                          Es requerido
+                      </div>
+                      <div *ngIf="form.controls.chassis.touched && form.controls.chassis.errors?.minlength"
+                        class="text text-danger mt-1">
+                          Debe tener minimo de 3 caracteres
+                        </div>
+                      <div *ngIf="form.controls.chassis.touched && form.controls.chassis.errors?.maxlength"
+                        class="text text-danger mt-1">
+                          Debe tener un maximo de 40 caracteres
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col mb-3">
+                    <fieldset>
+                      <label>Cantidad:</label>
+                      <div class="input-group bootstrap-touchspin">
+                        <button class="btn btn-primary btn-square bootstrap-touchspin-down" type="button">
+                          <i class="fa fa-minus"></i>
+                        </button>
+                        <input class="touchspin form-control" type="text" value={{counter}}>
+                        <div class="input-group-append ml-0">
+                          <button class="btn btn-primary btn-square bootstrap-touchspin-up" type="button">
+                            <i class="fa fa-plus"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </fieldset>
+                  </div>
+                </div>
+                <div id="offer_{{i}}" class="social-chat" *ngFor="let off of this.product.offer; index as i">
+                  <div class="your-msg" *ngIf="i < 2">
+                    <div class="media">
+                      <div class="media-body"><span class="f-w-500">Oferta: ${{off.price.toLocaleString('es-CL')}} <span> ({{off.cantidad}} Unidades)</span></span>
+                              <img class="img-100 img-fluid pull-right" alt=""
+                              src="{{off.photo}}">
+                        <p>{{off.origen}}</p>
+                        <p>{{off.estado}}</p>
+                        <p>{{off.comentario}}</p>
+                        
+                          <!--<button class="btn" type="button" (click)="QuickViewOrdersEdit.openModal(this.order, this.user.companies)"><i class="fa fa-edit"></i></button>-->
+                        <!--<label class="col-form-label mb-3">Aprobar Oferta</label>-->
+                        <label class="switch">
+                          <input type="checkbox" id="{{i}}" (change)="this.checkOffer(off, $event)"><span class="switch-state"></span>
+                        </label>
+                        
+                      </div>
+                    </div>
+                    <hr class="border-top:3px" >
+                  </div>
+                    
+                    
+                </div>
+              <div class="mt-1">
+                  <button class="btn btn-pill btn-primary m-r-15 mb-3" type="button" (click)="add()" [disabled]="this.countQtyOffers > this.counter || this.countQtyOffers <= 0">Confirmar | {{countQtyOffers}}</button>
+                  <button class="btn btn-pill btn-info mb-3" type="button" (click)="goBack()">Volver</button>
+              </div>
+            </form>
+        </div>
+    </div>
+</div>

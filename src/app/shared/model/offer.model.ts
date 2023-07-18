@@ -6,6 +6,7 @@ export interface Offer {
     price: number,
     photo: string,
     despacho: string,
+    cantidad: number,
     comentario: string,
     estado: string,
     origen: string
