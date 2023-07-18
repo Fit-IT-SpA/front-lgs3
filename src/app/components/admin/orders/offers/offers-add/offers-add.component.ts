@@ -60,7 +60,7 @@ export class OffersAddComponent implements OnInit {
   openModal(order: any) {
     //this.user = user;
    // this.companies = user.companies;
-
+    console.log(order);
     this.idOrder = order.id;
     this.maxQty = order.qty
     //console.log(this.user);

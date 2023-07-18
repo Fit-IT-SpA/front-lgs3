@@ -144,7 +144,7 @@ export class OrderService extends AbstractHttpService {
                 })
             );
     }
-    
+        
     findByAll() {
         const httpOptions = {
             headers: new HttpHeaders({

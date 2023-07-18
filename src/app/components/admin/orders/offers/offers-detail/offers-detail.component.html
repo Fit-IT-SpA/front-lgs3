@@ -5,37 +5,37 @@
             <div class="new-users-social">
               <div class="media">
                 <div class="media-body">
-                  <h6 class="mb-0 f-w-700">{{order.productName}}</h6>
-                  <p>Disponible hasta: {{order.closingDate}}</p>
+                  <h6 class="mb-0 f-w-700">{{product.model}}</h6>
+                  <p>Disponible hasta: {{product.closingDate}}</p>
                 </div><span class="pull-right mt-0"><i data-feather="more-vertical"></i></span>
               </div>
             </div>
             <div class="timeline-content">
               <hr>
-              <h6>{{order.productBrand}}</h6>
+              <h6>{{product.brand}}</h6>
               <p>
-                {{order.productDetails}}
+                {{product.productDetails}}
               </p>
               <p>
-                Cantidad: {{order.qty}}
+                Cantidad: {{product.qty}}
               </p>
-              <div class="product-price">${{order.limitPrice}}</div>
+              <div class="product-price">${{product.limitPrice}}</div>
               <div class="like-content"><span></span><span
                   class="pull-right comment-number"></span><span
-                  class="pull-right comment-number"><span>{{offer.length}}
+                  class="pull-right comment-number"><span>{{offers.length}}
                   </span><span><i class="fa fa-comments-o"></i></span></span></div>
-              <div id="offer_{{i}}" class="social-chat" *ngFor="let offer of offer; index as i">
+              <div id="offer_{{i}}" class="social-chat" *ngFor="let off of offers; index as i">
                 <div class="your-msg">
                   <div class="media">
-                    <div class="media-body"><span class="f-w-500">Oferta: ${{offer.price}} <span> ({{offer.cantidad}} Unidades)</span></span>
+                    <div class="media-body"><span class="f-w-500">Oferta: ${{off.price}} <span> ({{off.cantidad}} Unidades)</span></span>
                             <img class="img-100 img-fluid pull-right" alt=""
-                            src="{{offer.photo}}">
-                      <p>{{offer.origen}}</p>
-                      <p>{{offer.estado}}</p>
-                      <p>{{offer.comentario}}</p>
+                            src="{{off.photo}}">
+                      <p>{{off.origen}}</p>
+                      <p>{{off.estado}}</p>
+                      <p>{{off.comentario}}</p>
                       
                         <!--<button class="btn" type="button" (click)="QuickViewOrdersEdit.openModal(this.order, this.user.companies)"><i class="fa fa-edit"></i></button>-->
-                        <button (click)="removeWithConfirmation(offer.idOffer,i)" class="btn btn-danger" type="button">Eliminar Oferta</button>
+                        <button (click)="removeWithConfirmation(off.idOffer,i)" class="btn btn-danger" type="button">Eliminar Oferta</button>
                       
                     </div>
                   </div>

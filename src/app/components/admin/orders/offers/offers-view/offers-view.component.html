@@ -5,14 +5,14 @@
             <div class="new-users-social">
               <div class="media">
                 <div class="media-body">
-                  <h6 class="mb-0 f-w-700">{{order.productName}}</h6>
+                  <h6 class="mb-0 f-w-700">{{this.order.model}}</h6>
                   <p>Disponible hasta: {{order.closingDate}}</p>
                 </div><span class="pull-right mt-0"><i data-feather="more-vertical"></i></span>
               </div>
             </div><img class="img-fluid" alt="" src="{{order.photo}}">
             <div class="timeline-content">
               <hr>
-              <h6>{{order.productBrand}}</h6>
+              <h6>{{order.brand}}</h6>
               <p>
                 {{order.productDetails}}
               </p>
@@ -22,14 +22,14 @@
               <div class="product-price">${{order.limitPrice}}</div>
               <div class="like-content"><span></span><span
                   class="pull-right comment-number"></span><span
-                  class="pull-right comment-number"><span>{{offer.length}}
+                  class="pull-right comment-number"><span>{{order.offer?.length}}
                   </span><span><i class="fa fa-comments-o"></i></span></span></div>
               <div class="social-chat" *ngFor="let off of offer">
                 <div class="your-msg">
                   <div class="media">
                     <div class="media-body"><span class="f-w-500">Oferta<span>1 Year Ago</span></span>
                             <img class="img-50 img-fluid m-r-20 rounded-circle" alt=""
-                            src="{{off.photo}}">
+                            src="{{order.offer?.photo}}">
                       <p>offer.price</p>
                     </div>
                   </div>

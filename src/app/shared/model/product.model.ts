@@ -11,5 +11,6 @@ export interface Product {
     chassis: string,
     qty: number,
     offers: Offer[],
+    offer: Offer[],
     photo: string,
 }
