@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 
 // Menu
 export interface Menu {
+	id?: string,
 	headTitle1?: string,
 	headTitle2?: string,
 	path?: string;
@@ -87,23 +88,38 @@ export class NavService implements OnDestroy {
 	}
 
 	MENUITEMS: Menu[] = [
-		{
-			headTitle1: 'Usuario',
+		/*{
+			id: 'menu', headTitle1: 'Usuario',
 		},
 		{
-			title: 'Mi Perfil', icon: 'user', type: 'link', active: false, path: '/admin/my-profile'
+			id: 'menu', title: 'Mi Perfil', icon: 'user', type: 'link', active: false, path: '/admin/my-profile'
 		},
 		{
-			title: 'Desconectar', icon: 'radio', type: 'link', active: false, path: '/admin/desconectar'
+			id: 'menu', title: 'Desconectar', icon: 'radio', type: 'link', active: false, path: '/admin/desconectar'
+		},*/
+		{
+			id: 'menu', headTitle1: 'Menu',
 		},
 		{
-			headTitle1: 'Menu',
+			id: 'mis-comercios-lectura', path: '/admin/companies', title: 'Comercios', icon: 'home', type: 'link'
 		},
 		{
-			path: '/admin/companies', title: this.perfil.role.slug == 'taller' ? 'Talleres' : this.perfil.role.slug == 'comercio' ? 'Comercios' : 'No posee', icon: 'home', type: 'link'
+			id: 'mis-talleres-lectura', path: '/admin/companies', title: 'Talleres', icon: 'home', type: 'link'
 		},
-		this.myOrder,
 		{
+			id: 'mis-pedidos-lectura', title: 'Mis Pedidos', icon: 'shopping-cart', type: 'link', active: false, path: '/admin/orders'
+		},
+                {
+			id: 'mis-ofertas-lectura', title: 'Mis Ofertas', icon: 'shopping-cart', type: 'link', active: false, path: '/admin/orders/offers'
+		},
+		{
+			id: 'usuario-admin-escritura', title: 'Administracion', icon: 'edit', type: 'sub', active: false, children: [
+				{ id: 'usuario-admin-escritura', path: '/admin/users/user', title: 'Usuario', type: 'link' },
+				{ id: 'perfil-admin-escritura', path: '/admin/users/role', title: 'Perfil', type: 'link' },
+				{ id: 'privilegio-admin-escritura', path: '/admin/users/privilege', title: 'Privilegio', type: 'link' },
+			]
+		},
+		/*{
 			title: 'Referidos', icon: 'users', type: 'sub', active: true, children: [
 				{ path: '/admin/referers', title: 'Mis referidos', type: 'link' },
 				{ path: '/admin/referers/add', title: 'Agregar referido', type: 'link' },
@@ -130,27 +146,12 @@ export class NavService implements OnDestroy {
 			]
 		},
 		{
-			title: 'Administracion', icon: 'edit', type: 'sub', active: false, children: [
-				{ path: '/administracion/usuario', title: 'Usuario', type: 'link' },
-				{ path: '/administracion/perfil', title: 'Perfil', type: 'link' },
-				{ path: '/administracion/privilegio', title: 'Privilegio', type: 'link' },
-			]
-		},
-		{
 			title: 'Reporte', icon: 'file-text', type: 'sub', active: false, children: [
 				{ path: '/reporte/reporte', title: 'Reporte', type: 'link' },
 			]
-		},
-                
-                
-                {
-			title: 'Ver requerimientos', icon: 'file-text', type: 'sub', active: false, children: [
-				{ path: '/admin/offers', title: 'Pedidos no Ofertados', type: 'link' },
-			]
-		},
-                
+		},*/
 
-		/*{
+		{
 			headTitle1: 'Cosas que quitar',
 		},
 
@@ -459,7 +460,7 @@ export class NavService implements OnDestroy {
 		},
 		{ path: '/editor', title: 'Editor', icon: 'edit', type: 'link' },
 		{ path: '/knowledgebase', title: 'Knowledgebase', icon: 'sunrise', type: 'link' },
-		{ path: '/support-ticket', title: 'Support Ticket', icon: 'users', type: 'link' }*/
+		{ path: '/support-ticket', title: 'Support Ticket', icon: 'users', type: 'link' }
 
 	];
 
