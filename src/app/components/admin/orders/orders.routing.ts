@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { OrdersComponent } from './orders.component';
 import { OrdersAddComponent } from './orders-add/orders-add.component';
 import { ProductsAddComponent } from './products/products-add/products-add.component';
+import { ProductsViewComponent } from './products/products-view/products-view.component';
 import { ProductsComponent } from './products/products.component';
 import { OffersComponent } from './offers/offers.component';
 
@@ -29,6 +30,10 @@ export const routes: Routes = [
             {
                 path: 'orders/:id/products/add',
                 component: ProductsAddComponent
+            },
+            {
+                path: 'orders/:id/products/view/:product',
+                component: ProductsViewComponent
             },
             {
                 path: 'orders/offers',

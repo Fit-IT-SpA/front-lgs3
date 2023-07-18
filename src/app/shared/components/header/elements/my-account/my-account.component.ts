@@ -11,11 +11,16 @@ import { Router } from '@angular/router';
 export class MyAccountComponent implements OnInit {
 
     public perfil =  JSON.parse(localStorage.getItem("profile"));
+    public openMyAccount: boolean = false;
 
   constructor(public authService: AuthService, private _router: Router,) { }
 
   ngOnInit() {
      // console.log(this.perfil);
+  }
+
+  toggleMyAccount() {
+    this.openMyAccount = !this.openMyAccount;
   }
 
   logout(){

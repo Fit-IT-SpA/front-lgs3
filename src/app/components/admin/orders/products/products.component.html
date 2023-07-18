@@ -24,6 +24,7 @@
                             <th scope="col">Cantidad</th>
                             <th scope="col" *ngIf="this.order.status != 0">Ofertas</th>
                             <th scope="col">Eliminar</th>
+                            <th scope="col">Ver ofertas</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -35,6 +36,7 @@
                             <td>{{product.qty}}</td>
                             <td *ngIf="this.order.status != 0">{{product.offer.length}}</td>
                             <td><i class="icofont icofont-trash" (click)="removeWithConfirmation(product.id, product)"></i></td>
+                            <td><i class="icon-eye" (click)="view(product.id)"></i></td>
                         </tr>
                     </tbody>
                 </table>

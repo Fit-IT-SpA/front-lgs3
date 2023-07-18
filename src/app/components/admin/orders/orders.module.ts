@@ -10,6 +10,7 @@ import { OrdersAddComponent } from './orders-add/orders-add.component';
 import { OrdersEditComponent } from './orders-edit/orders-edit.component';
 import { OrdersViewComponent } from './orders-view/orders-view.component';
 import { ProductsAddComponent } from './products/products-add/products-add.component';
+import { ProductsViewComponent } from './products/products-view/products-view.component';
 import { ProductsComponent } from './products/products.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
@@ -30,6 +31,7 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
         OrdersEditComponent,
         OrdersViewComponent,
         ProductsAddComponent,
+        ProductsViewComponent,
         ProductsComponent,
         OffersComponent,
         OffersAddComponent,
