@@ -128,5 +128,37 @@ export class OrderService extends AbstractHttpService {
         }
         return value;
     }
+    
+     findByIdOrder(idOrder: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http
+            .get<any>(
+                this.apiUrl + '/product/'+idOrder, httpOptions)
+            .pipe(
+                map(response => {
+                    return response;
+                })
+            );
+    }
+    
+    findByAll() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http
+            .get<any>(
+                this.apiUrl + '/product/', httpOptions)
+            .pipe(
+                map(response => {
+                    return response;
+                })
+            );
+    }
 
 }

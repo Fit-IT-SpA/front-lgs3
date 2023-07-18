@@ -1,14 +1,10 @@
 <app-breadcrumb [title]="'Mis Privilegios'"></app-breadcrumb>
 <div class="container-fluid" *ngIf="access">
-    <!-- VOLT-F0.3 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA-->
     <div class="flex flex-col flex-auto" *ngIf="loading">
-        <div class="showLoading">
-            <mat-progress-spinner [diameter]="60" [mode]="'indeterminate'">
-            </mat-progress-spinner>
-            <div class="mt-2 font-medium">Procesando...</div>
-        </div>
+	<div class="loader-box">
+	  <div class="loader-3"></div>
+	</div>
     </div>
-
     <div class="main" *ngIf="!loading">
         <div class="content" *ngIf="privileges !== null">
             <div class="main-actions mb-4">

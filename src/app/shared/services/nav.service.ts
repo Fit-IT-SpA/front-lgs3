@@ -109,6 +109,9 @@ export class NavService implements OnDestroy {
 		{
 			id: 'mis-pedidos-lectura', title: 'Mis Pedidos', icon: 'shopping-cart', type: 'link', active: false, path: '/admin/orders'
 		},
+                {
+			id: 'mis-ofertas-lectura', title: 'Mis Ofertas', icon: 'shopping-cart', type: 'link', active: false, path: '/admin/orders/offers'
+		},
 		{
 			id: 'usuario-admin-escritura', title: 'Administracion', icon: 'edit', type: 'sub', active: false, children: [
 				{ id: 'usuario-admin-escritura', path: '/admin/users/user', title: 'Usuario', type: 'link' },

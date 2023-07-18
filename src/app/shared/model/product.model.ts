@@ -1,3 +1,4 @@
+import { Offer } from "./offer.model";
 export interface Product {
     id: string,
     idOrder: string,
@@ -8,5 +9,7 @@ export interface Product {
     //engine: string
     description: string,
     chassis: string,
-    qty: number
+    qty: number,
+    offers: Offer[],
+    photo: string,
 }

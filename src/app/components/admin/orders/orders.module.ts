@@ -16,6 +16,11 @@ import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { OrdersRoutingModule } from './orders.routing';
 import { ArchwizardModule } from 'angular-archwizard';
+import {OffersComponent  } from './offers/offers.component';
+import {OffersAddComponent  } from './offers/offers-add/offers-add.component';
+import {OffersViewComponent  } from './offers/offers-view/offers-view.component';
+import {OffersDetailComponent  } from './offers/offers-detail/offers-detail.component';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 
 @NgModule({
@@ -25,7 +30,11 @@ import { ArchwizardModule } from 'angular-archwizard';
         OrdersEditComponent,
         OrdersViewComponent,
         ProductsAddComponent,
-        ProductsComponent
+        ProductsComponent,
+        OffersComponent,
+        OffersAddComponent,
+        OffersViewComponent,
+        OffersDetailComponent
     ],
     imports: [
         CommonModule,
@@ -33,6 +42,7 @@ import { ArchwizardModule } from 'angular-archwizard';
         ArchwizardModule,
         NgApexchartsModule,
         SharedModule,
+        NgxDatatableModule,
         NgbModule,
         AgmCoreModule.forRoot({
             apiKey: ''

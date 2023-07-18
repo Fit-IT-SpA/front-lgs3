@@ -4,5 +4,9 @@ export interface Offer {
     company: string,
     status: number,
     price: number,
-    photo: string
+    photo: string,
+    despacho: string,
+    comentario: string,
+    estado: string,
+    origen: string
 }
