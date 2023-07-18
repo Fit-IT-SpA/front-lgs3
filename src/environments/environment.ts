@@ -13,7 +13,7 @@ export const environment = {
   },
 
   production: false,
-  serverUrl: "https://subdev.fittedit.com/api"
+  serverUrl: "http://localhost:3000"
 };
 /*
  * For easier debugging in development mode, you can import the following file
