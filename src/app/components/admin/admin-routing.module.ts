@@ -9,7 +9,7 @@ import {DesconectarComponent} from './desconectar/desconectar.component';
 import { CompaniesComponent } from './companies/companies.component';
 import { CompaniesAddComponent } from './companies/companies-add/companies-add.component';
 import { OrdersComponent } from './orders/orders.component';
-import { OffersComponent } from './offers/offers.component';
+import { AdminGuard } from '../../shared/guard/admin.guard';
 
 
 const routes: Routes = [
@@ -41,17 +41,30 @@ const routes: Routes = [
                 component: ReferersSellersSellsComponent
             },
             {
-                path: 'companies',
-                component: CompaniesComponent
+                path: '',
+                canActivate: [AdminGuard],
+                loadChildren: () => import('./users/user/user.module').then(m => m.UserModule)
             },
             {
-                path: 'offers',
-                component: OffersComponent
+                path: '',
+                canActivate: [AdminGuard],
+                loadChildren: () => import('./users/role/role.module').then(m => m.RoleModule)
             },
             {
-                path: 'orders',
-                component: OrdersComponent
-            }
+                path: '',
+                canActivate: [AdminGuard],
+                loadChildren: () => import('./users/privilege/privilege.module').then(m => m.PrivilegeModule)
+            },
+            {
+                path: '',
+                canActivate: [AdminGuard],
+                loadChildren: () => import('./companies/companies.module').then(m => m.CompaniesModule)
+            },
+            {
+                path: '',
+                canActivate: [AdminGuard],
+                loadChildren: () => import('./orders/orders.module').then(m => m.OrdersModule)
+            },
 
         ],
     }
