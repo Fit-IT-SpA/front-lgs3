@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { ConstantService } from './constant.service';
 import { User } from '../model/user';
 import { Order } from '../model/order.model';
+import { OrderAdd } from '../model/order-add.model';
 
 
 @Injectable()
@@ -13,7 +14,7 @@ export class OrderService extends AbstractHttpService {
     constructor(protected http: HttpClient) {
         super(http);
     }
-    add(order: Order) {
+    add(order: OrderAdd) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -34,7 +35,7 @@ export class OrderService extends AbstractHttpService {
         };
         return this.http
             .get<any>(
-                this.apiUrl + '/order/'+email, httpOptions)
+                this.apiUrl + '/order/email/'+email, httpOptions)
             .pipe(
                 map(response => {
                     return response;
@@ -56,13 +57,43 @@ export class OrderService extends AbstractHttpService {
                 })
             );
     }
+    findById(id: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http
+            .get<any>(
+                this.apiUrl + '/order/'+id, httpOptions)
+            .pipe(
+                map(response => {
+                    return response;
+                })
+            );
+    }
+    findWithProductById(id: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http
+            .get<any>(
+                this.apiUrl + '/order/'+id+'/product', httpOptions)
+            .pipe(
+                map(response => {
+                    return response;
+                })
+            );
+    }
     updateById(order: Order, id: string) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
             })
         };
-        return this.http.put<any>(`${this.apiUrl}/order/update/`+id, order, httpOptions).pipe(
+        return this.http.put<any>(`${this.apiUrl}/order/`+id, order, httpOptions).pipe(
             map(response => {
                 return response;
             })
@@ -98,6 +129,22 @@ export class OrderService extends AbstractHttpService {
         return value;
     }
     
+     findByIdOrder(idOrder: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http
+            .get<any>(
+                this.apiUrl + '/product/'+idOrder, httpOptions)
+            .pipe(
+                map(response => {
+                    return response;
+                })
+            );
+    }
+    
     findByAll() {
         const httpOptions = {
             headers: new HttpHeaders({
@@ -106,7 +153,7 @@ export class OrderService extends AbstractHttpService {
         };
         return this.http
             .get<any>(
-                this.apiUrl + '/order/', httpOptions)
+                this.apiUrl + '/product/', httpOptions)
             .pipe(
                 map(response => {
                     return response;
