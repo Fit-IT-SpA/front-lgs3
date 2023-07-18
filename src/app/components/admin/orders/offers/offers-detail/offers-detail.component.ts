@@ -79,7 +79,8 @@ export class OffersDetailComponent implements OnInit {
    */
   openModal(product: Product) {
     this.product = product;
-    this.offers = product.offers;
+    this.offers = product.offer;
+     console.log(product);
     //console.log(this.companies);
     this.modalOpen = true;
       this.modalService.open(this.QuickViewOffersDetail, { 
@@ -117,16 +118,18 @@ export class OffersDetailComponent implements OnInit {
           cancelButtonText: 'No, cancelar!'
         }).then((result) => {
           if (result.value) {  
-            this.subscription.add(this.srvOffer.remove(idOffer,this.order.idOrder).subscribe(
+            this.subscription.add(this.srvOffer.remove(idOffer,this.product.idOrder).subscribe(
                (response) => {
-                 this.subscription.add(this.srv.findByIdOrder(this.order.idOrder).subscribe(
+                 this.subscription.add(this.srv.findByIdOrder(this.product.id).subscribe(
                     (response) => {
                         Swal.fire(
                             'Eliminado!',
                             'Tu oferta '+idOffer+' se a eliminado.',
                             'success'
                         )
-                        this.offers = response.offers
+                        this.offers = response.offer;
+                        this.product.offer = response.offer;
+                        console.log(this.offers);
                     },
                         (error) => {
                             this.offers.splice(index, 1);

@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { validate, clean, format } from 'rut.js';
 import { Companies } from 'src/app/shared/model/companies.model';
 import { OrderService } from 'src/app/shared/services/order.service';
+import { Product } from 'src/app/shared/model/product.model';
 
 @Component({
   selector: 'app-offers-view',
@@ -36,6 +37,7 @@ export class OffersViewComponent implements OnInit {
   public counter: number = 1;
   public filePath: string;
   public imgFile: any;
+  public products: Product[];
 
   constructor(
     private modalService: NgbModal,
@@ -74,6 +76,7 @@ export class OffersViewComponent implements OnInit {
   openModal(order: Order) {
     this.order = order;
     console.log(this.order);
+   
     //console.log(this.companies);
     this.modalOpen = true;
       this.modalService.open(this.QuickViewOffersView, { 
