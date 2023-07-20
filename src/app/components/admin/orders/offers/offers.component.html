@@ -35,7 +35,7 @@
         <div [class]="'col-xl-'+col+' col-sm-'+col" [class.col-xl-12]="listView" *ngFor="let product of products">
             <div class="card">
               <div class="product-box">
-                <div class="product-img"><img class="img-fluid" src="{{product.photo}}" alt="">
+                <div class="product-img"><img class="img-fluid" src="assets/images/nophoto.png" alt="">
                   <div class="product-hover">
                     <ul>
                       <li (click)="QuickViewOffersAdd.openModal(product)" >
@@ -75,7 +75,6 @@
           <div class="table-responsive product-list-custom custom-datatable table-hover">
             <div class="table-responsive table-hover" style="width:100%"> 
                  <ngx-datatable class="bootstrap" [rows]="this.ordertable" [columns]="[
-                {prop:'photo',name: ''},
                 {prop:'model',name: 'Producto'},
                 {prop:'brand',name: 'Marca'},
                 {prop:'idOrder',name: 'Pedido'},

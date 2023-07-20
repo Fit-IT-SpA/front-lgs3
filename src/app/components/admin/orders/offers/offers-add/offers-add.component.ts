@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { validate, clean, format } from 'rut.js';
 import { Companies } from 'src/app/shared/model/companies.model';
 import { OrderService } from 'src/app/shared/services/order.service';
+import { Product } from '../../../../../shared/model/product.model';
 import { OfferService } from 'src/app/shared/services/offer.service';
 import { Router } from '@angular/router';
 
@@ -37,6 +38,7 @@ export class OffersAddComponent implements OnInit {
   public companies: Companies[];
   public counter: number = 1;
   public filePath: string;
+  private product: Product;
   public imgFile: any;
   public idOrder: string
   public maxQty: number;
@@ -57,12 +59,13 @@ export class OffersAddComponent implements OnInit {
    * open Dialog CUBA
    * @param user 
    */
-  openModal(order: any) {
+  openModal(product: any) {
     //this.user = user;
    // this.companies = user.companies;
-    console.log(order);
-    this.idOrder = order.id;
-    this.maxQty = order.qty
+    console.log(product);
+    this.product = product;
+    this.idOrder = product.id;
+    this.maxQty = product.qty
     //console.log(this.user);
     //console.log(this.companies);
     this.modalOpen = true;
@@ -93,17 +96,29 @@ export class OffersAddComponent implements OnInit {
 
     this.offer = this.createOffer();
     this.subscription.add(this.srvOffer.add(this.offer, this.idOrder).subscribe(
-        response => {
-            //console.log(response);
-            this.toster.success('Se creo correctamente su Pedido!!');
-            this.offersFormGroup.controls.photo.setValue('');
-            this.offersFormGroup.controls.origen.setValue('');
-            this.offersFormGroup.controls.estado.setValue('');
-            this.offersFormGroup.controls.price.setValue('');
-            this.offersFormGroup.controls.despacho.setValue('');
-            this.offersFormGroup.controls.comentario.setValue('');
-            this.offersFormGroup.controls.cantidad.setValue(0);
-            this.modalService.dismissAll();
+        response => {  
+            this.subscription.add(this.srv.findByIdOrder(this.product.id).subscribe(
+            (response) => {
+                this.toster.success('Se creo correctamente su Pedido!!');
+                this.offersFormGroup.controls.photo.setValue('');
+                this.offersFormGroup.controls.origen.setValue('');
+                this.offersFormGroup.controls.estado.setValue('');
+                this.offersFormGroup.controls.price.setValue('');
+                this.offersFormGroup.controls.despacho.setValue('');
+                this.offersFormGroup.controls.comentario.setValue('');
+                this.offersFormGroup.controls.cantidad.setValue(0);
+                this.counter = 1;
+                this.modalService.dismissAll();
+                this.product.offer = response.offer;
+            },
+                (error) => {
+                    console.log(error);
+                    this.toster.error('Se creó la oferta, pero no se logró obtener información de Pedido :(');
+                }
+          ))
+            
+            
+            
         },
         error => {
             console.log(error);

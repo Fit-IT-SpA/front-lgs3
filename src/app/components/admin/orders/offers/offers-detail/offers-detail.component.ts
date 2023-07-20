@@ -118,7 +118,7 @@ export class OffersDetailComponent implements OnInit {
           cancelButtonText: 'No, cancelar!'
         }).then((result) => {
           if (result.value) {  
-            this.subscription.add(this.srvOffer.remove(idOffer,this.product.idOrder).subscribe(
+            this.subscription.add(this.srvOffer.remove(idOffer,this.product.id).subscribe(
                (response) => {
                  this.subscription.add(this.srv.findByIdOrder(this.product.id).subscribe(
                     (response) => {
