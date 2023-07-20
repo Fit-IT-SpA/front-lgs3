@@ -37,7 +37,7 @@ export class OrdersComponent implements OnInit {
   public openSidebar: boolean = false;
   public listView: boolean = false;
   public col: string = '3';
-  public companiesName = this.perfil.role.slug == 'taller' ? 'Talleres' : this.perfil.role.slug == 'comercio' ? 'Comercios' : 'No posee';
+  public companiesName = this.perfil.role.slug == 'taller' ? 'Talleres' : this.perfil.role.slug == 'comercio' ? 'Comercios' : 'Negocios';
   public orders: Order[];
   public loading: boolean = true;
   
@@ -89,7 +89,11 @@ export class OrdersComponent implements OnInit {
         this.companiesSrv.findByEmail(this.perfil.email).subscribe(
             (response) => {
                 this.user = response;
-                this.findOrders();
+                if (this.user.status == 0) {
+                  this.router.navigate(['/admin/companies']);
+                } else {
+                  this.findOrders();
+                }
             },
             (error) => {
                 this.toster.error('Se ha producido un error al intentar buscar los '+this.companiesName);

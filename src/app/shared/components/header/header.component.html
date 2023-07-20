@@ -41,7 +41,7 @@
             <i class="fa fa-lightbulb-o" *ngIf="dark"></i>
           </div>
         </li>
-        <li class="cart-nav onhover-dropdown">
+        <li class="cart-nav onhover-dropdown" *ngIf="this.haveAccess()">
           <app-cart></app-cart>
         </li>
         <!--<li class="onhover-dropdown">

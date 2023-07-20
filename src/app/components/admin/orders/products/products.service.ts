@@ -48,6 +48,20 @@ export class ProductsService extends AbstractHttpService {
             })
         );
     }
+    updateById(id: string, product: Product) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http
+            .put<any>(`${this.apiUrl}/product/${id}`, product, httpOptions)
+            .pipe(
+                map(response => {
+                    return response;
+                })
+        );
+    }
     remove(id: string, product: Product) {
         product.status = -1;
         const httpOptions = {

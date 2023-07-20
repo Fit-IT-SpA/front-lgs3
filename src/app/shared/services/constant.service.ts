@@ -78,4 +78,6 @@ export class ConstantService {
     public static PERM_MIS_TALLERES_ESCRITURA            = "mis-talleres-escritura";
     public static PERM_MIS_COMERCIOS_LECTURA            = "mis-comercios-lectura";
     public static PERM_MIS_COMERCIOS_ESCRITURA            = "mis-comercios-escritura";
+    public static PERM_CAJA_LECTURA            = "caja-lectura";
+    public static PERM_CAJA_ESCRITURA            = "caja-escritura";
 }
