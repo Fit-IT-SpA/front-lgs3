@@ -28,6 +28,7 @@ import { UserModule } from './users/user/user.module';
 import { RoleModule } from './users/role/role.module';
 import { PrivilegeModule } from './users/privilege/privilege.module';
 import { CompaniesModule } from './companies/companies.module';
+import { CartModule } from './cart/cart.module';
 
 
 @NgModule({
@@ -55,6 +56,7 @@ import { CompaniesModule } from './companies/companies.module';
         CountToModule,
         NgbModule,
         FormsModule,
+        CartModule,
         FormsRoutingModule,
         ReactiveFormsModule,
         AgmCoreModule.forRoot({

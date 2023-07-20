@@ -7,6 +7,8 @@ export interface Product {
     status: number,
     //year: Date,
     //engine: string
+    createBy: string,
+    company: string,
     description: string,
     chassis: string,
     qty: number,

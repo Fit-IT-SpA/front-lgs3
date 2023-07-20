@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { NavService } from '../../services/nav.service';
 import { LayoutService } from '../../services/layout.service';
+import { ConstantService } from '../../services/constant.service';
 
 @Component({
   selector: 'app-header',
@@ -72,6 +73,17 @@ export class HeaderComponent implements OnInit {
       }
     }
   }
+  public haveAccess() {
+    let permissions = JSON.parse(localStorage.getItem("profile")).privilege;
+    if (permissions) {
+    let access = permissions.filter((perm: string) => {
+        return perm === ConstantService.PERM_CAJA_LECTURA;
+    });
+    return access.length > 0;
+    } else {
+    return false;
+    }
+}
 
 
 }

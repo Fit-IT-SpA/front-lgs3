@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cart',
@@ -9,7 +10,7 @@ export class CartComponent implements OnInit {
 
   public openCart: boolean = false;
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
   }
@@ -17,6 +18,9 @@ export class CartComponent implements OnInit {
   // For Mobile Device
   toggleCart() {
     this.openCart = !this.openCart;
+  }
+  goToCart() {
+    this.router.navigate(['admin/cart']);
   }
 
 }

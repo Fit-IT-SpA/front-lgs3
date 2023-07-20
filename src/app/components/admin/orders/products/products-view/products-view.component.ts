@@ -40,6 +40,7 @@ export class ProductsViewComponent implements OnInit {
   public counter: number = 1;
   public countQtyOffers: number = 0;
   public confirmOffers: Offer[] = [];
+  public totalConfirm: number = 0;
   public filePath: string;
   public imgFile: any;
   public loading: boolean = true;
@@ -117,6 +118,11 @@ export class ProductsViewComponent implements OnInit {
           qty: this.fb.control({ value: response.qty, disabled: true }),
         });
         this.product = response;
+        for (let off of this.product.offer) {
+          if (off.status >= 2) {
+            this.form.controls.qty.setValue(this.form.controls.qty.value - off.cantidad);
+          }
+        }
         this.counter = this.form.controls.qty.value;
         this.loading = false;
       }, error => {
@@ -144,12 +150,14 @@ export class ProductsViewComponent implements OnInit {
     if (event.currentTarget.checked) {
       this.confirmOffers.push(offer);
       this.countQtyOffers = this.countQtyOffers + offer.cantidad;
+      this.totalConfirm = this.totalConfirm + offer.price;
     } else {
       // eliminar elemento del array
       var deleteOffer: Offer = this.confirmOffers.find((off) => off.idOffer === offer.idOffer);
       this.confirmOffers.splice(this.confirmOffers.indexOf(deleteOffer), 1);
 
       this.countQtyOffers =  this.countQtyOffers - offer.cantidad;
+      this.totalConfirm = this.totalConfirm - offer.price;
     }
     //console.log(this.confirmOffers);
   }
@@ -162,12 +170,19 @@ export class ProductsViewComponent implements OnInit {
         }
       }
     }
-    console.log(this.product);
     this.save();
   }
   private save() {
-    this.toster.success("Se confirmarón "+this.countQtyOffers+" producto(s), para pagar debe pasar por caja.");
-    this.router.navigate(['/admin/orders/'+this.orderId+'/products']);
+    this.subscription.add(this.srv.updateById(this.product.id, this.product).subscribe(
+      response => {
+        console.log(response);
+        this.toster.success("Se confirmarón "+this.countQtyOffers+" producto(s), para pagar debe pasar por caja.");
+        this.router.navigate(['/admin/cart']);
+      }, error => {
+        console.log(error);
+        this.toster.error("Se produjo un error al intentar agregar los productos al carro");
+      }
+    ));
   }
   public goBack() {
     this.router.navigate(['/admin/orders/'+this.orderId+'/products']);

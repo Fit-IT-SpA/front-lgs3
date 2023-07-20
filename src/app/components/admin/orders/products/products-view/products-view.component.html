@@ -78,7 +78,7 @@
                         <button class="btn btn-primary btn-square bootstrap-touchspin-down" type="button">
                           <i class="fa fa-minus"></i>
                         </button>
-                        <input class="touchspin form-control" type="text" value={{counter}}>
+                        <input class="touchspin form-control" type="text" value={{counter}} [disabled]="true">
                         <div class="input-group-append ml-0">
                           <button class="btn btn-primary btn-square bootstrap-touchspin-up" type="button">
                             <i class="fa fa-plus"></i>
@@ -89,7 +89,7 @@
                   </div>
                 </div>
                 <div id="offer_{{i}}" class="social-chat" *ngFor="let off of this.product.offer; index as i">
-                  <div class="your-msg" *ngIf="i < 2">
+                  <div class="your-msg" *ngIf="i < 5 && off.status <= 1">
                     <div class="media">
                       <div class="media-body"><span class="f-w-500">Oferta: ${{off.price.toLocaleString('es-CL')}} <span> ({{off.cantidad}} Unidades)</span></span>
                               <img class="img-100 img-fluid pull-right" alt=""
@@ -111,10 +111,14 @@
                     
                     
                 </div>
+              <span>Total: ${{this.totalConfirm.toLocaleString('es-CL')}} | Productos: {{countQtyOffers}}</span>
               <div class="mt-1">
-                  <button class="btn btn-pill btn-primary m-r-15 mb-3" type="button" (click)="add()" [disabled]="this.countQtyOffers > this.counter || this.countQtyOffers <= 0">Confirmar | {{countQtyOffers}}</button>
+                  <button class="btn btn-pill btn-primary m-r-15 mb-3" type="button" (click)="add()" [disabled]="this.countQtyOffers > this.counter || this.countQtyOffers <= 0">Confirmar</button>
                   <button class="btn btn-pill btn-info mb-3" type="button" (click)="goBack()">Volver</button>
               </div>
+              <div *ngIf="this.countQtyOffers > this.counter"class="text text-danger mt-1">
+                La confirmación de ofertas no puede exceder la cantidad del producto pedido ({{this.counter}})
+              </div>  
             </form>
         </div>
     </div>
