@@ -2,7 +2,7 @@ name: Angular deployment
 on:
   push:
     branches:
-      - dev
+      ["dev","fb7"]
 
 jobs:
   deploy-prod:
@@ -27,3 +27,27 @@ jobs:
 
       - name: Deploy using rsync
         run: rsync -avz ./dist/cuba/ ${{ secrets.SUBDEV_SSH_USER }}@${{ secrets.SUBDEV_SSH_HOST }}:/var/www/html/
+        
+  deploy-fb7:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14.x
+          cache: "npm"
+      
+      - name: Intall dependencies and build
+        run: npm ci && npm run build:fb7
+
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2.5.1
+        with:
+          key: ${{ secrets.FB7_SSH_PRIVATE_KEY }}
+          known_hosts: ${{ secrets.FB7_KNOWN_HOSTS }}
+
+      - name: Deploy using rsync
+        run: rsync -avz ./dist/cuba/ ${{ secrets.FB7_SSH_USER }}@${{ secrets.FB7SSH_HOST }}:/var/www/html/
+
