@@ -51,8 +51,8 @@ export class SidebarComponent {
         }
       });
     });
-    this.menuPrivilageItems = this.menuItems;
-    //this.privilageMenu();
+    //this.menuPrivilageItems = this.menuItems;
+    this.privilageMenu();
   }
 
   @HostListener('window:resize', ['$event'])
