@@ -100,11 +100,11 @@ export class OffersComponent implements OnInit {
             let tmpOrders = [] 
             for(let i=0;i < this.products.length;i++){
             tmpOrders.push({
-                photo : '<img width="50" src="'+this.products[i].photo+'">',
+                /*photo : '<img width="50" src="'+this.products[i].photo+'">',
                 model : '<b>'+this.products[i].model+'</b>',
                 name : this.products[i].brand,
                 idOrder : this.products[i].idOrder,
-                company : this.products[i].brand,
+                company : this.products[i].brand,*/
                // limitPrice : this.orders[i].limitPrice
             });
             }

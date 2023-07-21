@@ -105,7 +105,7 @@ export class OrdersComponent implements OnInit {
     this.subscription.add(this.srv.findByEmail(this.perfil.email).subscribe(
       response => {
         this.orders = response;
-        //console.log(this.orders);
+        console.log(this.orders);
         this.loading = false;
       }, error => {
         console.log(error);

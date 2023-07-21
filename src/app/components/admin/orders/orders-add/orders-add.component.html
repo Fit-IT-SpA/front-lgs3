@@ -3,121 +3,103 @@
   <div class="row">
     <div class="col-sm-12">
       <div class="card">
+        <form [formGroup]="formOrder">
         <div class="card-header">
-          <h5>Crear Pedido</h5>
+          <h5>Datos auto</h5>
         </div>
         <div class="card-body">
-          <div class="card-header">
-            <h6>Elige un {{this.perfil.role.name}}</h6>
-        </div>
-        <form [formGroup]="firstFormGroup">
-        <!--company-->
-        <div class="card-block row">
-            <div class="col-sm-12 col-lg-12 col-xl-12">
-              <div class="table-responsive">
-                <table class="table table-bordered radio-first-col-width">
-                  <tbody>
-                    <tr *ngFor="let company of companies; index as i">
-                        <td *ngIf="this.formatRut(company.rut) != 'rut incorrecto'" >{{company.name}} 
-                            <div class="radio radio-primary">
-                                <input id="radio{{i}}" class="ml-2" type="radio" name="radio" value="{{company.rut}}" (click)="this.clickCompany(company.rut)">
-                                <label for="radio{{i}}" class="mb-0">{{this.formatRut(company.rut)}}</label>
-                            </div>
-                        </td>
-                    </tr>
-                  </tbody>
-                </table>
+        
+          <!--company-->
+          <div class="card-block row">
+              <div class="col-sm-12 col-lg-12 col-xl-12">
+                <!--<div class="mb-3">
+                  <h5>Datos de auto</h5>
+                </div>--->
+                <div class="form-row">
+                  <div class="col-md-6 mb-3">
+                    <div class="form-group">
+                      <label>Marca</label>
+                      <ng-select [items]="brandFilter" placeholder="(*) Marca"
+                          class="js-example-placeholder-multiple" formControlName="brand">
+                      </ng-select>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <div class="form-group">
+                      <label>Modelo</label>
+                      <input class="form-control" type="text" placeholder="Modelo" formControlName="model">
+                      <div *ngIf="formOrder.controls.model.touched && formOrder.controls.model.errors?.minlength"
+                      class="text text-danger mt-1">
+                        Debe tener minimo de 3 caracteres
+                      </div>
+                      <div *ngIf="formOrder.controls.model.touched && formOrder.controls.model.errors?.maxlength"
+                      class="text text-danger mt-1">
+                        Debe tener un maximo de 40 caracteres
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col mb-3">
+                    <div class="form-group">
+                      <label>Chasis/VIN</label>
+                      <input class="form-control" type="text" placeholder="(*) Chasis/VIN" formControlName="chassis">
+                      <div *ngIf="formOrder.controls.chassis.errors && formOrder.controls.chassis.touched && formOrder.controls.chassis.errors.required"
+                          class="text text-danger mt-1">
+                          Es requerido
+                      </div>
+                      <div *ngIf="formOrder.controls.chassis.touched && formOrder.controls.chassis.errors?.minlength"
+                        class="text text-danger mt-1">
+                          Debe tener minimo de 3 caracteres
+                        </div>
+                      <div *ngIf="formOrder.controls.chassis.touched && formOrder.controls.chassis.errors?.maxlength"
+                        class="text text-danger mt-1">
+                          Debe tener un maximo de 40 caracteres
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-4">
+                  <div>
+                    <h6>Agrega una foto del padrón del auto</h6>
+                    <span>(Donde aparezca el VIN del auto, para asegurar que recibas ofertas precisas a lo que buscas)</span>
+                  </div>
+                  <img src="{{url}}" class="row mb-3" id="image_service">
+                  <button class="btn btn-info mb-3" (click)="fileInput.click()" type="button">
+                    <i class="flex align-middle" data-feather="download"></i>
+                    Cargar Imagen
+                  </button>
+                  <input class="btn btn-outline-primary" type="file" #fileInput (change)="fileChangeEvent($event)" hidden >
+                </div>
               </div>
             </div>
-          </div>
-        <hr>
-        <button class="btn btn-pill btn-primary" type="submit" [disabled]="!firstFormGroup.valid" (click)="add()">Crear Pedido</button>
-        </form>
-              <!--<div id="step-3">
-                <aw-wizard-step stepTitle="info">
-                  <form [formGroup]="thirdFormGroup">
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <input class="btn btn-outline-primary" (change)="checkImageFile()" 
-                                #fileInput type="file" id="file" (click)="fileInput.click()">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label>Nombre del Pedido:</label>
-                                <input class="form-control" formControlName="productName">
-                                <ng-container class="invalid"
-                                *ngIf="thirdFormGroup.get('productName').hasError('required') && thirdFormGroup.get('productName').touched">
-                                Nombre es requerido</ng-container>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label>Marca del Pedido:</label>
-                                <input class="form-control" formControlName="productBrand">
-                                <ng-container class="invalid"
-                                *ngIf="thirdFormGroup.get('productBrand').hasError('required') && thirdFormGroup.get('productBrand').touched">
-                                Marca es requerido</ng-container>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group mb-0">
-                                <label for="exampleFormControlTextarea4">Información del Pedido:</label>
-                                <textarea class="form-control" id="exampleFormControlTextarea4" rows="3" formControlName="productDetails"></textarea>
-                                <ng-container class="invalid"
-                                *ngIf="thirdFormGroup.get('productDetails').hasError('required') && thirdFormGroup.get('productDetails').touched">
-                                Información es requerido</ng-container>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group mb-0">
-                        <label>Precio Limite:</label>
-                        <div class="input-group pill-input-group">
-                          <div class="input-group-prepend"><span class="input-group-text">$</span></div>
-                          <input class="form-control" type="text" aria-label="Amount (to the nearest dollar)" formControlName="limitPrice" onlyNumbers>
-                        </div>
-                        <ng-container class="invalid"
-                        *ngIf="thirdFormGroup.get('limitPrice').hasError('required') && thirdFormGroup.get('limitPrice').touched">
-                        Precio Limite es requerido</ng-container>
-                      </div>
-                    <fieldset>
-                        <label>Cantidad:</label>
-                        <div class="input-group bootstrap-touchspin">
-                          <button class="btn btn-primary btn-square bootstrap-touchspin-down" type="button" (click)=decrement()>
-                            <i class="fa fa-minus"></i>
-                          </button>
-                          <input class="touchspin form-control" type="text" value={{counter}}>
-                          <div class="input-group-append ml-0">
-                            <button class="btn btn-primary btn-square bootstrap-touchspin-up" type="button" (click)=increment()>
-                              <i class="fa fa-plus"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </fieldset>
-                    <div class="form-group custom-datepicker-dropdown custom-datepicker">
-                        <label for="exampleFormControlInput1">Fecha de Cierre:</label>
-                        <input class="form-control digits" type="text" formControlName="closingDate" ngbDatepicker
-                          #dob="ngbDatepicker" disableKeyPress (click)="dob.toggle()">
-                        <ng-container class="invalid"
-                          *ngIf="thirdFormGroup.get('closingDate').hasError('required') && thirdFormGroup.get('closingDate').touched">
-                          Fecha de cierre es requerida</ng-container>
-                    </div>
-                    <ngb-timepicker class="time-picker-custom" formControlName="closingTime"></ngb-timepicker>
-
-                    <button class="btn btn-success pull-right" type="button" awNextStep (click)="uploadFile()"
-                    [disabled]="!thirdFormGroup.valid">Crear</button>
-                    <button class="btn btn-secondary pull-right mr-1" type="button" awPreviousStep>Anterior</button>
-                  </form>
-                </aw-wizard-step>
-              </div>-->
         </div>
+        <hr class="border-top:3px" >
+        <div class="card-header">
+          <h5>Datos taller</h5>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive mb-3">
+            <div class="">
+              <h6>Elige un {{this.perfil.role.name}}</h6>
+            </div>
+            <table class="table table-bordered radio-first-col-width">
+              <tbody>
+                <tr *ngFor="let company of companies; index as i">
+                    <td *ngIf="this.formatRut(company.rut) != 'rut incorrecto'" >{{company.name}} 
+                        <div class="radio radio-primary">
+                            <input id="radio{{i}}" class="ml-2" type="radio" name="radio" value="{{company.rut}}" (click)="this.clickCompany(company.rut)"
+                            [checked]="i === 0">
+                            <label for="radio{{i}}" class="mb-0">{{this.formatRut(company.rut)}}</label>
+                        </div>
+                    </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <button class="btn btn-pill btn-primary" type="submit" [disabled]="!formOrder.valid" (click)="add()">Crear Pedido</button>
+        </div>
+      </form>
       </div>
     </div>
   </div>

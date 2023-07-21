@@ -33,7 +33,7 @@
         <div [class]="'col-xl-'+col+' col-sm-'+col" [class.col-xl-12]="listView" *ngFor="let order of orders">
             <div class="card">
               <div class="product-box">
-                <div class="product-img"><img class="img-fluid" src="assets/images/companies/taller.jpg" alt="">
+                <div class="product-img"><img class="img-fluid" src="{{order.photo}}" alt="">
                   <div class="product-hover">
                     <ul>
                       <li>
@@ -50,10 +50,10 @@
                   </div>
                 </div>
                 <div class="product-details">
-                  <h4>{{order.company.name}}</h4>
-                  <p>{{order.company.direction}}</p>
+                  <h4>{{order.chassis}}</h4>
+                  <p>{{order.brand}}</p>
+                  <p>{{order.model}}</p>
                   <p>{{order.idOrder}}</p>
-                  <p>{{this.formatRut(order.company.rut)}}</p>
                   <!--<div class="product-price">repuestos: {{order.products.length}}</div>-->
                 </div>
               </div>
