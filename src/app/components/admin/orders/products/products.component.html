@@ -9,41 +9,48 @@
 <div class="col-sm-12" *ngIf="!loading">
     <div class="card">
         <div class="card-header">
-            <h8>Debe agregar un repuesto al pedido</h8>
+            <h5>Lista de Repuestos</h5>
+            <span *ngIf="!this.products || this.products.length <= 0">Para publicar su pedido debe tener al menos un repuesto</span>
         </div>
         <div class="card-body">
+            <div class="social-chat mb-3">
+                <div class="your-msg">
+                    <div class="media">
+                        <div class="media-body">
+                            <span class="f-w-500">{{order.chassis}}</span>
+                            <img class="img-100 img-fluid pull-right" alt="" src="{{order.photo}}">
+                            <p>{{order.brand}}</p>
+                            <p>{{order.model}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <button class="btn btn-pill btn-primary pull-right mb-3" (click)="add()">Agregar Repuesto</button>
             <div class="table-responsive" *ngIf="this.products && this.products.length > 0">
                 <table class="table">
                     <thead class="table-primary">
                         <tr>
-                            <th scope="col">Marca</th>
-                            <th scope="col">Modelo</th>
-                            <th scope="col">Descripción</th>
-                            <th scope="col">Chasis/VIN</th>
+                            <th scope="col">Repuesto</th>
                             <th scope="col">Cantidad</th>
                             <th scope="col" *ngIf="this.order.status != 0">Ofertas</th>
-                            <th scope="col">Eliminar</th>
-                            <th scope="col">Ver ofertas</th>
+                            <!--<th scope="col">Eliminar</th>-->
+                            <th scope="col">Ver Detalle</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let product of this.products">
-                            <td>{{product.brand}}</td>
-                            <td>{{product.model}}</td>
-                            <td>{{product.description}}</td>
-                            <td>{{product.chassis}}</td>
+                            <td>{{product.title}}</td>
                             <td>{{product.qty}}</td>
                             <td *ngIf="this.order.status != 0">{{product.offer.length}}</td>
-                            <td><i class="icofont icofont-trash" (click)="removeWithConfirmation(product.id, product)"></i></td>
+                            <!--<td><i class="icofont icofont-trash" (click)="removeWithConfirmation(product.id, product)"></i></td>-->
                             <td><i class="icon-eye" (click)="view(product.id)"></i></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="mt-1">
-                <button class="btn btn-pill btn-primary m-r-15 mb-3" (click)="saveOrder()" *ngIf="this.products && this.products.length > 0">
-                    Guardar Pedido
+                <button class="btn btn-pill btn-primary m-r-15 mb-3" (click)="saveOrder()" *ngIf="this.products && this.products.length > 0 && this.order.status == 0">
+                    Publicar Pedido
                 </button>
                 <button class="btn btn-pill btn-info mb-3" (click)="cancelOrder()" *ngIf="this.order.status == 0">Cancelar Pedido</button>
                 <button class="btn btn-pill btn-info mb-3" (click)="goBack()" *ngIf="this.order.status != 0">Volver</button>

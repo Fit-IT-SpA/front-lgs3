@@ -82,6 +82,7 @@ export class ProductsComponent implements OnInit {
     this.subscription.add(this.srvOrder.findById(id).subscribe(
         response => {
             this.order = response;
+            console.log(this.order);
             this.getProducts();
         }, error => {
             console.log(error);
@@ -109,27 +110,38 @@ export class ProductsComponent implements OnInit {
       text: "No podras revertir esto despues!",
       type: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
       confirmButtonText: 'Si, quiero hacerlo!',
-      cancelButtonText: 'No, cancelar!'
+      cancelButtonText: 'No, cancelar!',
+      buttonsStyling: false,
+      customClass: {
+        confirmButton: 'btn btn-pill btn-primary', // Agrega tu clase CSS personalizada aquí
+        cancelButton: 'btn btn-pill btn-info', // Agrega tu clase CSS personalizada aquí
+      }
     }).then((result) => {
       if (result.value) {
         this.loading = true;
         let confirm = this.removeProduct(id, product);
         if (confirm) {
-            Swal.fire(
-                'Repuesto eliminado',
-                'Tu repuesto a sido eliminado.',
-                'success'
-            )
+            Swal.fire({
+              title: 'Repuesto eliminado',
+              text: 'Tu repuesto a sido eliminado.',
+              type: 'success',
+              buttonsStyling: false,
+              customClass: {
+                confirmButton: 'btn btn-pill btn-primary', // Agrega tu clase CSS personalizada aquí
+              }
+            });
             this.ngOnInit();
         } else {
-            Swal.fire(
-                'Ups.. algo salio mal!',
-                'Tu repuesto no se pudo eliminar.',
-                'error'
-            )
+            Swal.fire({
+                title: 'Ups.. algo salio mal!',
+                text: 'Tu repuesto no se pudo eliminar.',
+                type: 'error',
+                buttonsStyling: false,
+                customClass: {
+                  confirmButton: 'btn btn-pill btn-primary', // Agrega tu clase CSS personalizada aquí
+                }
+            });
         }
         
       }
@@ -141,26 +153,37 @@ export class ProductsComponent implements OnInit {
       text: "No podras revertir esto despues!",
       type: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
       confirmButtonText: 'Si, quiero hacerlo!',
-      cancelButtonText: 'No, cancelar!'
+      cancelButtonText: 'No, cancelar!',
+      buttonsStyling: false,
+      customClass: {
+        confirmButton: 'btn btn-pill btn-primary', // Agrega tu clase CSS personalizada aquí
+        cancelButton: 'btn btn-pill btn-info', // Agrega tu clase CSS personalizada aquí
+      }
     }).then((result) => {
       if (result.value) {
         let confirm = this.removeOrder();
         if (confirm) {
-            Swal.fire(
-                'Pedido cancelado',
-                'Tu pedido se a cancelado.',
-                'success'
-            )
+            Swal.fire({
+                title: 'Pedido cancelado',
+                text: 'Tu pedido se a cancelado.',
+                type: 'success',
+                buttonsStyling: false,
+                customClass: {
+                  confirmButton: 'btn btn-pill btn-primary', // Agrega tu clase CSS personalizada aquí
+                }
+            });
             this.goBack();
         } else {
-            Swal.fire(
-                'Ups.. algo salio mal!',
-                'Tu pedido no se a cancelado.',
-                'error'
-            )
+            Swal.fire({
+                title: 'Ups.. algo salio mal!',
+                text: 'Tu pedido no se a cancelado.',
+                type: 'error',
+                buttonsStyling: false,
+                customClass: {
+                  confirmButton: 'btn btn-pill btn-primary', // Agrega tu clase CSS personalizada aquí
+                }
+            });
         }
         
       }
@@ -168,30 +191,42 @@ export class ProductsComponent implements OnInit {
   }
   public saveOrder() {
     Swal.fire({
-      title: 'Estas seguro que deseas guardar tu pedido?',
+      title: 'Estas seguro que deseas publicar tu pedido?',
+      text: 'Tus productos serán visibles para todos los comercios y comenzarás a recibir ofertas. Atento!',
       type: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
       confirmButtonText: 'Si, quiero hacerlo!',
-      cancelButtonText: 'No, cancelar!'
+      cancelButtonText: 'No, cancelar!',
+      buttonsStyling: false,
+      customClass: {
+        confirmButton: 'btn btn-pill btn-primary', // Agrega tu clase CSS personalizada aquí
+        cancelButton: 'btn btn-pill btn-info', // Agrega tu clase CSS personalizada aquí
+      }
     }).then((result) => {
       if (result.value) {
         this.loading = true;
         let confirm = this.save();
         if (confirm) {
-            Swal.fire(
-                'Pedido guardado',
-                'Tu pedido se a guardado con exito.',
-                'success'
-            )
+            Swal.fire({
+                title: 'Pedido publicado',
+                text: 'Tu pedido se ha publicado con exito.',
+                type: 'success',
+                buttonsStyling: false,
+                customClass: {
+                  confirmButton: 'btn btn-pill btn-primary', // Agrega tu clase CSS personalizada aquí
+                }
+            });
             this.goBack();
         } else {
-            Swal.fire(
-                'Ups.. algo salio mal!',
-                'Tu pedido no se pudo guardar.',
-                'error'
-            )
+            Swal.fire({
+                title: 'Ups.. algo salio mal!',
+                text: 'Tu pedido no se pudo publicar.',
+                type: 'error',
+                buttonsStyling: false,
+                customClass: {
+                  confirmButton: 'btn btn-pill btn-primary', // Agrega tu clase CSS personalizada aquí
+                }
+            });
         }
         
       }

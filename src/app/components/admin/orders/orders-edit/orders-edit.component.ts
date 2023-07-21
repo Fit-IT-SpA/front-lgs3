@@ -119,14 +119,18 @@ export class OrdersEditComponent implements OnInit {
   }
   createOrder() {
     return {
-      idOrder: (new Date().getTime()).toString(),
-      createBy: this.perfil.email,
-      company: this.firstFormGroup.controls.company.value,
-      products: [],
-      status: 1,
-      //closingDate: this.createClosingDateTime(),
-      closingDate: new Date(),
-      photo: this.filePath,
+        idOrder: (new Date().getTime()).toString(),
+        createBy: this.perfil.email,
+        company: this.thirdFormGroup.controls.company.value,
+        status: 0,
+        //closingDate: this.createClosingDateTime(),
+        brand: (this.thirdFormGroup.controls.brand.value) ? this.thirdFormGroup.controls.brand.value.value : '',
+        model: (this.thirdFormGroup.controls.model.value) ? this.thirdFormGroup.controls.model.value : '',
+        //year: '',
+        //engine: '',
+        chassis: (this.thirdFormGroup.controls.chassis.value) ? this.thirdFormGroup.controls.chassis.value : '',
+        photo: (this.thirdFormGroup.controls.photo.value) ? this.thirdFormGroup.controls.photo.value : '',
+        closingDate: new Date(),
     }
 
   }

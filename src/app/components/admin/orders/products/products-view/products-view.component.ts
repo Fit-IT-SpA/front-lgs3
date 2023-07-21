@@ -60,10 +60,7 @@ export class ProductsViewComponent implements OnInit {
     public toster: ToastrService,
     public srv: ProductsService) {
       this.form = this.fb.group({
-        brand: [null, [Validators.required]],
-        model: ['', [Validators.minLength(3), Validators.maxLength(40)]],
-        chassis: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
-        description: ['', [Validators.minLength(3), Validators.maxLength(40)]],
+        description: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
         qty: ['', Validators.required],
         //year: ['', Validators.required],
         //engine: ['', Validators.required],
@@ -76,7 +73,6 @@ export class ProductsViewComponent implements OnInit {
         this.orderId = params['id'];
         let product: string = params['product'];
         this.getProduct(product);
-        //this.getOrder(id);
       }));
     } else {
       this.router.navigate(['/admin/unauthorized']);
@@ -97,7 +93,7 @@ export class ProductsViewComponent implements OnInit {
     this.subscription.add(this.srvOrder.findById(id).subscribe(
       response => {
           this.order = response;
-          this.form.controls.qty.setValue(this.counter);
+          console.log(this.order);
           this.loading = false;
 
       }, error => {
@@ -110,11 +106,7 @@ export class ProductsViewComponent implements OnInit {
       response => {
         console.log(response);
         this.form = this.fb.group({
-          brand: this.fb.control({ value: response.brand, disabled: true }),
-          model: this.fb.control({ value: response.model, disabled: true }),
-          chassis: this.fb.control({ value: response.chassis, disabled: true }),
-          name: this.fb.control({ value: response.name, disabled: true }),
-          description: this.fb.control({ value: response.description, disabled: true }),
+          description: this.fb.control({ value: response.title, disabled: true }),
           qty: this.fb.control({ value: response.qty, disabled: true }),
         });
         this.product = response;
@@ -124,7 +116,7 @@ export class ProductsViewComponent implements OnInit {
           }
         }
         this.counter = this.form.controls.qty.value;
-        this.loading = false;
+        this.getOrder(this.orderId);
       }, error => {
         console.log(error);
         this.loading = false;
