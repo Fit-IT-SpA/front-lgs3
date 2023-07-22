@@ -14,13 +14,13 @@ export class OfferService extends AbstractHttpService {
     constructor(protected http: HttpClient) {
         super(http);
     }
-    add(order: Offer, id) {
+    add(offer: Offer) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
             })
         };
-        return this.http.post<any>(`${this.apiUrl}/offer/`+id, order, httpOptions).pipe(
+        return this.http.post<any>(`${this.apiUrl}/offer/`, offer, httpOptions).pipe(
             map(response => {
                 return response;
             })
@@ -40,20 +40,17 @@ export class OfferService extends AbstractHttpService {
             })
         );
     }
-    remove(id: string, order:string) {
+    remove(id: string) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
             })
         };
-        return this.http
-            .put<any>(
-                this.apiUrl + '/offer/delete/'+id+'/'+order, httpOptions)
-            .pipe(
-                map(response => {
-                    return response;
-                })
-            );
+        return this.http.delete<any>(`${this.apiUrl}/offer/delete/${id}`, httpOptions).pipe(
+            map(response => {
+                return response;
+            })
+        );
     }
     uploadFile(file: FormData) {
         return this.http.post<any>(`${this.apiUrl}/files`, file).pipe(

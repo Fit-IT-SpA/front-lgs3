@@ -42,6 +42,7 @@ export class OffersAddComponent implements OnInit {
   public imgFile: any;
   public idOrder: string
   public maxQty: number;
+  public idProduct: string
 
   constructor(
     private modalService: NgbModal,
@@ -64,7 +65,8 @@ export class OffersAddComponent implements OnInit {
    // this.companies = user.companies;
     console.log(product);
     this.product = product;
-    this.idOrder = product.id;
+    this.idOrder = product.idOrder;
+    this.idProduct= product.id;
     this.maxQty = product.qty
     //console.log(this.user);
     //console.log(this.companies);
@@ -95,8 +97,10 @@ export class OffersAddComponent implements OnInit {
   add() {
 
     this.offer = this.createOffer();
-    this.subscription.add(this.srvOffer.add(this.offer, this.idOrder).subscribe(
+    this.subscription.add(this.srvOffer.add(this.offer).subscribe(
         response => {  
+            console.log(this.product.id);
+            console.log(this.idProduct);
             this.subscription.add(this.srv.findByIdOrder(this.product.id).subscribe(
             (response) => {
                 this.toster.success('Se creo correctamente su Pedido!!');
@@ -140,6 +144,9 @@ export class OffersAddComponent implements OnInit {
         company: /*this.offersFormGroup.controls.company.value*/ this.perfil.email,
         status: 1,
         photo: this.filePath,
+        idOrder : this.idOrder,
+        idProduct : this.idProduct
+
     }
 
   }
