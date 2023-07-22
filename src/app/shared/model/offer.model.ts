@@ -9,5 +9,7 @@ export interface Offer {
     cantidad: number,
     comentario: string,
     estado: string,
-    origen: string
+    origen: string,
+    idOrder: string,
+    idProduct: string
 }
