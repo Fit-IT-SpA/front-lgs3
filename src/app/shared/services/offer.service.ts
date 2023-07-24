@@ -59,4 +59,95 @@ export class OfferService extends AbstractHttpService {
           })
         );
       }
+    updateAllIds(ids: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http
+            .put<any>(
+                this.apiUrl + '/offer/all/'+ids, httpOptions)
+            .pipe(
+                map(response => {
+                    return response;
+                })
+        );
+    }
+    
+    findById(id: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http
+            .get<any>(
+                this.apiUrl + '/offer/'+id, httpOptions)
+            .pipe(
+                map(response => {
+                    return response;
+                })
+        );
+    }
+    findByIdOrder(id: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http
+            .get<any>(
+                this.apiUrl + '/offer/order/'+id, httpOptions)
+            .pipe(
+                map(response => {
+                    return response;
+                })
+        );
+    }
+    findByIdOrderAndStatus(id: string, status: number) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http
+            .get<any>(
+                this.apiUrl + '/offer/order/'+id+'/status/'+status, httpOptions)
+            .pipe(
+                map(response => {
+                    return response;
+                })
+        );
+    }
+    findByIdProduct(id: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http
+            .get<any>(
+                this.apiUrl + '/offer/product/'+id, httpOptions)
+            .pipe(
+                map(response => {
+                    return response;
+                })
+        );
+    }
+    findByIdProductAndStatus(id: string, status: number) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http
+            .get<any>(
+                this.apiUrl + '/offer/product/'+id+'/status/'+status, httpOptions)
+            .pipe(
+                map(response => {
+                    return response;
+                })
+        );
+    }
 }

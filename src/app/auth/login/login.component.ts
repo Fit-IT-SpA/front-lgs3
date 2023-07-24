@@ -9,6 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
+import { Session } from 'src/app/shared/model/session';
 
 export interface User {
   uid: string;
@@ -110,7 +111,15 @@ export class LoginComponent implements OnInit {
         }
         this.subscription.add(this._authSrv.signIn(credentials).subscribe(
             response => {
-                this._router.navigate(['/admin/companies']);
+                let profile: Session = JSON.parse(localStorage.getItem('profile'));
+                if (profile.role.slug === 'taller') {
+                  this._router.navigate(['/admin/orders']);
+                } else if (profile.role.slug === 'comercio') {
+                  this._router.navigate(['/admin/orders/offers']);
+                } else {
+                  this._router.navigate(['/admin/users/user']);
+                }
+                
             },
             response =>    { 
                 this.loginForm.enable();

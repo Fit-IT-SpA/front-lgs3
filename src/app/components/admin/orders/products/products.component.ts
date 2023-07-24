@@ -16,6 +16,7 @@ import { Product } from 'src/app/shared/model/product.model';
 import { ProductAdd } from 'src/app/shared/model/product-add.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConstantService } from 'src/app/shared/services/constant.service';
+import { OfferService } from 'src/app/shared/services/offer.service';
 declare var require;
 const Swal = require('sweetalert2');
 
@@ -23,7 +24,7 @@ const Swal = require('sweetalert2');
   selector: 'app-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss'],
-  providers: [UserService, CompaniesService, OrderService, ProductsService],
+  providers: [UserService, CompaniesService, OrderService, ProductsService, OfferService],
 })
 export class ProductsComponent implements OnInit {
 
@@ -53,6 +54,7 @@ export class ProductsComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private srvOrder: OrderService,
+    private srvOffer: OfferService,
     public toster: ToastrService,
     public srv: ProductsService) {}
 
@@ -94,9 +96,21 @@ export class ProductsComponent implements OnInit {
       response => {
         console.log(response);
         this.products = response;
+        this.getOffers();
+      }, error => {
+        console.log(error);
+      }
+    ));
+  }
+  private getOffers() {
+    this.subscription.add(this.srvOffer.findByIdOrderAndStatus(this.order.id, 1).subscribe(
+      response => {
+        this.offers = response;
+        console.log(this.offers);
         this.loading = false;
       }, error => {
         console.log(error);
+        this.loading = false;
       }
     ));
   }
@@ -267,6 +281,10 @@ export class ProductsComponent implements OnInit {
       }
     ));
     return false;
+  }
+  public findQtyOffer(id: string) : number {
+    const offersOfProduct = this.offers.filter((offer) => offer.idProduct === id);
+    return (offersOfProduct && offersOfProduct.length > 0) ? offersOfProduct.length : 0;
   }
   public view(id: string) {
     this.router.navigate(['/admin/orders/'+this.order.id+'/products/view/'+id]);

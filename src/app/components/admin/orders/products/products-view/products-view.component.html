@@ -46,7 +46,7 @@
                         <button class="btn btn-primary btn-square bootstrap-touchspin-down" type="button">
                           <i class="fa fa-minus"></i>
                         </button>
-                        <input class="touchspin form-control" type="text" value={{counter}} [disabled]="true">
+                        <input class="touchspin form-control" type="text" value={{counterView}} [disabled]="true">
                         <div class="input-group-append ml-0">
                           <button class="btn btn-primary btn-square bootstrap-touchspin-up" type="button">
                             <i class="fa fa-plus"></i>
@@ -56,7 +56,8 @@
                     </fieldset>
                   </div>
                 </div>
-                <div id="offer_{{i}}" class="social-chat" *ngFor="let off of this.product.offer; index as i">
+                <span *ngIf="this.offers && this.offers.length > 0">Tiene en el carrito {{this.counterView - this.counter}} productos, puede comprar hasta {{this.counter}} productos</span>
+                <div id="offer_{{i}}" class="social-chat" *ngFor="let off of this.offers; index as i">
                   <div class="your-msg" *ngIf="i < 5 && off.status <= 1">
                     <div class="media">
                       <div class="media-body"><span class="f-w-500">Oferta: ${{off.price.toLocaleString('es-CL')}} <span> ({{off.cantidad}} Unidades)</span></span>
@@ -79,9 +80,9 @@
                     
                     
                 </div>
-              <span *ngIf="this.product.offer && this.product.offer.length > 0">Total: ${{this.totalConfirm.toLocaleString('es-CL')}} | Productos: {{countQtyOffers}}</span>
+              <span *ngIf="this.offers && this.offers.length > 0">Total: ${{this.totalConfirm.toLocaleString('es-CL')}} | Productos: {{countQtyOffers}}</span>
               <div class="mt-1">
-                  <button *ngIf="this.product.offer && this.product.offer.length > 0" class="btn btn-pill btn-primary m-r-15 mb-3" type="button" (click)="add()" [disabled]="this.countQtyOffers > this.counter || this.countQtyOffers <= 0">Confirmar</button>
+                  <button *ngIf="this.offers && this.offers.length > 0" class="btn btn-pill btn-primary m-r-15 mb-3" type="button" (click)="add()" [disabled]="this.countQtyOffers > this.counter || this.countQtyOffers <= 0">Confirmar</button>
                   <button class="btn btn-pill btn-info mb-3" type="button" (click)="goBack()">Volver</button>
               </div>
               <div *ngIf="this.countQtyOffers > this.counter"class="text text-danger mt-1">

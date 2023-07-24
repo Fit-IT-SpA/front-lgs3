@@ -7,9 +7,9 @@
           <h5>Ofertas Recepcionadas</h5>
         </div>
         <div class="card-body" *ngIf="!this.loading">
-            <div *ngIf="!products || products.length <= 0">Carrito de compras vacío</div>
+            <div *ngIf="!orderOffer || orderOffer.length <= 0">Carrito de compras vacío</div>
             <div class="row mb-3" *ngFor="let product of orderOffer">
-                <span class="col mb-3">ID Pedido: {{product.id_order}}</span>
+                <span class="col mb-3">ID Pedido: {{product.idOrder}}</span>
                 <button class="btn btn-pill btn-info mb-3" type="button" (click)="this.contactTransferInfo(product.offers)">Formas de Pago</button>
                 <div class="order-history table-responsive wishlist">
                     <table class="table table-bordered mb-3">

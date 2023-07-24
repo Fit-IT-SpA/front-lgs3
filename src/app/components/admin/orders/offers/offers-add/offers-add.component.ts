@@ -67,7 +67,7 @@ export class OffersAddComponent implements OnInit {
     this.product = product;
     this.idOrder = product.idOrder;
     this.idProduct= product.id;
-    this.maxQty = product.qty
+    this.maxQty = product.originalQty
     //console.log(this.user);
     //console.log(this.companies);
     this.modalOpen = true;
@@ -113,7 +113,7 @@ export class OffersAddComponent implements OnInit {
                 this.offersFormGroup.controls.cantidad.setValue(0);
                 this.counter = 1;
                 this.modalService.dismissAll();
-                this.product.offer = response.offer;
+                //this.product.offer = response.offer;
             },
                 (error) => {
                     console.log(error);
