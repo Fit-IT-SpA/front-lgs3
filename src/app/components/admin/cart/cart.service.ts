@@ -15,7 +15,7 @@ export class CartService extends AbstractHttpService {
                 'Content-Type': 'application/json'
             })
         };
-        return this.http.get<any>(`${this.apiUrl}/cart/products/${email}`, httpOptions).pipe(
+        return this.http.get<any>(`${this.apiUrl}/cart/orders/${email}`, httpOptions).pipe(
             map(response => {
                 return response;
             })

@@ -17,12 +17,13 @@ import { Product } from 'src/app/shared/model/product.model';
 import { ProductAdd } from 'src/app/shared/model/product-add.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConstantService } from 'src/app/shared/services/constant.service';
+import { OfferService } from 'src/app/shared/services/offer.service';
 
 @Component({
   selector: 'app-products-view',
   templateUrl: './products-view.component.html',
   styleUrls: ['./products-view.component.scss'],
-  providers: [ServiceTypeService, UserService, CompaniesService, OrderService, ProductsService],
+  providers: [ServiceTypeService, UserService, CompaniesService, OrderService, ProductsService, OfferService],
 })
 export class ProductsViewComponent implements OnInit {
 
@@ -38,6 +39,7 @@ export class ProductsViewComponent implements OnInit {
   public form: FormGroup;
   public companies: Companies[];
   public counter: number = 1;
+  public counterView: number = 1;
   public countQtyOffers: number = 0;
   public confirmOffers: Offer[] = [];
   public totalConfirm: number = 0;
@@ -57,6 +59,7 @@ export class ProductsViewComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private srvOrder: OrderService,
+    private srvOffer: OfferService,
     public toster: ToastrService,
     public srv: ProductsService) {
       this.form = this.fb.group({
@@ -94,10 +97,22 @@ export class ProductsViewComponent implements OnInit {
       response => {
           this.order = response;
           console.log(this.order);
-          this.loading = false;
+          this.getOffers();
 
       }, error => {
           console.log(error);
+      }
+    ));
+  }
+  private getOffers() {
+    this.subscription.add(this.srvOffer.findByIdProductAndStatus(this.product.id, 1).subscribe(
+      response => {
+        this.offers = response;
+        console.log(this.offers);
+        this.loading = false;
+      }, error => {
+        console.log(error);
+        this.loading = false;
       }
     ));
   }
@@ -107,15 +122,11 @@ export class ProductsViewComponent implements OnInit {
         console.log(response);
         this.form = this.fb.group({
           description: this.fb.control({ value: response.title, disabled: true }),
-          qty: this.fb.control({ value: response.qty, disabled: true }),
+          qty: this.fb.control({ value: response.originalQty, disabled: true }),
         });
         this.product = response;
-        for (let off of this.product.offer) {
-          if (off.status >= 2) {
-            this.form.controls.qty.setValue(this.form.controls.qty.value - off.cantidad);
-          }
-        }
-        this.counter = this.form.controls.qty.value;
+        this.counterView = response.originalQty;
+        this.counter = response.qty;
         this.getOrder(this.orderId);
       }, error => {
         console.log(error);
@@ -154,27 +165,38 @@ export class ProductsViewComponent implements OnInit {
     //console.log(this.confirmOffers);
   }
   public add() {
-    this.product.status = 3;
-    for (let offer of this.product.offer) {
-      for (let offerConfirm of this.confirmOffers) {
-        if (offer.idOffer === offerConfirm.idOffer) {
-          offer.status = 2;
-        }
-      }
+    this.loading = true;
+    let offersId: string = '';
+    for (let i = 0 ; i < this.confirmOffers.length ; i++) {
+      if (i == this.confirmOffers.length - 1) 
+        offersId = offersId + this.confirmOffers[i].idOffer
+      else
+        offersId = offersId + this.confirmOffers[i].idOffer +','
     }
-    this.save();
+    this.save(offersId);
   }
-  private save() {
-    this.subscription.add(this.srv.updateById(this.product.id, this.product).subscribe(
+  private save(offersId: string) {
+    this.subscription.add(this.srvOffer.updateAllIds(offersId).subscribe(
       response => {
         console.log(response);
         this.toster.success("Se confirmarón "+this.countQtyOffers+" producto(s), para pagar debe pasar por caja.");
         this.router.navigate(['/admin/cart']);
+        this.loading = false;
       }, error => {
         console.log(error);
         this.toster.error("Se produjo un error al intentar agregar los productos al carro");
+        this.loading = false;
       }
     ));
+    /*this.subscription.add(this.srv.updateById(this.product.id, this.product).subscribe(
+      response => {
+        console.log(response);
+        
+      }, error => {
+        console.log(error);
+        
+      }
+    ));*/
   }
   public goBack() {
     this.router.navigate(['/admin/orders/'+this.orderId+'/products']);
