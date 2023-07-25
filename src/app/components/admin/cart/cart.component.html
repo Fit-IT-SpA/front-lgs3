@@ -25,15 +25,15 @@
                       </thead>
                       <tbody>
                         <tr *ngFor="let off of product.offers">
-                            <td *ngIf="off.status == 2"><img class="img-fluid img-40" src="{{off.photo}}" alt="#"></td>
-                            <td *ngIf="off.status == 2">
+                            <td *ngIf="off.status == 3"><img class="img-fluid img-40" src="{{off.photo}}" alt="#"></td>
+                            <td *ngIf="off.status == 3">
                                 <div class="product-name"><a href="javascript:void(0);">{{off.estado}}</a></div>
                             </td>
-                            <td *ngIf="off.status == 2">{{off.origen}}</td>
-                            <td *ngIf="off.status == 2"><span>{{off.cantidad}}</span>
+                            <td *ngIf="off.status == 3">{{off.origen}}</td>
+                            <td *ngIf="off.status == 3"><span>{{off.cantidad}}</span>
                             </td>
-                            <td *ngIf="off.status == 2"><i data-feather="x-circle"></i></td>
-                            <td *ngIf="off.status == 2">${{off.price.toLocaleString('es-CL')}}</td>
+                            <td *ngIf="off.status == 3"><i data-feather="x-circle"></i></td>
+                            <td *ngIf="off.status == 3">${{off.price.toLocaleString('es-CL')}}</td>
                         </tr>
                         <tr>
                           <td class="total-amount">

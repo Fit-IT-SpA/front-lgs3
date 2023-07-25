@@ -105,7 +105,7 @@ export class ProductsComponent implements OnInit {
     ));
   }
   private getOffers() {
-    this.subscription.add(this.srvOffer.findByIdOrderAndStatus(this.order.id, 1).subscribe(
+    this.subscription.add(this.srvOffer.findByIdOrderAndStatus(this.order.id, 2).subscribe(
       response => {
         this.offers = response;
         console.log(this.offers);

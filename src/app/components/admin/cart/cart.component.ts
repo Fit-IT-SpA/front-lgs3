@@ -74,7 +74,7 @@ export class CartComponent implements OnInit {
     public totalProduct(offers: Offer[]) {
         var total: number = 0;
         for (let offer of offers) {
-            if (offer.status == 2) {
+            if (offer.status == 3) {
                 total+= offer.price;
             }
         }
