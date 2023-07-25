@@ -94,6 +94,7 @@ export class ProductsAddComponent implements OnInit {
 
       }, error => {
           console.log(error);
+          this.loading = false;
       }
     ));
   }

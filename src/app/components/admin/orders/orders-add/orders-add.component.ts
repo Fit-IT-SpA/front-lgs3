@@ -14,6 +14,7 @@ import { Companies } from 'src/app/shared/model/companies.model';
 import { OrderService } from 'src/app/shared/services/order.service';
 import { Router } from '@angular/router';
 import { ConstantService } from 'src/app/shared/services/constant.service';
+import { numberValidator } from 'src/app/shared/validators/form-validators';
 
 @Component({
   selector: 'app-orders-add',
@@ -40,6 +41,7 @@ export class OrdersAddComponent implements OnInit {
   public filePath: string;
   public imgFile: any;
   public loading: boolean = true;
+  public loadingImg: boolean = false;
   public brandFilter: { value: string, label: string, job: string }[] = [
     { value: "CHEVROLET", label: "CHEVROLET", job: "" },
     { value: "HYUNDAI", label: "HYUNDAI", job: "" },
@@ -59,8 +61,8 @@ export class OrdersAddComponent implements OnInit {
             brand: [null, [Validators.required]],
             model: ['', [Validators.minLength(3), Validators.maxLength(40)]],
             chassis: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
-            photo: ['', [Validators.required]]
-            //year: ['', Validators.required],
+            photo: ['', [Validators.required]],
+            year: ['', [Validators.required, Validators.maxLength(4), Validators.minLength(4), numberValidator]],
             //engine: ['', Validators.required],
           });
      }
@@ -95,6 +97,7 @@ export class OrdersAddComponent implements OnInit {
             },
             (error) => {
                 this.toster.error('Se ha producido un error al intentar buscar los '+this.companiesTitle+' del usuario');
+                this.loading = false;
             }
         )
     );
@@ -150,7 +153,7 @@ export class OrdersAddComponent implements OnInit {
         //closingDate: this.createClosingDateTime(),
         brand: (this.formOrder.controls.brand.value) ? this.formOrder.controls.brand.value.value : '',
         model: (this.formOrder.controls.model.value) ? this.formOrder.controls.model.value : '',
-        //year: '',
+        year: (this.formOrder.controls.year.value) ? this.formOrder.controls.year.value : '',
         //engine: '',
         chassis: (this.formOrder.controls.chassis.value) ? this.formOrder.controls.chassis.value : '',
         photo: (this.formOrder.controls.photo.value) ? this.formOrder.controls.photo.value : '',
@@ -159,11 +162,13 @@ export class OrdersAddComponent implements OnInit {
 
   }
   fileChangeEvent(event: any) {
+    this.loadingImg = true;
     console.log(event.target.files[0]);
     const file = event.target.files[0];
     var mimeType = event.target.files[0].type;
     console.log(mimeType);
     if (mimeType.match(/image\/*/) == null) {
+      this.loadingImg = false;
       this.toster.error("Formato de imagen no soportado. Formatos soportados: png, jpg, jpeg");
     } else {
       this.imgFile = file;
@@ -177,6 +182,7 @@ export class OrdersAddComponent implements OnInit {
       formData.append("file", this.imgFile, newFileName);
       this.subscription.add(this.srv.uploadFile(formData).subscribe(
         response => {
+          this.loadingImg = false;
           let archivo = response;
           this.filePath = this.srv.apiUrl + "/files/" + archivo.files[0].originalname;
           this.url = this.filePath;
@@ -184,6 +190,7 @@ export class OrdersAddComponent implements OnInit {
           this.toster.success('¡Imagen subida correctamente!');
         }, error => {
             this.toster.error('Se ha producido un error al intentar cargar la imagen');
+            this.loadingImg = false;
         }
       ));
     }

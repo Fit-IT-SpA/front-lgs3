@@ -88,6 +88,7 @@ export class ProductsComponent implements OnInit {
             this.getProducts();
         }, error => {
             console.log(error);
+            this.loading = false;
         }
     ));
   }
@@ -99,6 +100,7 @@ export class ProductsComponent implements OnInit {
         this.getOffers();
       }, error => {
         console.log(error);
+        this.loading = false;
       }
     ));
   }

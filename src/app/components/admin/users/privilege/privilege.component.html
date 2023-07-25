@@ -1,10 +1,11 @@
 <app-breadcrumb [title]="'Mis Privilegios'"></app-breadcrumb>
 <div class="container-fluid" *ngIf="access">
     <div class="flex flex-col flex-auto" *ngIf="loading">
-	<div class="loader-box">
-	  <div class="loader-3"></div>
+		<h6 class="text-center">Procesando...</h6>
+		<div class="loader-box">
+		  <div class="loader-3"></div>
+		</div>
 	</div>
-    </div>
     <div class="main" *ngIf="!loading">
         <div class="content" *ngIf="privileges !== null">
             <div class="main-actions mb-4">

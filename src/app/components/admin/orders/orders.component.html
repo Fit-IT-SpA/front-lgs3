@@ -1,4 +1,10 @@
 <app-breadcrumb [title]="'Mis Pedidos'" [items]="['Mis Pedidos']" [active_item]="'Pedidos'"></app-breadcrumb>
+<div class="flex flex-col flex-auto" *ngIf="loading">
+  <h6 class="text-center">Procesando...</h6>
+  <div class="loader-box">
+    <div class="loader-3"></div>
+  </div>
+</div>
 <div class="product-grid">
     <div class="feature-products">
         <div class="row">
@@ -36,23 +42,22 @@
                 <div class="product-img"><img class="img-fluid" src="{{order.photo}}" alt="">
                   <div class="product-hover">
                     <ul>
-                      <li>
-                        <!--<button class="btn" type="button" (click)="QuickViewOrdersEdit.openModal(this.order, this.user.companies)"><i class="fa fa-edit"></i></button>-->
+                      <!--<li>
+                        <button class="btn" type="button" (click)="QuickViewOrdersEdit.openModal(this.order, this.user.companies)"><i class="fa fa-edit"></i></button>
                         <button class="btn" type="button"><i class="fa fa-edit"></i></button>
-                      </li>
+                      </li>-->
                       <li>
                         <button class="btn" type="button" data-toggle="modal" data-target="#exampleModalCenter22" (click)="this.orderView(order.id)"><i class="icon-eye"></i></button>
                       </li>
-                      <li>
+                      <!--<li>
                         <button class="btn" type="button" (click)="removeWithConfirmation(order.id)"><i class="fa fa-trash-o"></i></button>
-                      </li>
+                      </li>-->
                     </ul>
                   </div>
                 </div>
                 <div class="product-details">
-                  <h4>{{order.chassis}}</h4>
-                  <p>{{order.brand}}</p>
-                  <p>{{order.model}}</p>
+                  <h4>{{order.brand}} {{order.model}} {{order.year}}</h4>
+                  <p>{{order.chassis}}</p>
                   <p>{{order.idOrder}}</p>
                   <!--<div class="product-price">repuestos: {{order.products.length}}</div>-->
                 </div>

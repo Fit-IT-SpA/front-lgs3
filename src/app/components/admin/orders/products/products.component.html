@@ -1,15 +1,14 @@
 <app-breadcrumb [title]="'Repuestos'"></app-breadcrumb>
 <div class="flex flex-col flex-auto" *ngIf="loading">
-    <div class="showLoading">
-        <mat-progress-spinner [diameter]="60" [mode]="'indeterminate'">
-        </mat-progress-spinner>
-        <div class="mt-2 font-medium">Procesando...</div>
+    <h6 class="text-center">Procesando...</h6>
+    <div class="loader-box">
+      <div class="loader-3"></div>
     </div>
 </div>
 <div class="col-sm-12" *ngIf="!loading">
     <div class="card">
         <div class="card-header">
-            <h5>Lista de Repuestos</h5>
+            <h5>Lista de Repuestos del Pedido</h5>
             <span *ngIf="!this.products || this.products.length <= 0">Para publicar su pedido debe tener al menos un repuesto</span>
         </div>
         <div class="card-body">
@@ -17,10 +16,9 @@
                 <div class="your-msg">
                     <div class="media">
                         <div class="media-body">
-                            <span class="f-w-500">{{order.chassis}}</span>
+                            <span class="f-w-500">{{order.brand}} {{order.model}} {{order.year}}</span>
                             <img class="img-100 img-fluid pull-right" alt="" src="{{order.photo}}">
-                            <p>{{order.brand}}</p>
-                            <p>{{order.model}}</p>
+                            <p>{{order.chassis}}</p>
                         </div>
                     </div>
                 </div>

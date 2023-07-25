@@ -18,6 +18,7 @@ import { User } from 'src/app/shared/model/user';
 export class MyProfileComponent implements OnInit{
     user: User;
     public perfil =  JSON.parse(localStorage.getItem('profile'));
+    public loading: boolean = true;
     constructor(public authService: AuthService, private _router: Router, private userSrv: UserService, private companiesSrv: CompaniesService) { }
 
     ngOnInit() {
@@ -25,6 +26,7 @@ export class MyProfileComponent implements OnInit{
         this.companiesSrv.findByEmail(this.perfil.email).subscribe(
             (response) => {
                 this.user = response;
+                this.loading = false;
                 //console.log(this.user);
             });
     //    console.log(this.companias.length);

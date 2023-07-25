@@ -97,6 +97,7 @@ export class OrdersComponent implements OnInit {
             },
             (error) => {
                 this.toster.error('Se ha producido un error al intentar buscar los '+this.companiesName);
+                this.loading = false;
             }
         )
     );
@@ -110,6 +111,7 @@ export class OrdersComponent implements OnInit {
       }, error => {
         console.log(error);
         this.toster.error('Se a producido un error al intentar buscar los pedidos');
+        this.loading = false;
       }
     ))
   }
@@ -163,8 +165,8 @@ export class OrdersComponent implements OnInit {
       confirmButtonText: 'Si, quiero hacerlo!',
       cancelButtonText: 'No, cancelar!'
     }).then((result) => {
-      this.loading = true;
       if (result.value) {
+        this.loading = true;
         let confirm = this.remove(id);
         if (confirm) {
             Swal.fire(
