@@ -116,7 +116,7 @@ export class OffersAddComponent implements OnInit {
                 this.offersFormGroup.controls.cantidad.setValue(0);
                 this.counter = 1;
                 this.modalService.dismissAll();
-                //this.product.offer = response.offer;
+                this.product.offer = response.offer;
             },
                 (error) => {
                     console.log(error);
