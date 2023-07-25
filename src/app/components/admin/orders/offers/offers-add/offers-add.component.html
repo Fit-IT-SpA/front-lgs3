@@ -8,7 +8,18 @@
             </div>
               <div class="card-body">
                 <form class="form theme-form" [formGroup]="offersFormGroup">
-                    
+                    <div class="row">
+                            <div class="col">
+                                <label>Seleccione un {{this.perfil.role.name}}</label>
+                                <div class="form-group">
+                                    <div *ngFor="let company of companies; index as i" class="radio radio-primary">
+                                        <input id="radio{{i}}" class="ml-2" type="radio" name="radio" value="{{company.rut}}" (click)="this.clickCompany(company.rut)"
+                                        [checked]="i === 0">
+                                        <label for="radio{{i}}" class="mb-0">{{this.formatRut(company.rut)}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                      <div class="row">
                             <div class="col">
                                 <label>Imagen Repuesto</label>

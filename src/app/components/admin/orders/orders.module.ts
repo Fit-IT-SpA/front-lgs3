@@ -22,6 +22,7 @@ import {OffersAddComponent  } from './offers/offers-add/offers-add.component';
 import {OffersViewComponent  } from './offers/offers-view/offers-view.component';
 import {OffersDetailComponent  } from './offers/offers-detail/offers-detail.component';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { SalesComponent} from './sales/sales.component';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
         OffersComponent,
         OffersAddComponent,
         OffersViewComponent,
-        OffersDetailComponent
+        OffersDetailComponent,
+        SalesComponent
     ],
     imports: [
         CommonModule,

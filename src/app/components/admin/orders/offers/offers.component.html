@@ -4,6 +4,14 @@
   width: 100%;
 }
     </style>
+<div class="container-fluid">
+    <div class="flex flex-col flex-auto" *ngIf="loading">
+	<div class="loader-box">
+	  <div class="loader-3"></div>
+	</div>
+    </div>
+<div class="main" *ngIf="!loading">
+<div class="content" *ngIf="privileges !== null">
 <div class="product-grid">
     <div class="feature-products">
         <div class="row">
@@ -38,7 +46,7 @@
                 <div class="product-img"><img class="img-fluid" src="assets/images/nophoto.png" alt="">
                   <div class="product-hover">
                     <ul>
-                      <li (click)="QuickViewOffersAdd.openModal(product)" >
+                      <li (click)="QuickViewOffersAdd.openModal(product,this.user)" >
                         <!--<button class="btn" type="button" (click)="QuickViewOrdersEdit.openModal(this.order, this.user.companies)"><i class="fa fa-edit"></i></button>-->
                         <button ngbTooltip="Generar Oferta"  class="btn" type="button"><i class="fa fa-check "></i></button>
                       </li>
@@ -95,3 +103,7 @@
 <app-offers-add #quickViewOffersAdd></app-offers-add>
 <app-offers-view #quickViewOffersView></app-offers-view>
 <app-offers-detail #quickViewOffersDetail></app-offers-detail>
+</div>
+</div>
+</div>
+    
