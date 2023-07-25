@@ -8,4 +8,5 @@ export interface Product {
     createBy: string,
     company: string,
     status: number,
+    offer?: Offer[],
 }
