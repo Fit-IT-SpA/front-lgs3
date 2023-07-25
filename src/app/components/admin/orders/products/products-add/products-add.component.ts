@@ -135,9 +135,9 @@ export class ProductsAddComponent implements OnInit {
         title: (this.productsAddFormGroup.controls.description.value) ? this.productsAddFormGroup.controls.description.value : '',
         createBy: this.order.createBy,
         company: this.order.company,
-        status: 1,
-        offer: [],
+        status: 0,
         qty: (this.productsAddFormGroup.controls.qty.value) ? this.productsAddFormGroup.controls.qty.value : 1,
+        originalQty: (this.productsAddFormGroup.controls.qty.value) ? this.productsAddFormGroup.controls.qty.value : 1,
     }
   }
   goBack() {

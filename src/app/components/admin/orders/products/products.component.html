@@ -40,8 +40,8 @@
                     <tbody>
                         <tr *ngFor="let product of this.products">
                             <td>{{product.title}}</td>
-                            <td>{{product.qty}}</td>
-                            <td *ngIf="this.order.status != 0">{{product.offer.length}}</td>
+                            <td>{{product.originalQty}}</td>
+                            <td *ngIf="this.order.status != 0">{{this.findQtyOffer(product.id)}}</td>
                             <!--<td><i class="icofont icofont-trash" (click)="removeWithConfirmation(product.id, product)"></i></td>-->
                             <td><i class="icon-eye" (click)="view(product.id)"></i></td>
                         </tr>

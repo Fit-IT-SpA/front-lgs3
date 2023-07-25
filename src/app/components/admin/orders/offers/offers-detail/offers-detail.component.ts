@@ -79,7 +79,7 @@ export class OffersDetailComponent implements OnInit {
    */
   openModal(product: Product) {
     this.product = product;
-    this.offers = product.offer;
+    //this.offers = product.offer;
      console.log(product);
     //console.log(this.companies);
     this.modalOpen = true;
@@ -128,7 +128,7 @@ export class OffersDetailComponent implements OnInit {
                             'success'
                         )
                         this.offers = response.offer;
-                        this.product.offer = response.offer;
+                        //this.product.offer = response.offer;
                         console.log(this.offers);
                     },
                         (error) => {

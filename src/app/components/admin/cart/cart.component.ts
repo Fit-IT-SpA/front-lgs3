@@ -8,11 +8,13 @@ import { ConstantService } from 'src/app/shared/services/constant.service';
 import { CartService } from './cart.service';
 import { Product } from 'src/app/shared/model/product.model';
 import { Offer } from 'src/app/shared/model/offer.model';
+import { ProductsService } from '../orders/products/products.service';
+import { OfferService } from 'src/app/shared/services/offer.service';
 declare var require;
 const Swal = require('sweetalert2');
 
 export interface OrderOffer {
-    id_order: string,
+    idOrder: string,
     offers: Offer[]
 }
 
@@ -20,7 +22,7 @@ export interface OrderOffer {
     selector: 'app-cart-auctions',
     templateUrl: './cart.component.html',
     styleUrls: ['./cart.component.scss'],
-    providers: [CartService],
+    providers: [CartService, ProductsService, OfferService],
 })
 
 export class CartComponent implements OnInit {
@@ -35,6 +37,8 @@ export class CartComponent implements OnInit {
         private fb: FormBuilder,
         private router: Router,
         public srv: CartService,
+        private srvProduct: ProductsService,
+        private srvOffer: OfferService,
         public toster: ToastrService) {}
     ngOnInit(): void {
         if (this.haveAccess()) {
@@ -46,42 +50,15 @@ export class CartComponent implements OnInit {
     private getProductsInCart() {
         this.subscription.add(this.srv.findByEmail(this.profile.email).subscribe(
             response => {
-                this.products = response;
-                this.getOrderOfferModel();
+                this.orderOffer = response;
+                console.log(this.orderOffer);
+                this.loading = false;
+                //this.getOrderOfferModel();
             }, error => {
                 console.log(error);
+                this.loading = false;
             }
         ));
-    }
-    private getOrderOfferModel() {
-        let firstIdOrder: string = this.products[0].idOrder;
-        this.orderOffer.push({
-            id_order: firstIdOrder,
-            offers: []
-        });
-        let count: number = 0;
-        for (let product of this.products) {
-            if (product.idOrder !== this.orderOffer[count].id_order) {
-                this.orderOffer.push({
-                    id_order: product.idOrder,
-                    offers: []
-                });
-                count++;
-                for (let off of product.offer) {
-                    if (off.status == 2) {
-                        this.orderOffer[count].offers.push(off);
-                    }
-                }
-            } else {
-                for (let off of product.offer) {
-                    if (off.status == 2) {
-                        this.orderOffer[count].offers.push(off);
-                    }
-                }
-            }
-        }
-        console.log(this.orderOffer);
-        this.loading = false;
     }
     private haveAccess() {
         let permissions = JSON.parse(localStorage.getItem("profile")).privilege;
