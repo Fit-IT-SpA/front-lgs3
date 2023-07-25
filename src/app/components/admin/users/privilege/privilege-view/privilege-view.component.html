@@ -1,8 +1,9 @@
 <app-breadcrumb [title]="'Agregar Privilegio'"></app-breadcrumb>
 <div class="flex flex-col flex-auto" *ngIf="loading">
-    <div class="loader-box">
-        <div class="loader-3"></div>
-    </div>
+  <h6 class="text-center">Procesando...</h6>
+  <div class="loader-box">
+    <div class="loader-3"></div>
+  </div>
 </div>
 <div class="card" *ngIf="!loading">
     <div class="card-body" >

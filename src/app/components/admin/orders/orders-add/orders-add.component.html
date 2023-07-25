@@ -1,5 +1,11 @@
 <app-breadcrumb [title]="'Agregar Pedidos'"></app-breadcrumb>
-<div class="container-fluid">
+<div class="flex flex-col flex-auto" *ngIf="loading">
+  <h6 class="text-center">Procesando...</h6>
+  <div class="loader-box">
+    <div class="loader-3"></div>
+  </div>
+</div>
+<div class="container-fluid" *ngIf="!loading">
   <div class="row">
     <div class="col-sm-12">
       <div class="card">
@@ -40,7 +46,7 @@
                   </div>
                 </div>
                 <div class="form-row">
-                  <div class="col mb-3">
+                  <div class="col-md-6 mb-3">
                     <div class="form-group">
                       <label>Chasis/VIN</label>
                       <input class="form-control" type="text" placeholder="(*) Chasis/VIN" formControlName="chassis">
@@ -58,18 +64,48 @@
                       </div>
                     </div>
                   </div>
+                  <div class="col-md-6 mb-3">
+                    <div class="form-group">
+                      <label>Año</label>
+                      <input class="form-control" placeholder="(*) Año" formControlName="year">
+                      <div *ngIf="formOrder.controls.year.errors && formOrder.controls.year.touched && formOrder.controls.year.errors.required"
+                          class="text text-danger mt-1">
+                          Es requerido
+                      </div>
+                      <div *ngIf="formOrder.controls.year.errors && formOrder.controls.year.touched && formOrder.controls.year.errors?.invalidNumber"
+                          class="text text-danger mt-1">
+                          Solo se admiten números
+                      </div>
+                      <div *ngIf="formOrder.controls.year.touched && formOrder.controls.year.errors?.minlength"
+                        class="text text-danger mt-1">
+                          Debe tener mínimo de 4 dígitos
+                        </div>
+                      <div *ngIf="formOrder.controls.year.touched && formOrder.controls.year.errors?.maxlength"
+                        class="text text-danger mt-1">
+                          Debe tener un máximo de 4 dígitos
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div class="mb-4">
-                  <div>
+                  <div class="mb-3">
                     <h6>Agrega una foto del padrón del auto</h6>
                     <span>(Donde aparezca el VIN del auto, para asegurar que recibas ofertas precisas a lo que buscas)</span>
                   </div>
-                  <img src="{{url}}" class="row mb-3" id="image_service">
-                  <button class="btn btn-info mb-3" (click)="fileInput.click()" type="button">
-                    <i class="flex align-middle" data-feather="download"></i>
-                    Cargar Imagen
-                  </button>
-                  <input class="btn btn-outline-primary" type="file" #fileInput (change)="fileChangeEvent($event)" hidden >
+                  <div class="col-md-3" *ngIf="loadingImg">
+                    <h6 class="mb-0 text-center">Cargando foto...</h6>
+                    <div class="loader-box">
+                      <div class="loader-3"></div>
+                    </div>
+                  </div>
+                  <div *ngIf="!loadingImg">
+                    <img src="{{url}}" class="row mb-3" id="image_service">
+                    <button class="btn btn-info mb-3" (click)="fileInput.click()" type="button">
+                      <i class="flex align-middle" data-feather="download"></i>
+                      Cargar Imagen
+                    </button>
+                    <input class="btn btn-outline-primary" type="file" #fileInput (change)="fileChangeEvent($event)" hidden >
+                  </div>
                 </div>
               </div>
             </div>
@@ -97,7 +133,7 @@
               </tbody>
             </table>
           </div>
-          <button class="btn btn-pill btn-primary" type="submit" [disabled]="!formOrder.valid" (click)="add()">Crear Pedido</button>
+          <button class="btn btn-pill btn-primary" type="submit" (click)="add()">Crear Pedido</button>
         </div>
       </form>
       </div>

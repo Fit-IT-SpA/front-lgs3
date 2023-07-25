@@ -101,6 +101,7 @@ export class ProductsViewComponent implements OnInit {
 
       }, error => {
           console.log(error);
+          this.loading = false;
       }
     ));
   }

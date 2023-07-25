@@ -27,6 +27,7 @@ export class CompaniesComponent implements OnInit{
     public count: number;
     public user: User;
     public companies: Companies[];
+    public loading: boolean = true;
     public perfil =  JSON.parse(localStorage.getItem('profile'));
     public companiesTitle = this.perfil.role.slug == 'taller' ? 'Talleres' : this.perfil.role.slug == 'comercio' ? 'Comercios' : 'Negocios';
     public companyTitle = this.perfil.role.slug == 'taller' ? 'Taller' : this.perfil.role.slug == 'comercio' ? 'Comercio' : 'Negocio';
@@ -57,6 +58,7 @@ export class CompaniesComponent implements OnInit{
                 },
                 (error) => {
                     this.toster.error('Se ha producido un error al intentar buscar los '+this.companiesTitle);
+                    this.loading = false;
                 }
             )
         );
@@ -71,9 +73,11 @@ export class CompaniesComponent implements OnInit{
                         this.toster.info('Para interactuar con el sistema, debe tener 1 o varios '+this.companiesTitle);   
                     }
                     console.log(this.user);
+                    this.loading = false;
                 },
                 (error) => {
                     this.toster.error('Se ha producido un error al intentar buscar los '+this.companiesTitle);
+                    this.loading = false;
                 }
             )
         );
