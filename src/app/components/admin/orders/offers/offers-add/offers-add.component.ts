@@ -74,14 +74,14 @@ export class OffersAddComponent implements OnInit {
     this.modalOpen = true;
     
     this.offersFormGroup = this.fb.group({
-        photo: ['', Validators.required],
+        //photo: ['', Validators.required],
         estado: ['', Validators.required],
         origen: ['', Validators.required],
         price: [0, [Validators.required, Validators.min(200)]],
         cantidad: [1, [Validators.required, Validators.min(1), Validators.max(this.maxQty)]],
         despacho: ['retiro_tienda', Validators.required],
         company: [this.companies[0].rut],
-        comentario: ['']
+        //comentario: ['']
       });
     
       this.modalService.open(this.QuickViewOffersAdd, { 
@@ -106,12 +106,12 @@ export class OffersAddComponent implements OnInit {
             this.subscription.add(this.srv.findByIdOrder(this.product.id).subscribe(
             (response) => {
                 this.toster.success('Se creo correctamente su Pedido!!');
-                this.offersFormGroup.controls.photo.setValue('');
+                //this.offersFormGroup.controls.photo.setValue('');
                 this.offersFormGroup.controls.origen.setValue('');
                 this.offersFormGroup.controls.estado.setValue('');
                 this.offersFormGroup.controls.price.setValue('');
                 this.offersFormGroup.controls.despacho.setValue('');
-                this.offersFormGroup.controls.comentario.setValue('');
+                //this.offersFormGroup.controls.comentario.setValue('');
                 this.offersFormGroup.controls.company.setValue('');
                 this.offersFormGroup.controls.cantidad.setValue(0);
                 this.counter = 1;
@@ -140,13 +140,13 @@ export class OffersAddComponent implements OnInit {
         createBy: this.perfil.email,
         price: this.offersFormGroup.controls.price.value,
         despacho: this.offersFormGroup.controls.despacho.value,
-        comentario: this.offersFormGroup.controls.comentario.value,
+        //comentario: this.offersFormGroup.controls.comentario.value,
         estado: this.offersFormGroup.controls.estado.value,
         origen: this.offersFormGroup.controls.origen.value,
         cantidad: this.offersFormGroup.controls.cantidad.value,
         company: this.offersFormGroup.controls.company.value,
-        status: 1,
-        photo: this.filePath,
+        status: 2,
+        //photo: this.filePath,
         idOrder : this.idOrder,
         idProduct : this.idProduct
 
@@ -227,7 +227,7 @@ export class OffersAddComponent implements OnInit {
             this.toster.error('Se ha producido un error al intentar cargar la imagen');
         }
       ));
-      this.offersFormGroup.controls.photo.setValue(this.imgFile.name);
+      //this.offersFormGroup.controls.photo.setValue(this.imgFile.name);
       return;
     }
 

@@ -37,7 +37,7 @@ export class OffersComponent implements OnInit {
   public user: User;
   public uniqueId = (new Date()).getTime().toString();
   public openSidebar: boolean = false;
-  public listView: boolean = false;
+  public listView: boolean = true;
   public loading: boolean = true;
   public col: string = '3';
   public companiesName = this.perfil.role.slug == 'taller' ? 'Talleres' : this.perfil.role.slug == 'comercio' ? 'Comercios' : 'No posee';

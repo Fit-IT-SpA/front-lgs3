@@ -1,4 +1,4 @@
-<app-breadcrumb [title]="'Productos no Ofertados'" [items]="['Requerimientos']" [active_item]="'Productos no Ofertados'"></app-breadcrumb>
+<app-breadcrumb [title]="'Mi Mesón Virtual'" [items]="['Requerimientos']" [active_item]="'Mi Mesón Virtual'"></app-breadcrumb>
 <style>
     .ngx-datatable {
   width: 100%;
@@ -71,35 +71,6 @@
             </div>
         </div>
     </div>
-<div class="container-fluid">
-  <div class="row">
-    <!-- Individual column searching (text inputs) Starts-->
-    <div class="col-sm-12">
-      <div class="card">
-        <div class="card-header">
-          <h5>Productos no Ofertados</h5><span>Search your product from here..</span>
-        </div>
-        <div class="card-body">
-          <div class="table-responsive product-list-custom custom-datatable table-hover">
-            <div class="table-responsive table-hover" style="width:100%"> 
-                 <ngx-datatable class="bootstrap" [rows]="this.ordertable" [columns]="[
-                {prop:'model',name: 'Producto'},
-                {prop:'brand',name: 'Marca'},
-                {prop:'idOrder',name: 'Pedido'},
-                {prop:'company',name: 'Company'}
-                ]"
-                 [columnMode]="'force'"
-                 [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10">
-              </ngx-datatable>
-            </div>
-            </div>
-            </div>
-          </div>
-        </div>
-    </div>
-    </div>
-            
-
 <app-offers-add #quickViewOffersAdd></app-offers-add>
 <app-offers-view #quickViewOffersView></app-offers-view>
 <app-offers-detail #quickViewOffersDetail></app-offers-detail>
