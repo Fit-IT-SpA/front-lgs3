@@ -1,0 +1,36 @@
+<app-breadcrumb [title]="'Mis Ventas'"></app-breadcrumb>
+<div class="container-fluid">
+    <div class="flex flex-col flex-auto" *ngIf="loading">
+	<div class="loader-box">
+	  <div class="loader-3"></div>
+	</div>
+    </div>
+    <div class="main" *ngIf="!loading">
+        <div class="content" *ngIf="privileges !== null">
+            <div class="row">
+                <div class="col-sm-12">
+        <div class="card">
+          <div class="card-header">
+            <h5>Hoverable rows</h5><span>Use a class <code>table-hover</code> to enable a hover state on table rows within a <code>tbody</code>.</span>
+          </div>
+            <div class="card-body custom-datatable noscroll">
+                 <ngx-datatable class="bootstrap" [rows]="this.offersFormat" [columns]="[
+                {prop:'photo',name: ''},  
+                {prop:'status',name: 'Status'},
+                {prop:'origen',name: 'Origen'},
+                {prop:'price',name: 'Precio'},
+                {prop:'cantidad',name: 'Cantidad'},
+                {prop:'estado',name: 'Estado'}
+                ]"
+                  [columnMode]="'force'" [headerHeight]="40" [summaryRow]="false"
+                        [summaryPosition]="'bottom'" [footerHeight]="40" [rowHeight]="'auto'"
+                        [reorderable]="reorderable">
+              </ngx-datatable>
+            </div>
+            
+        </div>
+      </div>
+            </div>
+        </div>
+    </div>
+</div>

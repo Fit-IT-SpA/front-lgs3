@@ -27,6 +27,18 @@ export class OfferService extends AbstractHttpService {
         );
     }
 
+    getOffersByCompanies(companies: any) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http.post<any>(`${this.apiUrl}/offer/active/`, companies, httpOptions).pipe(
+            map(response => {
+                return response;
+            })
+        );
+    }
    
     updateById(offer: Offer, id: string) {
         const httpOptions = {

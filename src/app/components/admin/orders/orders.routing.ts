@@ -6,6 +6,7 @@ import { ProductsAddComponent } from './products/products-add/products-add.compo
 import { ProductsViewComponent } from './products/products-view/products-view.component';
 import { ProductsComponent } from './products/products.component';
 import { OffersComponent } from './offers/offers.component';
+import { SalesComponent } from './sales/sales.component';
 
 //import { OrdersEditComponent } from './orders-edit/orders-edit.component';
 //import { OrdersViewComponent } from './orders-view/orders-view.component';
@@ -38,6 +39,10 @@ export const routes: Routes = [
             {
                 path: 'orders/offers',
                 component: OffersComponent
+            },
+            {
+                path: 'orders/sales',
+                component: SalesComponent
             }
         ],
     }

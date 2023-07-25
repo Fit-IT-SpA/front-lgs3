@@ -112,6 +112,9 @@ export class NavService implements OnDestroy {
                 {
 			id: 'mis-ofertas-lectura', title: 'Mis Ofertas', icon: 'shopping-cart', type: 'link', active: false, path: '/admin/orders/offers'
 		},
+                {
+			id: 'mis-ventas-lectura', title: 'Mis Ventas', icon: 'shopping-cart', type: 'link', active: false, path: '/admin/orders/sales'
+		},
 		{
 			id: 'caja-lectura', title: 'Caja', icon: 'shopping-cart', type: 'sub', active: false, children: [
 				{ id: 'caja-lectura', path: '/admin/cart', title: 'Carrito de Compras', type: 'link' },

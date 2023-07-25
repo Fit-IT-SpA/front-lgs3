@@ -60,13 +60,14 @@ export class OffersAddComponent implements OnInit {
    * open Dialog CUBA
    * @param user 
    */
-  openModal(product: any) {
+  openModal(product: any, user : User) {
     //this.user = user;
    // this.companies = user.companies;
     console.log(product);
     this.product = product;
     this.idOrder = product.idOrder;
     this.idProduct= product.id;
+    this.companies = user.companies;
     this.maxQty = product.originalQty
     //console.log(this.user);
     //console.log(this.companies);
@@ -79,6 +80,7 @@ export class OffersAddComponent implements OnInit {
         price: [0, [Validators.required, Validators.min(200)]],
         cantidad: [1, [Validators.required, Validators.min(1), Validators.max(this.maxQty)]],
         despacho: ['retiro_tienda', Validators.required],
+        company: [this.companies[0].rut],
         comentario: ['']
       });
     
@@ -110,6 +112,7 @@ export class OffersAddComponent implements OnInit {
                 this.offersFormGroup.controls.price.setValue('');
                 this.offersFormGroup.controls.despacho.setValue('');
                 this.offersFormGroup.controls.comentario.setValue('');
+                this.offersFormGroup.controls.company.setValue('');
                 this.offersFormGroup.controls.cantidad.setValue(0);
                 this.counter = 1;
                 this.modalService.dismissAll();
@@ -141,7 +144,7 @@ export class OffersAddComponent implements OnInit {
         estado: this.offersFormGroup.controls.estado.value,
         origen: this.offersFormGroup.controls.origen.value,
         cantidad: this.offersFormGroup.controls.cantidad.value,
-        company: /*this.offersFormGroup.controls.company.value*/ this.perfil.email,
+        company: this.offersFormGroup.controls.company.value,
         status: 1,
         photo: this.filePath,
         idOrder : this.idOrder,
@@ -149,6 +152,10 @@ export class OffersAddComponent implements OnInit {
 
     }
 
+  }
+  
+  clickCompany(rut: string) {
+    this.offersFormGroup.controls.company.setValue(rut);
   }
   
   public increment() {
