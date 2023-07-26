@@ -19,9 +19,10 @@
                 {prop:'origen',name: 'Origen'},
                 {prop:'price',name: 'Precio'},
                 {prop:'cantidad',name: 'Cantidad'},
-                {prop:'estado',name: 'Estado'}
+                {prop:'estado',name: 'Estado'},
+                {cellTemplate: customCellTemplate,name: 'Acciones'},
                 ]"
-                  [columnMode]="'force'" [headerHeight]="40" [summaryRow]="false"
+                  [columnMode]="'force'" [headerHeight]="40" [summaryRow]="false" [loadingIndicator]="loadingIndicator"
                         [summaryPosition]="'bottom'" [footerHeight]="40" [rowHeight]="'auto'"
                         [reorderable]="reorderable">
               </ngx-datatable>

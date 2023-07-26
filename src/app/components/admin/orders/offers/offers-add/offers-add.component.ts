@@ -42,6 +42,7 @@ export class OffersAddComponent implements OnInit {
   public imgFile: any;
   public idOrder: string
   public maxQty: number;
+  public priceMask: number = 0;
   public idProduct: string
 
   constructor(
@@ -95,6 +96,10 @@ export class OffersAddComponent implements OnInit {
         this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
       });
   }
+  
+  sumaPrecio(){
+      this.priceMask = parseInt(this.offersFormGroup.controls.price.value)*parseInt(this.offersFormGroup.controls.cantidad.value);
+  }
 
   add() {
 
@@ -115,6 +120,7 @@ export class OffersAddComponent implements OnInit {
                 this.offersFormGroup.controls.company.setValue('');
                 this.offersFormGroup.controls.cantidad.setValue(0);
                 this.counter = 1;
+                this.priceMask = 0;
                 this.modalService.dismissAll();
                 this.product.offer = response.offer;
             },
@@ -138,7 +144,7 @@ export class OffersAddComponent implements OnInit {
     return {
         idOffer: (new Date().getTime()).toString(),
         createBy: this.perfil.email,
-        price: this.offersFormGroup.controls.price.value,
+        price: parseInt(this.offersFormGroup.controls.price.value)*parseInt(this.offersFormGroup.controls.cantidad.value),
         despacho: this.offersFormGroup.controls.despacho.value,
         //comentario: this.offersFormGroup.controls.comentario.value,
         estado: this.offersFormGroup.controls.estado.value,
@@ -161,12 +167,14 @@ export class OffersAddComponent implements OnInit {
   public increment() {
     this.counter += 1;
     this.offersFormGroup.controls.cantidad.setValue(this.counter);
+    this.priceMask = parseInt(this.offersFormGroup.controls.price.value)*parseInt(this.offersFormGroup.controls.cantidad.value);
   }
 
   public decrement() {
     if (this.counter > 1) {
         this.counter -= 1;
         this.offersFormGroup.controls.cantidad.setValue(this.counter);
+        this.priceMask = parseInt(this.offersFormGroup.controls.price.value)*parseInt(this.offersFormGroup.controls.cantidad.value);
     }
   }
   
