@@ -1,4 +1,5 @@
 export interface Offer {
+    id?:string,
     idOffer: string,
     createBy: string,
     company: string,

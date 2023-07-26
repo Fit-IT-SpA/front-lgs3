@@ -1,0 +1,31 @@
+<ng-template #quickViewSalesHandler let-modal>
+    <div class="col-sm-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="new-users-social">
+              <div class="media">
+                <div class="media-body">
+                  <h6 class="mb-0 f-w-700">{{order.brand}} - {{order.model}}</h6>
+                  <p>Repuesto: {{product.title}} ({{product.originalQty}} Cant. original)</p>
+                </div><span class="pull-right mt-0"><i data-feather="more-vertical"></i></span>
+              </div>
+            </div>
+            <div class="timeline-content">
+              <hr>
+              <h6>Oferta {{offer.idOffer}}</h6>
+              
+              <div class="product-price">$ {{offer.price | number:'1.0-0'}}</div>
+              <p>
+                Cantidad unidades ofertadas: {{offer.cantidad}}
+              </p>
+              <p>
+                Origen: {{offer.origen}}
+              </p>
+              <p>
+                Estado: {{offer.estado}}
+              </p>
+            </div>
+          </div>
+        </div>
+    </div>
+</ng-template>
