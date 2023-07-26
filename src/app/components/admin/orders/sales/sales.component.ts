@@ -18,6 +18,7 @@ import { companyDB } from 'src/app/shared/data/tables/company';
 //import { OrdersEditComponent } from './orders-edit/orders-edit.component';
 declare var require;
 const Swal = require('sweetalert2');
+import { SalesHandlerComponent } from './sales-handler/sales-handler.component';
 
 @Component({
   selector: 'app-sales',
@@ -48,7 +49,7 @@ export class SalesComponent implements OnInit {
   
   public company = [];
   
-  loadingIndicator: boolean = false;
+  loadingIndicator: boolean = true;
   reorderable: boolean = true;
   columns = [
     { prop: 'name' },
@@ -56,8 +57,7 @@ export class SalesComponent implements OnInit {
     { name: 'Company' }
   ];
 
-  
-  //@ViewChild("quickViewOrdersEdit") QuickViewOrdersEdit: OrdersEditComponent;
+  @ViewChild("quickViewSalesHandler") QuickViewSalesHandler: SalesHandlerComponent;
 
   constructor(
     private modalService: NgbModal,
@@ -108,6 +108,7 @@ export class SalesComponent implements OnInit {
                                 } else {
                                     status = "<span class='font-warning'>Por Definir ("+this.offers[i].status+")</span>";
                                 }
+                                console.log(this.offers[i]);
                                 tmpOrders.push({
                                     estado : this.offers[i].estado,
                                     origen : '<b>'+this.offers[i].origen+'</b>',
@@ -115,7 +116,8 @@ export class SalesComponent implements OnInit {
                                     cantidad : this.offers[i].cantidad.toLocaleString('es-CL'),
                                     company : this.offers[i].company,
                                     price : "$ "+this.offers[i].price.toLocaleString('es-CL'),
-                                    status : status
+                                    status : status,
+                                    id : this.offers[i].id
                                 });
                             }
                             this.offersFormat = tmpOrders;
@@ -137,9 +139,16 @@ export class SalesComponent implements OnInit {
               <i class="fa fa-edit"></i>
             </div>`;
   }  
-  public onCellClick(id: number) {
-    console.log('Celda clickeada. ID:', id);
-    // Realiza aquí las acciones que deseas cuando se haga clic en la celda.
+  onCellClick(id) {
+    if(id.type == "click"){
+        this.subscription.add(
+        this.srvOffer.findByRealId(id.row.id).subscribe(
+            (response) => {
+                this.QuickViewSalesHandler.openModal(response,this.user) 
+             }
+            )
+        );
+    }
   }
   public canWrite() {
     return true;
