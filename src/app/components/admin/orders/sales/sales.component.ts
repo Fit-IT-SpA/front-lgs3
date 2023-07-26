@@ -48,7 +48,7 @@ export class SalesComponent implements OnInit {
   
   public company = [];
   
-  loadingIndicator: boolean = true;
+  loadingIndicator: boolean = false;
   reorderable: boolean = true;
   columns = [
     { prop: 'name' },
@@ -99,7 +99,7 @@ export class SalesComponent implements OnInit {
                             console.log(this.offers.length);
                             for(let i=0;i < this.offers.length;i++){
                                 let status = "";
-                                if(this.offers[i].status > -1 && this.offers[i].status < 2){
+                                if(this.offers[i].status > -1 && this.offers[i].status <= 2){
                                     status = "<span class='font-primary'>Vigente</span>";
                                 }else if (this.offers[i].status == 3) {
                                     status = "<span class='font-success'>Por Definir (3)</span>";
@@ -112,10 +112,10 @@ export class SalesComponent implements OnInit {
                                     estado : this.offers[i].estado,
                                     origen : '<b>'+this.offers[i].origen+'</b>',
                                     idOrder : this.offers[i].idProduct,
-                                    cantidad : this.offers[i].cantidad,
+                                    cantidad : this.offers[i].cantidad.toLocaleString('es-CL'),
                                     company : this.offers[i].company,
-                                    price : this.offers[i].price,
-                                    status : status,
+                                    price : "$ "+this.offers[i].price.toLocaleString('es-CL'),
+                                    status : status
                                 });
                             }
                             this.offersFormat = tmpOrders;
@@ -132,6 +132,15 @@ export class SalesComponent implements OnInit {
 
   }
   
+  public customCellTemplate(row: any) {
+    return `<div class="icon-button" (click)="onCellClick(${row.id})">
+              <i class="fa fa-edit"></i>
+            </div>`;
+  }  
+  public onCellClick(id: number) {
+    console.log('Celda clickeada. ID:', id);
+    // Realiza aquí las acciones que deseas cuando se haga clic en la celda.
+  }
   public canWrite() {
     return true;
   }
