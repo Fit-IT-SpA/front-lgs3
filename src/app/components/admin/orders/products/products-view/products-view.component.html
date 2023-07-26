@@ -1,4 +1,4 @@
-<app-breadcrumb [title]="'Detalle Repuesto'"></app-breadcrumb>
+<app-breadcrumb [title]="'Revisar Ofertas'"></app-breadcrumb>
 <div class="flex flex-col flex-auto" *ngIf="loading">
   <h6 class="text-center">Procesando...</h6>
   <div class="loader-box">
@@ -7,56 +7,33 @@
 </div>
 <div class="col-sm-12" *ngIf="!loading">
     <div class="card">
+        <div class="card-header">
+          <h5>Detalles del repuesto pedido</h5>
+        </div>
         <div class="card-body">
-          <div class="social-chat mb-3">
+          <div class="social-chat">
             <div class="your-msg">
                 <div class="media">
                   <div class="media-body">
                     <span class="f-w-500">{{order.brand}} {{order.model}} {{order.year}}</span>
                     <img class="img-100 img-fluid pull-right" alt="" src="{{order.photo}}">
                     <p>{{order.chassis}}</p>
+                    <p>Repuesto: {{product.title}}</p>
+                    <p>Cantidad: {{product.originalQty}}</p>
                   </div>
                 </div>
             </div>
           </div>
-            <form [formGroup]="form">
-                <div class="form-row">
-                  <div class="col mb-3">
-                    <div class="form-group">
-                      <label>Nombre Repuesto</label>
-                      <input class="form-control" type="text" placeholder="(*) Nombre Repuesto" formControlName="description">
-                      <div *ngIf="form.controls.description.touched && form.controls.description.errors?.minlength"
-                        class="text text-danger mt-1">
-                          Debe tener minimo de 3 caracteres
-                        </div>
-                      <div *ngIf="form.controls.description.touched && form.controls.description.errors?.maxlength"
-                        class="text text-danger mt-1">
-                          Debe tener un maximo de 40 caracteres
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-row">
-                  <div class="col mb-3">
-                    <fieldset>
-                      <label>Cantidad:</label>
-                      <div class="input-group bootstrap-touchspin">
-                        <button class="btn btn-primary btn-square bootstrap-touchspin-down" type="button">
-                          <i class="fa fa-minus"></i>
-                        </button>
-                        <input class="touchspin form-control" type="text" value={{counterView}} [disabled]="true">
-                        <div class="input-group-append ml-0">
-                          <button class="btn btn-primary btn-square bootstrap-touchspin-up" type="button">
-                            <i class="fa fa-plus"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </fieldset>
-                  </div>
-                </div>
+        </div>
+        <hr class="border-top:3px" >
+        <div class="card-header">
+          <h5>Detalles de la oferta</h5>
+        </div>
+        <div class="card-body">
+            <div>
                 <span *ngIf="this.offers && this.offers.length > 0">Tiene en el carrito {{this.counterView - this.counter}} item(s), puede comprar hasta {{this.counter}} item(s) de este producto</span>
                 <div id="offer_{{i}}" class="social-chat" *ngFor="let off of this.offers; index as i">
-                  <div class="your-msg" *ngIf="i < 5 && off.status <= 2">
+                  <div class="your-msg" *ngIf="off.status == 2">
                     <div class="media">
                       <div class="media-body"><span class="f-w-500">Oferta: ${{off.price.toLocaleString('es-CL')}} <span> valor neto por unidad</span></span>
                               <img class="img-100 img-fluid pull-right" alt=""
@@ -83,15 +60,15 @@
                     
                     
                 </div>
-              <span *ngIf="this.offers && this.offers.length > 0">Total: ${{this.totalConfirm.toLocaleString('es-CL')}} | Productos: {{countQtyOffers}}</span>
+              <h5>Total a pagar: ${{this.totalConfirm.toLocaleString('es-CL')}} | Productos: {{countQtyOffers}}</h5>
               <div class="mt-1">
-                  <button *ngIf="this.offers && this.offers.length > 0" class="btn btn-pill btn-primary m-r-15 mb-3" type="button" (click)="add()" [disabled]="this.countQtyOffers > this.counter || this.countQtyOffers <= 0">Confirmar</button>
+                  <button *ngIf="this.offers && this.offers.length > 0" class="btn btn-pill btn-primary m-r-15 mb-3" type="button" (click)="add()" [disabled]="this.countQtyOffers > this.counter || this.countQtyOffers <= 0">Aceptar Oferta</button>
                   <button class="btn btn-pill btn-info mb-3" type="button" (click)="goBack()">Volver</button>
               </div>
               <div *ngIf="this.countQtyOffers > this.counter"class="text text-danger mt-1">
                 La confirmación de ofertas no puede exceder la cantidad del producto pedido ({{this.counter}})
               </div>  
-            </form>
+            </div>
         </div>
     </div>
 </div>

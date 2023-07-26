@@ -10,12 +10,16 @@ import { Product } from 'src/app/shared/model/product.model';
 import { Offer } from 'src/app/shared/model/offer.model';
 import { ProductsService } from '../orders/products/products.service';
 import { OfferService } from 'src/app/shared/services/offer.service';
+import { Order } from 'src/app/shared/model/order.model';
 declare var require;
 const Swal = require('sweetalert2');
 
 export interface OrderOffer {
-    idOrder: string,
-    offers: Offer[]
+  order: Order,
+  productWithOffers: {
+    product: Product, 
+    offers: Offer[],
+  },
 }
 
 @Component({
@@ -75,13 +79,22 @@ export class CartComponent implements OnInit {
         var total: number = 0;
         for (let offer of offers) {
             if (offer.status == 3) {
-                total+= offer.price;
+                total+= offer.price * offer.cantidad;
             }
         }
         return total;
     }
-    public contactTransferInfo(offers: Offer[]) {
-        const total: number = this.totalProduct(offers);
+    public totalOrder(productsWithOffers: {product: Product, offers: Offer[]}[]) {
+      var total: number = 0;
+      for (let product of productsWithOffers) {
+        for (let offer of product.offers) {
+          total+= offer.price * offer.cantidad;
+        }
+      }
+      return total;
+    }
+    public contactTransferInfo(productsWithOffers: {product: Product, offers: Offer[]}[]) {
+        const total: number = this.totalOrder(productsWithOffers);
         Swal.fire({
             type: 'info',
             title: 'Formas de Pago',
@@ -117,6 +130,9 @@ export class CartComponent implements OnInit {
                 confirmButton: 'btn btn-pill btn-info', // Agrega tu clase CSS personalizada aquí
             }
         });
+    }
+    public confirmPayment(id: string) {
+
     }
     public ngOnDestroy() {
         if (this.subscription) this.subscription.unsubscribe();
