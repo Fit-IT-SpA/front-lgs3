@@ -133,7 +133,7 @@
               </tbody>
             </table>
           </div>
-          <button class="btn btn-pill btn-primary" type="submit" (click)="add()">Crear Pedido</button>
+          <button class="btn btn-pill btn-primary" type="submit" (click)="add()" [disabled]="formOrder.invalid">Crear Pedido</button>
         </div>
       </form>
       </div>
