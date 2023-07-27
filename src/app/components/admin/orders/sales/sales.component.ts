@@ -140,10 +140,12 @@ export class SalesComponent implements OnInit {
             </div>`;
   }  
   onCellClick(id) {
+      console.log(id);
     if(id.type == "click"){
         this.subscription.add(
         this.srvOffer.findByRealId(id.row.id).subscribe(
             (response) => {
+                
                 this.QuickViewSalesHandler.openModal(response,this.user) 
              }
             )

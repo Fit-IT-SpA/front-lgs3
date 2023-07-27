@@ -22,7 +22,7 @@
                 {prop:'estado',name: 'Estado'}
                 ]"
                   [columnMode]="'force'" [headerHeight]="40" [summaryRow]="false" [loadingIndicator]="loadingIndicator"
-                  (click)="onCellClick($event)"
+                  (activate)="onCellClick($event)"
                         [summaryPosition]="'bottom'" [footerHeight]="40" [rowHeight]="'auto'"
                         [reorderable]="reorderable">
               </ngx-datatable>

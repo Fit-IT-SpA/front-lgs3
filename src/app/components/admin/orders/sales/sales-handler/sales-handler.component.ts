@@ -64,10 +64,9 @@ export class SalesHandlerComponent implements OnInit  {
    * @param user 
    */
   openModal(obj: any, user : User) {
-    /*this.offer = obj.offer;
+    this.offer = obj.offer;
     this.order = obj.order;
-    this.product = obj.product;*/
-    
+    this.product = obj.product;
 
     this.modalOpen = true;
 
