@@ -160,5 +160,21 @@ export class OrderService extends AbstractHttpService {
                 })
             );
     }
+    
+    findOfferByMail(email) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http
+            .get<any>(
+                this.apiUrl + '/product/byemail/'+email, httpOptions)
+            .pipe(
+                map(response => {
+                    return response;
+                })
+            );
+    }
 
 }

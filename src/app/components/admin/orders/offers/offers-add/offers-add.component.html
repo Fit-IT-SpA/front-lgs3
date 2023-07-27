@@ -4,10 +4,27 @@
         <div class="col-sm-12">
           <div class="card">
             <div class="card-header pb-0">
-              <h5>Oferta</h5>
+              <h5>Ingresar Oferta</h5>
             </div>
-              <div class="card-body">
+              <div class="card-body pb-0">
                 <form class="form theme-form" [formGroup]="offersFormGroup">
+                    <div class="row">
+                            <div class="col">
+                                <h6>Repuesto Requerido</h6>
+                                <div class="form-group">
+                                    Producti: {{this.product.title}}<br />
+                                    Auto: {{this.product.order[0].brand}} {{this.product.order[0].model}}<br />
+                                    Cantidad: {{this.product.originalQty}}  
+                                </div>
+                            </div>
+                        </div>
+                    <hr> 
+                    <div class="row">
+                            <div class="col">
+                                <h6>Datos Repuesto Ofertado</h6>
+                            </div>
+                        </div>
+                    <hr> 
                     <div class="row">
                             <div class="col">
                                 <label>Seleccione un {{this.perfil.role.name}}</label>
@@ -29,18 +46,25 @@
                                 </div>
                             </div>
                         </div> -->
-                    <div class="row">
-                        <div class="col">
-                            <p>Datos de su repuesto</p>
-                        </div>
-                    </div>
                         <div class="row">
                             <div class="col-sm-8">
                                 <div class="form-group">
-                                <label>Estado de su producto</label>
+                                <label>Condición de su producto</label>
                                 <select class="form-control digits" formControlName="estado">
                                     <option>Nuevo</option>
                                     <option>Usado</option>
+                                </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-sm-8">
+                                <div class="form-group">
+                                <label>Origen</label>
+                                <select class="form-control digits" formControlName="origen">
+                                    <option>Original</option>
+                                    <option>Alternativo</option>
+                                    <option>Chino</option>
                                 </select>
                                 </div>
                             </div>
@@ -64,21 +88,9 @@
                                 </div>
                             </div>
                         <div class="row mt-4">
-                            <div class="col-sm-8">
-                                <div class="form-group">
-                                <label>Origen</label>
-                                <select class="form-control digits" formControlName="origen">
-                                    <option>Original</option>
-                                    <option>Alternativo</option>
-                                    <option>Chino</option>
-                                </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="exampleFormControlInput1">Su precio por <b>Unidad</b> con IVA </label>
+                                    <label for="exampleFormControlInput1">Su precio por <b>Unidad</b> con IVA</label>
                                     <input (keyup)="sumaPrecio()"  formControlName="price" class="form-control" id="exampleFormControlInput1" type="number"
                                         placeholder="$">
                                 </div>
@@ -105,7 +117,7 @@
                                           </div>
                                           <div class="media-body">
                                             <h6 class="mt-0 mega-title-badge">Retiro en Comercio</h6>
-                                            <p>taller Jonathan - San Isidro 720, Santiago</p>
+                                            <p>San Isidro 720, Santiago, Barrio 10 de Julio</p>
                                           </div>
                                         </div>
                                       </div>
@@ -126,7 +138,7 @@
                     
                 </form>
                 </div>
-              <div class="card-footer">
+              <div class="card-footer p-0 ml-5">
                         <button (click)="add()" [disabled]="offersFormGroup.invalid" class="btn btn-primary" type="submit">Crear</button>
                         <input (click)="modal.dismiss('Cross click')"  class="btn btn-secondary ml-2" type="button" value="Cancelar">
                     </div>

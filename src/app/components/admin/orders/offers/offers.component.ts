@@ -94,25 +94,10 @@ export class OffersComponent implements OnInit {
     );
   }
   private findOrders() {
-    this.subscription.add(this.srv.findByAll().subscribe(
+    this.subscription.add(this.srv.findOfferByMail(this.user.email).subscribe(
       response => {
         this.products = response;
-        //console.log(this.products.length);
-        let tmpOrders = [] 
-
-        for(let i=0;i < this.products.length;i++){
-            tmpOrders.push({
-             //   photo : '<img width="50" src="'+this.products[i].photo+'">',
-                name : this.products[i].title,
-                model : '<b>'+this.products[i].qty+'</b>',
-                idOrder : this.products[i].idOrder,
-                company : this.products[i].company,
-            });
-        }
-        this.ordertable = tmpOrders;
-        this.loading = false;    
-        //console.log(this.ordertable);
-        //console.log(this.products);
+        this.loading = false;
       }
     ))
   }
