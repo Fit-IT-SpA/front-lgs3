@@ -101,11 +101,11 @@ export class OffersComponent implements OnInit {
         if(!this.user.companies || this.user.companies.length <= 0){
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
-                  confirmButton: 'btn btn-primary',
-                  cancelButton: 'btn btn-danger'
+                  confirmButton: 'btn btn-pill btn-primary mr-2',
+                  cancelButton: 'btn btn-pill btn-info ml-2'
                 },
                 buttonsStyling: false,
-              })
+              });   
             swalWithBootstrapButtons.fire({
             title: 'Ups! no has ingresado los datos de tu local',
             text: "Sólo podrás ver pedidos, pero no podrás ofertar",
