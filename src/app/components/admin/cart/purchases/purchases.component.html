@@ -1,0 +1,65 @@
+<app-breadcrumb [title]="'Mis compras'" [active_item]="'Mis compras'"></app-breadcrumb>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="flex flex-col flex-auto" *ngIf="loading">
+                    <h6 class="text-center">Procesando...</h6>
+                    <div class="loader-box">
+                      <div class="loader-3"></div>
+                    </div>
+                </div>
+                <div class="card-body" *ngIf="!loading">
+                    <div *ngIf="!orderOffer || orderOffer.length <= 0">No tiene ninguna compra hasta el momento</div>
+                    <div *ngIf="orderOffer && orderOffer.length > 0">
+                        <div *ngFor="let order of orderOffer">
+                            <div class="social-chat" *ngIf="order.productWithOffers && order.productWithOffers.length > 0">
+                                <div class="your-msg">
+                                    <div class="media">
+                                        <div class="media-body">
+                                            <span class="f-w-500">{{order.order.brand}} {{order.order.model}} {{order.order.year}}</span>
+                                            <img class="img-100 img-fluid pull-right" alt="" src="{{order.order.photo}}">
+                                            <p>{{order.order.chassis}}</p>
+                                            <p>ID Pedido: {{order.order.idOrder}}</p>
+                                            <p>Fecha Pedido: {{order.order.createdAt | date:'yyyy-MM-dd HH:mm' }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" *ngFor="let product of order.productWithOffers">
+                                <div class="col-xl-4 col-md-6" *ngFor="let off of product.offers">
+                                    <div class="prooduct-details-box">
+                                        <div class="media">
+                                            <img class="align-self-center img-fluid img-60" src="" alt="">
+                                            <div class="media-body ml-3">
+                                                <div class="product-name">
+                                                    <h6><a href="javascript:void(0);">{{product.product.title}}</a></h6>
+                                                </div>
+                                                <div class="price d-flex"> 
+                                                    <div class="text-muted mr-2">Valor</div>: ${{off.price.toLocaleString('es-CL')}}
+                                                </div>
+                                                <div class="price d-flex"> 
+                                                    <div class="text-muted mr-2">Cantidad</div>: {{off.cantidad}}
+                                                </div>
+                                                <div class="price d-flex"> 
+                                                    <div class="text-muted mr-2">{{off.origen}} {{off.estado}}</div>
+                                                </div>
+                                                <div>
+                                                    <div class="text-muted mr-2">Fecha de pago</div> {{off.confirmedAtClaimant| date:'yyyy-MM-dd HH:mm' }}
+                                                </div>
+                                                <div class="avaiabilty">
+                                                    <div class="text-primary" *ngIf="off.status == 4">procesando</div>
+                                                    <div class="text-success" *ngIf="off.status == 5">confirmado</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
