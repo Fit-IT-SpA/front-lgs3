@@ -7,6 +7,7 @@ import { CompaniesService } from '../../../../shared/services/companies.service'
 import { User } from '../../../../shared/model/user';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { validate, clean, format } from 'rut.js';
 import { Router } from '@angular/router';
 import { OrderService } from 'src/app/shared/services/order.service';
@@ -27,6 +28,8 @@ import { SalesHandlerComponent } from './sales-handler/sales-handler.component';
   providers: [ServiceTypeService, UserService, CompaniesService, OrderService, OfferService]
 })
 export class SalesComponent implements OnInit {
+    
+  formattedHTML: SafeHtml;
   
   private subscription: Subscription = new Subscription();
   public closeResult: string;
@@ -66,12 +69,14 @@ export class SalesComponent implements OnInit {
     private userSrv: UserService,
     private srv: OrderService,
     private srvOffer: OfferService,
+    private sanitizer: DomSanitizer,
     public toster: ToastrService,
     private companiesSrv: CompaniesService) {
         this.company = companyDB.data;
      }
 
   ngOnInit(): void {
+    
     if (this.haveAccess()) {
       this.getOffers();       
     }
@@ -108,16 +113,17 @@ export class SalesComponent implements OnInit {
                                 } else {
                                     status = "<span class='font-warning'>Por Definir ("+this.offers[i].status+")</span>";
                                 }
-                                console.log(this.offers[i]);
                                 tmpOrders.push({
                                     estado : this.offers[i].estado,
-                                    origen : '<b>'+this.offers[i].origen+'</b>',
+                                    origen : this.sanitizer.bypassSecurityTrustHtml('<b>'+this.offers[i].origen+'</b>'),
                                     idOrder : this.offers[i].idProduct,
-                                    cantidad : this.offers[i].cantidad.toLocaleString('es-CL'),
+                                    cantidad : this.offers[i].cantidad,
                                     company : this.offers[i].company,
-                                    price : "$ "+this.offers[i].price.toLocaleString('es-CL'),
-                                    status : status,
-                                    id : this.offers[i].id
+                                    price : this.offers[i].price,
+                                    status : this.sanitizer.bypassSecurityTrustHtml(status),
+                                    id : this.offers[i].id,
+                                    order : this.offers[i].order,
+                                    product : this.offers[i].product,
                                 });
                             }
                             this.offersFormat = tmpOrders;
@@ -139,18 +145,8 @@ export class SalesComponent implements OnInit {
               <i class="fa fa-edit"></i>
             </div>`;
   }  
-  onCellClick(id) {
-      console.log(id);
-    if(id.type == "click"){
-        this.subscription.add(
-        this.srvOffer.findByRealId(id.row.id).subscribe(
-            (response) => {
-                
-                this.QuickViewSalesHandler.openModal(response,this.user) 
-             }
-            )
-        );
-    }
+  onCellClick(offer) {
+      this.QuickViewSalesHandler.openModal(offer,this.user) 
   }
   public canWrite() {
     return true;

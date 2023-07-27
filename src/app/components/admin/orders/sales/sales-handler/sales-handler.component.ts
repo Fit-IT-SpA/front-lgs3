@@ -64,10 +64,7 @@ export class SalesHandlerComponent implements OnInit  {
    * @param user 
    */
   openModal(obj: any, user : User) {
-    this.offer = obj.offer;
-    this.order = obj.order;
-    this.product = obj.product;
-
+    this.offer = obj;
     this.modalOpen = true;
 
       this.modalService.open(this.QuickViewSalesHandler, { 

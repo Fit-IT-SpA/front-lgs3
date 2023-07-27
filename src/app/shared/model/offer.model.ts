@@ -1,3 +1,5 @@
+import { Order } from "./order.model";
+import { Product } from "./product.model";
 export interface Offer {
     id?:string,
     idOffer: string,
@@ -12,5 +14,7 @@ export interface Offer {
     estado: string,
     origen: string,
     idOrder: string,
-    idProduct: string
+    idProduct: string,
+    product?: Product[],
+    order?: Order[]
 }
