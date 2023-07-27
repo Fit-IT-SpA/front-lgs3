@@ -97,7 +97,7 @@ export class SalesComponent implements OnInit {
                     companies.push(this.user.companies[0].rut);
                 }
                 this.subscription.add(
-                    this.srvOffer.getOffersByCompanies(companies).subscribe(
+                    this.srvOffer.getOffersByCompaniesAndEmail(this.user.email,companies).subscribe(
                         (response) => {
                             let tmpOrders = [];
                             this.offers = response;
@@ -107,9 +107,11 @@ export class SalesComponent implements OnInit {
                                 if(this.offers[i].status > -1 && this.offers[i].status <= 2){
                                     status = "<span class='font-primary'>Vigente</span>";
                                 }else if (this.offers[i].status == 3) {
-                                    status = "<span class='font-success'>Por Definir (3)</span>";
+                                    status = "<span class='font-primary'>Adjudicado</span>";
                                 }else if (this.offers[i].status == 4) {
-                                    status = "<span class='font-danger'>Por Definir (4)</span>";
+                                    status = "<span class='font-danger'>Pagado</span>";
+                                }else if (this.offers[i].status == 5) {
+                                    status = "<span class='font-success'>Pagado Confirmado</span>";
                                 } else {
                                     status = "<span class='font-warning'>Por Definir ("+this.offers[i].status+")</span>";
                                 }
@@ -128,11 +130,15 @@ export class SalesComponent implements OnInit {
                             }
                             this.offersFormat = tmpOrders;
                             this.loading = false;
+                        },(error) => {
+                            this.toster.error('Se ha producido un error al intentar buscar las ofertas.');
+                            this.loading = false;
                         }
                     ));
             },
             (error) => {
                 this.toster.error('Se ha producido un error al intentar buscar las ofertas.');
+                this.loading = false;
             }
         )
     );

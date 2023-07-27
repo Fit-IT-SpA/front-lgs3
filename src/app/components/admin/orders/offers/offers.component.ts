@@ -97,7 +97,28 @@ export class OffersComponent implements OnInit {
     this.subscription.add(this.srv.findOfferByMail(this.user.email).subscribe(
       response => {
         this.products = response;
-        this.loading = false;
+        this.loading = false;  
+        if(!this.user.companies || this.user.companies.length <= 0){
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                  confirmButton: 'btn btn-primary',
+                  cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false,
+              })
+            swalWithBootstrapButtons.fire({
+            title: 'Ups! no has ingresado los datos de tu local',
+            text: "Sólo podrás ver pedidos, pero no podrás ofertar",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Agregar local',
+            cancelButtonText: 'Ver pedidos'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.router.navigate(['admin/companies']);
+            }
+          });
+        } 
       }
     ))
   }
