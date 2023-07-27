@@ -111,7 +111,9 @@ export class SalesComponent implements OnInit {
                                 }else if (this.offers[i].status == 4) {
                                     status = "<span class='font-danger'>Pagado</span>";
                                 }else if (this.offers[i].status == 5) {
-                                    status = "<span class='font-success'>Pagado Confirmado</span>";
+                                    status = '<button class="btn btn-warning btn-xs" type="button" placement="top">Por confirmar</button>';
+                                }else if (this.offers[i].status == 6) {
+                                    status = '<button class="btn btn-success btn-xs type="button" placement="top">Confirmado</button>';
                                 } else {
                                     status = "<span class='font-warning'>Por Definir ("+this.offers[i].status+")</span>";
                                 }
