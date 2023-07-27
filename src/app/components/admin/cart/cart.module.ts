@@ -12,11 +12,13 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ArchwizardModule } from 'angular-archwizard';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { CartRoutingModule } from './cart.routing';
+import { PurchasesComponent } from './purchases/purchases.component';
 
 
 @NgModule({
     declarations: [
         CartComponent,
+        PurchasesComponent
     ],
     imports: [
         CommonModule,

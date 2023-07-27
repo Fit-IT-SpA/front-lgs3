@@ -132,7 +132,57 @@ export class CartComponent implements OnInit {
         });
     }
     public confirmPayment(id: string) {
-
+      Swal.fire({
+        title: 'Estas seguro que deseas confirmar el pago?',
+        text: 'id del pedido: '+id,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si, quiero hacerlo!',
+        cancelButtonText: 'No, cancelar!',
+        buttonsStyling: false,
+        customClass: {
+          confirmButton: 'btn btn-pill btn-primary', // Agrega tu clase CSS personalizada aquí
+          cancelButton: 'btn btn-pill btn-info', // Agrega tu clase CSS personalizada aquí
+        }
+      }).then(async (result) => {
+        if (result.value) {
+          let confirm: boolean = await this.savePayment(id);
+          if (confirm) {
+              this.loading = true;
+              Swal.fire({
+                  title: 'Pago confirmado',
+                  text: 'Tu compra será procesada.',
+                  type: 'success',
+                  buttonsStyling: false,
+                  customClass: {
+                    confirmButton: 'btn btn-pill btn-primary', // Agrega tu clase CSS personalizada aquí
+                  }
+              });
+              this.getProductsInCart();
+          } else {
+              Swal.fire({
+                  title: 'Ups.. algo salio mal!',
+                  text: 'Tu compra no se pudo confirmar.',
+                  type: 'error',
+                  buttonsStyling: false,
+                  customClass: {
+                    confirmButton: 'btn btn-pill btn-primary', // Agrega tu clase CSS personalizada aquí
+                  }
+              });
+          }
+          
+        }
+      });
+    }
+    private async savePayment(id: string): Promise<boolean> {
+      try {
+        const response = await this.srv.confirmedPayment(id).toPromise();
+        console.log(response);
+        return true;
+      } catch (error) {
+        console.log(error);
+        return false;
+      }
     }
     public ngOnDestroy() {
         if (this.subscription) this.subscription.unsubscribe();

@@ -107,7 +107,7 @@ export class NavService implements OnDestroy {
 			id: 'mis-talleres-lectura', path: '/admin/companies', title: 'Talleres', icon: 'home', type: 'link'
 		},
 		{
-			id: 'mis-pedidos-lectura', title: 'Mis Pedidos', icon: 'shopping-bag', type: 'link', active: false, path: '/admin/orders'
+			id: 'mis-pedidos-lectura', title: 'Mis Pedidos', icon: 'package', type: 'link', active: false, path: '/admin/orders'
 		},
                 {
 			id: 'mis-ofertas-lectura', title: 'Mi Mesón Virtual', icon: 'tool', type: 'link', active: false, path: '/admin/orders/offers'
@@ -117,6 +117,9 @@ export class NavService implements OnDestroy {
 		},
 		{
 			id: 'caja-lectura', title: 'Caja', icon: 'shopping-cart', type: 'link', active: false, path: '/admin/cart'
+		},
+		{
+			id: 'mis-compras-lectura', title: 'Mis Compras', icon: 'shopping-bag', type: 'link', active: false, path: '/admin/purchases'
 		},
 		{
 			id: 'usuario-admin-escritura', title: 'Administracion', icon: 'edit', type: 'sub', active: false, children: [

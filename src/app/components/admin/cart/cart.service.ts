@@ -21,4 +21,28 @@ export class CartService extends AbstractHttpService {
             })
         );
     }
+    findPurchases(email: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http.get<any>(`${this.apiUrl}/cart/purchases/orders/${email}`, httpOptions).pipe(
+            map(response => {
+                return response;
+            })
+        );
+    }
+    confirmedPayment(id: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http.put<any>(`${this.apiUrl}/cart/confirmed-payment/${id}`, httpOptions).pipe(
+            map(response => {
+                return response;
+            })
+        );
+    }
 }
