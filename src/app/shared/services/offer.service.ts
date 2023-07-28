@@ -65,6 +65,19 @@ export class OfferService extends AbstractHttpService {
             })
         );
     }
+    updateStatusById(id: string, status : number) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http.post<any>(`${this.apiUrl}/offer/update/`+id+`/`+status, httpOptions).pipe(
+            map(response => {
+                return response;
+            })
+        );
+    }
+    
     remove(id: string) {
         const httpOptions = {
             headers: new HttpHeaders({

@@ -29,6 +29,10 @@ import { SalesHandlerComponent } from './sales-handler/sales-handler.component';
 })
 export class SalesComponent implements OnInit {
     
+  ejecutarOnInitPadre() {
+    this.ngOnInit();
+  }
+    
   formattedHTML: SafeHtml;
   
   private subscription: Subscription = new Subscription();
@@ -76,7 +80,6 @@ export class SalesComponent implements OnInit {
      }
 
   ngOnInit(): void {
-    
     if (this.haveAccess()) {
       this.getOffers();       
     }
@@ -128,10 +131,12 @@ export class SalesComponent implements OnInit {
                                     id : this.offers[i].id,
                                     order : this.offers[i].order,
                                     product : this.offers[i].product,
+                                    statusClean: this.offers[i].status
                                 });
                             }
                             this.offersFormat = tmpOrders;
                             this.loading = false;
+                            
                         },(error) => {
                             this.toster.error('Se ha producido un error al intentar buscar las ofertas.');
                             this.loading = false;

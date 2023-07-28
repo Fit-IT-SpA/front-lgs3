@@ -1,4 +1,5 @@
-import { Component, OnInit, TemplateRef, ViewChild  } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild , EventEmitter } from '@angular/core';
+import { SalesComponent } from '../sales.component';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ServiceTypeService } from '../../../../../shared/services/service-type.service';
@@ -10,11 +11,14 @@ import { Offer } from '../../../../../shared/model/offer.model';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { validate, clean, format } from 'rut.js';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Companies } from 'src/app/shared/model/companies.model';
 import { OrderService } from 'src/app/shared/services/order.service';
 import { Product } from '../../../../../shared/model/product.model';
 import { OfferService } from 'src/app/shared/services/offer.service';
 import { Router } from '@angular/router';
+declare var require;
+const Swal = require('sweetalert2');
 
 @Component({
   selector: 'app-sales-handler',
@@ -23,8 +27,6 @@ import { Router } from '@angular/router';
   providers: [ServiceTypeService, UserService, CompaniesService, OrderService, OfferService],
 })
 export class SalesHandlerComponent implements OnInit  {
-    
-
   @ViewChild("quickViewSalesHandler", { static: false }) QuickViewSalesHandler: TemplateRef<any>;
   private subscription: Subscription = new Subscription();
   public closeResult: string;
@@ -45,12 +47,16 @@ export class SalesHandlerComponent implements OnInit  {
   public idOrder: string
   public maxQty: number;
   public priceMask: number = 0;
-  public idProduct: string
+  public idProduct: string;
+  public estado : string;
+  public status : string;
 
   constructor(
+    public componentePadre: SalesComponent,
     private modalService: NgbModal,
     private fb: FormBuilder,
     private userSrv: UserService,
+    private sanitizer: DomSanitizer,
     private srv: OrderService,
     private srvOffer: OfferService,
     private router: Router,
@@ -59,12 +65,31 @@ export class SalesHandlerComponent implements OnInit  {
         
   ngOnInit(): void {
   }
+
+  ejecutarOnInitPadre() {
+    this.componentePadre.ejecutarOnInitPadre();
+  }
+  
   /**
    * open Dialog CUBA
    * @param user 
    */
   openModal(obj: any, user : User) {
+    this.user = user;
     this.offer = obj;
+    this.status = obj.statusClean;
+    if(obj.statusClean == 2){ 
+        this.estado = "VIGENTE";
+    } else if (obj.statusClean == 3) {
+        this.estado = "ADJUDICADO";
+    }else if (obj.statusClean == 4) {
+        this.estado = "PAGADO";
+    }else if (obj.statusClean == 5) {
+        this.estado = "POR CONFIRMAR";
+    }else if (obj.statusClean == 6) {
+        this.estado = "CONFIRMADO";
+    }
+
     this.modalOpen = true;
 
       this.modalService.open(this.QuickViewSalesHandler, { 
@@ -78,86 +103,43 @@ export class SalesHandlerComponent implements OnInit  {
         this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
       });
   }
-  
-  sumaPrecio(){
-      this.priceMask = parseInt(this.offersFormGroup.controls.price.value)*parseInt(this.offersFormGroup.controls.cantidad.value);
-  }
 
-  add() {
-
-    this.offer = this.createOffer();
-    this.subscription.add(this.srvOffer.add(this.offer).subscribe(
-        response => {  
-            console.log(this.product.id);
-            console.log(this.idProduct);
-            this.subscription.add(this.srv.findByIdOrder(this.product.id).subscribe(
-            (response) => {
-                this.toster.success('Se creo correctamente su Pedido!!');
-                //this.offersFormGroup.controls.photo.setValue('');
-                this.offersFormGroup.controls.origen.setValue('');
-                this.offersFormGroup.controls.estado.setValue('');
-                this.offersFormGroup.controls.price.setValue('');
-                this.offersFormGroup.controls.despacho.setValue('');
-                //this.offersFormGroup.controls.comentario.setValue('');
-                this.offersFormGroup.controls.company.setValue('');
-                this.offersFormGroup.controls.cantidad.setValue(0);
-                this.counter = 1;
-                this.priceMask = 0;
-                this.modalService.dismissAll();
-                this.product.offer = response.offer;
+  confirmarPago(offer){
+      const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+              confirmButton: 'btn btn-pill btn-primary mr-2',
+              cancelButton: 'btn btn-pill btn-info ml-2'
             },
-                (error) => {
-                    console.log(error);
-                    this.toster.error('Se creó la oferta, pero no se logró obtener información de Pedido :(');
-                }
-          ))
-            
-            
-            
-        },
-        error => {
-            console.log(error);
-            this.toster.error('No se pudo crear su Pedido :(');
+            buttonsStyling: false,
+          });   
+        swalWithBootstrapButtons.fire({
+        title: 'Confirmación de Pago',
+        text: "Repuesto: "+offer.product.title,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Estoy seguro',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) { 
+           this.srvOffer.updateStatusById(this.offer.id,6).subscribe(
+            (response) => {
+                this.modalService.dismissAll();
+                Swal.fire(
+                    {title:'Pago confirmado',
+                    icon: 'success'
+                });
+               
+                this.ejecutarOnInitPadre();
+                
+            },   
+            (error) => {
+                Swal.fire(
+                {title:'Error al confirmar pago',
+                icon: 'error'
+                });
+            });
         }
-    ));
-    
-  }
-  createOffer() {
-    return {
-        idOffer: (new Date().getTime()).toString(),
-        createBy: this.perfil.email,
-        price: parseInt(this.offersFormGroup.controls.price.value)*parseInt(this.offersFormGroup.controls.cantidad.value),
-        despacho: this.offersFormGroup.controls.despacho.value,
-        //comentario: this.offersFormGroup.controls.comentario.value,
-        estado: this.offersFormGroup.controls.estado.value,
-        origen: this.offersFormGroup.controls.origen.value,
-        cantidad: this.offersFormGroup.controls.cantidad.value,
-        company: this.offersFormGroup.controls.company.value,
-        status: 2,
-        //photo: this.filePath,
-        idOrder : this.idOrder,
-        idProduct : this.idProduct
-
-    }
-
-  }
-  
-  clickCompany(rut: string) {
-    this.offersFormGroup.controls.company.setValue(rut);
-  }
-  
-  public increment() {
-    this.counter += 1;
-    this.offersFormGroup.controls.cantidad.setValue(this.counter);
-    this.priceMask = parseInt(this.offersFormGroup.controls.price.value)*parseInt(this.offersFormGroup.controls.cantidad.value);
-  }
-
-  public decrement() {
-    if (this.counter > 1) {
-        this.counter -= 1;
-        this.offersFormGroup.controls.cantidad.setValue(this.counter);
-        this.priceMask = parseInt(this.offersFormGroup.controls.price.value)*parseInt(this.offersFormGroup.controls.cantidad.value);
-    }
+      });
   }
   
   /**
@@ -177,10 +159,6 @@ export class SalesHandlerComponent implements OnInit  {
    * @param rut rut del taller que hará el pedido
    */
   
-  public finish() {
-    this.toster.success('Successfully Registered')
-  }
-
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
@@ -190,37 +168,4 @@ export class SalesHandlerComponent implements OnInit  {
       return `with: ${reason}`;
     }
   }
- 
-  checkImageFile() {
-    const inputNode: any = document.querySelector('#file');
-    const fileTemp = inputNode.files[0];
-    var mimeType = fileTemp.type;
-    if (mimeType.match(/image\/*/) == null) {
-      this.toster.error('Formato de imagen no soportado. Formatos soportados: png, jpg, jpeg', 'X');
-      return;
-    } else {
-      this.imgFile = fileTemp;
-      let possible = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-      var ramdomName = '';
-      for (var i = 30; i > 0; --i) ramdomName += possible[Math.floor(Math.random() * possible.length)];
-      var fileExtension = this.imgFile.name.slice(this.imgFile.name.lastIndexOf('.') - this.imgFile.name.length);
-      var newFileName = ramdomName + fileExtension;
-      const formData = new FormData();
-
-      formData.append("file", this.imgFile, newFileName);
-      this.subscription.add(this.srv.uploadFile(formData).subscribe(
-        response => {
-          let archivo = response;
-          this.filePath = this.srv.apiUrl + "/files/" + archivo.files[0].originalname;
-          this.toster.success('¡Imagen subida correctamente!');
-        }, error => {
-            this.toster.error('Se ha producido un error al intentar cargar la imagen');
-        }
-      ));
-      //this.offersFormGroup.controls.photo.setValue(this.imgFile.name);
-      return;
-    }
-
-  }
-
 }
