@@ -5,7 +5,7 @@
             <div class="new-users-social">
               <div class="media">
                 <div class="media-body">
-                  <h6 class="mb-0 f-w-700">{{offer.order.brand}} - {{offer.order.model}}</h6>
+                  <h6 class="mb-0 f-w-700">{{estado}} | {{offer.order.brand}} - {{offer.order.model}}</h6>
                   <p>Repuesto: {{offer.product.title}} ({{offer.product.originalQty}} Cant. original)</p>
                 </div><span class="pull-right mt-0"><i data-feather="more-vertical"></i></span>
               </div>
@@ -20,10 +20,15 @@
               </p>
               <p [innerHTML]="offer.origen"></p>
               <p>
-                Estado: {{offer.estado}}
+                Condición {{offer.estado}}
               </p>
             </div>
           </div>
+            <div *ngIf="this.status == 5"  this.status  class="card-footer">
+                <div class="input-group bootstrap-touchspin">
+                    <button (click)=confirmarPago(offer) class="btn btn-pill btn-primary" type="button">Confirmar Pago</button>
+                </div>
+            </div>
         </div>
     </div>
 </ng-template>
