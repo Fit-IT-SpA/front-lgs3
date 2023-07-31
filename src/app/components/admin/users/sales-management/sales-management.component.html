@@ -1,0 +1,64 @@
+<app-breadcrumb [title]="'Gestión de ventas'" [active_item]="'Gestión de ventas'"></app-breadcrumb>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="flex flex-col flex-auto" *ngIf="loading">
+                    <h6 class="text-center">Procesando...</h6>
+                    <div class="loader-box">
+                      <div class="loader-3"></div>
+                    </div>
+                </div>
+                <div class="card-body" *ngIf="!this.loading">
+                    <div *ngIf="!orderOffer || orderOffer.length <= 0">No hay ventas por gestionar</div>
+                    <div *ngIf="orderOffer && orderOffer.length > 0">
+                      <div>
+                        <div class="order-history table-responsive wishlist">
+                          <table class="table table-bordered mb-3">
+                            <thead>
+                              <tr>
+                                <th style="text-align: left">Auto</th>
+                                <th>Producto</th>
+                                <th>Precio unitario</th>
+                                <th>Q Oferta</th>
+                                <th>Comisión Servicio</th>
+                                <th>Total Venta</th>
+                                <th>Taller</th>
+                                <th>Comercio</th>
+                                <th>Confirmar pago</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let offer of orderOffer">
+                                <!--<td *ngIf="off.status == 3"><img class="img-fluid img-40" src="{{off.photo}}" alt="#"></td>-->
+                                <td style="text-align: left">{{offer.order.brand}} {{offer.order.model}} {{offer.order.year}}</td>
+                                <td>{{offer.product.title}}</td>
+                                <td>${{offer.price.toLocaleString('es-CL')}}</td>
+                                <td><span>{{offer.cantidad}}</span></td>
+                                <td></td>
+                                <td>${{(offer.price * offer.cantidad).toLocaleString('es-CL')}}</td>
+                                <!--<td>
+                                    <div class="product-name"><a href="javascript:void(0);">{{offer.estado}}</a></div>
+                                </td>
+                                <td>{{offer.origen}}</td>
+                                <td>
+                                    <button class="btn btn-pill btn-warning btn-xs" *ngIf="offer.status == 4">por confirmar</button>
+                                    <button class="btn btn-pill btn-warning btn-xs" *ngIf="offer.status == 5">pago confirmado</button>
+                                </td>-->
+                                <td><button class="btn btn-pill btn-info btn-xs" (click)="this.contactCompany(offer.workshop, offer.order.company, offer.price * offer.cantidad)">{{this.findCompany(offer.workshop, offer.order.company).name}}</button></td>
+                                <td><button class="btn btn-pill btn-info btn-xs" (click)="this.contactCompany(offer.commerce, offer.company, offer.price * offer.cantidad)">{{this.findCompany(offer.commerce, offer.company).name}}</button></td>
+                                <td>
+                                  <button class="btn btn-pill btn-success btn-xs" (click)="this.confirmPayment(offer._id, offer.product._id, offer.order._id)">Confirmar pago</button>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <hr class="border-top:3px" >
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

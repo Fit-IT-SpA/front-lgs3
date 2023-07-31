@@ -27,6 +27,7 @@ import { FormsRoutingModule } from '../forms/forms-routing.module';
 import { UserModule } from './users/user/user.module';
 import { RoleModule } from './users/role/role.module';
 import { PrivilegeModule } from './users/privilege/privilege.module';
+import { SalesManagementModule } from './users/sales-management/sales-management.module';
 import { CompaniesModule } from './companies/companies.module';
 import { CartModule } from './cart/cart.module';
 
@@ -45,6 +46,7 @@ import { CartModule } from './cart/cart.module';
         UserModule,
         RoleModule,
         PrivilegeModule,
+        SalesManagementModule,
         OrdersModule,
         CompaniesModule,
         ChartistModule,

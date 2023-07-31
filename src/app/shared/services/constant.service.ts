@@ -70,6 +70,8 @@ export class ConstantService {
     public static PERM_PERFIL_ADMIN_ESCRITURA             = "perfil-admin-escritura";
     public static PERM_PRIVILEGIO_ADMIN_LECTURA             = "privilegio-admin-lectura";
     public static PERM_PRIVILEGIO_ADMIN_ESCRITURA             = "privilegio-admin-escritura";
+    public static PERM_GESTION_VENTAS_ADMIN_LECTURA             = "gestion-de-ventas-admin-lectura";
+    public static PERM_GESTION_VENTAS_ADMIN_ESCRITURA             = "gestion-de-ventas-admin-escritura";
     public static PERM_MIS_PEDIDOS_LECTURA            = "mis-pedidos-lectura";
     public static PERM_MIS_PEDIDOS_ESCRITURA            = "mis-pedidos-escritura";
     public static PERM_MIS_OFERTAS_LECTURA            = "mis-ofertas-lectura";

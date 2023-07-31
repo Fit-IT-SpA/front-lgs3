@@ -96,6 +96,7 @@ export class OrdersAddComponent implements OnInit {
                 this.loading = false;
             },
             (error) => {
+                console.log(error);
                 this.toster.error('Se ha producido un error al intentar buscar los '+this.companiesTitle+' del usuario');
                 this.loading = false;
             }
@@ -189,6 +190,7 @@ export class OrdersAddComponent implements OnInit {
           this.formOrder.controls.photo.setValue(this.url);
           this.toster.success('¡Imagen subida correctamente!');
         }, error => {
+            console.log(error);
             this.toster.error('Se ha producido un error al intentar cargar la imagen');
             this.loadingImg = false;
         }
