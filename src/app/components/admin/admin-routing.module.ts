@@ -6,9 +6,6 @@ import {SellerComponent} from './referers/seller/seller.component';
 import {MyProfileComponent} from './my-profile/my-profile.component';
 import {ReferersSellersSellsComponent} from './referers/seller/sells/sells.component';
 import {DesconectarComponent} from './desconectar/desconectar.component';
-import { CompaniesComponent } from './companies/companies.component';
-import { CompaniesAddComponent } from './companies/companies-add/companies-add.component';
-import { OrdersComponent } from './orders/orders.component';
 import { AdminGuard } from '../../shared/guard/admin.guard';
 
 
@@ -54,6 +51,11 @@ const routes: Routes = [
                 path: '',
                 canActivate: [AdminGuard],
                 loadChildren: () => import('./users/privilege/privilege.module').then(m => m.PrivilegeModule)
+            },
+            {
+                path: '',
+                canActivate: [AdminGuard],
+                loadChildren: () => import('./users/sales-management/sales-management.module').then(m => m.SalesManagementModule)
             },
             {
                 path: '',
