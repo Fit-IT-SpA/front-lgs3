@@ -1,8 +1,8 @@
 name: Angular deployment
 on:
   push:
-    branches:
-      ["dev","fb7"]
+    branches:  ["dev","fb7"]
+     
 
 jobs:
   deploy-prod:
