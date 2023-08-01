@@ -31,7 +31,7 @@
         </div>
         <div class="card-body">
             <div>
-                <span *ngIf="this.offers && this.offers.length > 0">Tiene en el carrito {{this.counterView - this.counter}} item(s), puede comprar hasta {{this.counter}} item(s) de este producto</span>
+                <span *ngIf="this.offers && this.offers.length > 0">Puede comprar hasta {{this.counter}} item(s) de este producto</span>
                 <div id="offer_{{i}}" class="social-chat" *ngFor="let off of this.offers; index as i">
                   <div class="your-msg" *ngIf="off.status == 2">
                     <div class="media">

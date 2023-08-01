@@ -144,7 +144,7 @@ export class OffersAddComponent implements OnInit {
     return {
         idOffer: (new Date().getTime()).toString(),
         createBy: this.perfil.email,
-        price: parseInt(this.offersFormGroup.controls.price.value)*parseInt(this.offersFormGroup.controls.cantidad.value),
+        price: parseInt(this.offersFormGroup.controls.price.value),
         despacho: this.offersFormGroup.controls.despacho.value,
         //comentario: this.offersFormGroup.controls.comentario.value,
         estado: this.offersFormGroup.controls.estado.value,
