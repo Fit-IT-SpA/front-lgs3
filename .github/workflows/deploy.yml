@@ -16,7 +16,7 @@ jobs:
           node-version: 14.x
           cache: "npm"
       
-      - name: Intall dependencies and build
+      - name: Install dependencies and build
         run: npm ci && npm run build:prod
 
       - name: Install SSH Key
@@ -39,7 +39,7 @@ jobs:
           node-version: 14.x
           cache: "npm"
       
-      - name: Intall dependencies and build
+      - name: Install dependencies and build
         run: npm ci && npm run build:fb7
 
       - name: Install SSH Key
