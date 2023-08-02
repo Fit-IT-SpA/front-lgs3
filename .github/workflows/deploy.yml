@@ -28,5 +28,5 @@ jobs:
           known_hosts: ${{ secrets.FB7_KNOWN_HOSTS }}
 
       - name: Deploy using rsync
-        run: rsync -avz ./dist/cuba/ ${{ secrets.FB7_SSH_USER }}@${{ secrets.FB7_SSH_HOST }}:/var/www/html/subdev
+        run: rsync -avz ./dist/cuba/ ${{ secrets.FB7_SSH_USER }}@${{ secrets.FB7_SSH_HOST }}:/var/www/lux
 
