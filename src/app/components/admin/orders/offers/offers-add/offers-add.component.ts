@@ -110,7 +110,7 @@ export class OffersAddComponent implements OnInit {
             console.log(this.idProduct);
             this.subscription.add(this.srv.findByIdOrder(this.product.id).subscribe(
             (response) => {
-                this.toster.success('Se creo correctamente su Pedido!!');
+                this.toster.success('Se creó correctamente su Oferta!!');
                 //this.offersFormGroup.controls.photo.setValue('');
                 this.offersFormGroup.controls.origen.setValue('');
                 this.offersFormGroup.controls.estado.setValue('');
@@ -126,7 +126,7 @@ export class OffersAddComponent implements OnInit {
             },
                 (error) => {
                     console.log(error);
-                    this.toster.error('Se creó la oferta, pero no se logró obtener información de Pedido :(');
+                    this.toster.error('Se creó la oferta, pero no se logró obtener información de Oferta :(');
                 }
           ))
             
@@ -135,7 +135,7 @@ export class OffersAddComponent implements OnInit {
         },
         error => {
             console.log(error);
-            this.toster.error('No se pudo crear su Pedido :(');
+            this.toster.error('No se pudo crear su Oferta :(');
         }
     ));
     

@@ -45,4 +45,16 @@ export class CartService extends AbstractHttpService {
             })
         );
     }
+    confirmProductReceived(offerId: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http.put<any>(`${this.apiUrl}/cart/confirm-received/${offerId}`, httpOptions).pipe(
+            map(response => {
+                return response;
+            })
+        );       
+    }
 }

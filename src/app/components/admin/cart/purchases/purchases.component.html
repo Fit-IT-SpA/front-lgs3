@@ -12,54 +12,40 @@
                 <div class="card-body" *ngIf="!loading">
                     <div *ngIf="!orderOffer || orderOffer.length <= 0">No tiene ninguna compra hasta el momento</div>
                     <div *ngIf="orderOffer && orderOffer.length > 0">
-                        <div *ngFor="let order of orderOffer">
-                            <div class="social-chat" *ngIf="order.productWithOffers && order.productWithOffers.length > 0">
-                                <div class="your-msg">
-                                    <div class="media">
-                                        <div class="media-body">
-                                            <span class="f-w-500">{{order.order.brand}} {{order.order.model}} {{order.order.year}}</span>
-                                            <img class="img-100 img-fluid pull-right" alt="" src="{{order.order.photo}}">
-                                            <p>{{order.order.chassis}}</p>
-                                            <p>ID Pedido: {{order.order.idOrder}}</p>
-                                            <p>Fecha Pedido: {{order.order.createdAt | date:'yyyy-MM-dd HH:mm' }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row" *ngFor="let product of order.productWithOffers">
-                                <div class="col-xl-4 col-md-6" *ngFor="let off of product.offers">
-                                    <div class="prooduct-details-box">
-                                        <div class="media">
-                                            <img class="align-self-center img-fluid img-60" src="" alt="">
-                                            <div class="media-body ml-3">
-                                                <div class="product-name">
-                                                    <h6><a href="javascript:void(0);">{{product.product.title}}</a></h6>
-                                                </div>
-                                                <div class="price d-flex"> 
-                                                    <div class="text-muted mr-2">Valor</div>: ${{off.price.toLocaleString('es-CL')}}
-                                                </div>
-                                                <div class="price d-flex"> 
-                                                    <div class="text-muted mr-2">Cantidad</div>: {{off.cantidad}}
-                                                </div>
-                                                <div class="price d-flex"> 
-                                                    <div class="text-muted mr-2">{{off.origen}} {{off.estado}}</div>
-                                                </div>
-                                                <div>
-                                                    <div class="text-muted mr-2">Fecha de pago</div> {{off.confirmedAtClaimant| date:'yyyy-MM-dd HH:mm' }}
-                                                </div>
-                                                <div class="avaiabilty">
-                                                    <div class="text-primary" *ngIf="off.status == 4">procesando</div>
-                                                    <div class="text-success" *ngIf="off.status == 5">confirmado</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <table id="table-ventas" class="table table-hover table-responsive table-border-horizonta">
+                            <thead>
+                              <tr>
+                                <th scope="col">Auto</th>
+                                <th scope="col">Repuesto</th>
+                                <th scope="col">Publicación</th>
+                                <th scope="col">Pago</th>
+                                <th scope="col">Precio Unitario</th>
+                                <th class="text-center" scope="col">Cantidad</th>
+                                <th scope="col">Precio Total</th>
+                                <th scope="col">Status</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr (click)="this.onCellClick(offer)" *ngFor="let offer of orderOffer; index as i"  >
+                                <td>{{offer.order.brand}} {{offer.order.model}} {{offer.order.year}}</td>
+                                <td>{{offer.product.title}}</td>
+                                <td>{{offer.order.createdAt | date:'yyyy-MM-dd HH:mm'}}</td>
+                                <td>{{offer.confirmedAtClaimant | date:'yyyy-MM-dd HH:mm'}}</td>
+                                <td>${{offer.price | number:'1.0-0'}}</td>
+                                <td class="text-center">{{offer.cantidad | number:'1.0-0'}}</td>
+                                <td>${{offer.price*offer.cantidad | number:'1.0-0'}}</td>
+                                <td>
+                                    <button class="btn btn-pill btn-info btn-xs" *ngIf="offer.status == 4 || offer.status == 5">Procesando</button>
+                                    <button class="btn btn-pill btn-warning btn-xs" *ngIf="offer.status == 6">Retirar</button>
+                                    <button class="btn btn-pill btn-success btn-xs" *ngIf="offer.status == 7">Recibido</button>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<app-purchases-view #quickViewParchasesView></app-purchases-view>

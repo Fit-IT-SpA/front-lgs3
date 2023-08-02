@@ -11,16 +11,10 @@ import { Offer } from 'src/app/shared/model/offer.model';
 import { ProductsService } from '../../orders/products/products.service';
 import { OfferService } from 'src/app/shared/services/offer.service';
 import { Order } from 'src/app/shared/model/order.model';
+import { OfferWithData } from 'src/app/shared/model/offer-with-data';
+import { PurchasesViewComponent } from './purchases-view/purchases-view.component';
 declare var require;
 const Swal = require('sweetalert2');
-
-export interface OrderOffer {
-    order: Order,
-    productWithOffers: {
-      product: Product, 
-      offers: Offer[],
-    },
-  }
 
 @Component({
     selector: 'app-purchases',
@@ -34,7 +28,8 @@ export class PurchasesComponent implements OnInit {
     public profile =  JSON.parse(localStorage.getItem('profile'));
     public loading: boolean = true;
     public products: Product[] = [];
-    public orderOffer: OrderOffer[] = [];
+    public orderOffer: OfferWithData[] = [];
+    @ViewChild("quickViewParchasesView") QuickViewParchasesView: PurchasesViewComponent;
 
     constructor(
         private modalService: NgbModal,
@@ -70,7 +65,11 @@ export class PurchasesComponent implements OnInit {
                 this.loading = false;
             }, error => {
                 console.log(error);
+                this.loading = false;
             }
         ));
+    }
+    onCellClick(offer: OfferWithData) {
+        this.QuickViewParchasesView.openModal(offer);
     }
 }
