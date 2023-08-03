@@ -35,6 +35,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
 import { ActivatePasswordComponent } from './auth/activate-password/activate-password.component';
+import { ExpiredComponent } from './auth/expired/expired.component';
 
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -47,7 +48,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     LoginComponent,
     RegisterComponent,
     ForgotPasswordComponent,
-    ActivatePasswordComponent
+    ActivatePasswordComponent,
+    ExpiredComponent
   ],
   imports: [
     BrowserModule,

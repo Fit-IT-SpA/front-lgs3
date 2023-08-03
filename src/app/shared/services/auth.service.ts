@@ -117,6 +117,16 @@ export class AuthServiceNielsen extends AbstractHttpService
         this.route.navigate(['sign-in']);
     }
 
+    logout(rut: string, type: string) {
+        return this.http
+        .put<boolean>(`${this.apiUrl}/audit-authentications/log-out/${rut}/${type}`,{})
+        .pipe(
+            map((response) => {
+            return response;
+            })
+        );
+    }
+
     check(): Observable<boolean>
     {
         // Check if the user is logged in
