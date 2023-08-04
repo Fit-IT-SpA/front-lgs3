@@ -3,10 +3,7 @@ on:
   push:
     branches:  
       - fb7
-     
-
 jobs:
-  
   deploy-fb7:
     runs-on: ubuntu-latest
     steps:
