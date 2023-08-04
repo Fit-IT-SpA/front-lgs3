@@ -197,6 +197,9 @@ export class OrdersAddComponent implements OnInit {
       ));
     }
   }
+  public goBack() {
+    this.router.navigate(['/admin/orders']);
+  }
   /*createClosingDateTime() {
     let date: Date = new Date(
         this.thirdFormGroup.controls.closingDate.value.year, 

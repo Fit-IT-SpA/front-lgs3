@@ -150,6 +150,7 @@ export class OffersAddComponent implements OnInit {
         estado: this.offersFormGroup.controls.estado.value,
         origen: this.offersFormGroup.controls.origen.value,
         cantidad: this.offersFormGroup.controls.cantidad.value,
+        commission: 0.10,
         company: this.offersFormGroup.controls.company.value,
         status: 2,
         //photo: this.filePath,
