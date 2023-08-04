@@ -134,7 +134,10 @@
               </tbody>
             </table>
           </div>
-          <button class="btn btn-pill btn-primary" type="submit" (click)="add()" [disabled]="formOrder.invalid">Crear Pedido</button>
+          <div class="mt-1">
+            <button class="btn btn-pill btn-primary m-r-15 mb-3" type="submit" (click)="add()" [disabled]="formOrder.invalid">Crear Pedido</button>
+            <button class="btn btn-pill btn-info mb-3" type="button" (click)="goBack()">Volver</button>
+          </div>
         </div>
       </form>
       </div>

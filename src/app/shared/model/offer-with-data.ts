@@ -15,6 +15,7 @@ export interface OfferWithData {
     origen: string,
     estado: string,
     cantidad: number,
+    commission: number,
     idOrder: string,
     idProduct: string,
     confirmedAtAdmin: Date | null,
