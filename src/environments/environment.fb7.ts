@@ -8,5 +8,5 @@ export const environment = {
         storageBucket: "Your StorageBucket url",
         messagingSenderId: "Your Sender Id"
       },
-    serverUrl: "https://tuercasdev.fitit.dev"
+    serverUrl: "https://tuercasdev.fitit.dev/api"
 };
