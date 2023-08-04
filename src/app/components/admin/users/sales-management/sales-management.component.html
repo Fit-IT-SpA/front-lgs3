@@ -35,7 +35,7 @@
                                 <td>{{offer.product.title}}</td>
                                 <td>${{offer.price.toLocaleString('es-CL')}}</td>
                                 <td><span>{{offer.cantidad}}</span></td>
-                                <td></td>
+                                <td>{{(offer.price / 10).toLocaleString('es-CL')}}</td>
                                 <td>${{(offer.price * offer.cantidad).toLocaleString('es-CL')}}</td>
                                 <!--<td>
                                     <div class="product-name"><a href="javascript:void(0);">{{offer.estado}}</a></div>

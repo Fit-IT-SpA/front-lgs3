@@ -51,7 +51,7 @@
                       <td *ngIf="off.status == 3">{{off.origen}}</td>
                       <td *ngIf="off.status == 3"><span>{{off.cantidad}}</span>
                       </td>
-                      <td *ngIf="off.status == 3">${{off.price.toLocaleString('es-CL')}}</td>
+                      <td *ngIf="off.status == 3">${{(off.price + off.price / 10).toLocaleString('es-CL')}}</td>
                       <td *ngIf="off.status == 3"><i data-feather="x-circle"></i></td>
                     </tr>
                     <tr>
