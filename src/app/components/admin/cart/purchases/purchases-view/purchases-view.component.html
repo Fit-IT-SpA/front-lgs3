@@ -10,14 +10,14 @@
                 <h6 class="f-w-600">Detalles de la Compra</h6>
                 <p class="mb-0">{{offerData.product.title}}</p>
                 <p class="mb-0">{{offerData.origen}} {{offerData.estado}}</p>
-                <p class="mb-0">Valor unitario: ${{offerData.price.toLocaleString('es-CL')}}</p>
+                <p class="mb-0">Valor unitario: ${{(offerData.price + offerData.price / 10).toLocaleString('es-CL')}}</p>
                 <p class="mb-0">Cantidad: {{offerData.cantidad}}</p>
                 <div>
                     <p class="" *ngIf="offerData.status == 4 || offerData.status == 5">Estatus: <span class="text-info">Procesando</span></p>
                     <p class="" *ngIf="offerData.status == 6">Estatus: <span class="text-warning">Retirar</span></p>
                     <p class="" *ngIf="offerData.status == 7">Estatus: <span class="text-success">Recibido</span></p>
                 </div>
-                <div *ngIf="offerData.price" class="product-price">Valor total: ${{(offerData.price * offerData.cantidad).toLocaleString('es-CL')}}</div>
+                <div *ngIf="offerData.price" class="product-price">Valor total: ${{((offerData.price + offerData.price / 10) * offerData.cantidad).toLocaleString('es-CL')}}</div>
                 <div style="text-align: center" class="addcart-btn">
                     <button class="btn btn-pill btn-primary m-r-15" *ngIf="offerData.status == 6" (click)="this.confirmProductReceived(offerData._id)" type="button">Lo Recibí!</button>
                     <button class="btn btn-pill btn-info" (click)="modal.dismiss('Cross click')" type="button">Volver</button>

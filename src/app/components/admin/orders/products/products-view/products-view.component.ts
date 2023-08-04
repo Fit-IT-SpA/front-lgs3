@@ -154,14 +154,14 @@ export class ProductsViewComponent implements OnInit {
     if (event.currentTarget.checked) {
       this.confirmOffers.push(offer);
       this.countQtyOffers = this.countQtyOffers + offer.cantidad;
-      this.totalConfirm = this.totalConfirm + offer.price * offer.cantidad;
+      this.totalConfirm = this.totalConfirm + (offer.price + offer.price / 10) * offer.cantidad;
     } else {
       // eliminar elemento del array
       var deleteOffer: Offer = this.confirmOffers.find((off) => off.idOffer === offer.idOffer);
       this.confirmOffers.splice(this.confirmOffers.indexOf(deleteOffer), 1);
 
       this.countQtyOffers =  this.countQtyOffers - offer.cantidad;
-      this.totalConfirm = this.totalConfirm - offer.price * offer.cantidad;
+      this.totalConfirm = this.totalConfirm - (offer.price + offer.price / 10) * offer.cantidad;
     }
     //console.log(this.confirmOffers);
   }
