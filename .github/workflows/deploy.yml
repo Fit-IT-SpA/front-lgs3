@@ -9,6 +9,7 @@ jobs:
   
   deploy-fb7:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/fb7'
     steps:
       - uses: actions/checkout@v3
 
@@ -19,7 +20,7 @@ jobs:
           cache: "npm"
       
       - name: Install dependencies and build
-        run: npm ci && npm run build:fb7
+        run: npm ci && npm run build -- --configuration=fb7
 
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2.5.1
