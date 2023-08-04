@@ -1,9 +1,17 @@
-<app-breadcrumb [title]="'Productos no Ofertados'" [items]="['Requerimientos']" [active_item]="'Productos no Ofertados'"></app-breadcrumb>
+<app-breadcrumb [title]="'Mi Mesón Virtual'" [items]="['Requerimientos']" [active_item]="'Mi Mesón Virtual'"></app-breadcrumb>
 <style>
     .ngx-datatable {
   width: 100%;
 }
     </style>
+<div class="container-fluid">
+    <div class="flex flex-col flex-auto" *ngIf="loading">
+	<div class="loader-box">
+	  <div class="loader-3"></div>
+	</div>
+    </div>
+<div class="main" *ngIf="!loading">
+<div class="content" *ngIf="privileges !== null">
 <div class="product-grid">
     <div class="feature-products">
         <div class="row">
@@ -35,16 +43,16 @@
         <div [class]="'col-xl-'+col+' col-sm-'+col" [class.col-xl-12]="listView" *ngFor="let product of products">
             <div class="card">
               <div class="product-box">
-                <div class="product-img"><img class="img-fluid" src="{{product.photo}}" alt="">
+                <div class="product-img"><img class="img-fluid" src="assets/images/nophoto.png" alt="">
                   <div class="product-hover">
                     <ul>
-                      <li (click)="QuickViewOffersAdd.openModal(product)" >
+                      <li *ngIf="this.user.companies.length > 0" (click)="QuickViewOffersAdd.openModal(product,this.user)" >
                         <!--<button class="btn" type="button" (click)="QuickViewOrdersEdit.openModal(this.order, this.user.companies)"><i class="fa fa-edit"></i></button>-->
-                        <button ngbTooltip="Generar Oferta"  class="btn" type="button"><i class="fa fa-check "></i></button>
+                        <button ngbTooltip="Ingresar Oferta"  class="btn" type="button"><i class="fa fa-dollar ml-1"></i></button>
                       </li>
-                      <li (click)="QuickViewOffersView.openModal(product)">
+                      <!-- <li (click)="QuickViewOffersView.openModal(product)">
                         <button class="btn" type="button" data-toggle="modal" data-target="#exampleModalCenter22" ><i class="icon-eye"></i></button>
-                      </li>
+                      </li> -->
                       <li *ngIf="this.product.offer.length > 0" (click)="quickViewOffersDetail.openModal(product)">
                         <button  ngbTooltip="Ver Ofertas ({{this.product.offer.length}})"class="btn" type="button" data-toggle="modal" data-target="#exampleModalCenter23" ><i class="fa fa-money"></i></button>
                       </li>
@@ -52,47 +60,21 @@
                   </div>
                 </div>
                 <div class="product-details">
-                  <h4>{{product.model}}</h4>
-                  <p>{{product.brand}}</p>
+                  <h4>{{product.title}}</h4>
+                  <p>Cantidad: {{product.qty}}</p>
+                  
+                  <!-- <p>{{this.formatRut(product.company)}}</p> -->
                   <p>{{product.idOrder}}</p>
-                  <p>{{this.formatRut(product.company)}}</p>
-                 
                   </div>
                 </div>
               </div>
             </div>
         </div>
     </div>
-<div class="container-fluid">
-  <div class="row">
-    <!-- Individual column searching (text inputs) Starts-->
-    <div class="col-sm-12">
-      <div class="card">
-        <div class="card-header">
-          <h5>Productos no Ofertados</h5><span>Search your product from here..</span>
-        </div>
-        <div class="card-body">
-          <div class="table-responsive product-list-custom custom-datatable table-hover">
-            <div class="table-responsive table-hover" style="width:100%"> 
-                 <ngx-datatable class="bootstrap" [rows]="this.ordertable" [columns]="[
-                {prop:'photo',name: ''},
-                {prop:'model',name: 'Producto'},
-                {prop:'brand',name: 'Marca'},
-                {prop:'idOrder',name: 'Pedido'},
-                {prop:'company',name: 'Company'}
-                ]"
-                 [columnMode]="'force'"
-                 [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10">
-              </ngx-datatable>
-            </div>
-            </div>
-            </div>
-          </div>
-        </div>
-    </div>
-    </div>
-            
-
 <app-offers-add #quickViewOffersAdd></app-offers-add>
 <app-offers-view #quickViewOffersView></app-offers-view>
 <app-offers-detail #quickViewOffersDetail></app-offers-detail>
+</div>
+</div>
+</div>
+    

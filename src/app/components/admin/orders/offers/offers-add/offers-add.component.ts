@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { validate, clean, format } from 'rut.js';
 import { Companies } from 'src/app/shared/model/companies.model';
 import { OrderService } from 'src/app/shared/services/order.service';
+import { Product } from '../../../../../shared/model/product.model';
 import { OfferService } from 'src/app/shared/services/offer.service';
 import { Router } from '@angular/router';
 
@@ -37,9 +38,12 @@ export class OffersAddComponent implements OnInit {
   public companies: Companies[];
   public counter: number = 1;
   public filePath: string;
+  private product: Product;
   public imgFile: any;
   public idOrder: string
   public maxQty: number;
+  public priceMask: number = 0;
+  public idProduct: string
 
   constructor(
     private modalService: NgbModal,
@@ -57,24 +61,28 @@ export class OffersAddComponent implements OnInit {
    * open Dialog CUBA
    * @param user 
    */
-  openModal(order: any) {
+  openModal(product: any, user : User) {
     //this.user = user;
    // this.companies = user.companies;
-    console.log(order);
-    this.idOrder = order.id;
-    this.maxQty = order.qty
+    console.log(product);
+    this.product = product;
+    this.idOrder = product.idOrder;
+    this.idProduct= product.id;
+    this.companies = user.companies;
+    this.maxQty = product.originalQty
     //console.log(this.user);
     //console.log(this.companies);
     this.modalOpen = true;
     
     this.offersFormGroup = this.fb.group({
-        photo: ['', Validators.required],
+        //photo: ['', Validators.required],
         estado: ['', Validators.required],
         origen: ['', Validators.required],
         price: [0, [Validators.required, Validators.min(200)]],
         cantidad: [1, [Validators.required, Validators.min(1), Validators.max(this.maxQty)]],
         despacho: ['retiro_tienda', Validators.required],
-        comentario: ['']
+        company: [this.companies[0].rut],
+        //comentario: ['']
       });
     
       this.modalService.open(this.QuickViewOffersAdd, { 
@@ -88,26 +96,46 @@ export class OffersAddComponent implements OnInit {
         this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
       });
   }
+  
+  sumaPrecio(){
+      this.priceMask = parseInt(this.offersFormGroup.controls.price.value)*parseInt(this.offersFormGroup.controls.cantidad.value);
+  }
 
   add() {
 
     this.offer = this.createOffer();
-    this.subscription.add(this.srvOffer.add(this.offer, this.idOrder).subscribe(
-        response => {
-            //console.log(response);
-            this.toster.success('Se creo correctamente su Pedido!!');
-            this.offersFormGroup.controls.photo.setValue('');
-            this.offersFormGroup.controls.origen.setValue('');
-            this.offersFormGroup.controls.estado.setValue('');
-            this.offersFormGroup.controls.price.setValue('');
-            this.offersFormGroup.controls.despacho.setValue('');
-            this.offersFormGroup.controls.comentario.setValue('');
-            this.offersFormGroup.controls.cantidad.setValue(0);
-            this.modalService.dismissAll();
+    this.subscription.add(this.srvOffer.add(this.offer).subscribe(
+        response => {  
+            console.log(this.product.id);
+            console.log(this.idProduct);
+            this.subscription.add(this.srv.findByIdOrder(this.product.id).subscribe(
+            (response) => {
+                this.toster.success('Se creó correctamente su Oferta!!');
+                //this.offersFormGroup.controls.photo.setValue('');
+                this.offersFormGroup.controls.origen.setValue('');
+                this.offersFormGroup.controls.estado.setValue('');
+                this.offersFormGroup.controls.price.setValue('');
+                this.offersFormGroup.controls.despacho.setValue('');
+                //this.offersFormGroup.controls.comentario.setValue('');
+                this.offersFormGroup.controls.company.setValue('');
+                this.offersFormGroup.controls.cantidad.setValue(0);
+                this.counter = 1;
+                this.priceMask = 0;
+                this.modalService.dismissAll();
+                this.product.offer = response.offer;
+            },
+                (error) => {
+                    console.log(error);
+                    this.toster.error('Se creó la oferta, pero no se logró obtener información de Oferta :(');
+                }
+          ))
+            
+            
+            
         },
         error => {
             console.log(error);
-            this.toster.error('No se pudo crear su Pedido :(');
+            this.toster.error('No se pudo crear su Oferta :(');
         }
     ));
     
@@ -116,28 +144,37 @@ export class OffersAddComponent implements OnInit {
     return {
         idOffer: (new Date().getTime()).toString(),
         createBy: this.perfil.email,
-        price: this.offersFormGroup.controls.price.value,
+        price: parseInt(this.offersFormGroup.controls.price.value),
         despacho: this.offersFormGroup.controls.despacho.value,
-        comentario: this.offersFormGroup.controls.comentario.value,
+        //comentario: this.offersFormGroup.controls.comentario.value,
         estado: this.offersFormGroup.controls.estado.value,
         origen: this.offersFormGroup.controls.origen.value,
         cantidad: this.offersFormGroup.controls.cantidad.value,
-        company: /*this.offersFormGroup.controls.company.value*/ this.perfil.email,
-        status: 1,
-        photo: this.filePath,
+        company: this.offersFormGroup.controls.company.value,
+        status: 2,
+        //photo: this.filePath,
+        idOrder : this.idOrder,
+        idProduct : this.idProduct
+
     }
 
+  }
+  
+  clickCompany(rut: string) {
+    this.offersFormGroup.controls.company.setValue(rut);
   }
   
   public increment() {
     this.counter += 1;
     this.offersFormGroup.controls.cantidad.setValue(this.counter);
+    this.priceMask = parseInt(this.offersFormGroup.controls.price.value)*parseInt(this.offersFormGroup.controls.cantidad.value);
   }
 
   public decrement() {
     if (this.counter > 1) {
         this.counter -= 1;
         this.offersFormGroup.controls.cantidad.setValue(this.counter);
+        this.priceMask = parseInt(this.offersFormGroup.controls.price.value)*parseInt(this.offersFormGroup.controls.cantidad.value);
     }
   }
   
@@ -198,7 +235,7 @@ export class OffersAddComponent implements OnInit {
             this.toster.error('Se ha producido un error al intentar cargar la imagen');
         }
       ));
-      this.offersFormGroup.controls.photo.setValue(this.imgFile.name);
+      //this.offersFormGroup.controls.photo.setValue(this.imgFile.name);
       return;
     }
 

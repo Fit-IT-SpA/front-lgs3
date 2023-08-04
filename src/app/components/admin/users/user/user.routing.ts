@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { UserComponent } from './user.component';
 import { UserAddComponent } from './user-add/user-add.component';
 import { UserEditComponent } from './user-edit/user-edit.component';
+import { AdminGuard } from 'src/app/shared/guard/admin.guard';
 
 
 export const routes: Routes = [
@@ -11,14 +12,17 @@ export const routes: Routes = [
         children: [
             {
                 path: 'users/user',
+                canActivate: [AdminGuard],
                 component: UserComponent
             },
             {
                 path: 'users/user/add',
+                canActivate: [AdminGuard],
                 component: UserAddComponent
             },
             {
                 path: 'users/user/edit/:id',
+                canActivate: [AdminGuard],
                 component: UserEditComponent
             }
         ],

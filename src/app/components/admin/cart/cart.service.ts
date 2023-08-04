@@ -15,10 +15,46 @@ export class CartService extends AbstractHttpService {
                 'Content-Type': 'application/json'
             })
         };
-        return this.http.get<any>(`${this.apiUrl}/cart/products/${email}`, httpOptions).pipe(
+        return this.http.get<any>(`${this.apiUrl}/cart/orders/${email}`, httpOptions).pipe(
             map(response => {
                 return response;
             })
         );
+    }
+    findPurchases(email: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http.get<any>(`${this.apiUrl}/cart/purchases/orders/${email}`, httpOptions).pipe(
+            map(response => {
+                return response;
+            })
+        );
+    }
+    confirmedPayment(id: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http.put<any>(`${this.apiUrl}/cart/confirmed-payment/${id}`, httpOptions).pipe(
+            map(response => {
+                return response;
+            })
+        );
+    }
+    confirmProductReceived(offerId: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http.put<any>(`${this.apiUrl}/cart/confirm-received/${offerId}`, httpOptions).pipe(
+            map(response => {
+                return response;
+            })
+        );       
     }
 }

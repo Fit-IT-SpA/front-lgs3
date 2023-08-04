@@ -37,7 +37,8 @@ export class OffersComponent implements OnInit {
   public user: User;
   public uniqueId = (new Date()).getTime().toString();
   public openSidebar: boolean = false;
-  public listView: boolean = false;
+  public listView: boolean = true;
+  public loading: boolean = true;
   public col: string = '3';
   public companiesName = this.perfil.role.slug == 'taller' ? 'Talleres' : this.perfil.role.slug == 'comercio' ? 'Comercios' : 'No posee';
   //public orders: Order[];
@@ -93,25 +94,31 @@ export class OffersComponent implements OnInit {
     );
   }
   private findOrders() {
-    this.subscription.add(this.srv.findByAll().subscribe(
+    this.subscription.add(this.srv.findOfferByMail(this.user.email).subscribe(
       response => {
         this.products = response;
-        //console.log(this.products.length);
-            let tmpOrders = [] 
-            for(let i=0;i < this.products.length;i++){
-            tmpOrders.push({
-                photo : '<img width="50" src="'+this.products[i].photo+'">',
-                model : '<b>'+this.products[i].model+'</b>',
-                name : this.products[i].brand,
-                idOrder : this.products[i].idOrder,
-                company : this.products[i].brand,
-               // limitPrice : this.orders[i].limitPrice
-            });
+        this.loading = false;  
+        if(!this.user.companies || this.user.companies.length <= 0){
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                  confirmButton: 'btn btn-pill btn-primary mr-2',
+                  cancelButton: 'btn btn-pill btn-info ml-2'
+                },
+                buttonsStyling: false,
+              });   
+            swalWithBootstrapButtons.fire({
+            title: 'Ups! no has ingresado los datos de tu local',
+            text: "Sólo podrás ver pedidos, pero no podrás ofertar",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Agregar local',
+            cancelButtonText: 'Ver pedidos'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.router.navigate(['admin/companies']);
             }
-        this.ordertable = tmpOrders;
-            
-        //console.log(this.ordertable);
-        //console.log(this.products);
+          });
+        } 
       }
     ))
   }

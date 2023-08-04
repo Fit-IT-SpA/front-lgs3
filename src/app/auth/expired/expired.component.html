@@ -1,0 +1,26 @@
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-xl-7" [ngStyle]="{'background-image': 'url(assets/images/login/2.jpg)',
+                                       'background-size': 'cover',
+                                       'background-position': 'center center',
+                                       'display': 'block'}">
+        <img class="bg-img-cover bg-center d-none" src="assets/images/login/2.jpg" alt="looginpage">
+      </div>
+      <div class="col-xl-5 p-0">
+        <div class="login-card">
+          <div>
+            <div>
+              <a class="logo text-left" href="#">
+                <img class="img-fluid for-light" src="assets/images/logo/Logo_Planeta_Tuerca.png" alt="looginpage">
+                <img class="img-fluid for-dark" src="assets/images/logo/Logo_Planeta_Tuerca.png" alt="looginpage">
+              </a>
+            </div>
+            <div class="login-main">
+                <h6>Sesión Terminada</h6>
+                <span>Por seguridad tu sesión ha expirado, vuelve a ingresar, te llevamos al login en <span>{{this.countdown}} segundos...</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

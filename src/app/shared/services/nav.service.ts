@@ -107,22 +107,26 @@ export class NavService implements OnDestroy {
 			id: 'mis-talleres-lectura', path: '/admin/companies', title: 'Talleres', icon: 'home', type: 'link'
 		},
 		{
-			id: 'mis-pedidos-lectura', title: 'Mis Pedidos', icon: 'shopping-cart', type: 'link', active: false, path: '/admin/orders'
+			id: 'mis-pedidos-lectura', title: 'Mis Pedidos', icon: 'package', type: 'link', active: false, path: '/admin/orders'
 		},
                 {
-			id: 'mis-ofertas-lectura', title: 'Mis Ofertas', icon: 'shopping-cart', type: 'link', active: false, path: '/admin/orders/offers'
+			id: 'mis-ofertas-lectura', title: 'Mi Mesón Virtual', icon: 'tool', type: 'link', active: false, path: '/admin/orders/offers'
+		},
+                {
+			id: 'mis-ventas-lectura', title: 'Mis Ventas', icon: 'dollar-sign', type: 'link', active: false, path: '/admin/orders/sales'
 		},
 		{
-			id: 'caja-lectura', title: 'Caja', icon: 'shopping-cart', type: 'sub', active: false, children: [
-				{ id: 'caja-lectura', path: '/admin/cart', title: 'Carrito de Compras', type: 'link' },
-				//{ id: 'caja-escritura', path: '', title: 'Gestionar Talleres', type: 'link' },
-			]
+			id: 'caja-lectura', title: 'Caja', icon: 'shopping-cart', type: 'link', active: false, path: '/admin/cart'
+		},
+		{
+			id: 'mis-compras-lectura', title: 'Mis Compras', icon: 'shopping-bag', type: 'link', active: false, path: '/admin/purchases'
 		},
 		{
 			id: 'usuario-admin-escritura', title: 'Administracion', icon: 'edit', type: 'sub', active: false, children: [
 				{ id: 'usuario-admin-escritura', path: '/admin/users/user', title: 'Usuario', type: 'link' },
 				{ id: 'perfil-admin-escritura', path: '/admin/users/role', title: 'Perfil', type: 'link' },
 				{ id: 'privilegio-admin-escritura', path: '/admin/users/privilege', title: 'Privilegio', type: 'link' },
+				{ id: 'gestion-de-ventas-admin-escritura', path: '/admin/users/sales-management', title: 'Gestión de ventas', type: 'link' }
 			]
 		},
 		/*{

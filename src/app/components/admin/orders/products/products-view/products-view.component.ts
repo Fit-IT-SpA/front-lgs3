@@ -17,12 +17,13 @@ import { Product } from 'src/app/shared/model/product.model';
 import { ProductAdd } from 'src/app/shared/model/product-add.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConstantService } from 'src/app/shared/services/constant.service';
+import { OfferService } from 'src/app/shared/services/offer.service';
 
 @Component({
   selector: 'app-products-view',
   templateUrl: './products-view.component.html',
   styleUrls: ['./products-view.component.scss'],
-  providers: [ServiceTypeService, UserService, CompaniesService, OrderService, ProductsService],
+  providers: [ServiceTypeService, UserService, CompaniesService, OrderService, ProductsService, OfferService],
 })
 export class ProductsViewComponent implements OnInit {
 
@@ -38,6 +39,7 @@ export class ProductsViewComponent implements OnInit {
   public form: FormGroup;
   public companies: Companies[];
   public counter: number = 1;
+  public counterView: number = 1;
   public countQtyOffers: number = 0;
   public confirmOffers: Offer[] = [];
   public totalConfirm: number = 0;
@@ -57,13 +59,11 @@ export class ProductsViewComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private srvOrder: OrderService,
+    private srvOffer: OfferService,
     public toster: ToastrService,
     public srv: ProductsService) {
       this.form = this.fb.group({
-        brand: [null, [Validators.required]],
-        model: ['', [Validators.minLength(3), Validators.maxLength(40)]],
-        chassis: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
-        description: ['', [Validators.minLength(3), Validators.maxLength(40)]],
+        description: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
         qty: ['', Validators.required],
         //year: ['', Validators.required],
         //engine: ['', Validators.required],
@@ -76,7 +76,6 @@ export class ProductsViewComponent implements OnInit {
         this.orderId = params['id'];
         let product: string = params['product'];
         this.getProduct(product);
-        //this.getOrder(id);
       }));
     } else {
       this.router.navigate(['/admin/unauthorized']);
@@ -97,11 +96,24 @@ export class ProductsViewComponent implements OnInit {
     this.subscription.add(this.srvOrder.findById(id).subscribe(
       response => {
           this.order = response;
-          this.form.controls.qty.setValue(this.counter);
-          this.loading = false;
+          console.log(this.order);
+          this.getOffers();
 
       }, error => {
           console.log(error);
+          this.loading = false;
+      }
+    ));
+  }
+  private getOffers() {
+    this.subscription.add(this.srvOffer.findByIdProductAndStatus(this.product.id, 2).subscribe(
+      response => {
+        this.offers = response;
+        console.log(this.offers);
+        this.loading = false;
+      }, error => {
+        console.log(error);
+        this.loading = false;
       }
     ));
   }
@@ -110,21 +122,13 @@ export class ProductsViewComponent implements OnInit {
       response => {
         console.log(response);
         this.form = this.fb.group({
-          brand: this.fb.control({ value: response.brand, disabled: true }),
-          model: this.fb.control({ value: response.model, disabled: true }),
-          chassis: this.fb.control({ value: response.chassis, disabled: true }),
-          name: this.fb.control({ value: response.name, disabled: true }),
-          description: this.fb.control({ value: response.description, disabled: true }),
-          qty: this.fb.control({ value: response.qty, disabled: true }),
+          description: this.fb.control({ value: response.title, disabled: true }),
+          qty: this.fb.control({ value: response.originalQty, disabled: true }),
         });
         this.product = response;
-        for (let off of this.product.offer) {
-          if (off.status >= 2) {
-            this.form.controls.qty.setValue(this.form.controls.qty.value - off.cantidad);
-          }
-        }
-        this.counter = this.form.controls.qty.value;
-        this.loading = false;
+        this.counterView = response.originalQty;
+        this.counter = response.qty;
+        this.getOrder(this.orderId);
       }, error => {
         console.log(error);
         this.loading = false;
@@ -150,39 +154,50 @@ export class ProductsViewComponent implements OnInit {
     if (event.currentTarget.checked) {
       this.confirmOffers.push(offer);
       this.countQtyOffers = this.countQtyOffers + offer.cantidad;
-      this.totalConfirm = this.totalConfirm + offer.price;
+      this.totalConfirm = this.totalConfirm + offer.price * offer.cantidad;
     } else {
       // eliminar elemento del array
       var deleteOffer: Offer = this.confirmOffers.find((off) => off.idOffer === offer.idOffer);
       this.confirmOffers.splice(this.confirmOffers.indexOf(deleteOffer), 1);
 
       this.countQtyOffers =  this.countQtyOffers - offer.cantidad;
-      this.totalConfirm = this.totalConfirm - offer.price;
+      this.totalConfirm = this.totalConfirm - offer.price * offer.cantidad;
     }
     //console.log(this.confirmOffers);
   }
   public add() {
-    this.product.status = 3;
-    for (let offer of this.product.offer) {
-      for (let offerConfirm of this.confirmOffers) {
-        if (offer.idOffer === offerConfirm.idOffer) {
-          offer.status = 2;
-        }
-      }
+    this.loading = true;
+    let offersId: string = '';
+    for (let i = 0 ; i < this.confirmOffers.length ; i++) {
+      if (i == this.confirmOffers.length - 1) 
+        offersId = offersId + this.confirmOffers[i].idOffer
+      else
+        offersId = offersId + this.confirmOffers[i].idOffer +','
     }
-    this.save();
+    this.save(offersId);
   }
-  private save() {
-    this.subscription.add(this.srv.updateById(this.product.id, this.product).subscribe(
+  private save(offersId: string) {
+    this.subscription.add(this.srvOffer.updateAllIds(offersId).subscribe(
       response => {
         console.log(response);
         this.toster.success("Se confirmarón "+this.countQtyOffers+" producto(s), para pagar debe pasar por caja.");
         this.router.navigate(['/admin/cart']);
+        this.loading = false;
       }, error => {
         console.log(error);
         this.toster.error("Se produjo un error al intentar agregar los productos al carro");
+        this.loading = false;
       }
     ));
+    /*this.subscription.add(this.srv.updateById(this.product.id, this.product).subscribe(
+      response => {
+        console.log(response);
+        
+      }, error => {
+        console.log(error);
+        
+      }
+    ));*/
   }
   public goBack() {
     this.router.navigate(['/admin/orders/'+this.orderId+'/products']);

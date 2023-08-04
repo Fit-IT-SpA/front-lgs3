@@ -57,10 +57,7 @@ export class ProductsAddComponent implements OnInit {
     public toster: ToastrService,
     public srv: ProductsService) {
       this.productsAddFormGroup = this.fb.group({
-        brand: [null, [Validators.required]],
-        model: ['', [Validators.minLength(3), Validators.maxLength(40)]],
-        chassis: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
-        description: ['', [Validators.minLength(3), Validators.maxLength(40)]],
+        description: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
         qty: ['', Validators.required],
         //year: ['', Validators.required],
         //engine: ['', Validators.required],
@@ -97,6 +94,7 @@ export class ProductsAddComponent implements OnInit {
 
       }, error => {
           console.log(error);
+          this.loading = false;
       }
     ));
   }
@@ -133,17 +131,14 @@ export class ProductsAddComponent implements OnInit {
   private createProduct() {
     return {
         idOrder: this.order.id,
-        brand: (this.productsAddFormGroup.controls.brand.value) ? this.productsAddFormGroup.controls.brand.value.value : '',
-        model: (this.productsAddFormGroup.controls.model.value) ? this.productsAddFormGroup.controls.model.value : '',
         //year: '',
         //engine: '',
-        description: (this.productsAddFormGroup.controls.description.value) ? this.productsAddFormGroup.controls.description.value : '',
+        title: (this.productsAddFormGroup.controls.description.value) ? this.productsAddFormGroup.controls.description.value : '',
         createBy: this.order.createBy,
         company: this.order.company,
-        status: 1,
-        offer: [],
-        chassis: (this.productsAddFormGroup.controls.chassis.value) ? this.productsAddFormGroup.controls.chassis.value : '',
+        status: 0,
         qty: (this.productsAddFormGroup.controls.qty.value) ? this.productsAddFormGroup.controls.qty.value : 1,
+        originalQty: (this.productsAddFormGroup.controls.qty.value) ? this.productsAddFormGroup.controls.qty.value : 1,
     }
   }
   goBack() {

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CompaniesComponent } from './companies.component';
+import { AdminGuard } from 'src/app/shared/guard/admin.guard';
 
 
 export const routes: Routes = [
@@ -9,6 +10,7 @@ export const routes: Routes = [
         children: [
             {
                 path: 'companies',
+                canActivate: [AdminGuard],
                 component: CompaniesComponent
             },
         ],

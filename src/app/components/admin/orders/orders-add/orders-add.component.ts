@@ -14,6 +14,7 @@ import { Companies } from 'src/app/shared/model/companies.model';
 import { OrderService } from 'src/app/shared/services/order.service';
 import { Router } from '@angular/router';
 import { ConstantService } from 'src/app/shared/services/constant.service';
+import { numberValidator } from 'src/app/shared/validators/form-validators';
 
 @Component({
   selector: 'app-orders-add',
@@ -30,14 +31,17 @@ export class OrdersAddComponent implements OnInit {
   public companiesForm: FormGroup;
   public perfil =  JSON.parse(localStorage.getItem('profile'));
   public companiesTitle = this.perfil.role.slug == 'taller' ? 'Talleres' : this.perfil.role.slug == 'comercio' ? 'Comercios' : 'Negocios';
+  public url: ArrayBuffer | string;
   private user: User;
   public orderAdd: OrderAdd;
   public order: Order;
-  public firstFormGroup: FormGroup;
+  public formOrder: FormGroup;
   public companies: Companies[];
   public counter: number = 1;
   public filePath: string;
   public imgFile: any;
+  public loading: boolean = true;
+  public loadingImg: boolean = false;
   public brandFilter: { value: string, label: string, job: string }[] = [
     { value: "CHEVROLET", label: "CHEVROLET", job: "" },
     { value: "HYUNDAI", label: "HYUNDAI", job: "" },
@@ -52,8 +56,14 @@ export class OrdersAddComponent implements OnInit {
     private router: Router,
     public toster: ToastrService,
     private companiesSrv: CompaniesService) {
-        this.firstFormGroup = this.fb.group({
+        this.formOrder = this.fb.group({
             company: ['', Validators.required],
+            brand: [null, [Validators.required]],
+            model: ['', [Validators.minLength(3), Validators.maxLength(40)]],
+            chassis: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
+            photo: ['', [Validators.required]],
+            year: ['', [Validators.required, Validators.maxLength(4), Validators.minLength(4), numberValidator]],
+            //engine: ['', Validators.required],
           });
      }
 
@@ -81,10 +91,14 @@ export class OrdersAddComponent implements OnInit {
             (response) => {
                 this.user = response;
                 this.companies = this.user.companies;
-                console.log(this.user);
+                this.formOrder.controls.company.setValue(this.companies[0].rut);
+                //console.log(this.user);
+                this.loading = false;
             },
             (error) => {
+                console.log(error);
                 this.toster.error('Se ha producido un error al intentar buscar los '+this.companiesTitle+' del usuario');
+                this.loading = false;
             }
         )
     );
@@ -117,7 +131,7 @@ export class OrdersAddComponent implements OnInit {
         response => {
             //console.log(response);
             this.toster.success('Se creó correctamente su pedido');
-            this.firstFormGroup.controls.company.setValue('');
+            this.formOrder.controls.company.setValue('');
             this.product(response.id);
         },
         error => {
@@ -135,12 +149,53 @@ export class OrdersAddComponent implements OnInit {
     return {
         idOrder: (new Date().getTime()).toString(),
         createBy: this.perfil.email,
-        company: this.firstFormGroup.controls.company.value,
+        company: this.formOrder.controls.company.value,
         status: 0,
         //closingDate: this.createClosingDateTime(),
+        brand: (this.formOrder.controls.brand.value) ? this.formOrder.controls.brand.value.value : '',
+        model: (this.formOrder.controls.model.value) ? this.formOrder.controls.model.value : '',
+        year: (this.formOrder.controls.year.value) ? this.formOrder.controls.year.value : '',
+        //engine: '',
+        chassis: (this.formOrder.controls.chassis.value) ? this.formOrder.controls.chassis.value : '',
+        photo: (this.formOrder.controls.photo.value) ? this.formOrder.controls.photo.value : '',
         closingDate: new Date(),
     }
 
+  }
+  fileChangeEvent(event: any) {
+    this.loadingImg = true;
+    console.log(event.target.files[0]);
+    const file = event.target.files[0];
+    var mimeType = event.target.files[0].type;
+    console.log(mimeType);
+    if (mimeType.match(/image\/*/) == null) {
+      this.loadingImg = false;
+      this.toster.error("Formato de imagen no soportado. Formatos soportados: png, jpg, jpeg");
+    } else {
+      this.imgFile = file;
+      let possible = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      var ramdomName = '';
+      for (var i = 30; i > 0; --i) ramdomName += possible[Math.floor(Math.random() * possible.length)];
+      var fileExtension = this.imgFile.name.slice(this.imgFile.name.lastIndexOf('.') - this.imgFile.name.length);
+      var newFileName = ramdomName + fileExtension;
+      const formData = new FormData();
+
+      formData.append("file", this.imgFile, newFileName);
+      this.subscription.add(this.srv.uploadFile(formData).subscribe(
+        response => {
+          this.loadingImg = false;
+          let archivo = response;
+          this.filePath = this.srv.apiUrl + "/files/" + archivo.files[0].originalname;
+          this.url = this.filePath;
+          this.formOrder.controls.photo.setValue(this.url);
+          this.toster.success('¡Imagen subida correctamente!');
+        }, error => {
+            console.log(error);
+            this.toster.error('Se ha producido un error al intentar cargar la imagen');
+            this.loadingImg = false;
+        }
+      ));
+    }
   }
   /*createClosingDateTime() {
     let date: Date = new Date(
@@ -169,8 +224,8 @@ export class OrdersAddComponent implements OnInit {
    * @param rut rut del taller que hará el pedido
    */
   clickCompany(rut: string) {
-    this.firstFormGroup.controls.company.setValue(rut);
-    //console.log(this.firstFormGroup.controls.company.value);
+    this.formOrder.controls.company.setValue(rut);
+    //console.log(this.formOrder.controls.company.value);
   }
   public finish() {
     this.toster.success('Successfully Registered')

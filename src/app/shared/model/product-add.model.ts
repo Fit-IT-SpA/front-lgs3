@@ -1,12 +1,11 @@
+import { Offer } from "./offer.model";
+
 export interface ProductAdd {
     idOrder: string,
-    brand: string,
-    model: string,
-    //year: string,
-    //engine: string
+    title: string,
+    qty: number,
+    originalQty: number,
     createBy: string,
     company: string,
-    description: string,
-    chassis: string,
-    qty: number
+    status: number,
 }

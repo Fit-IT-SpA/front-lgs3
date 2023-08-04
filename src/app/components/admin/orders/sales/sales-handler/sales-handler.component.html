@@ -1,0 +1,34 @@
+<ng-template #quickViewSalesHandler let-modal>
+    <div class="col-sm-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="new-users-social">
+              <div class="media">
+                <div class="media-body">
+                  <h6 class="mb-0 f-w-700">{{estado}} | {{offer.order.brand}} - {{offer.order.model}}</h6>
+                  <p>Repuesto: {{offer.product.title}} ({{offer.product.originalQty}} Cant. original)</p>
+                </div><span class="pull-right mt-0"><i data-feather="more-vertical"></i></span>
+              </div>
+            </div>
+            <div class="timeline-content">
+              <hr>
+              <h6>Oferta {{offer.idOffer}}</h6>
+              
+              <div class="product-price">$ {{offer.price | number:'1.0-0'}}</div>
+              <p>
+                Cantidad unidades ofertadas: {{offer.cantidad}}
+              </p>
+              <p [innerHTML]="offer.origen"></p>
+              <p>
+                Condición {{offer.estado}}
+              </p>
+            </div>
+          </div>
+            <div *ngIf="this.status == 5"  this.status  class="card-footer">
+                <div class="input-group bootstrap-touchspin">
+                    <button (click)=confirmarPago(offer) class="btn btn-pill btn-primary" type="button">Confirmar Pago</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

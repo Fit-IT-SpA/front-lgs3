@@ -6,51 +6,78 @@
         <div class="card-header">
           <h5>Ofertas Recepcionadas</h5>
         </div>
-        <div class="card-body" *ngIf="!this.loading">
-            <div *ngIf="!products || products.length <= 0">Carrito de compras vacío</div>
-            <div class="row mb-3" *ngFor="let product of orderOffer">
-                <span class="col mb-3">ID Pedido: {{product.id_order}}</span>
-                <button class="btn btn-pill btn-info mb-3" type="button" (click)="this.contactTransferInfo(product.offers)">Formas de Pago</button>
-                <div class="order-history table-responsive wishlist">
-                    <table class="table table-bordered mb-3">
-                      <thead>
-                        <tr>
-                          <th>Oferta</th>
-                          <th>Estado</th>
-                          <th>Origen</th>
-                          <th>Cantidad</th>
-                          <th>Cancelar Oferta</th>
-                          <th>Total</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr *ngFor="let off of product.offers">
-                            <td *ngIf="off.status == 2"><img class="img-fluid img-40" src="{{off.photo}}" alt="#"></td>
-                            <td *ngIf="off.status == 2">
-                                <div class="product-name"><a href="javascript:void(0);">{{off.estado}}</a></div>
-                            </td>
-                            <td *ngIf="off.status == 2">{{off.origen}}</td>
-                            <td *ngIf="off.status == 2"><span>{{off.cantidad}}</span>
-                            </td>
-                            <td *ngIf="off.status == 2"><i data-feather="x-circle"></i></td>
-                            <td *ngIf="off.status == 2">${{off.price.toLocaleString('es-CL')}}</td>
-                        </tr>
-                        <tr>
-                          <td class="total-amount">
-                            <h6 class="m-0 text-right"><span class="f-w-600">Precio Total :</span></h6>
-                          </td>
-                          <td colspan="5"><span>${{this.totalProduct(product.offers).toLocaleString('es-CL')}}</span></td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                <div class="mt-1">
-                    <button class="btn btn-pill btn-success">Confirmar Pago</button>
-                </div>
-                <hr class="border-top:3px" >
-            </div>
+        <div class="flex flex-col flex-auto" *ngIf="loading">
+          <h6 class="text-center">Procesando...</h6>
+          <div class="loader-box">
+            <div class="loader-3"></div>
+          </div>
         </div>
-        <!-- Container-fluid Ends-->
+        <div class="card-body" *ngIf="!this.loading">
+          <div *ngIf="!orderOffer || orderOffer.length <= 0">Carrito de compras vacío</div>
+          <div *ngIf="orderOffer && orderOffer.length > 0">
+            <div *ngFor="let order of orderOffer">
+              <div class="social-chat">
+                <div class="your-msg">
+                    <div class="media">
+                        <div class="media-body">
+                            <span class="f-w-500">{{order.order.brand}} {{order.order.model}} {{order.order.year}}</span>
+                            <img class="img-100 img-fluid pull-right" alt="" src="{{order.order.photo}}">
+                            <p>{{order.order.chassis}}</p>
+                            <p>ID Pedido: {{order.order.idOrder}}</p>
+                        </div>
+                    </div>
+                </div>
+              </div>
+              <button class="btn btn-pill btn-info mb-3" type="button" (click)="this.contactTransferInfo(order.productWithOffers)">Formas de Pago</button>
+              <div class="order-history table-responsive wishlist">
+                <table class="table table-bordered mb-3">
+                  <thead>
+                    <tr>
+                      <th style="text-align: left">Oferta</th>
+                      <th>Estado</th>
+                      <th>Origen</th>
+                      <th>Cantidad</th>
+                      <th>Total</th>
+                      <th>Cancelar Oferta</th>
+                    </tr>
+                  </thead>
+                  <tbody *ngFor="let product of order.productWithOffers">
+                    <tr *ngFor="let off of product.offers">
+                      <!--<td *ngIf="off.status == 3"><img class="img-fluid img-40" src="{{off.photo}}" alt="#"></td>-->
+                      <td style="text-align: left" *ngIf="off.status == 3">{{product.product.title}}</td>
+                      <td *ngIf="off.status == 3">
+                          <div class="product-name"><a href="javascript:void(0);">{{off.estado}}</a></div>
+                      </td>
+                      <td *ngIf="off.status == 3">{{off.origen}}</td>
+                      <td *ngIf="off.status == 3"><span>{{off.cantidad}}</span>
+                      </td>
+                      <td *ngIf="off.status == 3">${{off.price.toLocaleString('es-CL')}}</td>
+                      <td *ngIf="off.status == 3"><i data-feather="x-circle"></i></td>
+                    </tr>
+                    <tr>
+                      <td class="total-amount" colspan="4">
+                        <h6 class="m-0 text-right"><span class="f-w-600">Subtotal:</span></h6>
+                      </td>
+                      <td><span>${{this.totalProduct(product.offers).toLocaleString('es-CL')}}</span></td>
+                    </tr>
+                  </tbody>
+                  <tbody>
+                    <tr>
+                      <td class="total-amount" colspan="4">
+                        <h6 class="m-0 text-right"><span class="f-w-600">Total a Pago:</span></h6>
+                      </td>
+                      <td><span>${{this.totalOrder(order.productWithOffers).toLocaleString('es-CL')}}</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <span>Ten a mano tu comprobante de pago del banco, te lo pediremos en el siguiente paso</span>
+              <div class="mt-1">
+                  <button class="btn btn-pill btn-success" (click)="confirmPayment(order.order.idOrder)">Confirmar Pago</button>
+              </div>
+              <hr class="border-top:3px" >
+          </div>
+        </div>
       </div>
     </div>
   </div>

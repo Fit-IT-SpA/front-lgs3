@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CartComponent } from './cart.component';
-
-//import { OrdersEditComponent } from './orders-edit/orders-edit.component';
-//import { OrdersViewComponent } from './orders-view/orders-view.component';
+import { PurchasesComponent } from './purchases/purchases.component';
+import { AdminGuard } from 'src/app/shared/guard/admin.guard';
 
 
 export const routes: Routes = [
@@ -12,7 +11,13 @@ export const routes: Routes = [
         children: [
             {
                 path: 'cart',
+                canActivate: [AdminGuard],
                 component: CartComponent
+            },
+            {
+                path: 'purchases',
+                canActivate: [AdminGuard],
+                component: PurchasesComponent
             }
         ],
     }

@@ -118,7 +118,7 @@ export class OffersDetailComponent implements OnInit {
           cancelButtonText: 'No, cancelar!'
         }).then((result) => {
           if (result.value) {  
-            this.subscription.add(this.srvOffer.remove(idOffer,this.product.idOrder).subscribe(
+            this.subscription.add(this.srvOffer.remove(idOffer).subscribe(
                (response) => {
                  this.subscription.add(this.srv.findByIdOrder(this.product.id).subscribe(
                     (response) => {
@@ -154,8 +154,8 @@ export class OffersDetailComponent implements OnInit {
         })
       }
       
-      public async remove(idOffer: string, idOrder: string) {
-        await this.subscription.add(this.srvOffer.remove(idOffer,idOrder).subscribe(
+      public async remove(idOffer: string) {
+        await this.subscription.add(this.srvOffer.remove(idOffer).subscribe(
           (response) => {
             return response
           },

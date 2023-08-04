@@ -8,19 +8,25 @@ import { ConstantService } from 'src/app/shared/services/constant.service';
 import { CartService } from './cart.service';
 import { Product } from 'src/app/shared/model/product.model';
 import { Offer } from 'src/app/shared/model/offer.model';
+import { ProductsService } from '../orders/products/products.service';
+import { OfferService } from 'src/app/shared/services/offer.service';
+import { Order } from 'src/app/shared/model/order.model';
 declare var require;
 const Swal = require('sweetalert2');
 
 export interface OrderOffer {
-    id_order: string,
-    offers: Offer[]
+  order: Order,
+  productWithOffers: {
+    product: Product, 
+    offers: Offer[],
+  },
 }
 
 @Component({
     selector: 'app-cart-auctions',
     templateUrl: './cart.component.html',
     styleUrls: ['./cart.component.scss'],
-    providers: [CartService],
+    providers: [CartService, ProductsService, OfferService],
 })
 
 export class CartComponent implements OnInit {
@@ -35,6 +41,8 @@ export class CartComponent implements OnInit {
         private fb: FormBuilder,
         private router: Router,
         public srv: CartService,
+        private srvProduct: ProductsService,
+        private srvOffer: OfferService,
         public toster: ToastrService) {}
     ngOnInit(): void {
         if (this.haveAccess()) {
@@ -46,42 +54,15 @@ export class CartComponent implements OnInit {
     private getProductsInCart() {
         this.subscription.add(this.srv.findByEmail(this.profile.email).subscribe(
             response => {
-                this.products = response;
-                this.getOrderOfferModel();
+                this.orderOffer = response;
+                console.log(this.orderOffer);
+                this.loading = false;
+                //this.getOrderOfferModel();
             }, error => {
                 console.log(error);
+                this.loading = false;
             }
         ));
-    }
-    private getOrderOfferModel() {
-        let firstIdOrder: string = this.products[0].idOrder;
-        this.orderOffer.push({
-            id_order: firstIdOrder,
-            offers: []
-        });
-        let count: number = 0;
-        for (let product of this.products) {
-            if (product.idOrder !== this.orderOffer[count].id_order) {
-                this.orderOffer.push({
-                    id_order: product.idOrder,
-                    offers: []
-                });
-                count++;
-                for (let off of product.offer) {
-                    if (off.status == 2) {
-                        this.orderOffer[count].offers.push(off);
-                    }
-                }
-            } else {
-                for (let off of product.offer) {
-                    if (off.status == 2) {
-                        this.orderOffer[count].offers.push(off);
-                    }
-                }
-            }
-        }
-        console.log(this.orderOffer);
-        this.loading = false;
     }
     private haveAccess() {
         let permissions = JSON.parse(localStorage.getItem("profile")).privilege;
@@ -97,14 +78,23 @@ export class CartComponent implements OnInit {
     public totalProduct(offers: Offer[]) {
         var total: number = 0;
         for (let offer of offers) {
-            if (offer.status == 2) {
-                total+= offer.price;
+            if (offer.status == 3) {
+                total+= offer.price * offer.cantidad;
             }
         }
         return total;
     }
-    public contactTransferInfo(offers: Offer[]) {
-        const total: number = this.totalProduct(offers);
+    public totalOrder(productsWithOffers: {product: Product, offers: Offer[]}[]) {
+      var total: number = 0;
+      for (let product of productsWithOffers) {
+        for (let offer of product.offers) {
+          total+= offer.price * offer.cantidad;
+        }
+      }
+      return total;
+    }
+    public contactTransferInfo(productsWithOffers: {product: Product, offers: Offer[]}[]) {
+        const total: number = this.totalOrder(productsWithOffers);
         Swal.fire({
             type: 'info',
             title: 'Formas de Pago',
@@ -140,6 +130,59 @@ export class CartComponent implements OnInit {
                 confirmButton: 'btn btn-pill btn-info', // Agrega tu clase CSS personalizada aquí
             }
         });
+    }
+    public confirmPayment(id: string) {
+      Swal.fire({
+        title: 'Estas seguro que deseas confirmar el pago?',
+        text: 'id del pedido: '+id,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si, quiero hacerlo!',
+        cancelButtonText: 'No, cancelar!',
+        buttonsStyling: false,
+        customClass: {
+          confirmButton: 'btn btn-pill btn-primary', // Agrega tu clase CSS personalizada aquí
+          cancelButton: 'btn btn-pill btn-info', // Agrega tu clase CSS personalizada aquí
+        }
+      }).then(async (result) => {
+        if (result.value) {
+          let confirm: boolean = await this.savePayment(id);
+          if (confirm) {
+              this.loading = true;
+              Swal.fire({
+                  title: 'Pago confirmado',
+                  text: 'Tu compra será procesada.',
+                  type: 'success',
+                  buttonsStyling: false,
+                  customClass: {
+                    confirmButton: 'btn btn-pill btn-primary', // Agrega tu clase CSS personalizada aquí
+                  }
+              });
+              this.getProductsInCart();
+          } else {
+              Swal.fire({
+                  title: 'Ups.. algo salio mal!',
+                  text: 'Tu compra no se pudo confirmar.',
+                  type: 'error',
+                  buttonsStyling: false,
+                  customClass: {
+                    confirmButton: 'btn btn-pill btn-primary', // Agrega tu clase CSS personalizada aquí
+                  }
+              });
+          }
+          
+        }
+      });
+    }
+    private async savePayment(id: string): Promise<boolean> {
+      try {
+        const response = await this.srv.confirmedPayment(id).toPromise();
+        console.log(response);
+        return true;
+      } catch (error) {
+        console.log(error);
+        return false;
+      }
     }
     public ngOnDestroy() {
         if (this.subscription) this.subscription.unsubscribe();
