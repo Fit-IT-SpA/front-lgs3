@@ -32,7 +32,11 @@ export class OffersDetailComponent implements OnInit {
   public companiesForm: FormGroup;
   public perfil =  JSON.parse(localStorage.getItem('profile'));
   private order: Order;
-  private product: Product;
+  public orderWithProductOffers: {
+    order: Order,
+    product: Product,
+    offers: Offer[]
+  };
   private offers: Offer[] = [];
   public firstFormGroup: FormGroup;
   public secondFormGroup: FormGroup;
@@ -77,9 +81,9 @@ export class OffersDetailComponent implements OnInit {
    * open Dialog CUBA
    * @param user 
    */
-  openModal(product: Product) {
-    this.product = product;
-    this.offers = product.offer;
+  openModal(product: {order: Order,product: Product,offers: Offer[]}) {
+    this.orderWithProductOffers = product;
+    this.offers = product.offers;
      console.log(product);
     //console.log(this.companies);
     this.modalOpen = true;
@@ -120,7 +124,7 @@ export class OffersDetailComponent implements OnInit {
           if (result.value) {  
             this.subscription.add(this.srvOffer.remove(idOffer).subscribe(
                (response) => {
-                 this.subscription.add(this.srv.findByIdOrder(this.product.id).subscribe(
+                 this.subscription.add(this.srv.findByIdOrder(this.orderWithProductOffers.product.id).subscribe(
                     (response) => {
                         Swal.fire(
                             'Eliminado!',
@@ -128,7 +132,7 @@ export class OffersDetailComponent implements OnInit {
                             'success'
                         )
                         this.offers = response.offer;
-                        this.product.offer = response.offer;
+                        this.orderWithProductOffers.product.offer = response.offer;
                         console.log(this.offers);
                     },
                         (error) => {

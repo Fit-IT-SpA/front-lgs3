@@ -38,7 +38,11 @@ export class OffersAddComponent implements OnInit {
   public companies: Companies[];
   public counter: number = 1;
   public filePath: string;
-  private product: Product;
+  public orderWithProductOffers: {
+    order: Order,
+    product: Product,
+    offers: Offer[]
+  };
   public imgFile: any;
   public idOrder: string
   public maxQty: number;
@@ -61,15 +65,15 @@ export class OffersAddComponent implements OnInit {
    * open Dialog CUBA
    * @param user 
    */
-  openModal(product: any, user : User) {
+  openModal(product: {order: Order,product: Product,offers: Offer[]}, user : User) {
     //this.user = user;
    // this.companies = user.companies;
     console.log(product);
-    this.product = product;
-    this.idOrder = product.idOrder;
-    this.idProduct= product.id;
+    this.orderWithProductOffers = product;
+    this.idOrder = product.product.idOrder;
+    this.idProduct= product.product.id;
     this.companies = user.companies;
-    this.maxQty = product.originalQty
+    this.maxQty = product.product.originalQty
     //console.log(this.user);
     //console.log(this.companies);
     this.modalOpen = true;
@@ -106,9 +110,9 @@ export class OffersAddComponent implements OnInit {
     this.offer = this.createOffer();
     this.subscription.add(this.srvOffer.add(this.offer).subscribe(
         response => {  
-            console.log(this.product.id);
+            console.log(this.orderWithProductOffers.product.id);
             console.log(this.idProduct);
-            this.subscription.add(this.srv.findByIdOrder(this.product.id).subscribe(
+            this.subscription.add(this.srv.findByIdOrder(this.orderWithProductOffers.product.id).subscribe(
             (response) => {
                 this.toster.success('Se creó correctamente su Oferta!!');
                 //this.offersFormGroup.controls.photo.setValue('');
@@ -122,7 +126,7 @@ export class OffersAddComponent implements OnInit {
                 this.counter = 1;
                 this.priceMask = 0;
                 this.modalService.dismissAll();
-                this.product.offer = response.offer;
+                this.orderWithProductOffers.offers = response.offer;
             },
                 (error) => {
                     console.log(error);

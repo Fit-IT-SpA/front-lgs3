@@ -161,7 +161,7 @@ export class OrderService extends AbstractHttpService {
             );
     }
     
-    findOfferByMail(email) {
+    findOfferByMail(email: string, brand: string) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -169,7 +169,7 @@ export class OrderService extends AbstractHttpService {
         };
         return this.http
             .get<any>(
-                this.apiUrl + '/product/byemail/'+email, httpOptions)
+                this.apiUrl + '/product/byemail/filter/'+email+'/'+brand, httpOptions)
             .pipe(
                 map(response => {
                     return response;
