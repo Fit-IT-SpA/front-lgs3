@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, HostListener } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ServiceTypeService } from '../../../../shared/services/service-type.service';
@@ -15,6 +15,11 @@ import { Router } from '@angular/router';
 import { OrderService } from 'src/app/shared/services/order.service';
 import { Order } from 'src/app/shared/model/order.model';
 import { Product } from 'src/app/shared/model/product.model';
+import { ProductsFilter } from 'src/app/shared/model/product-filter';
+import { OfferWithData } from 'src/app/shared/model/offer-with-data';
+import { UtilService } from 'src/app/shared/services/util.service';
+import { Offer } from 'src/app/shared/model/offer.model';
+import { checkedOptionValidator } from 'src/app/shared/validators/form-validators';
 //import { OrdersEditComponent } from './orders-edit/orders-edit.component';
 declare var require;
 const Swal = require('sweetalert2');
@@ -43,6 +48,23 @@ export class OffersComponent implements OnInit {
   public companiesName = this.perfil.role.slug == 'taller' ? 'Talleres' : this.perfil.role.slug == 'comercio' ? 'Comercios' : 'No posee';
   //public orders: Order[];
   public products: Product[];
+  public orderWithProductOffers: {
+    order: Order,
+    product: Product,
+    offers: Offer[]
+  }[] = [];
+  public screenType: string = "";
+  public filterForm: FormGroup;
+  public brandsFilter: { value: string, label: string, job: string }[] = [
+    { value: "CHEVROLET", label: "CHEVROLET", job: "" },
+    { value: "HYUNDAI", label: "HYUNDAI", job: "" },
+    { value: "KIA MOTORS", label: "KIA MOTORS", job: "" }
+  ];
+  public parameters: ProductsFilter = {
+    brand: "CHEVROLET,HYUNDAI,KIA MOTORS",
+  };
+  public filterHidden: boolean = false;
+  public filterButton: string = "Filtrar";
   
   // Ventanas Popup
   @ViewChild("quickViewOffersAdd") QuickViewOffersAdd: OffersAddComponent;
@@ -52,17 +74,42 @@ export class OffersComponent implements OnInit {
   //@ViewChild("quickViewOrdersEdit") QuickViewOrdersEdit: OrdersEditComponent;
 
   constructor(
-    private modalService: NgbModal,
+    public formBuilder: FormBuilder,
     private fb: FormBuilder,
     private router: Router,
-    private userSrv: UserService,
+    private utilSrv: UtilService,
     private srv: OrderService,
     public toster: ToastrService,
     private companiesSrv: CompaniesService) {
+      this.screenType = utilSrv.getScreenSize();
+      if (window.innerWidth < 575) {
+        this.listView = true;
+        this.filterButton = "Filtrar";
+        this.filterHidden = true;
+      } else {
+        this.filterButton = "Ocultar";
+        this.filterHidden = false;
+        this.listView = false;
+      }
      }
-
+  @HostListener('window:resize', ['$event'])
+  onWindowResize(event: any) {
+    //console.log('Resolución actual: ' + window.innerWidth + ' x ' + window.innerHeight);
+    if (window.innerWidth < 575) {
+      this.filterButton = "Filtrar";
+      this.listView = true;
+      this.filterHidden = true;
+    } else {
+      this.filterButton = "Ocultar";
+      this.filterHidden = false;
+      this.listView = false;
+    }
+  }   
   ngOnInit(): void {
     if (this.haveAccess()) {
+      this.filterForm = this.formBuilder.group({
+        brand: this.formBuilder.control({value: this.brandsFilter, disabled: false}),
+      });
       this.findUser();
     }
   }
@@ -94,9 +141,10 @@ export class OffersComponent implements OnInit {
     );
   }
   private findOrders() {
-    this.subscription.add(this.srv.findOfferByMail(this.user.email).subscribe(
+    this.subscription.add(this.srv.findOfferByMail(this.user.email, this.parameters.brand).subscribe(
       response => {
-        this.products = response;
+        console.log(response);
+        this.orderWithProductOffers = response;
         this.loading = false;  
         if(!this.user.companies || this.user.companies.length <= 0){
             const swalWithBootstrapButtons = Swal.mixin({
@@ -138,6 +186,17 @@ export class OffersComponent implements OnInit {
   }
   gridColumn(val) {
     this.col = val;
+  }
+  showFilter() {
+    this.filterButton = (this.filterButton == "Filtrar") ? "Ocultar" : "Filtrar";
+    this.filterHidden = (this.filterHidden) ? false : true;
+  }
+  changeFilter() {
+    this.parameters.brand = (this.filterForm.controls.brand.value).map((object: { value: string; label: string; job: string }) => object.value);
+    if (this.parameters.brand && this.parameters.brand.length == 0) {
+      this.parameters.brand = "null";
+    }
+    this.findOrders();
   }
   public canWrite() {
     return true;

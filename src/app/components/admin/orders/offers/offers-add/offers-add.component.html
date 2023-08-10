@@ -12,9 +12,9 @@
                             <div class="col">
                                 <h6>Repuesto Requerido</h6>
                                 <div class="form-group">
-                                    Producti: {{this.product.title}}<br />
-                                    Auto: {{this.product.order[0].brand}} {{this.product.order[0].model}}<br />
-                                    Cantidad: {{this.product.originalQty}}  
+                                    Producto: {{this.orderWithProductOffers.product.title}}<br/>
+                                    Auto: {{this.orderWithProductOffers.order.brand}} {{this.orderWithProductOffers.order.model}}<br/>
+                                    Cantidad: {{this.orderWithProductOffers.product.originalQty}}  
                                 </div>
                             </div>
                         </div>
@@ -139,9 +139,9 @@
                 </form>
                 </div>
               <div class="card-footer p-0 ml-5">
-                        <button (click)="add()" [disabled]="offersFormGroup.invalid" class="btn btn-primary" type="submit">Crear</button>
-                        <input (click)="modal.dismiss('Cross click')"  class="btn btn-secondary ml-2" type="button" value="Cancelar">
-                    </div>
+                <button (click)="add()" [disabled]="offersFormGroup.invalid" class="btn btn-pill btn-primary" type="submit">Crear</button>
+                <input (click)="modal.dismiss('Cross click')"  class="btn btn-pill btn-secondary ml-2" type="button" value="Cancelar">
+              </div>
           </div>
         </div>
       </div>
