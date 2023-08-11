@@ -22,7 +22,7 @@
                         <div class="media-body">
                             <span class="f-w-500">{{order.order.brand}} {{order.order.model}} {{order.order.year}}</span>
                             <img class="img-100 img-fluid pull-right" alt="" src="{{order.order.photo}}">
-                            <p>{{order.order.chassis}}</p>
+                            <p>VIN: {{order.order.chassis}}</p>
                             <p>ID Pedido: {{order.order.idOrder}}</p>
                         </div>
                     </div>
@@ -37,8 +37,9 @@
                       <th>Estado</th>
                       <th>Origen</th>
                       <th>Cantidad</th>
+                      <th>Valor unidad</th>
                       <th>Total</th>
-                      <th>Cancelar Oferta</th>
+                      <!--<th>Cancelar Oferta</th>-->
                     </tr>
                   </thead>
                   <tbody *ngFor="let product of order.productWithOffers">
@@ -49,10 +50,11 @@
                           <div class="product-name"><a href="javascript:void(0);">{{off.estado}}</a></div>
                       </td>
                       <td *ngIf="off.status == 3">{{off.origen}}</td>
-                      <td *ngIf="off.status == 3"><span>{{off.cantidad}}</span>
+                      <td *ngIf="off.status == 3"><span>{{off.qtyOfferAccepted}}</span>
                       </td>
                       <td *ngIf="off.status == 3">${{(off.price + off.price * off.commission).toLocaleString('es-CL')}}</td>
-                      <td *ngIf="off.status == 3"><i data-feather="x-circle"></i></td>
+                      <td *ngIf="off.status == 3">${{((off.price + off.price * off.commission) * off.qtyOfferAccepted).toLocaleString('es-CL')}}</td>
+                      <!--<td *ngIf="off.status == 3"><i data-feather="x-circle"></i></td>-->
                     </tr>
                     <tr>
                       <td class="total-amount" colspan="4">

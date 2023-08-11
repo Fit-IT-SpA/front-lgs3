@@ -52,26 +52,7 @@ export class OffersDetailComponent implements OnInit {
     private userSrv: UserService,
     private srvOffer: OfferService,
     private srv: OrderService,
-    public toster: ToastrService,) {
-        this.firstFormGroup = this.fb.group({
-            company: ['', Validators.required],
-          });
-          this.secondFormGroup = this.fb.group({
-            brand: ['', Validators.required],
-            model: ['', Validators.required],
-            year: ['', Validators.required],
-            engine: ['', Validators.required],
-          });
-          this.thirdFormGroup = this.fb.group({
-            productName: ['', Validators.required],
-            productBrand: ['', Validators.required],
-            productDetails: ['', Validators.required],
-            limitPrice: ['', Validators.required],
-            qty: [this.counter, Validators.required],
-            closingDate: ['', Validators.required],
-            closingTime: [{hour: new Date().getHours(), minute: new Date().getMinutes()}, Validators.required],
-            photo: ['', Validators.required],
-          })
+    public toster: ToastrService) {
      }
 
   ngOnInit(): void {
