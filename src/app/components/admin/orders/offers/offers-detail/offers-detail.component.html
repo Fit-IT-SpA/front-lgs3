@@ -15,7 +15,7 @@
               <div id="offer_{{i}}" class="social-chat" *ngFor="let off of offers; index as i">
                 <div class="your-msg">
                   <div class="media">
-                    <div class="media-body"><span class="f-w-500">Oferta: $ {{off.price | number:'1.0-0'}} <span> ({{off.cantidad}} Unidades)</span></span>
+                    <div class="media-body"><span class="f-w-500">Oferta: $ {{off.price | number:'1.0-0'}} <span> ({{off.qty}} Unidades)</span></span>
                       <p>{{off.origen}}</p>
                       <p>{{off.estado}}</p>
                       <p>{{off.comentario}}</p>

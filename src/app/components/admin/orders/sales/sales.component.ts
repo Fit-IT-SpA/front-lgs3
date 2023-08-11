@@ -124,7 +124,7 @@ export class SalesComponent implements OnInit {
                                     estado : this.offers[i].estado,
                                     origen : this.sanitizer.bypassSecurityTrustHtml('<b>'+this.offers[i].origen+'</b>'),
                                     idOrder : this.offers[i].idProduct,
-                                    cantidad : this.offers[i].cantidad,
+                                    qtyOfferAccepted : this.offers[i].qtyOfferAccepted,
                                     company : this.offers[i].company,
                                     price : this.offers[i].price,
                                     status : this.sanitizer.bypassSecurityTrustHtml(status),

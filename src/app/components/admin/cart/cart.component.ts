@@ -79,7 +79,7 @@ export class CartComponent implements OnInit {
         var total: number = 0;
         for (let offer of offers) {
             if (offer.status == 3) {
-                total+= (offer.price + offer.price * offer.commission) * offer.cantidad;
+                total+= (offer.price + offer.price * offer.commission) * offer.qtyOfferAccepted;
             }
         }
         return total;
@@ -88,7 +88,7 @@ export class CartComponent implements OnInit {
       var total: number = 0;
       for (let product of productsWithOffers) {
         for (let offer of product.offers) {
-          total+= (offer.price + offer.price * offer.commission) * offer.cantidad;
+          total+= (offer.price + offer.price * offer.commission) * offer.qtyOfferAccepted;
         }
       }
       return total;
