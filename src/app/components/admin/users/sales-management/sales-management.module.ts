@@ -10,11 +10,13 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SalesManagementRoutingModule } from './sales-management.routing';
+import { SalesManagementViewComponent } from './sales-management-view/sales-management-view.component';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 @NgModule({
     declarations: [
-        SalesManagementComponent
+        SalesManagementComponent,
+        SalesManagementViewComponent
     ],
     imports: [
         CommonModule,

@@ -45,7 +45,6 @@ export class CompaniesComponent implements OnInit{
         public toster: ToastrService,) { }
 
     ngOnInit() {
-        console.log(this.perfil);
         this.getCount();
     }
     private getCount() {

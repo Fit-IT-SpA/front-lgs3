@@ -21,15 +21,22 @@ export class SalesManagementService extends AbstractHttpService {
             })
         );
     }
-    confirmPayment(offerId: string, productId: string, orderId: string) {
+    confirmPayment(offerId: string, productId: string, orderId: string, photo: string) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
             })
         };
-        return this.http.put<any>(`${this.apiUrl}/sales-management/order/${orderId}/product/${productId}/offer/${offerId}`, httpOptions).pipe(
+        return this.http.put<any>(`${this.apiUrl}/sales-management/order/${orderId}/product/${productId}/offer/${offerId}`, {photo: photo}, httpOptions).pipe(
             map(response => {
                 return response;
+            })
+        );
+    }
+    uploadFile(file: FormData) {
+        return this.http.post<any>(`${this.apiUrl}/files`, file).pipe(
+            map(response => {
+            return response;
             })
         );
     }
