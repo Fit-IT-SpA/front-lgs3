@@ -22,7 +22,6 @@ export class MyProfileComponent implements OnInit{
     constructor(public authService: AuthService, private _router: Router, private userSrv: UserService, private companiesSrv: CompaniesService) { }
 
     ngOnInit() {
-        console.log(this.perfil);
         this.companiesSrv.findByEmail(this.perfil.email).subscribe(
             (response) => {
                 this.user = response;

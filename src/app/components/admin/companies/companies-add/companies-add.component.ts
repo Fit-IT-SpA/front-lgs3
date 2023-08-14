@@ -73,8 +73,7 @@ export class CompaniesAddComponent implements OnInit {
         accountType: this.companiesForm.controls.accountType.value,
         bank: this.companiesForm.controls.bank.value
       }
-    )
-    console.log(this.user);
+    );
     this.subscription.add(
       this.srv.add(this.user).subscribe(
           (response) => {

@@ -26,6 +26,7 @@
                                 <th>Comisión total</th>
                                 <th>Total transacción</th>
                                 <th>Taller</th>
+                                <th>Comprobante Taller</th>
                                 <th>Comercio</th>
                                 <th>Confirmar pago</th>
                               </tr>
@@ -49,9 +50,10 @@
                                     <button class="btn btn-pill btn-warning btn-xs" *ngIf="offer.status == 5">pago confirmado</button>
                                 </td>-->
                                 <td><button class="btn btn-pill btn-info btn-xs" (click)="this.contactCompany(offer.workshop, offer.order.company, (offer.price + offer.price * offer.commission) * offer.qtyOfferAccepted)">{{this.findCompany(offer.workshop, offer.order.company).name}}</button></td>
+                                <td><button class="btn btn-pill btn-info btn-xs" (click)="this.paymentReceipt(offer.workshop, offer.order.company, offer.photoPaymentReceiptAtClaimant)">Comprobante</button></td>
                                 <td><button class="btn btn-pill btn-info btn-xs" (click)="this.contactCompany(offer.commerce, offer.company, offer.price * offer.qtyOfferAccepted)">{{this.findCompany(offer.commerce, offer.company).name}}</button></td>
                                 <td>
-                                  <button class="btn btn-pill btn-success btn-xs" (click)="this.confirmPayment(offer._id, offer.product._id, offer.order._id)">Confirmar pago</button>
+                                  <button class="btn btn-pill btn-success btn-xs" (click)="this.QuickViewSalesManagementView.openModal(offer._id, offer.product._id, offer.order._id, offer)">Confirmar pago</button>
                                 </td>
                               </tr>
                             </tbody>
@@ -65,3 +67,4 @@
         </div>
     </div>
 </div>
+<app-sales-management-view #quickViewSalesManagementView></app-sales-management-view>
