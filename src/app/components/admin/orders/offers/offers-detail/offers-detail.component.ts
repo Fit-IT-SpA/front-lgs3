@@ -3,7 +3,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ServiceTypeService } from '../../../../../shared/services/service-type.service';
 import { UserService } from '../../../../../shared/services/user.service';
-import { CompaniesService } from '../../../../../shared/services/companies.service';
+import { CompaniesService } from '../../../companies/companies.service';
 import { User } from '../../../../../shared/model/user';
 import { Order } from '../../../../../shared/model/order.model';
 import { Product } from '../../../../../shared/model/product.model';

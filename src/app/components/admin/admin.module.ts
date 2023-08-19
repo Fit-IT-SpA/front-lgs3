@@ -12,11 +12,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { AgmCoreModule } from '@agm/core';
 import { AdminRoutingModule } from './admin-routing.module';
 
-import { ReferersComponent } from './referers/referers.component';
-import { AddComponent } from './referers/add/add.component';
-import { SellerComponent } from './referers/seller/seller.component';
 import { MyProfileComponent } from './my-profile/my-profile.component';
-import {ReferersSellersSellsComponent} from './referers/seller/sells/sells.component';
 import {DesconectarComponent} from './desconectar/desconectar.component';
 import {CompaniesComponent} from './companies/companies.component';
 import {CompaniesAddComponent} from './companies/companies-add/companies-add.component';
@@ -34,11 +30,7 @@ import { CartModule } from './cart/cart.module';
 
 @NgModule({
     declarations: [
-        ReferersComponent,
-        AddComponent,
-        SellerComponent,
         MyProfileComponent,
-        ReferersSellersSellsComponent,
         DesconectarComponent,
     ],
     imports: [

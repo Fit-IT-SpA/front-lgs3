@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AbstractHttpService } from './abstract-http.service';
+import { AbstractHttpService } from '../../../shared/services/abstract-http.service';
 import { map } from 'rxjs/operators';
-import { ConstantService } from './constant.service';
-import { User } from '../model/user';
+import { ConstantService } from '../../../shared/services/constant.service';
+import { User } from '../../../shared/model/user';
+import { Companies } from '../../../shared/model/companies.model';
 
 
 @Injectable()
@@ -12,13 +13,13 @@ export class CompaniesService extends AbstractHttpService {
     constructor(protected http: HttpClient) {
         super(http);
     }
-    add(user: User) {
+    add(company: Companies) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
             })
         };
-        return this.http.put<any>(`${this.apiUrl}/companies`, user, httpOptions).pipe(
+        return this.http.post<any>(`${this.apiUrl}/company`, company, httpOptions).pipe(
             map(response => {
                 return response;
             })
@@ -38,7 +39,7 @@ export class CompaniesService extends AbstractHttpService {
                 map(response => {
                     return response;
                 })
-            );
+        );
     }
     findByEmail(email: string) {
         const httpOptions = {
@@ -53,7 +54,7 @@ export class CompaniesService extends AbstractHttpService {
                 map(response => {
                     return response;
                 })
-            );
+        );
     }
     checkStatusUser(email: string) {
         const httpOptions = {
@@ -68,7 +69,7 @@ export class CompaniesService extends AbstractHttpService {
                 map(response => {
                     return response;
                 })
-            );
+        );
     }
     updateByRut(user: User, rut: string) {
         const httpOptions = {
@@ -95,7 +96,56 @@ export class CompaniesService extends AbstractHttpService {
                 map(response => {
                     return response;
                 })
-            );
+        );
+    }
+    findVehicleListMake() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http
+            .get<any>(
+                this.apiUrl + '/vehicle-list/make', httpOptions)
+            .pipe(
+                map(response => {
+                    return response;
+            })
+        );
+    }
+    findVehicleListModelByMake(make: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http
+            .get<any>(
+                this.apiUrl + '/vehicle-list/make/'+make+'/model', httpOptions)
+            .pipe(
+                map(response => {
+                    return response;
+            })
+        );
+    }
+    findVehicleListYearByMakeModel(make: string, model: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        // Codificar make y model
+        const encodedMake = encodeURIComponent(make);
+        const encodedModel = encodeURIComponent(model);
+        const url =
+        `${this.apiUrl}/vehicle-list/make/${encodedMake}/model/${encodedModel}/year`;
+        return this.http
+            .get<any>(url, httpOptions)
+            .pipe(
+                map(response => {
+                    return response;
+            })
+        );
     }
 
     private completeZero(value){

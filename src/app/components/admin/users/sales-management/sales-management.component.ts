@@ -71,17 +71,13 @@ export class SalesManagementComponent implements OnInit {
             }
         ));
     }
-    public findCompany(user: User, companyRut: string): Companies {
-        return (user.companies.filter(company => company.rut === companyRut))[0];
-    }
     public refusePayment() {
 
     }
-    public contactCompany(user: User, companyRut: string, total: number) {
-        const company: Companies = this.findCompany(user, companyRut);
-        let title: string = (user.role === 'taller') ? 'Pago hecho por taller' : (user.role === 'comercio') ? 'Información de comercio' : '';
-        let subTitle: string = (user.role === 'taller') ? 'Revisar si el pago fue efectuado en su cuenta' 
-        : (user.role === 'comercio') ? 'Depositar a este contacto' : '';
+    public contactCompany(company: Companies, total: number) {
+        let title: string = (company.type === 'taller') ? 'Pago hecho por taller' : (company.type === 'comercio') ? 'Información de comercio' : '';
+        let subTitle: string = (company.type === 'taller') ? 'Revisar si el pago fue efectuado en su cuenta' 
+        : (company.type === 'comercio') ? 'Depositar a este contacto' : '';
         Swal.fire({
             type: 'info',
             title: title,
@@ -103,7 +99,7 @@ export class SalesManagementComponent implements OnInit {
                   '<input class="form-control" type="text" disabled="true" placeholder="Cta Cte: '+company.phone+'">'+
                 '</div>'+
                 '<div class="form-group">'+
-                  '<input class="form-control" type="text" disabled="true" placeholder="Email: '+user.email+'">'+
+                  '<input class="form-control" type="text" disabled="true" placeholder="Email: '+company.createBy+'">'+
                 '</div>'+
                 '<div class="form-group">'+
                   '<input class="form-control" type="text" disabled="true" placeholder="Total pago: $'+total.toLocaleString('es-CL')+'">'+
