@@ -2,7 +2,7 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { UserService } from '../../../../shared/services/user.service';
-import { CompaniesService } from '../../../../shared/services/companies.service';
+import { CompaniesService } from '../../companies/companies.service';
 import { User } from '../../../../shared/model/user';
 import { Order } from '../../../../shared/model/order.model';
 import { Offer } from '../../../../shared/model/offer.model';

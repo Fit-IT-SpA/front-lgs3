@@ -3,7 +3,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ServiceTypeService } from '../../../../../shared/services/service-type.service';
 import { UserService } from '../../../../../shared/services/user.service';
-import { CompaniesService } from '../../../../../shared/services/companies.service';
+import { CompaniesService } from '../../../companies/companies.service';
 import { User } from '../../../../../shared/model/user';
 import { Order } from '../../../../../shared/model/order.model';
 import { Offer } from '../../../../../shared/model/offer.model';
@@ -65,14 +65,14 @@ export class OffersAddComponent implements OnInit {
    * open Dialog CUBA
    * @param user 
    */
-  openModal(product: {order: Order,product: Product,offers: Offer[]}, user : User) {
+  openModal(product: {order: Order,product: Product,offers: Offer[]}, companies : Companies[]) {
     //this.user = user;
    // this.companies = user.companies;
     console.log(product);
     this.orderWithProductOffers = product;
     this.idOrder = product.product.idOrder;
     this.idProduct= product.product.id;
-    this.companies = user.companies;
+    this.companies = companies;
     this.maxQty = product.product.originalQty
     //console.log(this.user);
     //console.log(this.companies);

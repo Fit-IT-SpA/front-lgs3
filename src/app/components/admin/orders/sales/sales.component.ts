@@ -3,7 +3,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ServiceTypeService } from '../../../../shared/services/service-type.service';
 import { UserService } from '../../../../shared/services/user.service';
-import { CompaniesService } from '../../../../shared/services/companies.service';
+import { CompaniesService } from '../../companies/companies.service';
 import { User } from '../../../../shared/model/user';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
@@ -20,6 +20,7 @@ import { companyDB } from 'src/app/shared/data/tables/company';
 declare var require;
 const Swal = require('sweetalert2');
 import { SalesHandlerComponent } from './sales-handler/sales-handler.component';
+import { Companies } from 'src/app/shared/model/companies.model';
 
 @Component({
   selector: 'app-sales',
@@ -43,6 +44,7 @@ export class SalesComponent implements OnInit {
   public count: number;
   public ordertable: any[];
   public user: User;
+  public companies: Companies[] = [];
   public uniqueId = (new Date()).getTime().toString();
   public openSidebar: boolean = false;
   public listView: boolean = false;
@@ -93,14 +95,13 @@ export class SalesComponent implements OnInit {
     this.subscription.add(
         this.companiesSrv.findByEmail(this.perfil.email).subscribe(
             (response) => {
-                this.user = response;
-                console.log(this.user.companies);
+                this.companies = response;
                 let companies = [];
-                for(let i=0;i<this.user.companies.length;i++){
-                    companies.push(this.user.companies[0].rut);
+                for(let i=0;i<this.companies.length;i++){
+                    companies.push(this.companies[i].rut);
                 }
                 this.subscription.add(
-                    this.srvOffer.getOffersByCompaniesAndEmail(this.user.email,companies).subscribe(
+                    this.srvOffer.getOffersByCompaniesAndEmail(this.perfil.email,companies).subscribe(
                         (response) => {
                             let tmpOrders = [];
                             this.offers = response;

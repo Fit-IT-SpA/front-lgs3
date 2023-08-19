@@ -3,7 +3,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ServiceTypeService } from '../../../../shared/services/service-type.service';
 import { UserService } from '../../../../shared/services/user.service';
-import { CompaniesService } from '../../../../shared/services/companies.service';
+import { CompaniesService } from '../../companies/companies.service';
 import { User } from '../../../../shared/model/user';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
@@ -20,6 +20,7 @@ import { OfferWithData } from 'src/app/shared/model/offer-with-data';
 import { UtilService } from 'src/app/shared/services/util.service';
 import { Offer } from 'src/app/shared/model/offer.model';
 import { checkedOptionValidator } from 'src/app/shared/validators/form-validators';
+import { Companies } from 'src/app/shared/model/companies.model';
 //import { OrdersEditComponent } from './orders-edit/orders-edit.component';
 declare var require;
 const Swal = require('sweetalert2');
@@ -40,6 +41,7 @@ export class OffersComponent implements OnInit {
   public count: number;
   public ordertable: any[];
   public user: User;
+  public companies: Companies[] = [];
   public uniqueId = (new Date()).getTime().toString();
   public openSidebar: boolean = false;
   public listView: boolean = true;
@@ -55,13 +57,9 @@ export class OffersComponent implements OnInit {
   }[] = [];
   public screenType: string = "";
   public filterForm: FormGroup;
-  public brandsFilter: { value: string, label: string, job: string }[] = [
-    { value: "CHEVROLET", label: "CHEVROLET", job: "" },
-    { value: "HYUNDAI", label: "HYUNDAI", job: "" },
-    { value: "KIA MOTORS", label: "KIA MOTORS", job: "" }
-  ];
+  public brandsFilter: { value: string, label: string, job: string }[] = [];
   public parameters: ProductsFilter = {
-    brand: "CHEVROLET,HYUNDAI,KIA MOTORS",
+    brand: "",
   };
   public filterHidden: boolean = false;
   public filterButton: string = "Filtrar";
@@ -127,26 +125,32 @@ export class OffersComponent implements OnInit {
         )
     );
   }
-  private findUser() {
-    this.subscription.add(
-        this.companiesSrv.findByEmail(this.perfil.email).subscribe(
-            (response) => {
-                this.user = response;
-                this.findOrders();
-            },
-            (error) => {
-                this.toster.error('Se ha producido un error al intentar buscar los '+this.companiesName);
-            }
-        )
-    );
-  }
-  private findOrders() {
-    this.subscription.add(this.srv.findOfferByMail(this.user.email, this.parameters.brand).subscribe(
-      response => {
+  private async findUser() {
+    try {
+      const response: Companies[] = await this.companiesSrv.findByEmail(this.perfil.email).toPromise();
+      if (response && response.length > 0) {
         console.log(response);
-        this.orderWithProductOffers = response;
-        this.loading = false;  
-        if(!this.user.companies || this.user.companies.length <= 0){
+        this.companies = response;
+        let count = 0;
+        for (let company of this.companies) {
+          for (let i = 0 ; i < company.make.length ; i++) {
+            this.brandsFilter.push({
+              value: company.make[i],
+              label: company.make[i],
+              job: ''
+            })
+            if (i == company.make.length - 1 && count == this.companies.length-1) {
+              this.parameters.brand += company.make[i];
+            } else {
+              this.parameters.brand += company.make[i]+',';
+            }
+          }
+          count++;
+        }
+        this.findOrders();
+      } else {
+        this.loading = false;
+        if(!this.companies || this.companies.length <= 0){
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
                   confirmButton: 'btn btn-pill btn-primary mr-2',
@@ -166,7 +170,28 @@ export class OffersComponent implements OnInit {
               this.router.navigate(['admin/companies']);
             }
           });
-        } 
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    /*this.subscription.add(
+        this.companiesSrv.findByEmail(this.perfil.email).subscribe(
+            (response) => {
+                
+            },
+            (error) => {
+                this.toster.error('Se ha producido un error al intentar buscar los '+this.companiesName);
+            }
+        )
+    );*/
+  }
+  private findOrders() {
+    this.subscription.add(this.srv.findOfferByMail(this.perfil.email, this.parameters.brand).subscribe(
+      response => {
+        console.log(response);
+        this.orderWithProductOffers = response;
+        this.loading = false;
       }
     ))
   }

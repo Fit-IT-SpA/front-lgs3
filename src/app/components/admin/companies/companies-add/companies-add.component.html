@@ -7,7 +7,7 @@
       </div>
     <div class="card" *ngIf="!loading">
         <div class="card-header">
-            <h5>Agregar {{this.perfil.role.name}}</h5>
+            <h5>Agregar {{this.profile.role.name}}</h5>
         </div>
         <form class="form theme-form" [formGroup]="companiesForm">
             <div class="card-body">
@@ -25,7 +25,7 @@
                         <div class="form-group">
                             <label for="name">Nombre</label>
                             <input class="form-control btn-pill" id="name" type="name"
-                                placeholder="Nombre del {{this.perfil.role.name}}" formControlName="name">  
+                                placeholder="Nombre del {{this.profile.role.name}}" formControlName="name">  
                         </div>
                     </div>
                 </div>
@@ -34,7 +34,7 @@
                         <div class="form-group">
                             <label for="direction">Dirección</label>
                             <input class="form-control btn-pill" id="direction" type="direction"
-                                placeholder="Dirección del {{this.perfil.role.name}}" formControlName="direction">  
+                                placeholder="Dirección del {{this.profile.role.name}}" formControlName="direction">  
                         </div>
                     </div>
                 </div>
@@ -43,7 +43,7 @@
                         <div class="form-group">
                             <label for="phone">Teléfono</label>
                             <input class="form-control btn-pill" id="phone" type="phone"
-                                placeholder="Teléfono del {{this.perfil.role.name}}" formControlName="phone">  
+                                placeholder="Teléfono del {{this.profile.role.name}}" formControlName="phone">  
                         </div>
                     </div>
                 </div>
@@ -52,7 +52,7 @@
                         <div class="form-group">
                             <label for="accountNumber">Número de Cuenta</label>
                             <input class="form-control btn-pill" id="accountNumber" type="accountNumber"
-                                placeholder="Número de Cuenta del {{this.perfil.role.name}}" formControlName="accountNumber">  
+                                placeholder="Número de Cuenta del {{this.profile.role.name}}" formControlName="accountNumber">  
                         </div>
                     </div>
                 </div>
@@ -61,7 +61,7 @@
                         <div class="form-group">
                             <label for="accountType">Tipo de Cuenta</label>
                             <input class="form-control btn-pill" id="accountType" type="accountType"
-                                placeholder="Tipo de Cuenta del {{this.perfil.role.name}}" formControlName="accountType">  
+                                placeholder="Tipo de Cuenta del {{this.profile.role.name}}" formControlName="accountType">  
                         </div>
                     </div>
                 </div>
@@ -74,10 +74,22 @@
                         </div>
                     </div>
                 </div>
+                <div *ngIf="this.profile.role.slug === 'comercio'">
+                    <div class="col">
+                        <label>Marcas</label>
+                        <ng-select 
+                            [items]="makesFilter" 
+                            placeholder="Marcas"
+                            class="js-example-placeholder-multiple" 
+                            [multiple]="true"
+                            formControlName="make">
+                        </ng-select>
+                    </div>
+                </div>
             </div>
             <div class="card-footer">
-                <button class="btn btn-primary mr-1" type="submit" [disabled]="!companiesForm.valid" (click)="add()">Agregar</button>
-                <button class="btn btn-primary" type="cancel" (click)="modal.dismiss('Cross click')">Cancelar</button>
+                <button class="btn btn-pill btn-primary mr-1" type="submit" [disabled]="!companiesForm.valid" (click)="add()">Agregar</button>
+                <button class="btn btn-pill btn-info" type="cancel" (click)="modal.dismiss('Cross click')">Volver</button>
             </div>
         </form>
     </div>
