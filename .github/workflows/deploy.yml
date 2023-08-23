@@ -5,7 +5,7 @@ on:
       - fb4
 
 jobs:
-  deploy-prod:
+  deploy-fb4:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
