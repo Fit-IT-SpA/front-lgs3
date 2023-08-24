@@ -4,7 +4,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Companies } from 'src/app/shared/model/companies.model';
 import { User } from 'src/app/shared/model/user';
-import { CompaniesService } from 'src/app/shared/services/companies.service';
+import { CompaniesService } from 'src/app/components/admin/companies/companies.service';
 import { validate, clean, format } from 'rut.js';
 import { Subscription } from 'rxjs';
 

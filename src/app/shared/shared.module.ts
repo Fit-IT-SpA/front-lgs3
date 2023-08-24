@@ -45,7 +45,7 @@ import { NavService } from './services/nav.service';
 import { UserService } from './services/user.service';
 import { ServiceTypeService } from './services/service-type.service';
 import { ReferersService } from './services/referers.service';
-import { CompaniesService } from './services/companies.service';
+import { CompaniesService } from '../components/admin/companies/companies.service';
 import { OrderService } from './services/order.service';
 
 

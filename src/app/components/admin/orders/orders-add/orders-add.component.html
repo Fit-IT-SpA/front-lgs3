@@ -25,13 +25,25 @@
                   <div class="col-md-6 mb-3">
                     <div class="form-group">
                       <label>Marca</label>
-                      <ng-select [items]="brandFilter" placeholder="(*) Marca"
-                          class="js-example-placeholder-multiple" formControlName="brand">
+                      <ng-select [items]="makesFilter" placeholder="(*) Marca"
+                          class="js-example-placeholder-multiple" formControlName="brand" (change)="this.onChangeMakeFilter()">
                       </ng-select>
                     </div>
                   </div>
                   <div class="col-md-6 mb-3">
                     <div class="form-group">
+                      <label>Modelo</label>
+                      <div class="flex flex-col flex-auto" *ngIf="disabledModelFilter">
+                        <h6 class="text-center">Cargando...</h6>
+                        <div class="loader-box">
+                          <div class="loader-3"></div>
+                        </div>
+                      </div>
+                      <ng-select [items]="modelFilter" placeholder="(*) Modelo" (change)="this.onChangeModelFilter()" *ngIf="!disabledModelFilter"
+                          class="js-example-placeholder-multiple" formControlName="model">
+                      </ng-select>
+                    </div>
+                    <!--<div class="form-group">
                       <label>Modelo</label>
                       <input class="form-control" type="text" placeholder="Modelo" formControlName="model">
                       <div *ngIf="formOrder.controls.model.touched && formOrder.controls.model.errors?.minlength"
@@ -42,12 +54,24 @@
                       class="text text-danger mt-1">
                         Debe tener un maximo de 40 caracteres
                       </div>
-                    </div>
+                    </div>-->
                   </div>
                 </div>
                 <div class="form-row">
                   <div class="col-md-6 mb-3">
                     <div class="form-group">
+                      <label>Año</label>
+                      <div class="flex flex-col flex-auto" *ngIf="disabledYearFilter">
+                        <h6 class="text-center">Cargando...</h6>
+                        <div class="loader-box">
+                          <div class="loader-3"></div>
+                        </div>
+                      </div>
+                      <ng-select [items]="yearFilter" placeholder="(*) Año" *ngIf="!disabledYearFilter"
+                          class="js-example-placeholder-multiple" formControlName="year">
+                      </ng-select>
+                    </div>
+                    <!--<div class="form-group">
                       <label>Año</label>
                       <input class="form-control" placeholder="(*) Año" formControlName="year">
                       <div *ngIf="formOrder.controls.year.errors && formOrder.controls.year.touched && formOrder.controls.year.errors.required"
@@ -66,7 +90,7 @@
                         class="text text-danger mt-1">
                           Debe tener un máximo de 4 dígitos
                       </div>
-                    </div>
+                    </div>-->
                   </div>
                   <div class="col-md-6 mb-3">
                     <div class="form-group">
@@ -118,7 +142,7 @@
         <div class="card-body">
           <div class="table-responsive mb-3">
             <div class="">
-              <h6>Elige un {{this.perfil.role.name}}</h6>
+              <h6>Elige un {{this.profile.role.name}}</h6>
             </div>
             <table class="table table-bordered radio-first-col-width">
               <tbody>
@@ -134,7 +158,10 @@
               </tbody>
             </table>
           </div>
-          <button class="btn btn-pill btn-primary" type="submit" (click)="add()" [disabled]="formOrder.invalid">Crear Pedido</button>
+          <div class="mt-1">
+            <button class="btn btn-pill btn-primary m-r-15 mb-3" type="submit" (click)="add()" [disabled]="formOrder.invalid">Crear Pedido</button>
+            <button class="btn btn-pill btn-info mb-3" type="button" (click)="goBack()">Volver</button>
+          </div>
         </div>
       </form>
       </div>

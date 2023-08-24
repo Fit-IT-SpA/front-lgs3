@@ -6,8 +6,9 @@ import { Router } from '@angular/router';
 import { CompaniesAddComponent } from './companies-add/companies-add.component';
 import { CompaniesEditComponent } from './companies-edit/companies-edit.component';
 import { CompaniesViewComponent } from './companies-view/companies-view.component';
-import { CompaniesService } from 'src/app/shared/services/companies.service';
+import { CompaniesService } from 'src/app/components/admin/companies/companies.service';
 import { Subscription } from 'rxjs';
+import { validate, clean, format } from 'rut.js';
 import { ToastrService } from 'ngx-toastr';
 import { User } from 'src/app/shared/model/user';
 import { Companies } from 'src/app/shared/model/companies.model';
@@ -28,9 +29,9 @@ export class CompaniesComponent implements OnInit{
     public user: User;
     public companies: Companies[];
     public loading: boolean = true;
-    public perfil =  JSON.parse(localStorage.getItem('profile'));
-    public companiesTitle = this.perfil.role.slug == 'taller' ? 'Talleres' : this.perfil.role.slug == 'comercio' ? 'Comercios' : 'Negocios';
-    public companyTitle = this.perfil.role.slug == 'taller' ? 'Taller' : this.perfil.role.slug == 'comercio' ? 'Comercio' : 'Negocio';
+    public profile =  JSON.parse(localStorage.getItem('profile'));
+    public companiesTitle = this.profile.role.slug == 'taller' ? 'Talleres' : this.profile.role.slug == 'comercio' ? 'Comercios' : 'Negocios';
+    public companyTitle = this.profile.role.slug == 'taller' ? 'Taller' : this.profile.role.slug == 'comercio' ? 'Comercio' : 'Negocio';
 
     // Ventanas popup
     @ViewChild("quickViewCompaniesAdd") QuickViewCompaniesAdd: CompaniesAddComponent;
@@ -45,12 +46,11 @@ export class CompaniesComponent implements OnInit{
         public toster: ToastrService,) { }
 
     ngOnInit() {
-        console.log(this.perfil);
         this.getCount();
     }
     private getCount() {
         this.subscription.add(
-            this.srv.countByEmail(this.perfil.email).subscribe(
+            this.srv.countByEmail(this.profile.email).subscribe(
                 (response) => {
                     this.count = response;
                     console.log(this.count);
@@ -65,14 +65,13 @@ export class CompaniesComponent implements OnInit{
     }
     private find() {
         this.subscription.add(
-            this.srv.findByEmail(this.perfil.email).subscribe(
+            this.srv.findByEmail(this.profile.email).subscribe(
                 (response) => {
-                    this.user = response;
-                    this.companies = this.user.companies;
-                    if (this.user.status == 0) {
+                    this.companies = response;
+                    /*if (this.user.status == 0) {
                         this.toster.info('Para interactuar con el sistema, debe tener 1 o varios '+this.companiesTitle);   
                     }
-                    console.log(this.user);
+                    console.log(this.user);*/
                     this.loading = false;
                 },
                 (error) => {
@@ -84,7 +83,7 @@ export class CompaniesComponent implements OnInit{
     }
     private async remove(rut: string) {
         await this.subscription.add(
-            this.srv.remove(this.perfil.email, rut).subscribe(
+            this.srv.remove(this.profile.email, rut).subscribe(
                 (response) => {
                     return response;
                 },
@@ -97,7 +96,7 @@ export class CompaniesComponent implements OnInit{
     }
     removeWithConfirmation(rut: string) {
         Swal.fire({
-          title: 'Estas seguro que deseas eliminar el '+this.perfil.role.name+'?',
+          title: 'Estas seguro que deseas eliminar el '+this.profile.role.name+'?',
           text: "No podras revertir esto despues!",
           type: 'warning',
           showCancelButton: true,
@@ -111,14 +110,14 @@ export class CompaniesComponent implements OnInit{
             if (confirm) {
                 Swal.fire(
                     'Eliminado!',
-                    'Tu '+this.perfil.role.name+' se a eliminado.',
+                    'Tu '+this.profile.role.name+' se a eliminado.',
                     'success'
                 )
                 this.getCount();
             } else {
                 Swal.fire(
                     'Ups.. algo salio mal!',
-                    'Tu '+this.perfil.role.name+' no se a eliminado.',
+                    'Tu '+this.profile.role.name+' no se a eliminado.',
                     'error'
                 )
             }

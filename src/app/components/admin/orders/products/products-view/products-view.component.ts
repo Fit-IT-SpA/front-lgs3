@@ -1,9 +1,9 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, ElementRef, ViewChildren, QueryList } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ServiceTypeService } from '../../../../../shared/services/service-type.service';
 import { UserService } from '../../../../../shared/services/user.service';
-import { CompaniesService } from '../../../../../shared/services/companies.service';
+import { CompaniesService } from '../../../companies/companies.service';
 import { User } from '../../../../../shared/model/user';
 import { Order } from '../../../../../shared/model/order.model';
 import { Offer } from '../../../../../shared/model/offer.model';
@@ -26,6 +26,7 @@ import { OfferService } from 'src/app/shared/services/offer.service';
   providers: [ServiceTypeService, UserService, CompaniesService, OrderService, ProductsService, OfferService],
 })
 export class ProductsViewComponent implements OnInit {
+  @ViewChildren('inputCheck') inputChecks: QueryList<ElementRef<HTMLInputElement>>;
 
   private subscription: Subscription = new Subscription();
   public closeResult: string;
@@ -135,49 +136,73 @@ export class ProductsViewComponent implements OnInit {
       }
     ));
   }
-  public increment() {
-    this.counter += 1;
-    this.form.controls.qty.setValue(this.counter);
+  public increment(offer: Offer, index: number) {
+    const arrayInputChecks = this.inputChecks.toArray();
+    if (offer.qtyOfferAccepted < offer.qty) {
+      if (arrayInputChecks[index].nativeElement.checked) {
+        this.countQtyOffers = this.countQtyOffers - offer.qtyOfferAccepted;
+        this.totalConfirm = this.totalConfirm - (offer.price + offer.price / 10) * offer.qtyOfferAccepted;
+      }
+      offer.qtyOfferAccepted++;
+      if (arrayInputChecks[index].nativeElement.checked) {
+        this.countQtyOffers = this.countQtyOffers + offer.qtyOfferAccepted;
+        this.totalConfirm = this.totalConfirm + (offer.price + offer.price / 10) * offer.qtyOfferAccepted;
+      }
+    }
     //console.log(this.productsAddFormGroup.controls);
   }
 
-  public decrement() {
-    if (this.counter > 1) {
-        this.counter -= 1;
-        this.form.controls.qty.setValue(this.counter);
+  public decrement(offer: Offer, index: number) {
+    const arrayInputChecks = this.inputChecks.toArray();
+    if (offer.qtyOfferAccepted > 1) {
+      if (arrayInputChecks[index].nativeElement.checked) {
+        this.countQtyOffers = this.countQtyOffers - offer.qtyOfferAccepted;
+        this.totalConfirm = this.totalConfirm - (offer.price + offer.price / 10) * offer.qtyOfferAccepted;
+      }
+      offer.qtyOfferAccepted--;
+      if (arrayInputChecks[index].nativeElement.checked) {
+        this.countQtyOffers = this.countQtyOffers + offer.qtyOfferAccepted;
+        this.totalConfirm = this.totalConfirm + (offer.price + offer.price / 10) * offer.qtyOfferAccepted;
+      }
     }
     //console.log(this.productsAddFormGroup.controls);
   }
   public checkOffer(offer: Offer, event: any) {
     //console.log(event.currentTarget.checked);
-    //console.log(offer);
+    console.log(offer);
     if (event.currentTarget.checked) {
       this.confirmOffers.push(offer);
-      this.countQtyOffers = this.countQtyOffers + offer.cantidad;
-      this.totalConfirm = this.totalConfirm + offer.price * offer.cantidad;
+      this.countQtyOffers = this.countQtyOffers + offer.qtyOfferAccepted;
+      this.totalConfirm = this.totalConfirm + (offer.price + offer.price / 10) * offer.qtyOfferAccepted;
     } else {
       // eliminar elemento del array
       var deleteOffer: Offer = this.confirmOffers.find((off) => off.idOffer === offer.idOffer);
       this.confirmOffers.splice(this.confirmOffers.indexOf(deleteOffer), 1);
 
-      this.countQtyOffers =  this.countQtyOffers - offer.cantidad;
-      this.totalConfirm = this.totalConfirm - offer.price * offer.cantidad;
+      this.countQtyOffers =  this.countQtyOffers - offer.qtyOfferAccepted;
+      this.totalConfirm = this.totalConfirm - (offer.price + offer.price / 10) * offer.qtyOfferAccepted;
     }
     //console.log(this.confirmOffers);
   }
   public add() {
     this.loading = true;
     let offersId: string = '';
+    let offersQty: string = '';
     for (let i = 0 ; i < this.confirmOffers.length ; i++) {
-      if (i == this.confirmOffers.length - 1) 
-        offersId = offersId + this.confirmOffers[i].idOffer
-      else
-        offersId = offersId + this.confirmOffers[i].idOffer +','
+      if (i == this.confirmOffers.length - 1)  {
+        offersId = offersId + this.confirmOffers[i].idOffer;
+        offersQty = offersQty + String(this.confirmOffers[i].qtyOfferAccepted);
+      } else {
+        offersId = offersId + this.confirmOffers[i].idOffer +',';
+        offersQty = offersQty + String(this.confirmOffers[i].qtyOfferAccepted)+',';
+      }
     }
-    this.save(offersId);
+    //console.log(offersId);
+    //console.log(offersQty);
+    this.save(offersId, offersQty);
   }
-  private save(offersId: string) {
-    this.subscription.add(this.srvOffer.updateAllIds(offersId).subscribe(
+  private save(offersId: string, offersQty: string) {
+    this.subscription.add(this.srvOffer.updateAllIds(offersId, offersQty).subscribe(
       response => {
         console.log(response);
         this.toster.success("Se confirmarón "+this.countQtyOffers+" producto(s), para pagar debe pasar por caja.");

@@ -35,17 +35,31 @@
                 <div id="offer_{{i}}" class="social-chat" *ngFor="let off of this.offers; index as i">
                   <div class="your-msg" *ngIf="off.status == 2">
                     <div class="media">
-                      <div class="media-body"><span class="f-w-500">Oferta: ${{off.price.toLocaleString('es-CL')}} <span> valor neto por unidad</span></span>
+                      <div class="media-body"><span class="f-w-500">Oferta: ${{(off.price + off.price * off.commission).toLocaleString('es-CL')}} <span> valor neto por unidad</span></span>
                               <img class="img-100 img-fluid pull-right" alt=""
                               src="{{off.photo}}">
-                        <p>Cantidad ofrecida: {{off.cantidad}} Unidades</p>
-                        <p>Características del producto: {{off.estado}}, {{off.origen}}</p>
+                        <p>Cantidad ofrecida: {{off.qty}} Unidades</p>
+                        <fieldset>
+                          <p>Cantidad:</p>
+                          <div class="input-group bootstrap-touchspin">
+                            <button class="btn btn-primary btn-square bootstrap-touchspin-down" type="button" (click)="decrement(off, i)">
+                              <i class="fa fa-minus"></i>
+                            </button>
+                            <input class="touchspin form-control" type="text" value={{off.qtyOfferAccepted}}>
+                            <div class="input-group-append ml-0">
+                              <button class="btn btn-primary btn-square bootstrap-touchspin-up" type="button" (click)="increment(off, i)">
+                                <i class="fa fa-plus"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </fieldset>
+                        <p>Características del producto: <span class="f-w-500">{{off.estado}}</span>, <span class="f-w-500">{{off.origen}}</span></p>
                         
                           <!--<button class="btn" type="button" (click)="QuickViewOrdersEdit.openModal(this.order, this.user.companies)"><i class="fa fa-edit"></i></button>-->
                         <!--<label class="col-form-label mb-3">Aprobar Oferta</label>-->
                         <div class="icon-state switch-outline">
                           <label class="switch">
-                            <input type="checkbox" id="{{i}}" (change)="this.checkOffer(off, $event)"><span class="switch-state bg-success"></span>
+                            <input type="checkbox" id="{{i}}" (change)="this.checkOffer(off, $event)" #inputCheck><span class="switch-state bg-success"></span>
                           </label>
                         </div>
                         <label class="mb-3">Bien! Acepto la oferta y términos y condiciones</label>

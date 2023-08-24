@@ -117,7 +117,7 @@ export class LoginComponent implements OnInit {
                 } else if (profile.role.slug === 'comercio') {
                   this._router.navigate(['/admin/orders/offers']);
                 } else {
-                  this._router.navigate(['/admin/users/user']);
+                  this._router.navigate(['/admin/users/sales-management']);
                 }
                 
             },

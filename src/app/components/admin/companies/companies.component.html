@@ -6,35 +6,27 @@
   </div>
 </div>
 <div class="container-fluid" *ngIf="!loading">
-  <div class="row">
-    <div class="col-md-6 col-xl-4 box-col-6 xl-50">
-        <div class="card custom-card">
-          <div class="card-profile">
-          </div>
-          <div class="text-center profile-details">
-            <button class="btn btn-primary btn-lg btn-pill" type="button" placement="top" (click)="QuickViewCompaniesAdd.openModal(this.user)" >Agregar {{this.companyTitle}}</button>
-          </div>
-        </div>
+    <div class="text-right p-15" *ngIf="this.canWrite()">
+      <button class="btn btn-primary btn-pill" type="button" (click)="QuickViewCompaniesAdd.openModal(this.user)" >Agregar {{this.companyTitle}}</button>
     </div>
+   <div class="row">
     <div class="col-md-6 col-xl-4 box-col-6 xl-50" *ngFor="let company of companies">
         <div class="card custom-card">
           <div class="row">
               <div class="col-4 col-sm-4" *ngIf="this.canWrite()">
-                  <button class="btn btn-primary" (click)="QuickViewCompaniesEdit.openModal(this.user, company.rut)">
-                      <!--<i data-feather="edit"></i>-->
+                  <!--<button class="btn btn-primary" (click)="QuickViewCompaniesEdit.openModal(this.user, company.rut)">
                       <i class="fa fa-edit"></i>
-                  </button>
+                  </button>-->
               </div>
               <div class="col-4 col-sm-4" *ngIf="this.canWrite()">
-                  <button class="btn btn-secondary" (click)="removeWithConfirmation(company.rut)">
-                      <!--<i data-feather="trash"></i>-->
+                  <!--<button class="btn btn-secondary" (click)="removeWithConfirmation(company.rut)">
                       <i class="fa fa-trash"></i>
-                  </button>
+                  </button>-->
               </div>
           </div>
           <div class="card-profile">
-              <img class="rounded-circle" src="assets/images/companies/taller.jpg" alt="" *ngIf="this.perfil.role.slug == 'taller'" (click)="QuickViewCompaniesView.openModal(this.user, company.rut)"> 
-              <img class="rounded-circle" src="assets/images/companies/comercio.jpg" alt="" *ngIf="this.perfil.role.slug == 'comercio'" (click)="QuickViewCompaniesView.openModal(this.user, company.rut)">
+              <img class="rounded-circle" src="assets/images/companies/taller.jpg" alt="" *ngIf="this.profile.role.slug == 'taller'" (click)="QuickViewCompaniesView.openModal(this.user, company.rut)"> 
+              <img class="rounded-circle" src="assets/images/companies/comercio.jpg" alt="" *ngIf="this.profile.role.slug == 'comercio'" (click)="QuickViewCompaniesView.openModal(this.user, company.rut)">
           </div>
           <div class="text-center profile-details">
               <h4>{{company.name}}</h4>  
@@ -42,9 +34,6 @@
           </div>
         </div>
     </div>
-
-    
-
   </div>
 </div>
 <app-companies-add #quickViewCompaniesAdd></app-companies-add>

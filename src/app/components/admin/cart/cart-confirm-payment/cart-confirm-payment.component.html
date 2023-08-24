@@ -1,0 +1,43 @@
+<ng-template #quickViewCartConfirmPayment let-modal>
+    <div class="modal-content">
+        <div class="modal-header product-modal">
+          <div class="product-box row">
+            <div class="product-img col-md-6" *ngIf="!offerData.order.photo"><img class="img-fluid" src="assets/images/ecommerce/01.jpg" alt=""></div>
+            <div class="product-img col-md-6" *ngIf="offerData.order.photo"><img class="img-fluid" src="{{offerData.order.photo}}" alt=""></div>
+            <div class="product-details col-md-6 text-left">
+              <h4>{{offerData.order.brand}} {{offerData.order.model}} {{offerData.order.year}}</h4>
+              <div class="product-view">
+                <h6 class="f-w-600">Detalles de la Compra</h6>
+                <div class="product-price">Total a pago: ${{(this.totalOrder(offerData.productWithOffers)).toLocaleString('es-CL')}}</div>
+                <div class="mb-4">
+                    <div class="mb-3">
+                      <h6>Agrega una foto del comprobante</h6>
+                      <!--<span>(Donde aparezca el VIN del auto, para asegurar que recibas ofertas precisas a lo que buscas)</span>-->
+                      <!--<span style="display: block;">(No tienes el padrón a mano? Busca tu VIN por tu patente en <a href="https://www.patentechile.com/" target="_blank">patenteschile.com</a> y nos subes esa foto)</span>-->
+                    </div>
+                    <div class="col-md-3" *ngIf="loadingImg">
+                      <h6 class="mb-0 text-center">Cargando foto...</h6>
+                      <div class="loader-box">
+                        <div class="loader-3"></div>
+                      </div>
+                    </div>
+                    <div *ngIf="!loadingImg">
+                      <img src="{{url}}" class="row mb-3" id="image_service">
+                      <button class="btn btn-info mb-3" (click)="fileInput.click()" type="button">
+                        <i class="flex align-middle" data-feather="download"></i>
+                        Cargar Imagen
+                      </button>
+                      <input class="btn btn-outline-primary" type="file" #fileInput (change)="fileChangeEvent($event)" hidden >
+                    </div>
+                </div>
+                <div style="text-align: center" class="addcart-btn">
+                    <button class="btn btn-pill btn-primary m-r-15" [disabled]="form.invalid" (click)="this.confirmPayment(offerData.order.idOrder)" type="button">Confirmar Pago</button>
+                    <button class="btn btn-pill btn-info" (click)="modal.dismiss('Cross click')" type="button">Volver</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">×</span></button>
+        </div>
+      </div>
+</ng-template>

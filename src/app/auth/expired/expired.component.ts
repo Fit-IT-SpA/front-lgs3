@@ -19,7 +19,7 @@ export class ExpiredComponent implements OnInit {
     private _router: Router
     ) {
       this._unsubscribeAll = new Subject();
-      this.countdown = 3;
+      this.countdown = 4;
       this.countdownMapping = {
           '=1'   : '# segundo',
           'other': '# segundos'

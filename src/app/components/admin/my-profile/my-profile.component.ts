@@ -4,7 +4,8 @@ import {ServiceTypeService} from '../../../shared/services/service-type.service'
 import {UserService} from '../../../shared/services/user.service';
 import { AuthService } from '../../../shared/services/firebase/auth.service';
 import { Router } from '@angular/router';
-import { CompaniesService } from 'src/app/shared/services/companies.service';
+import { Subscription } from 'rxjs';
+import { CompaniesService } from 'src/app/components/admin/companies/companies.service';
 import { User } from 'src/app/shared/model/user';
 
 
@@ -16,25 +17,28 @@ import { User } from 'src/app/shared/model/user';
 })
 
 export class MyProfileComponent implements OnInit{
-    user: User;
-    public perfil =  JSON.parse(localStorage.getItem('profile'));
+    private subscription: Subscription = new Subscription();
+    public user: User;
+    public profile =  JSON.parse(localStorage.getItem('profile'));
     public loading: boolean = true;
-    constructor(public authService: AuthService, private _router: Router, private userSrv: UserService, private companiesSrv: CompaniesService) { }
+    constructor(
+        public authService: AuthService, 
+        private _router: Router, 
+        private userSrv: UserService, 
+        private companiesSrv: CompaniesService) { }
 
     ngOnInit() {
-        console.log(this.perfil);
-        this.companiesSrv.findByEmail(this.perfil.email).subscribe(
-            (response) => {
-                this.user = response;
-                this.loading = false;
-                //console.log(this.user);
-            });
-    //    console.log(this.companias.length);
-
-
+        this.getUser();
     }
-    logout(){
-        localStorage.removeItem('profile');
-        this._router.navigate(['/auth/login']);
+    public getUser() {
+        this.subscription.add(this.userSrv.findByEmail(this.profile.email).subscribe(
+            (response) => {
+                this.user = response[0];
+                this.loading = false;
+            }, (error) => {
+                this.loading = false;
+                console.log(error);
+            }
+        ));
     }
 }

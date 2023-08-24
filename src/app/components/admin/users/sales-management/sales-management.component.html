@@ -12,6 +12,7 @@
                 <div class="card-body" *ngIf="!this.loading">
                     <div *ngIf="!orderOffer || orderOffer.length <= 0">No hay ventas por gestionar</div>
                     <div *ngIf="orderOffer && orderOffer.length > 0">
+                      <span style="color: #808080;">Nota: Valores con IVA incluido</span>
                       <div>
                         <div class="order-history table-responsive wishlist">
                           <table class="table table-bordered mb-3">
@@ -21,9 +22,11 @@
                                 <th>Producto</th>
                                 <th>Precio unitario</th>
                                 <th>Q Oferta</th>
-                                <th>Comisión Servicio</th>
-                                <th>Total Venta</th>
+                                <th>Costo total</th>
+                                <th>Comisión total</th>
+                                <th>Total transacción</th>
                                 <th>Taller</th>
+                                <th>Comprobante Taller</th>
                                 <th>Comercio</th>
                                 <th>Confirmar pago</th>
                               </tr>
@@ -34,9 +37,10 @@
                                 <td style="text-align: left">{{offer.order.brand}} {{offer.order.model}} {{offer.order.year}}</td>
                                 <td>{{offer.product.title}}</td>
                                 <td>${{offer.price.toLocaleString('es-CL')}}</td>
-                                <td><span>{{offer.cantidad}}</span></td>
-                                <td></td>
-                                <td>${{(offer.price * offer.cantidad).toLocaleString('es-CL')}}</td>
+                                <td><span>{{offer.qtyOfferAccepted}}</span></td>
+                                <td>{{(offer.price * offer.qtyOfferAccepted).toLocaleString('es-CL')}}</td>
+                                <td>{{((offer.price * offer.commission) * offer.qtyOfferAccepted).toLocaleString('es-CL')}}</td>
+                                <td>${{((offer.price + offer.price * offer.commission) * offer.qtyOfferAccepted).toLocaleString('es-CL')}}</td>
                                 <!--<td>
                                     <div class="product-name"><a href="javascript:void(0);">{{offer.estado}}</a></div>
                                 </td>
@@ -45,10 +49,13 @@
                                     <button class="btn btn-pill btn-warning btn-xs" *ngIf="offer.status == 4">por confirmar</button>
                                     <button class="btn btn-pill btn-warning btn-xs" *ngIf="offer.status == 5">pago confirmado</button>
                                 </td>-->
-                                <td><button class="btn btn-pill btn-info btn-xs" (click)="this.contactCompany(offer.workshop, offer.order.company, offer.price * offer.cantidad)">{{this.findCompany(offer.workshop, offer.order.company).name}}</button></td>
-                                <td><button class="btn btn-pill btn-info btn-xs" (click)="this.contactCompany(offer.commerce, offer.company, offer.price * offer.cantidad)">{{this.findCompany(offer.commerce, offer.company).name}}</button></td>
+                                <td><button class="btn btn-pill btn-info btn-xs" (click)="this.contactCompany(offer.workshop,(offer.price + offer.price * offer.commission) * offer.qtyOfferAccepted)">{{offer.workshop.name}}</button></td>
+                                <td><button class="btn btn-pill btn-info btn-xs" (click)="this.paymentReceipt(offer.workshop, offer.order.company, offer.photoPaymentReceiptAtClaimant)">Comprobante</button></td>
+                                <td><button class="btn btn-pill btn-info btn-xs" (click)="this.contactCompany(offer.commerce, offer.price * offer.qtyOfferAccepted)">{{offer.commerce.name}}</button></td>
                                 <td>
-                                  <button class="btn btn-pill btn-success btn-xs" (click)="this.confirmPayment(offer._id, offer.product._id, offer.order._id)">Confirmar pago</button>
+                                  <button *ngIf="offer.status === 4" class="btn btn-pill btn-success btn-xs" (click)="this.QuickViewSalesManagementView.openModal(offer._id, offer.product._id, offer.order._id, offer)">Confirmar pago</button>
+                                  <button *ngIf="offer.status === 5" class="btn btn-pill btn-warning btn-xs">Esperando Local</button>
+                                  <button *ngIf="offer.status === 6" class="btn btn-pill btn-primary btn-xs">Pago recibido</button>
                                 </td>
                               </tr>
                             </tbody>
@@ -62,3 +69,4 @@
         </div>
     </div>
 </div>
+<app-sales-management-view #quickViewSalesManagementView></app-sales-management-view>

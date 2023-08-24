@@ -20,7 +20,7 @@
                           <th scope="col">Repuesto</th>
                           <th scope="col">Marca / Modelo</th>
                           <th scope="col">Origen</th>
-                          <th scope="col">COndición</th>
+                          <th scope="col">Condición</th>
                           <th scope="col">Precio</th>
                           <th class="text-center" scope="col">Cantidad</th>
                           <th scope="col">Status</th>
@@ -33,7 +33,7 @@
                           <td [innerHTML]="offer.origen"></td>
                           <td>{{offer.estado}}</td>
                           <td>$ {{offer.price | number:'1.0-0'}}</td>
-                          <td class="text-center">{{offer.cantidad | number:'1.0-0'}}</td>
+                          <td class="text-center">{{offer.qtyOfferAccepted | number:'1.0-0'}}</td>
                           <td [innerHTML]="offer.status"></td>
                         </tr>
                       </tbody>

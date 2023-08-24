@@ -3,7 +3,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ServiceTypeService } from '../../../../shared/services/service-type.service';
 import { UserService } from '../../../../shared/services/user.service';
-import { CompaniesService } from '../../../../shared/services/companies.service';
+import { CompaniesService } from '../../companies/companies.service';
 import { User } from '../../../../shared/model/user';
 import { Order } from '../../../../shared/model/order.model';
 import { OrderAdd } from '../../../../shared/model/order-add.model';
@@ -29,8 +29,8 @@ export class OrdersAddComponent implements OnInit {
   public closeResult: string;
   public modalOpen: boolean = false;
   public companiesForm: FormGroup;
-  public perfil =  JSON.parse(localStorage.getItem('profile'));
-  public companiesTitle = this.perfil.role.slug == 'taller' ? 'Talleres' : this.perfil.role.slug == 'comercio' ? 'Comercios' : 'Negocios';
+  public profile =  JSON.parse(localStorage.getItem('profile'));
+  public companiesTitle = this.profile.role.slug == 'taller' ? 'Talleres' : this.profile.role.slug == 'comercio' ? 'Comercios' : 'Negocios';
   public url: ArrayBuffer | string;
   private user: User;
   public orderAdd: OrderAdd;
@@ -42,11 +42,11 @@ export class OrdersAddComponent implements OnInit {
   public imgFile: any;
   public loading: boolean = true;
   public loadingImg: boolean = false;
-  public brandFilter: { value: string, label: string, job: string }[] = [
-    { value: "CHEVROLET", label: "CHEVROLET", job: "" },
-    { value: "HYUNDAI", label: "HYUNDAI", job: "" },
-    { value: "KIA MOTORS", label: "KIA MOTORS", job: "" }
-  ];
+  public makesFilter: { value: string, label: string, job: string }[] = [];
+  public modelFilter: { value: string, label: string, job: string }[] = [];
+  public yearFilter: { value: string, label: string, job: string }[] = [];
+  public disabledModelFilter: boolean = false;
+  public disabledYearFilter: boolean = false;
 
   constructor(
     private modalService: NgbModal,
@@ -59,17 +59,19 @@ export class OrdersAddComponent implements OnInit {
         this.formOrder = this.fb.group({
             company: ['', Validators.required],
             brand: [null, [Validators.required]],
-            model: ['', [Validators.minLength(3), Validators.maxLength(40)]],
+            model: [null, [Validators.required]],
             chassis: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
             photo: ['', [Validators.required]],
-            year: ['', [Validators.required, Validators.maxLength(4), Validators.minLength(4), numberValidator]],
+            year: [null, [Validators.required]],
             //engine: ['', Validators.required],
-          });
+        });
+        this.formOrder.get('model').disable();
+        this.formOrder.get('year').disable();
      }
 
   ngOnInit(): void {
     if (this.haveAccess()) {
-      this.getUser();
+      this.getCompany();
     } else {
       this.router.navigate(['/admin/unauthorized']);
     }
@@ -85,23 +87,84 @@ export class OrdersAddComponent implements OnInit {
       return false;
     }
   }
-  private getUser() {
-    this.subscription.add(
-        this.companiesSrv.findByEmail(this.perfil.email).subscribe(
-            (response) => {
-                this.user = response;
-                this.companies = this.user.companies;
-                this.formOrder.controls.company.setValue(this.companies[0].rut);
-                //console.log(this.user);
-                this.loading = false;
-            },
-            (error) => {
-                console.log(error);
-                this.toster.error('Se ha producido un error al intentar buscar los '+this.companiesTitle+' del usuario');
-                this.loading = false;
-            }
-        )
-    );
+  private getCompany() {
+    this.subscription.add(this.companiesSrv.findByEmail(this.profile.email).subscribe(
+      (response) => {
+        console.log(response);
+        this.companies = response;
+        this.formOrder.controls.company.setValue(this.companies[0].rut);
+        this.getVehicleListMake();
+      }, (error) => {
+        console.log(error);
+        this.toster.error('Se ha producido un error al intentar buscar los '+this.companiesTitle+' del usuario');
+        this.loading = false;
+      }
+    ));
+  }
+  private getVehicleListMake() {
+    this.subscription.add(this.companiesSrv.findVehicleListMake().subscribe(
+      response => {
+        for (let vehicle of response) {
+          this.makesFilter.push({
+            value: vehicle.make,
+            label: vehicle.make,
+            job: ''
+          })
+        }
+        this.loading = false;
+      }, (error) => {
+        console.log(error);
+      }
+    ));
+  }
+  public async onChangeMakeFilter() {
+    console.log("onChangeMakeFilter");
+    this.disabledModelFilter = true;
+    this.formOrder.controls.model.setValue(null);
+    this.formOrder.controls.year.setValue(null);
+    this.formOrder.get('model').disable();
+    this.formOrder.get('year').disable();
+    this.modelFilter = [];
+    this.yearFilter = [];
+    try {
+      const response: {model: string}[] = await this.companiesSrv.findVehicleListModelByMake(this.formOrder.controls.brand.value.value).toPromise();
+      if (response && response.length > 0) {
+        for (let vehicle of response) {
+          this.modelFilter.push({
+            value: vehicle.model,
+            label: vehicle.model,
+            job: ''
+          });
+        }
+        this.disabledModelFilter = false;
+        this.formOrder.get('model').enable();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  public async onChangeModelFilter() {
+    console.log("onChangeModelFilter");
+    this.disabledYearFilter = true;
+    this.formOrder.controls.year.setValue(null);
+    this.formOrder.get('year').disable();
+    this.yearFilter = [];
+    try {
+      const response: {year: string}[] = await this.companiesSrv.findVehicleListYearByMakeModel(this.formOrder.controls.brand.value.value, this.formOrder.controls.model.value.value).toPromise();
+      if (response && response.length > 0) {
+        for (let vehicle of response) {
+          this.yearFilter.push({
+            value: vehicle.year,
+            label: vehicle.year,
+            job: ''
+          });
+        }
+        this.disabledYearFilter = false;
+        this.formOrder.get('year').enable();
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
   /**
    * open Dialog CUBA
@@ -148,13 +211,13 @@ export class OrdersAddComponent implements OnInit {
   createOrder() {
     return {
         idOrder: (new Date().getTime()).toString(),
-        createBy: this.perfil.email,
+        createBy: this.profile.email,
         company: this.formOrder.controls.company.value,
         status: 0,
         //closingDate: this.createClosingDateTime(),
         brand: (this.formOrder.controls.brand.value) ? this.formOrder.controls.brand.value.value : '',
-        model: (this.formOrder.controls.model.value) ? this.formOrder.controls.model.value : '',
-        year: (this.formOrder.controls.year.value) ? this.formOrder.controls.year.value : '',
+        model: (this.formOrder.controls.model.value) ? this.formOrder.controls.model.value.value : '',
+        year: (this.formOrder.controls.year.value) ? this.formOrder.controls.year.value.value : '',
         //engine: '',
         chassis: (this.formOrder.controls.chassis.value) ? this.formOrder.controls.chassis.value : '',
         photo: (this.formOrder.controls.photo.value) ? this.formOrder.controls.photo.value : '',
@@ -196,6 +259,9 @@ export class OrdersAddComponent implements OnInit {
         }
       ));
     }
+  }
+  public goBack() {
+    this.router.navigate(['/admin/orders']);
   }
   /*createClosingDateTime() {
     let date: Date = new Date(

@@ -3,7 +3,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ServiceTypeService } from '../../../../../shared/services/service-type.service';
 import { UserService } from '../../../../../shared/services/user.service';
-import { CompaniesService } from '../../../../../shared/services/companies.service';
+import { CompaniesService } from '../../../companies/companies.service';
 import { User } from '../../../../../shared/model/user';
 import { Order } from '../../../../../shared/model/order.model';
 import { Product } from '../../../../../shared/model/product.model';
@@ -32,7 +32,11 @@ export class OffersDetailComponent implements OnInit {
   public companiesForm: FormGroup;
   public perfil =  JSON.parse(localStorage.getItem('profile'));
   private order: Order;
-  private product: Product;
+  public orderWithProductOffers: {
+    order: Order,
+    product: Product,
+    offers: Offer[]
+  };
   private offers: Offer[] = [];
   public firstFormGroup: FormGroup;
   public secondFormGroup: FormGroup;
@@ -48,26 +52,7 @@ export class OffersDetailComponent implements OnInit {
     private userSrv: UserService,
     private srvOffer: OfferService,
     private srv: OrderService,
-    public toster: ToastrService,) {
-        this.firstFormGroup = this.fb.group({
-            company: ['', Validators.required],
-          });
-          this.secondFormGroup = this.fb.group({
-            brand: ['', Validators.required],
-            model: ['', Validators.required],
-            year: ['', Validators.required],
-            engine: ['', Validators.required],
-          });
-          this.thirdFormGroup = this.fb.group({
-            productName: ['', Validators.required],
-            productBrand: ['', Validators.required],
-            productDetails: ['', Validators.required],
-            limitPrice: ['', Validators.required],
-            qty: [this.counter, Validators.required],
-            closingDate: ['', Validators.required],
-            closingTime: [{hour: new Date().getHours(), minute: new Date().getMinutes()}, Validators.required],
-            photo: ['', Validators.required],
-          })
+    public toster: ToastrService) {
      }
 
   ngOnInit(): void {
@@ -77,9 +62,9 @@ export class OffersDetailComponent implements OnInit {
    * open Dialog CUBA
    * @param user 
    */
-  openModal(product: Product) {
-    this.product = product;
-    this.offers = product.offer;
+  openModal(product: {order: Order,product: Product,offers: Offer[]}) {
+    this.orderWithProductOffers = product;
+    this.offers = product.offers;
      console.log(product);
     //console.log(this.companies);
     this.modalOpen = true;
@@ -120,7 +105,7 @@ export class OffersDetailComponent implements OnInit {
           if (result.value) {  
             this.subscription.add(this.srvOffer.remove(idOffer).subscribe(
                (response) => {
-                 this.subscription.add(this.srv.findByIdOrder(this.product.id).subscribe(
+                 this.subscription.add(this.srv.findByIdOrder(this.orderWithProductOffers.product.id).subscribe(
                     (response) => {
                         Swal.fire(
                             'Eliminado!',
@@ -128,7 +113,7 @@ export class OffersDetailComponent implements OnInit {
                             'success'
                         )
                         this.offers = response.offer;
-                        this.product.offer = response.offer;
+                        this.orderWithProductOffers.product.offer = response.offer;
                         console.log(this.offers);
                     },
                         (error) => {

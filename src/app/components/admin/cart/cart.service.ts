@@ -33,13 +33,13 @@ export class CartService extends AbstractHttpService {
             })
         );
     }
-    confirmedPayment(id: string) {
+    confirmedPayment(id: string, photo: string) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
             })
         };
-        return this.http.put<any>(`${this.apiUrl}/cart/confirmed-payment/${id}`, httpOptions).pipe(
+        return this.http.put<any>(`${this.apiUrl}/cart/confirmed-payment/${id}`, {photo: photo}, httpOptions).pipe(
             map(response => {
                 return response;
             })
@@ -56,5 +56,12 @@ export class CartService extends AbstractHttpService {
                 return response;
             })
         );       
+    }
+    uploadFile(file: FormData) {
+        return this.http.post<any>(`${this.apiUrl}/files`, file).pipe(
+            map(response => {
+            return response;
+            })
+        );
     }
 }

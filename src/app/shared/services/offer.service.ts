@@ -97,7 +97,7 @@ export class OfferService extends AbstractHttpService {
           })
         );
       }
-    updateAllIds(ids: string) {
+    updateAllIds(ids: string, qty: string) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -105,7 +105,7 @@ export class OfferService extends AbstractHttpService {
         };
         return this.http
             .put<any>(
-                this.apiUrl + '/offer/all/'+ids, httpOptions)
+                this.apiUrl + '/offer/all/'+ids+'/'+qty, httpOptions)
             .pipe(
                 map(response => {
                     return response;

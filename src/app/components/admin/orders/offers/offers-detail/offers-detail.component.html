@@ -6,7 +6,7 @@
               <div class="media">
                 <div class="media-body">
                   <h6 class="mb-0 f-w-700">Ofertas ({{offers.length}})</h6>
-                  <p>Requeridos: {{product.qty}}</p>
+                  <p>Requeridos: {{orderWithProductOffers.product.qty}}</p>
                 </div>
               </div>
             </div>
@@ -15,13 +15,17 @@
               <div id="offer_{{i}}" class="social-chat" *ngFor="let off of offers; index as i">
                 <div class="your-msg">
                   <div class="media">
-                    <div class="media-body"><span class="f-w-500">Oferta: $ {{off.price | number:'1.0-0'}} <span> ({{off.cantidad}} Unidades)</span></span>
+                    <div class="media-body"><span class="f-w-500">Oferta: $ {{off.price | number:'1.0-0'}} <span> ({{off.qty}} Unidades)</span></span>
                       <p>{{off.origen}}</p>
                       <p>{{off.estado}}</p>
                       <p>{{off.comentario}}</p>
+                      <p>
+                        <span class="btn btn-pill btn-info btn-xs" *ngIf="off.status === 2">Oferta Vigente</span>
+                        <span class="btn btn-pill btn-success btn-xs" *ngIf="off.status === 3">Oferta Aceptada</span>
+                      </p>
                       
                         <!--<button class="btn" type="button" (click)="QuickViewOrdersEdit.openModal(this.order, this.user.companies)"><i class="fa fa-edit"></i></button>-->
-                        <button (click)="removeWithConfirmation(off.id,i)" class="btn btn-danger" type="button">Eliminar Oferta</button>
+                        <button *ngIf="off.status === 2" (click)="removeWithConfirmation(off.id,i)" class="btn btn-danger" type="button">Eliminar Oferta</button>
                       
                     </div>
                   </div>

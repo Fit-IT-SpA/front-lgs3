@@ -3,7 +3,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ServiceTypeService } from '../../../../../shared/services/service-type.service';
 import { UserService } from '../../../../../shared/services/user.service';
-import { CompaniesService } from '../../../../../shared/services/companies.service';
+import { CompaniesService } from '../../../companies/companies.service';
 import { User } from '../../../../../shared/model/user';
 import { Order } from '../../../../../shared/model/order.model';
 import { Offer } from '../../../../../shared/model/offer.model';
@@ -38,7 +38,11 @@ export class OffersAddComponent implements OnInit {
   public companies: Companies[];
   public counter: number = 1;
   public filePath: string;
-  private product: Product;
+  public orderWithProductOffers: {
+    order: Order,
+    product: Product,
+    offers: Offer[]
+  };
   public imgFile: any;
   public idOrder: string
   public maxQty: number;
@@ -61,15 +65,15 @@ export class OffersAddComponent implements OnInit {
    * open Dialog CUBA
    * @param user 
    */
-  openModal(product: any, user : User) {
+  openModal(product: {order: Order,product: Product,offers: Offer[]}, companies : Companies[]) {
     //this.user = user;
    // this.companies = user.companies;
     console.log(product);
-    this.product = product;
-    this.idOrder = product.idOrder;
-    this.idProduct= product.id;
-    this.companies = user.companies;
-    this.maxQty = product.originalQty
+    this.orderWithProductOffers = product;
+    this.idOrder = product.product.idOrder;
+    this.idProduct= product.product.id;
+    this.companies = companies;
+    this.maxQty = product.product.originalQty
     //console.log(this.user);
     //console.log(this.companies);
     this.modalOpen = true;
@@ -106,9 +110,9 @@ export class OffersAddComponent implements OnInit {
     this.offer = this.createOffer();
     this.subscription.add(this.srvOffer.add(this.offer).subscribe(
         response => {  
-            console.log(this.product.id);
+            console.log(this.orderWithProductOffers.product.id);
             console.log(this.idProduct);
-            this.subscription.add(this.srv.findByIdOrder(this.product.id).subscribe(
+            this.subscription.add(this.srv.findByIdOrder(this.orderWithProductOffers.product.id).subscribe(
             (response) => {
                 this.toster.success('Se creó correctamente su Oferta!!');
                 //this.offersFormGroup.controls.photo.setValue('');
@@ -122,7 +126,7 @@ export class OffersAddComponent implements OnInit {
                 this.counter = 1;
                 this.priceMask = 0;
                 this.modalService.dismissAll();
-                this.product.offer = response.offer;
+                this.orderWithProductOffers.offers = response.offer;
             },
                 (error) => {
                     console.log(error);
@@ -149,7 +153,9 @@ export class OffersAddComponent implements OnInit {
         //comentario: this.offersFormGroup.controls.comentario.value,
         estado: this.offersFormGroup.controls.estado.value,
         origen: this.offersFormGroup.controls.origen.value,
-        cantidad: this.offersFormGroup.controls.cantidad.value,
+        qty: this.offersFormGroup.controls.cantidad.value,
+        qtyOfferAccepted: this.offersFormGroup.controls.cantidad.value,
+        commission: 0.10,
         company: this.offersFormGroup.controls.company.value,
         status: 2,
         //photo: this.filePath,

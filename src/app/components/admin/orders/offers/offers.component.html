@@ -12,6 +12,30 @@
     </div>
 <div class="main" *ngIf="!loading">
 <div class="content" *ngIf="privileges !== null">
+<div class="card" *ngIf="!filterHidden">
+    <div class="card-body">
+        <form [formGroup]="filterForm" class="needs-validation">
+            <div class="form-row">
+                <div class="col mb-3">
+                    <label>Marcas</label>
+                    <ng-select 
+                        [items]="brandsFilter" 
+                        placeholder="Marcas"
+                        class="js-example-placeholder-multiple" 
+                        [multiple]="true"
+                        formControlName="brand">
+                    </ng-select>
+                </div>
+            </div>
+        </form>
+        <div class="col">
+            <button class="btn btn-primary" type="button" (click)="changeFilter()" >Buscar</button>
+        </div>
+    </div>
+</div>
+<div class="col-md-4 mb-3" *ngIf="listView">
+  <button class="btn btn-info" (click)="this.showFilter()" type="button" >{{this.filterButton}}</button>
+</div>
 <div class="product-grid">
     <div class="feature-products">
         <div class="row">
@@ -40,37 +64,38 @@
 </div>
 <div class="product-wrapper-grid" [class.list-view]="listView">
     <div class="row">
-        <div [class]="'col-xl-'+col+' col-sm-'+col" [class.col-xl-12]="listView" *ngFor="let product of products">
-            <div class="card">
-              <div class="product-box">
-                <div class="product-img"><img class="img-fluid" src="assets/images/nophoto.png" alt="">
-                  <div class="product-hover">
-                    <ul>
-                      <li *ngIf="this.user.companies.length > 0" (click)="QuickViewOffersAdd.openModal(product,this.user)" >
-                        <!--<button class="btn" type="button" (click)="QuickViewOrdersEdit.openModal(this.order, this.user.companies)"><i class="fa fa-edit"></i></button>-->
-                        <button ngbTooltip="Ingresar Oferta"  class="btn" type="button"><i class="fa fa-dollar ml-1"></i></button>
-                      </li>
-                      <!-- <li (click)="QuickViewOffersView.openModal(product)">
-                        <button class="btn" type="button" data-toggle="modal" data-target="#exampleModalCenter22" ><i class="icon-eye"></i></button>
-                      </li> -->
-                      <li *ngIf="this.product.offer.length > 0" (click)="quickViewOffersDetail.openModal(product)">
-                        <button  ngbTooltip="Ver Ofertas ({{this.product.offer.length}})"class="btn" type="button" data-toggle="modal" data-target="#exampleModalCenter23" ><i class="fa fa-money"></i></button>
-                      </li>
-                    </ul>
+        <div [class]="'col-xl-'+col+' col-sm-'+col" [class.col-xl-12]="listView" *ngFor="let data of orderWithProductOffers">
+              <div class="card">
+                <div class="product-box">
+                  <div class="product-img">
+                    <img class="img-fluid" *ngIf="data.order.photo" src="{{data.order.photo}}" alt="">
+                    <img class="img-fluid" *ngIf="!data.order.photo" src="assets/images/nophoto.png" alt="">
+                    <div class="product-hover">
+                      <ul>
+                        <li *ngIf="this.companies.length > 0" (click)="QuickViewOffersAdd.openModal(data,this.companies)" >
+                          <!--<button class="btn" type="button" (click)="QuickViewOrdersEdit.openModal(this.order, this.user.companies)"><i class="fa fa-edit"></i></button>-->
+                          <button ngbTooltip="Ingresar Oferta"  class="btn" type="button"><i class="fa fa-dollar ml-1"></i></button>
+                        </li>
+                        <!-- <li (click)="QuickViewOffersView.openModal(product)">
+                          <button class="btn" type="button" data-toggle="modal" data-target="#exampleModalCenter22" ><i class="icon-eye"></i></button>
+                        </li> -->
+                        <li *ngIf="data.offers.length > 0" (click)="quickViewOffersDetail.openModal(data)">
+                          <button  ngbTooltip="Ver Ofertas ({{data.offers.length}})"class="btn" type="button" data-toggle="modal" data-target="#exampleModalCenter23" ><i class="fa fa-money"></i></button>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="product-details">
+                    <h4>{{data.product.title}}</h4>
+                    <p>{{data.order.model}} {{data.order.year}}</p>
+                    <p>Cantidad: {{data.product.qty}}</p>
+                    <!-- <p>{{this.formatRut(product.company)}}</p> -->
+                    </div>
                   </div>
                 </div>
-                <div class="product-details">
-                  <h4>{{product.title}}</h4>
-                  <p>Cantidad: {{product.qty}}</p>
-                  
-                  <!-- <p>{{this.formatRut(product.company)}}</p> -->
-                  <p>{{product.idOrder}}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
         </div>
-    </div>
+      </div>
+</div>
 <app-offers-add #quickViewOffersAdd></app-offers-add>
 <app-offers-view #quickViewOffersView></app-offers-view>
 <app-offers-detail #quickViewOffersDetail></app-offers-detail>
