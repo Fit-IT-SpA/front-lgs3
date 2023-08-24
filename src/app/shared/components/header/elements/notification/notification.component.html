@@ -1,33 +1,53 @@
 <div class="notification-box" (click)="toggleNotificationMobile()">
   <app-feather-icons [icon]="'bell'"></app-feather-icons>
-  <span class="badge badge-pill badge-secondary">4</span>
+  <span *ngIf="unreadCount > 0" class="badge badge-pill badge-secondary">{{unreadCount}}</span>
 </div>
 <ul class="notification-dropdown onhover-show-div" [class.active]="openNotification">
   <li>
+    <h6 class="f-18">Notificaciones</h6>
     <app-feather-icons [icon]="'bell'"></app-feather-icons>
-    <h6 class="f-18 mb-0">Notitications</h6>
+    <a *ngIf="notifications && notifications.length > 0" class="btn btn-primary" (click)="markAllAsRead()">Marcar todos como leídos</a>
   </li>
-  <li>
-    <p>
-      <i class="fa fa-circle-o mr-3 font-primary"></i>Delivery processing <span class="pull-right">10 min.</span>
-    </p>
-  </li>
-  <li>
-    <p>
-      <i class="fa fa-circle-o mr-3 font-success"></i>Order Complete<span class="pull-right">1 hr</span>
-    </p>
-  </li>
-  <li>
-    <p>
-      <i class="fa fa-circle-o mr-3 font-info"></i>Tickets Generated<span class="pull-right">3 hr</span>
-    </p>
-  </li>
-  <li>
-    <p>
-      <i class="fa fa-circle-o mr-3 font-danger"></i>Delivery Complete<span class="pull-right">6 hr</span>
-    </p>
-  </li>
-  <li>
-    <a class="btn btn-primary" href="#">Check all notification</a>
-  </li>
+  <div class="content" *ngIf="!loading">
+    <div *ngFor="let notification of this.notifications">
+      <div class="notifications">
+        <!-- Actions -->
+        <div class="actions">
+          <i *ngIf="notification.status == 0" class="fa fa-circle-o mr-3 font-danger" (click)="toggleRead(notification)"></i>
+          <i *ngIf="notification.status == 1" class="fa fa-circle-o mr-3 font-primary" (click)="toggleRead(notification)"></i>
+          <i class="fa fa-trash" (click)="delete(notification)"></i>
+        </div>
+      </div>
+      
+      <div class="notification-content" (click)="this.notificationWithLink(notification.link)">
+        <div class="title"
+             *ngIf="notification.title"
+             [innerHTML]="notification.title"></div>
+        <div class="description"
+             *ngIf="notification.message"
+             [innerHTML]="notification.message"></div>
+        <div class="time">{{notification.createdAt | date:'MMM dd, h:mm a'}}</div>
+      </div>
+      <hr>
+    </div>
+    <div class="empty" *ngIf="!notifications || !notifications.length">
+      <app-feather-icons [icon]="'bell'"></app-feather-icons>
+      <span>No tiene notificaciones</span>
+    </div>
+    <!--<li>
+      <p>
+        <i class="fa fa-circle-o mr-3 font-success"></i>Order Complete<span class="pull-right">1 hr</span>
+      </p>
+    </li>
+    <li>
+      <p>
+        <i class="fa fa-circle-o mr-3 font-info"></i>Tickets Generated<span class="pull-right">3 hr</span>
+      </p>
+    </li>
+    <li>
+      <p>
+        <i class="fa fa-circle-o mr-3 font-danger"></i>Delivery Complete<span class="pull-right">6 hr</span>
+      </p>
+    </li>-->
+  </div>
 </ul>

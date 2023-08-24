@@ -42,12 +42,12 @@
                         <fieldset>
                           <p>Cantidad:</p>
                           <div class="input-group bootstrap-touchspin">
-                            <button class="btn btn-primary btn-square bootstrap-touchspin-down" type="button" (click)="decrement(off)">
+                            <button class="btn btn-primary btn-square bootstrap-touchspin-down" type="button" (click)="decrement(off, i)">
                               <i class="fa fa-minus"></i>
                             </button>
                             <input class="touchspin form-control" type="text" value={{off.qtyOfferAccepted}}>
                             <div class="input-group-append ml-0">
-                              <button class="btn btn-primary btn-square bootstrap-touchspin-up" type="button" (click)="increment(off)">
+                              <button class="btn btn-primary btn-square bootstrap-touchspin-up" type="button" (click)="increment(off, i)">
                                 <i class="fa fa-plus"></i>
                               </button>
                             </div>
