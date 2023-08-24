@@ -53,7 +53,9 @@
                                 <td><button class="btn btn-pill btn-info btn-xs" (click)="this.paymentReceipt(offer.workshop, offer.order.company, offer.photoPaymentReceiptAtClaimant)">Comprobante</button></td>
                                 <td><button class="btn btn-pill btn-info btn-xs" (click)="this.contactCompany(offer.commerce, offer.price * offer.qtyOfferAccepted)">{{offer.commerce.name}}</button></td>
                                 <td>
-                                  <button class="btn btn-pill btn-success btn-xs" (click)="this.QuickViewSalesManagementView.openModal(offer._id, offer.product._id, offer.order._id, offer)">Confirmar pago</button>
+                                  <button *ngIf="offer.status === 4" class="btn btn-pill btn-success btn-xs" (click)="this.QuickViewSalesManagementView.openModal(offer._id, offer.product._id, offer.order._id, offer)">Confirmar pago</button>
+                                  <button *ngIf="offer.status === 5" class="btn btn-pill btn-warning btn-xs">Esperando Local</button>
+                                  <button *ngIf="offer.status === 6" class="btn btn-pill btn-primary btn-xs">Pago recibido</button>
                                 </td>
                               </tr>
                             </tbody>

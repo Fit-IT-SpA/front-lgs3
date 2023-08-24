@@ -1,0 +1,82 @@
+.content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    max-height: 480px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+.notification {
+    display: flex;
+    flex: 1 0 auto;
+    border-bottom-width: 1px;
+
+    &:last-child {
+        border-bottom-width: 0;
+    }
+
+    > a {
+        cursor: pointer;
+    }
+
+    > a,
+    > span {
+        display: flex;
+        flex: 1 1 auto;
+        padding: 20px 0 20px 24px;
+    }
+}
+.notification-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+}
+
+/*.actions {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin: 20px 24px 20px 8px;
+}
+.indicator {
+    width: 24px;
+    height: 24px;
+    min-height: 24px;
+    line-height: 24px !important;
+}
+
+.remove {
+    width: 24px;
+    height: 24px;
+    min-height: 24px;
+    line-height: 24px !important;
+}*/
+
+.title {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.description {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.time {
+    margin-top: 8px;
+    font-size: 12px;
+    line-height: 1;
+}
+.empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 96px 24px;
+}

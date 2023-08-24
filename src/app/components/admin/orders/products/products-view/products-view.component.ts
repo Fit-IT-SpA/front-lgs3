@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, ElementRef, ViewChildren, QueryList } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ServiceTypeService } from '../../../../../shared/services/service-type.service';
@@ -26,7 +26,7 @@ import { OfferService } from 'src/app/shared/services/offer.service';
   providers: [ServiceTypeService, UserService, CompaniesService, OrderService, ProductsService, OfferService],
 })
 export class ProductsViewComponent implements OnInit {
-  @ViewChild('inputCheck') inputCheck: ElementRef<HTMLInputElement>;
+  @ViewChildren('inputCheck') inputChecks: QueryList<ElementRef<HTMLInputElement>>;
 
   private subscription: Subscription = new Subscription();
   public closeResult: string;
@@ -136,14 +136,15 @@ export class ProductsViewComponent implements OnInit {
       }
     ));
   }
-  public increment(offer: Offer) {
+  public increment(offer: Offer, index: number) {
+    const arrayInputChecks = this.inputChecks.toArray();
     if (offer.qtyOfferAccepted < offer.qty) {
-      if (this.inputCheck.nativeElement.checked) {
+      if (arrayInputChecks[index].nativeElement.checked) {
         this.countQtyOffers = this.countQtyOffers - offer.qtyOfferAccepted;
         this.totalConfirm = this.totalConfirm - (offer.price + offer.price / 10) * offer.qtyOfferAccepted;
       }
       offer.qtyOfferAccepted++;
-      if (this.inputCheck.nativeElement.checked) {
+      if (arrayInputChecks[index].nativeElement.checked) {
         this.countQtyOffers = this.countQtyOffers + offer.qtyOfferAccepted;
         this.totalConfirm = this.totalConfirm + (offer.price + offer.price / 10) * offer.qtyOfferAccepted;
       }
@@ -151,14 +152,15 @@ export class ProductsViewComponent implements OnInit {
     //console.log(this.productsAddFormGroup.controls);
   }
 
-  public decrement(offer: Offer) {
+  public decrement(offer: Offer, index: number) {
+    const arrayInputChecks = this.inputChecks.toArray();
     if (offer.qtyOfferAccepted > 1) {
-      if (this.inputCheck.nativeElement.checked) {
+      if (arrayInputChecks[index].nativeElement.checked) {
         this.countQtyOffers = this.countQtyOffers - offer.qtyOfferAccepted;
         this.totalConfirm = this.totalConfirm - (offer.price + offer.price / 10) * offer.qtyOfferAccepted;
       }
       offer.qtyOfferAccepted--;
-      if (this.inputCheck.nativeElement.checked) {
+      if (arrayInputChecks[index].nativeElement.checked) {
         this.countQtyOffers = this.countQtyOffers + offer.qtyOfferAccepted;
         this.totalConfirm = this.totalConfirm + (offer.price + offer.price / 10) * offer.qtyOfferAccepted;
       }
