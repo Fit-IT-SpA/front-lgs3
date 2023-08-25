@@ -8,5 +8,5 @@ export const environment = {
         storageBucket: "Your StorageBucket url",
         messagingSenderId: "Your Sender Id"
       },
-    serverUrl: "https://subdev.fittedit.com/api"
+    serverUrl: "https://meson.planetatuercas.cl.com/api"
 };
