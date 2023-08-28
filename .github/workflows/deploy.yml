@@ -2,9 +2,9 @@ name: Angular deployment
 on:
   push:
     branches:  
-      - fb7
+      - dev
 jobs:
-  deploy-fb7:
+  deploy-dev:
     runs-on: ubuntu-latest
     
     steps:
@@ -17,7 +17,7 @@ jobs:
           cache: "npm"
       
       - name: Install dependencies and build
-        run: npm ci && npm run build:fb7
+        run: npm ci && npm run build:dev
 
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2.5.1
