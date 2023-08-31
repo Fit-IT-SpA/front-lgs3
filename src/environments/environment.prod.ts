@@ -7,5 +7,7 @@ export const environment = {
     projectId: "Your Project Id",
     storageBucket: "Your StorageBucket url",
     messagingSenderId: "Your Sender Id"
-  }
+  
+  },
+   serverUrl: "https://meson.planetatuercas.cl/api"
 };
