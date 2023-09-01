@@ -1,8 +1,8 @@
 name: Angular deployment
 on:
   push:
-    branches:  
-      - dev, prod
+    branches:  ["dev", "prod"]
+     
 jobs:
   deploy-dev:
     runs-on: ubuntu-latest
