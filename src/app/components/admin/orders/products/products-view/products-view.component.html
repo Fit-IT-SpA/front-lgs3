@@ -53,7 +53,7 @@
                             </div>
                           </div>
                         </fieldset>
-                        <p>Características del producto: <span class="f-w-500">{{off.estado}}</span>, <span class="f-w-500">{{off.origen}}</span></p>
+                        <p>Características del producto: <span class="f-w-500">{{off.estado}}</span>, <span class="f-w-500">{{off.origen}}</span><span class="f-w-500" *ngIf="off.make && off.make !== ''">, Marca: {{off.make}}</span></p>
                         
                           <!--<button class="btn" type="button" (click)="QuickViewOrdersEdit.openModal(this.order, this.user.companies)"><i class="fa fa-edit"></i></button>-->
                         <!--<label class="col-form-label mb-3">Aprobar Oferta</label>-->

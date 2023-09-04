@@ -13,6 +13,7 @@ export interface Offer {
     qtyOfferAccepted: number,
     commission: number,
     comentario?: string,
+    make?: string,
     estado: string,
     origen: string,
     idOrder: string,
