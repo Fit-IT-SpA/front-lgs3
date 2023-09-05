@@ -1,4 +1,5 @@
-<ng-template #quickViewCompaniesEdit let-modal>
+<app-breadcrumb [title]="'Editar '+this.profile.role.name"></app-breadcrumb>
+<div>
     <div class="flex flex-col flex-auto" *ngIf="loading">
         <h6 class="text-center">Procesando...</h6>
         <div class="loader-box">
@@ -6,79 +7,152 @@
         </div>
     </div>
   <div class="card" *ngIf="!loading">
-      <div class="card-header">
-          <h5>Agregar {{this.perfil.role.name}}</h5>
-      </div>
-      <form class="form theme-form" [formGroup]="companiesForm">
+      <form [formGroup]="companiesForm">
           <div class="card-body">
               <div>
                   <div class="col">
+                    <div class="form-group">
+                        <label for="rut">Rut</label>
+                        <input class="form-control btn-pill" id="rut" type="rut" minlength="8" maxlength="12"
+                            placeholder="Rut del {{this.profile.role.name}}" formControlName="rut" (blur)="onBlurRut()" (focus)="onFocusRut()">
+                        <div *ngIf="companiesForm.controls.rut.errors && companiesForm.controls.rut.touched && companiesForm.controls.rut.errors.required"
+                            class="text text-danger mt-1">
+                            Es requerido
+                        </div>
+                        <div *ngIf="companiesForm.controls.rut.errors && companiesForm.controls.rut.touched && companiesForm.controls.rut.errors?.rut"
+                            class="text text-danger mt-1">
+                            Formato invalido
+                        </div>
+                    </div>
+                  </div>
+              </div>
+              <div>
+                  <div class="col">
                       <div class="form-group">
-                          <label for="rut">Rut</label>
-                          <input class="form-control btn-pill" id="rut" type="rut"
-                              placeholder="18.004.523-6" formControlName="rut">  
+                        <label for="name">Nombre</label>
+                        <input class="form-control btn-pill" id="name" type="name"
+                            placeholder="Nombre del {{this.profile.role.name}}" formControlName="name">  
+                        <div *ngIf="companiesForm.controls.name.errors && companiesForm.controls.name.touched && companiesForm.controls.name.errors.required"
+                            class="text text-danger mt-1">
+                            Es requerido
+                        </div>
+                        <div *ngIf="companiesForm.controls.name.touched && companiesForm.controls.name.errors?.maxlength"
+                            class="text text-danger mt-1">
+                            Debe tener un maximo de 18 caracteres
+                        </div>
                       </div>
                   </div>
               </div>
               <div>
                   <div class="col">
                       <div class="form-group">
-                          <label for="name">Nombre</label>
-                          <input class="form-control btn-pill" id="name" type="name"
-                              placeholder="Nombre del {{this.perfil.role.name}}" formControlName="name">  
+                        <label for="direction">Dirección</label>
+                        <input class="form-control btn-pill" id="direction" type="direction"
+                            placeholder="Dirección del {{this.profile.role.name}}" formControlName="direction">
+                        <div *ngIf="companiesForm.controls.direction.errors && companiesForm.controls.direction.touched && companiesForm.controls.direction.errors.required"
+                            class="text text-danger mt-1">
+                            Es requerido
+                        </div>
+                        <div *ngIf="companiesForm.controls.direction.touched && companiesForm.controls.direction.errors?.maxlength"
+                            class="text text-danger mt-1">
+                            Debe tener un maximo de 140 caracteres
+                        </div>
                       </div>
                   </div>
               </div>
               <div>
                   <div class="col">
                       <div class="form-group">
-                          <label for="direction">Dirección</label>
-                          <input class="form-control btn-pill" id="direction" type="direction"
-                              placeholder="Dirección del {{this.perfil.role.name}}" formControlName="direction">  
+                        <label for="phone">Teléfono</label>
+                        <input class="form-control btn-pill" id="phone" type="phone"
+                            placeholder="Teléfono del {{this.profile.role.name}}" formControlName="phone">  
+                        <div *ngIf="companiesForm.controls.phone.errors && companiesForm.controls.phone.touched && companiesForm.controls.phone.errors.required"
+                            class="text text-danger mt-1">
+                            Es requerido
+                        </div>
+                        <div *ngIf="companiesForm.controls.phone.errors && companiesForm.controls.phone.touched && companiesForm.controls.phone.errors?.invalidMobileNumber"
+                            class="text text-danger mt-1">
+                            Formato invalido, ejemplo: 912341234
+                        </div>
+                        <div *ngIf="companiesForm.controls.phone.errors && companiesForm.controls.phone.touched && companiesForm.controls.phone.errors?.invalidNumber"
+                            class="text text-danger mt-1">
+                            Solo se admiten números
+                        </div>
                       </div>
                   </div>
               </div>
               <div>
                   <div class="col">
                       <div class="form-group">
-                          <label for="phone">Teléfono</label>
-                          <input class="form-control btn-pill" id="phone" type="phone"
-                              placeholder="Teléfono del {{this.perfil.role.name}}" formControlName="phone">  
+                        <label for="accountNumber">Número de Cuenta Banco</label>
+                        <input class="form-control btn-pill" id="accountNumber" type="accountNumber"
+                            placeholder="Número de Cuenta del {{this.profile.role.name}}" formControlName="accountNumber">
+                        <div *ngIf="companiesForm.controls.accountNumber.errors && companiesForm.controls.accountNumber.touched && companiesForm.controls.accountNumber.errors.required"
+                            class="text text-danger mt-1">
+                            Es requerido
+                        </div>
+                        <div *ngIf="companiesForm.controls.accountNumber.errors && companiesForm.controls.accountNumber.touched && companiesForm.controls.accountNumber.errors?.invalidNumber"
+                            class="text text-danger mt-1">
+                            Solo se admiten números
+                        </div>
                       </div>
                   </div>
               </div>
               <div>
                   <div class="col">
                       <div class="form-group">
-                          <label for="accountNumber">Número de Cuenta</label>
-                          <input class="form-control btn-pill" id="accountNumber" type="accountNumber"
-                              placeholder="Número de Cuenta del {{this.perfil.role.name}}" formControlName="accountNumber">  
+                        <label>Tipo de Cuenta</label>
+                        <ng-select 
+                            [items]="accountTypesFilter" 
+                            placeholder="Tipo de Cuenta del {{this.profile.role.name}}"
+                            class="js-example-placeholder-multiple" 
+                            formControlName="accountType">
+                        </ng-select>
+                        <div *ngIf="companiesForm.controls.accountType.errors && companiesForm.controls.accountType.touched && companiesForm.controls.accountType.errors.required"
+                            class="text text-danger mt-1">
+                            Es requerido
+                        </div>
                       </div>
                   </div>
               </div>
               <div>
                   <div class="col">
                       <div class="form-group">
-                          <label for="accountType">Tipo de Cuenta</label>
-                          <input class="form-control btn-pill" id="accountType" type="accountType"
-                              placeholder="Tipo de Cuenta del {{this.perfil.role.name}}" formControlName="accountType">  
+                        <label>Banco</label>
+                        <ng-select 
+                            [items]="banksFilter" 
+                            placeholder="Banco del {{this.profile.role.name}}"
+                            class="js-example-placeholder-multiple" 
+                            formControlName="bank">
+                        </ng-select>
+                        <div *ngIf="companiesForm.controls.bank.errors && companiesForm.controls.bank.touched && companiesForm.controls.bank.errors.required"
+                            class="text text-danger mt-1">
+                            Es requerido
+                        </div>
                       </div>
                   </div>
               </div>
-              <div>
-                  <div class="col">
-                      <div class="form-group">
-                          <label for="bank">Banco</label>
-                          <input class="form-control btn-pill" id="bank" type="bank"
-                              placeholder="Banco" formControlName="bank">  
-                      </div>
-                  </div>
-              </div>
+              <div *ngIf="this.profile.role.slug === 'comercio'">
+                <div class="col">
+                    <label>Marcas</label>
+                    <ng-select 
+                        [items]="allMakesFilter" 
+                        placeholder="Marcas que vende su comercio"
+                        class="js-example-placeholder-multiple" 
+                        [multiple]="true"
+                        formControlName="make">
+                    </ng-select>
+                    <div *ngIf="companiesForm.controls.make.errors && companiesForm.controls.make.touched && companiesForm.controls.make.errors.required"
+                        class="text text-danger mt-1">
+                        Es requerido
+                    </div>
+                </div>
+            </div>
           </div>
           <div class="card-footer">
-              <button class="btn btn-primary mr-1" type="submit" [disabled]="!companiesForm.valid" (click)="save()">Guardar</button>
-              <button class="btn btn-primary" type="cancel" (click)="modal.dismiss('Cross click')">Cancelar</button>
+            <button class="btn btn-pill btn-primary mr-1" type="submit" [disabled]="!companiesForm.valid" (click)="save()">Guardar</button>
+            <button class="btn btn-pill btn-info" type="cancel" (click)="goBack()">Volver</button>
           </div>
       </form>
   </div>
-</ng-template>
+</div>

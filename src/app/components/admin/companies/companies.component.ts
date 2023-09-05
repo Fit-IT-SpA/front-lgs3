@@ -3,15 +3,13 @@ import {ServiceTypeService} from '../../../shared/services/service-type.service'
 import {UserService} from '../../../shared/services/user.service';
 import { AuthService } from '../../../shared/services/firebase/auth.service';
 import { Router } from '@angular/router';
-import { CompaniesAddComponent } from './companies-add/companies-add.component';
-import { CompaniesEditComponent } from './companies-edit/companies-edit.component';
 import { CompaniesViewComponent } from './companies-view/companies-view.component';
 import { CompaniesService } from 'src/app/components/admin/companies/companies.service';
 import { Subscription } from 'rxjs';
-import { validate, clean, format } from 'rut.js';
 import { ToastrService } from 'ngx-toastr';
 import { User } from 'src/app/shared/model/user';
 import { Companies } from 'src/app/shared/model/companies.model';
+import { ConstantService } from 'src/app/shared/services/constant.service';
 declare var require
 const Swal = require('sweetalert2')
 
@@ -32,21 +30,30 @@ export class CompaniesComponent implements OnInit{
     public profile =  JSON.parse(localStorage.getItem('profile'));
     public companiesTitle = this.profile.role.slug == 'taller' ? 'Talleres' : this.profile.role.slug == 'comercio' ? 'Comercios' : 'Negocios';
     public companyTitle = this.profile.role.slug == 'taller' ? 'Taller' : this.profile.role.slug == 'comercio' ? 'Comercio' : 'Negocio';
-
-    // Ventanas popup
-    @ViewChild("quickViewCompaniesAdd") QuickViewCompaniesAdd: CompaniesAddComponent;
-    @ViewChild("quickViewCompaniesEdit") QuickViewCompaniesEdit: CompaniesEditComponent;
     @ViewChild("quickViewCompaniesView") QuickViewCompaniesView: CompaniesViewComponent;
 
     constructor(
         public authService: AuthService, 
-        private _router: Router, 
+        private router: Router, 
         private userSrv: UserService,
         private srv: CompaniesService,
         public toster: ToastrService,) { }
 
     ngOnInit() {
-        this.getCount();
+        if (this.haveAccess()) {
+            this.getCount();
+        }
+    }
+    private haveAccess() {
+        let permissions = JSON.parse(localStorage.getItem("profile")).privilege;
+        if (permissions) {
+            let access = permissions.filter((perm: string) => {
+                return perm === ConstantService.PERM_MIS_TALLERES_LECTURA|| perm === ConstantService.PERM_MIS_COMERCIOS_LECTURA;
+            });
+            return access.length > 0;
+        } else {
+            return false;
+        }
     }
     private getCount() {
         this.subscription.add(
@@ -68,10 +75,9 @@ export class CompaniesComponent implements OnInit{
             this.srv.findByEmail(this.profile.email).subscribe(
                 (response) => {
                     this.companies = response;
-                    /*if (this.user.status == 0) {
+                    if (this.companies && this.companies.length < 1) {
                         this.toster.info('Para interactuar con el sistema, debe tener 1 o varios '+this.companiesTitle);   
                     }
-                    console.log(this.user);*/
                     this.loading = false;
                 },
                 (error) => {
@@ -81,9 +87,9 @@ export class CompaniesComponent implements OnInit{
             )
         );
     }
-    private async remove(rut: string) {
+    private async remove(id: string) {
         await this.subscription.add(
-            this.srv.remove(this.profile.email, rut).subscribe(
+            this.srv.remove(id).subscribe(
                 (response) => {
                     return response;
                 },
@@ -126,6 +132,20 @@ export class CompaniesComponent implements OnInit{
         })
       }
     public canWrite() {
-        return true;
+        let permissions = JSON.parse(localStorage.getItem("profile")).privilege;
+        if (permissions) {
+            let access = permissions.filter((perm: string) => {
+                return perm === ConstantService.PERM_MIS_TALLERES_ESCRITURA|| perm === ConstantService.PERM_MIS_COMERCIOS_ESCRITURA;
+            });
+            return access.length > 0;
+        } else {
+            return false;
+        }
+    }
+    public add() {
+        this.router.navigate(['/admin/companies/add']);
+    }
+    public edit(id: string) {
+        this.router.navigate(['/admin/companies/edit/'+id]);
     }
 }

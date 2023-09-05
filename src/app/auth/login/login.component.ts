@@ -136,9 +136,9 @@ export class LoginComponent implements OnInit {
     
     // Set user
   SetUserData(user) {
-      console.log(user);
+      //console.log(user);
     const userRef:  AngularFirestoreDocument<any> =  this.afs.doc(`users/${user.token}`);
-    console.log(userRef);
+    //console.log(userRef);
     const userData: User = {
       email: user.email,
       displayName: user.name,
