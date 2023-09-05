@@ -49,7 +49,22 @@ export class CompaniesService extends AbstractHttpService {
         };
         return this.http
             .get<any>(
-                this.apiUrl + '/companies/'+email, httpOptions)
+                this.apiUrl + '/companies/byemail/'+email, httpOptions)
+            .pipe(
+                map(response => {
+                    return response;
+                })
+        );
+    }
+    findById(id: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http
+            .get<any>(
+                this.apiUrl + '/companies/'+id, httpOptions)
             .pipe(
                 map(response => {
                     return response;
@@ -71,19 +86,19 @@ export class CompaniesService extends AbstractHttpService {
                 })
         );
     }
-    updateByRut(user: User, rut: string) {
+    updateByRut(id: string, company: Companies) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
             })
         };
-        return this.http.put<any>(`${this.apiUrl}/companies/update/`+rut, user, httpOptions).pipe(
+        return this.http.put<any>(`${this.apiUrl}/companies/update/${id}`, company, httpOptions).pipe(
             map(response => {
                 return response;
             })
         );
     }
-    remove(email: string, rut: string) {
+    remove(id: string) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -91,7 +106,7 @@ export class CompaniesService extends AbstractHttpService {
         };
         return this.http
             .put<any>(
-                this.apiUrl + '/companies/'+email+'/'+rut, httpOptions)
+                this.apiUrl + '/companies/delete/'+id, httpOptions)
             .pipe(
                 map(response => {
                     return response;

@@ -21,6 +21,7 @@ import { UtilService } from 'src/app/shared/services/util.service';
 import { Offer } from 'src/app/shared/model/offer.model';
 import { checkedOptionValidator } from 'src/app/shared/validators/form-validators';
 import { Companies } from 'src/app/shared/model/companies.model';
+import { ConstantService } from 'src/app/shared/services/constant.service';
 //import { OrdersEditComponent } from './orders-edit/orders-edit.component';
 declare var require;
 const Swal = require('sweetalert2');
@@ -112,7 +113,15 @@ export class OffersComponent implements OnInit {
     }
   }
   private haveAccess() {
-    return true;
+    let permissions = JSON.parse(localStorage.getItem("profile")).privilege;
+    if (permissions) {
+        let access = permissions.filter((perm: string) => {
+            return perm === ConstantService.PERM_MIS_OFERTAS_LECTURA;
+        });
+        return access.length > 0;
+    } else {
+        return false;
+    }
   }
   checkStatusUser() {
     this.subscription.add(
@@ -149,7 +158,7 @@ export class OffersComponent implements OnInit {
         }
         this.findOrders();
       } else {
-        this.loading = false;
+        this.getVehicleListMake();
         if(!this.companies || this.companies.length <= 0){
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
@@ -167,7 +176,7 @@ export class OffersComponent implements OnInit {
             cancelButtonText: 'Ver pedidos'
           }).then((result) => {
             if (result.isConfirmed) {
-              this.router.navigate(['admin/companies']);
+              this.router.navigate(['admin/companies/add']);
             }
           });
         }
@@ -185,6 +194,29 @@ export class OffersComponent implements OnInit {
             }
         )
     );*/
+  }
+  private getVehicleListMake() {
+    this.subscription.add(this.companiesSrv.findVehicleListMake().subscribe(
+      response => {
+        this.brandsFilter.push({
+          value: "all",
+          label: "Todas las marcas",
+          job: ''
+        })
+        for (let vehicle of response) {
+          this.brandsFilter.push({
+            value: vehicle.make,
+            label: vehicle.make,
+            job: ''
+          })
+        }
+        this.filterForm.controls.brand.setValue([{value: "all",label: "Todas las marcas",job: ''}]);
+        //console.log(this.makesFilter); 
+        this.changeFilter();
+      }, (error) => {
+        console.log(error);
+      }
+    ));
   }
   private findOrders() {
     this.subscription.add(this.srv.findOfferByMail(this.perfil.email, this.parameters.brand).subscribe(
@@ -224,7 +256,15 @@ export class OffersComponent implements OnInit {
     this.findOrders();
   }
   public canWrite() {
-    return true;
+    let permissions = JSON.parse(localStorage.getItem("profile")).privilege;
+    if (permissions) {
+        let access = permissions.filter((perm: string) => {
+            return perm === ConstantService.PERM_MIS_OFERTAS_ESCRITURA;
+        });
+        return access.length > 0;
+    } else {
+        return false;
+    }
   }
   private async remove(id: string) {
     this.subscription.add(this.srv.remove(id).subscribe(
