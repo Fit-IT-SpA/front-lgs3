@@ -15,6 +15,7 @@ import { OrderService } from 'src/app/shared/services/order.service';
 import { Order } from 'src/app/shared/model/order.model';
 import { OrdersEditComponent } from './orders-edit/orders-edit.component';
 import { ConstantService } from 'src/app/shared/services/constant.service';
+import { Companies } from 'src/app/shared/model/companies.model';
 declare var require;
 const Swal = require('sweetalert2');
 
@@ -32,7 +33,7 @@ export class OrdersComponent implements OnInit {
   public companiesForm: FormGroup;
   public perfil =  JSON.parse(localStorage.getItem('profile'));
   public count: number;
-  public user: User;
+  public companies: Companies[];
   public uniqueId = (new Date()).getTime().toString();
   public openSidebar: boolean = false;
   public listView: boolean = false;
@@ -88,8 +89,8 @@ export class OrdersComponent implements OnInit {
     this.subscription.add(
         this.companiesSrv.findByEmail(this.perfil.email).subscribe(
             (response) => {
-                this.user = response;
-                if (this.user.status == 0) {
+                this.companies = response;
+                if (this.companies && this.companies.length < 1) {
                   this.router.navigate(['/admin/companies']);
                 } else {
                   this.findOrders();

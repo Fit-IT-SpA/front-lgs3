@@ -70,7 +70,7 @@ export function mobileValidator(control: FormControl): {[key: string]: any} {
     } else {
         let length = control.value.length;
         if(length != 9) {
-            return { invalidNumber: true};
+            return { invalidMobileNumber: true};
         }
     }
 
