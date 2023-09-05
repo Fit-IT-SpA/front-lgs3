@@ -163,6 +163,35 @@
                                 }
                             ]       
           },
+             "fb7": {
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.fb7.ts"
+                                }
+                            ],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "aot":true,
+                            "sourceMap": true,
+                            "extractCss": true,
+                            "namedChunks": true,
+                            "extractLicenses": true,
+                            "vendorChunk": false,
+                            "buildOptimizer": true,
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "5mb",
+                                    "maximumError": "8mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "300kb",
+                                    "maximumError": "500kb"
+                                }
+                            ]       
+          },
             
             "dev": {
                             "fileReplacements": [
