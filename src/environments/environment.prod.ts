@@ -8,5 +8,5 @@ export const environment = {
     storageBucket: "Your StorageBucket url",
     messagingSenderId: "Your Sender Id"
   },
-  serverUrl: "https://meson.planetatuercas.cl/api"
+   serverUrl: "https://meson.planetatuercas.cl/api"
 };
