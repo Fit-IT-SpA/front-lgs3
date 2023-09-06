@@ -176,5 +176,20 @@ export class OrderService extends AbstractHttpService {
                 })
             );
     }
+    findProductById(id: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http
+            .get<any>(
+                this.apiUrl + '/product/'+id, httpOptions)
+            .pipe(
+                map(response => {
+                    return response;
+                })
+            );
+    }
 
 }

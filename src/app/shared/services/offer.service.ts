@@ -20,7 +20,7 @@ export class OfferService extends AbstractHttpService {
                 'Content-Type': 'application/json'
             })
         };
-        return this.http.post<any>(`${this.apiUrl}/offer/`, offer, httpOptions).pipe(
+        return this.http.post<any>(`${this.apiUrl}/offer`, offer, httpOptions).pipe(
             map(response => {
                 return response;
             })

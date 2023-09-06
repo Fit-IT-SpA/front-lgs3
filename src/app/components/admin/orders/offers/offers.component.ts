@@ -1,5 +1,4 @@
 import { Component, OnInit, TemplateRef, ViewChild, HostListener } from '@angular/core';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ServiceTypeService } from '../../../../shared/services/service-type.service';
 import { UserService } from '../../../../shared/services/user.service';
@@ -16,10 +15,8 @@ import { OrderService } from 'src/app/shared/services/order.service';
 import { Order } from 'src/app/shared/model/order.model';
 import { Product } from 'src/app/shared/model/product.model';
 import { ProductsFilter } from 'src/app/shared/model/product-filter';
-import { OfferWithData } from 'src/app/shared/model/offer-with-data';
 import { UtilService } from 'src/app/shared/services/util.service';
 import { Offer } from 'src/app/shared/model/offer.model';
-import { checkedOptionValidator } from 'src/app/shared/validators/form-validators';
 import { Companies } from 'src/app/shared/model/companies.model';
 import { ConstantService } from 'src/app/shared/services/constant.service';
 //import { OrdersEditComponent } from './orders-edit/orders-edit.component';
@@ -66,7 +63,6 @@ export class OffersComponent implements OnInit {
   public filterButton: string = "Filtrar";
   
   // Ventanas Popup
-  @ViewChild("quickViewOffersAdd") QuickViewOffersAdd: OffersAddComponent;
   @ViewChild("quickViewOffersView") QuickViewOffersView: OffersViewComponent;
   @ViewChild("quickViewOffersDetail") QuickViewOffersDetail: OffersDetailComponent;
   
@@ -74,7 +70,6 @@ export class OffersComponent implements OnInit {
 
   constructor(
     public formBuilder: FormBuilder,
-    private fb: FormBuilder,
     private router: Router,
     private utilSrv: UtilService,
     private srv: OrderService,
@@ -304,6 +299,9 @@ export class OffersComponent implements OnInit {
         
       }
     })
+  }
+  public add(id: string) {
+    this.router.navigate(['/admin/orders/offers/add/'+id]);
   }
 
 }
