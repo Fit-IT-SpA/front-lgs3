@@ -1,149 +1,138 @@
-<ng-template #quickViewOffersAdd let-modal>
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="card">
-            <div class="card-header pb-0">
-              <h5>Ingresar Oferta</h5>
-            </div>
-              <div class="card-body pb-0">
-                <form class="form theme-form" [formGroup]="offersFormGroup">
-                    <div class="row">
-                            <div class="col">
-                                <h6>Repuesto Requerido</h6>
-                                <div class="form-group">
-                                    Producto: {{this.orderWithProductOffers.product.title}}<br/>
-                                    Auto: {{this.orderWithProductOffers.order.brand}} {{this.orderWithProductOffers.order.model}}<br/>
-                                    Cantidad: {{this.orderWithProductOffers.product.originalQty}}  
-                                </div>
-                            </div>
-                        </div>
-                    <hr> 
-                    <div class="row">
-                            <div class="col">
-                                <h6>Datos Repuesto Ofertado</h6>
-                            </div>
-                        </div>
-                    <hr> 
-                    <div class="row">
-                            <div class="col">
-                                <label>Seleccione un {{this.perfil.role.name}}</label>
-                                <div class="form-group">
-                                    <div *ngFor="let company of companies; index as i" class="radio radio-primary">
-                                        <input id="radio{{i}}" class="ml-2" type="radio" name="radio" value="{{company.rut}}" (click)="this.clickCompany(company.rut)"
-                                        [checked]="i === 0">
-                                        <label for="radio{{i}}" class="mb-0">{{this.formatRut(company.rut)}}</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    <!-- <div class="row">
-                            <div class="col">
-                                <label>Imagen Repuesto</label>
-                                <div class="form-group">
-                                    <input class="btn btn-outline-primary" (change)="checkImageFile()" 
-                                    #fileInput type="file" id="file" (click)="fileInput.click()">
-                                </div>
-                            </div>
-                        </div> -->
-                        <div class="row">
-                            <div class="col-sm-8">
-                                <div class="form-group">
-                                <label>Condición de su producto</label>
-                                <select class="form-control digits" formControlName="estado">
-                                    <option>Nuevo</option>
-                                    <option>Usado</option>
-                                </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col-sm-8">
-                                <div class="form-group">
-                                <label>Origen</label>
-                                <select class="form-control digits" formControlName="origen">
-                                    <option>Original</option>
-                                    <option>Alternativo</option>
-                                    <option>Chino</option>
-                                </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-8">
-                         <fieldset>
-                             <label>Cantidad: <i>(requeridos {{this.maxQty}})</i></label>
-                            <div class="input-group bootstrap-touchspin">
-                              <button class="btn btn-primary btn-square bootstrap-touchspin-down" type="button" (click)=decrement()>
-                                <i class="fa fa-minus"></i>
-                              </button>
-                                <input readonly="" formControlName="cantidad" class="touchspin form-control" type="text" value={{counter}}>
-                              <div class="input-group-append ml-0">
-                                <button class="btn btn-primary btn-square bootstrap-touchspin-up" type="button" (click)=increment()>
-                                  <i class="fa fa-plus"></i>
-                                </button>
-                              </div>
-                            </div>
-                          </fieldset>
-                                </div>
-                            </div>
-                        <div class="row mt-4">
-                            <div class="col">
-                                <div class="form-group">
-                                    <label for="exampleFormControlInput1">Su precio por <b>Unidad</b> con IVA</label>
-                                    <input (keyup)="sumaPrecio()"  formControlName="price" class="form-control" id="exampleFormControlInput1" type="number"
-                                        placeholder="$">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="form-group">
-                                    <label >Total oferta: <b>$ {{priceMask | number:'1.0-0'}}</b></label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="form-group">
-                                    <label for="exampleFormControlSelect9">Tipo de Entrega</label>
-                                    <div class="row">
-                                    <div class="col-sm-6">
-                                      <div class="card">
-                                        <div class="media p-20">
-                                          <div class="radio radio-primary mr-3 ml-2">
-                                            <input id="radio14" type="radio" formControlName="despacho"  name="despacho" value="retiro_tienda">
-                                            <label for="radio14"></label>
-                                          </div>
-                                          <div class="media-body">
-                                            <h6 class="mt-0 mega-title-badge">Retiro en Comercio</h6>
-                                            <p>San Isidro 720, Santiago, Barrio 10 de Julio</p>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- <div class="row">
-                            <div class="col">
-                                <div class="form-group mb-0">
-                                    <label for="exampleFormControlTextarea4">Comentario (opcional)</label>
-                                    <textarea formControlName="comentario" class="form-control" id="exampleFormControlTextarea4" rows="1"></textarea>
-                                </div>
-                            </div>
-                        </div> -->
-                    
-                    
-                </form>
-                </div>
-              <div class="card-footer p-0 ml-5">
-                <button (click)="add()" [disabled]="offersFormGroup.invalid" class="btn btn-pill btn-primary" type="submit">Crear</button>
-                <input (click)="modal.dismiss('Cross click')"  class="btn btn-pill btn-secondary ml-2" type="button" value="Cancelar">
-              </div>
-          </div>
+<app-breadcrumb [title]="'Ingresar Oferta'"></app-breadcrumb>
+<div class="flex flex-col flex-auto" *ngIf="loading">
+  <h6 class="text-center">Procesando...</h6>
+  <div class="loader-box">
+    <div class="loader-3"></div>
+  </div>
+</div>
+<div class="card" *ngIf="!loading">
+  <div class="card-body">
+    <div class="product-box row">
+      <div class="product-img col-md-6" *ngIf="!order.photo"><img class="img-fluid" src="assets/images/ecommerce/01.jpg" alt=""></div>
+      <div class="product-img col-md-6" *ngIf="order.photo"><img class="img-fluid" src="{{order.photo}}" alt=""></div>
+      <div class="product-details col-md-6 text-left">
+        <h4>Repuesto Requerido</h4>
+        <div class="product-view">
+          <p>Producto: {{this.product.title}}</p>
+          <p>Auto: {{order.brand}} {{order.model}} {{order.year}}</p>
+          <p>VIN: {{order.chassis}}</p>
+          <p>Cantidad: {{this.product.originalQty}}</p>
         </div>
+        <hr>
+        <h4>Datos de tu oferta</h4>
+        <form [formGroup]="offersFormGroup" class="product-view">
+          <div class="table-responsive mb-3">
+            <div class="">
+              <label>Seleccione un {{this.profile.role.name}}</label>
+            </div>
+            <table class="table table-bordered radio-first-col-width">
+              <tbody>
+                <tr *ngFor="let company of companies; index as i">
+                    <td *ngIf="this.formatRut(company.rut) != 'rut incorrecto'" >{{company.name}} 
+                        <div class="radio radio-primary">
+                            <input id="radio{{i}}" class="ml-2" type="radio" name="radio" value="{{company.rut}}" (click)="this.clickCompany(company.rut)"
+                            [checked]="i === 0">
+                            <label for="radio{{i}}" class="mb-0">{{this.formatRut(company.rut)}}</label>
+                        </div>
+                    </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <label>Condición de su producto</label>
+                <select class="form-control digits" formControlName="estado" placeholder="Condición de su producto">
+                    <option>Nuevo</option>
+                    <option>Usado</option>
+                </select>
+                <div *ngIf="offersFormGroup.controls.estado.errors && offersFormGroup.controls.estado.touched && offersFormGroup.controls.estado.errors.required"
+                    class="text text-danger mt-1">
+                    Es requerido
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col">
+              <div class="form-group">
+                <label>Origen</label>
+                <select class="form-control digits" formControlName="origen" placeholder="Origen">
+                    <option>Original</option>
+                    <option>Alternativo</option>
+                    <option>Chino</option>
+                </select>
+                <div *ngIf="offersFormGroup.controls.origen.errors && offersFormGroup.controls.origen.touched && offersFormGroup.controls.origen.errors.required"
+                    class="text text-danger mt-1">
+                    Es requerido
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <fieldset>
+                <label>Cantidad: <i>(requeridos {{this.maxQty}})</i></label>
+                <div class="input-group bootstrap-touchspin">
+                  <button class="btn btn-primary btn-square bootstrap-touchspin-down" type="button" (click)=decrement()>
+                    <i class="fa fa-minus"></i>
+                  </button>
+                  <input readonly="" formControlName="cantidad" class="touchspin form-control" type="text" value={{counter}}>
+                  <div class="input-group-append ml-0">
+                    <button class="btn btn-primary btn-square bootstrap-touchspin-up" type="button" (click)=increment()>
+                      <i class="fa fa-plus"></i>
+                    </button>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+          <div class="row mt-4">
+            <div class="col">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">Su precio por <b>Unidad</b> con IVA</label>
+                    <input (keyup)="sumaPrecio()"  formControlName="price" class="form-control" id="exampleFormControlInput1" type="number"
+                        placeholder="$">
+                </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label >Total oferta: <b>$ {{priceMask | number:'1.0-0'}}</b></label>
+                </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="exampleFormControlSelect9">Tipo de Entrega</label>
+                    <div class="row">
+                    <div class="col">
+                      <div class="card">
+                        <div class="media p-20">
+                          <div class="radio radio-primary mr-3 ml-2">
+                            <input id="radio14" type="radio" formControlName="despacho"  name="despacho" value="retiro_tienda">
+                            <label for="radio14"></label>
+                          </div>
+                          <div class="media-body">
+                            <h6 class="mt-0 mega-title-badge">Retiro en Comercio</h6>
+                            <p>San Isidro 720, Santiago, Barrio 10 de Julio</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+          <div class="mt-1">
+            <button class="btn btn-pill btn-primary m-r-15 mb-3" type="submit" (click)="add()" [disabled]="offersFormGroup.invalid">Crear Oferta</button>
+            <button class="btn btn-pill btn-info mb-3" type="button" (click)="goBack()">Volver</button>
+          </div>
+        </form>
       </div>
     </div>
-</ng-template>
+  </div>
+</div>
