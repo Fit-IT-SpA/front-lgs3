@@ -14,7 +14,8 @@ import { Companies } from 'src/app/shared/model/companies.model';
 import { OrderService } from 'src/app/shared/services/order.service';
 import { Product } from '../../../../../shared/model/product.model';
 import { OfferService } from 'src/app/shared/services/offer.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ConstantService } from 'src/app/shared/services/constant.service';
 
 @Component({
   selector: 'app-offers-add',
@@ -23,18 +24,13 @@ import { Router } from '@angular/router';
   providers: [ServiceTypeService, UserService, CompaniesService, OrderService, OfferService],
 })
 export class OffersAddComponent implements OnInit {
-  
-  @ViewChild("quickViewOffersAdd", { static: false }) QuickViewOffersAdd: TemplateRef<any>;
   private subscription: Subscription = new Subscription();
   public closeResult: string;
   public modalOpen: boolean = false;
   public companiesForm: FormGroup;
-  public perfil =  JSON.parse(localStorage.getItem('profile'));
-  private user: User;
+  public profile =  JSON.parse(localStorage.getItem('profile'));
   private offer: Offer;
   public offersFormGroup: FormGroup;
-  public secondFormGroup: FormGroup;
-  public thirdFormGroup: FormGroup;
   public companies: Companies[];
   public counter: number = 1;
   public filePath: string;
@@ -48,58 +44,74 @@ export class OffersAddComponent implements OnInit {
   public maxQty: number;
   public priceMask: number = 0;
   public idProduct: string
+  public loading: boolean = true;
+  public product: Product;
+  public order: Order;
 
   constructor(
-    private modalService: NgbModal,
     private fb: FormBuilder,
-    private userSrv: UserService,
     private srv: OrderService,
+    private companiesSrv: CompaniesService,
     private srvOffer: OfferService,
     private router: Router,
-    public toster: ToastrService,) {
+    public toster: ToastrService,
+    private activatedRoute: ActivatedRoute) {
     }
         
   ngOnInit(): void {
+    if (this.haveAccess()) {
+      this.subscription.add(this.activatedRoute.params.subscribe(params => {
+        if (params['product']) {
+          this.idProduct = params['product'];
+          this.getCompanies();
+        }
+      }));
+    }
   }
-  /**
-   * open Dialog CUBA
-   * @param user 
-   */
-  openModal(product: {order: Order,product: Product,offers: Offer[]}, companies : Companies[]) {
-    //this.user = user;
-   // this.companies = user.companies;
-    console.log(product);
-    this.orderWithProductOffers = product;
-    this.idOrder = product.product.idOrder;
-    this.idProduct= product.product.id;
-    this.companies = companies;
-    this.maxQty = product.product.originalQty
-    //console.log(this.user);
-    //console.log(this.companies);
-    this.modalOpen = true;
-    
-    this.offersFormGroup = this.fb.group({
-        //photo: ['', Validators.required],
-        estado: ['', Validators.required],
-        origen: ['', Validators.required],
-        make: ['', [Validators.maxLength(10), Validators.pattern(/^[a-zA-Z]+$/)]],
-        price: [0, [Validators.required, Validators.min(200)]],
-        cantidad: [1, [Validators.required, Validators.min(1), Validators.max(this.maxQty)]],
-        despacho: ['retiro_tienda', Validators.required],
-        company: [this.companies[0].rut],
-        //comentario: ['']
-      });
-    
-      this.modalService.open(this.QuickViewOffersAdd, { 
-        size: 'lg',
-        ariaLabelledBy: 'modal-basic-title',
-        centered: true,
-        windowClass: 'Quickview' 
-      }).result.then((result) => {
-        `Result ${result}`
-      }, (reason) => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      });
+  private getCompanies() {
+    this.subscription.add(
+      this.companiesSrv.findByEmail(this.profile.email).subscribe(
+          (response) => {
+              this.companies = response;
+              this.getProduct();
+          }, (error) => {
+            console.log(error);
+          }
+      )
+    );
+  }
+  private getProduct() {
+    this.subscription.add(this.srv.findProductById(this.idProduct).subscribe(
+      response => {
+        this.product = response;
+        this.maxQty = this.product.originalQty
+        this.offersFormGroup = this.fb.group({
+          //photo: ['', Validators.required],
+          estado: ['', Validators.required],
+          origen: ['', Validators.required],
+          make: ['', [Validators.maxLength(10), Validators.pattern(/^[a-zA-Z\s]+$/)]],
+          price: [0, [Validators.required, Validators.min(200)]],
+          cantidad: [1, [Validators.required, Validators.min(1), Validators.max(this.maxQty)]],
+          despacho: ['retiro_tienda', Validators.required],
+          company: [this.companies[0].rut],
+          //comentario: ['']
+        });
+        this.getOrder();
+      }, error => {
+        console.log(error);
+      }
+    ));
+  }
+  private getOrder() {
+    this.subscription.add(this.srv.findById(this.product.idOrder).subscribe(
+      response => {
+        this.order = response;
+        console.log(this.order);
+        this.loading = false;
+      }, error => {
+        console.log(error);
+      }
+    ))
   }
   
   sumaPrecio(){
@@ -107,36 +119,21 @@ export class OffersAddComponent implements OnInit {
   }
 
   add() {
-
+    this.loading = true;
     this.offer = this.createOffer();
     this.subscription.add(this.srvOffer.add(this.offer).subscribe(
-        response => {  
-            console.log(this.orderWithProductOffers.product.id);
-            console.log(this.idProduct);
-            this.subscription.add(this.srv.findByIdOrder(this.orderWithProductOffers.product.id).subscribe(
-            (response) => {
-                this.toster.success('Se creó correctamente su Oferta!!');
-                //this.offersFormGroup.controls.photo.setValue('');
-                this.offersFormGroup.controls.origen.setValue('');
-                this.offersFormGroup.controls.estado.setValue('');
-                this.offersFormGroup.controls.price.setValue('');
-                this.offersFormGroup.controls.despacho.setValue('');
-                //this.offersFormGroup.controls.comentario.setValue('');
-                this.offersFormGroup.controls.company.setValue('');
-                this.offersFormGroup.controls.cantidad.setValue(0);
-                this.counter = 1;
-                this.priceMask = 0;
-                this.modalService.dismissAll();
-                this.orderWithProductOffers.offers = response.offer;
-            },
-                (error) => {
-                    console.log(error);
-                    this.toster.error('Se creó la oferta, pero no se logró obtener información de Oferta :(');
-                }
-          ))
-            
-            
-            
+        response => {
+          this.toster.success('Se creó correctamente su Oferta!!');
+          //this.offersFormGroup.controls.photo.setValue('');
+          this.offersFormGroup.controls.origen.setValue('');
+          this.offersFormGroup.controls.estado.setValue('');
+          this.offersFormGroup.controls.price.setValue('');
+          this.offersFormGroup.controls.despacho.setValue('');
+          //this.offersFormGroup.controls.comentario.setValue('');
+          this.offersFormGroup.controls.company.setValue('');
+          this.offersFormGroup.controls.cantidad.setValue(0);
+          this.loading = false;
+          this.goBack()
         },
         error => {
             console.log(error);
@@ -148,7 +145,7 @@ export class OffersAddComponent implements OnInit {
   createOffer() {
     return {
         idOffer: (new Date().getTime()).toString(),
-        createBy: this.perfil.email,
+        createBy: this.profile.email,
         price: parseInt(this.offersFormGroup.controls.price.value),
         despacho: this.offersFormGroup.controls.despacho.value,
         //comentario: this.offersFormGroup.controls.comentario.value,
@@ -161,11 +158,10 @@ export class OffersAddComponent implements OnInit {
         company: this.offersFormGroup.controls.company.value,
         status: 2,
         //photo: this.filePath,
-        idOrder : this.idOrder,
+        idOrder : this.order.id,
         idProduct : this.idProduct
 
     }
-
   }
   
   clickCompany(rut: string) {
@@ -173,9 +169,11 @@ export class OffersAddComponent implements OnInit {
   }
   
   public increment() {
-    this.counter += 1;
-    this.offersFormGroup.controls.cantidad.setValue(this.counter);
-    this.priceMask = parseInt(this.offersFormGroup.controls.price.value)*parseInt(this.offersFormGroup.controls.cantidad.value);
+    if (this.counter < this.maxQty) {
+      this.counter += 1;
+      this.offersFormGroup.controls.cantidad.setValue(this.counter);
+      this.priceMask = parseInt(this.offersFormGroup.controls.price.value)*parseInt(this.offersFormGroup.controls.cantidad.value);
+    }
   }
 
   public decrement() {
@@ -196,25 +194,6 @@ export class OffersAddComponent implements OnInit {
         if (rut.length > 3 && validate(rut))
             return format(rut);
     return 'rut incorrecto';    
-  }
-  /**
-   * metodo que se dispara al hacer click en un botón radio
-   * guarda el rut dentro del formulario
-   * @param rut rut del taller que hará el pedido
-   */
-  
-  public finish() {
-    this.toster.success('Successfully Registered')
-  }
-
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
   }
  
   checkImageFile() {
@@ -247,6 +226,20 @@ export class OffersAddComponent implements OnInit {
       return;
     }
 
+  }
+  private haveAccess() {
+    let permissions = JSON.parse(localStorage.getItem("profile")).privilege;
+    if (permissions) {
+        let access = permissions.filter((perm: string) => {
+            return perm === ConstantService.PERM_MIS_OFERTAS_LECTURA;
+        });
+        return access.length > 0;
+    } else {
+        return false;
+    }
+  }
+  public goBack() { 
+    this.router.navigate(['/admin/orders/offers']);
   }
 
 }

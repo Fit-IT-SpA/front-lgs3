@@ -72,7 +72,7 @@
                     <img class="img-fluid" *ngIf="!data.order.photo" src="assets/images/nophoto.png" alt="">
                     <div class="product-hover">
                       <ul>
-                        <li *ngIf="this.companies.length > 0" (click)="QuickViewOffersAdd.openModal(data,this.companies)" >
+                        <li *ngIf="this.companies.length > 0" (click)="add(data.product.id)" >
                           <!--<button class="btn" type="button" (click)="QuickViewOrdersEdit.openModal(this.order, this.user.companies)"><i class="fa fa-edit"></i></button>-->
                           <button ngbTooltip="Ingresar Oferta"  class="btn" type="button"><i class="fa fa-dollar ml-1"></i></button>
                         </li>
@@ -96,7 +96,6 @@
         </div>
       </div>
 </div>
-<app-offers-add #quickViewOffersAdd></app-offers-add>
 <app-offers-view #quickViewOffersView></app-offers-view>
 <app-offers-detail #quickViewOffersDetail></app-offers-detail>
 </div>
