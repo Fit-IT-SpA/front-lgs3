@@ -4,6 +4,8 @@ export interface Companies {
     createBy: string,
     name: string,
     direction: string,
+    region: string,
+    commune: string,
     phone: string,
     accountNumber: number,
     accountType: string,

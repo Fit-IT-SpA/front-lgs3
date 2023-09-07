@@ -143,6 +143,15 @@ export class OrdersAddComponent implements OnInit {
       console.log(error);
     }
   }
+  public onClearMakeFilter() {
+    this.disabledModelFilter = false;
+    this.formOrder.controls.model.setValue(null);
+    this.formOrder.controls.year.setValue(null);
+    this.formOrder.get('model').disable();
+    this.formOrder.get('year').disable();
+    this.modelFilter = [];
+    this.yearFilter = [];
+  }
   public async onChangeModelFilter() {
     console.log("onChangeModelFilter");
     this.disabledYearFilter = true;
@@ -165,6 +174,12 @@ export class OrdersAddComponent implements OnInit {
     } catch (error) {
       console.log(error);
     }
+  }
+  public onClearModelFilter() {
+    this.disabledYearFilter = false;
+    this.formOrder.controls.year.setValue(null);
+    this.formOrder.get('year').disable();
+    this.yearFilter = [];
   }
   /**
    * open Dialog CUBA
