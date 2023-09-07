@@ -62,6 +62,40 @@
                 </div>
                 <div>
                     <div class="col">
+                      <div class="form-group">
+                        <label>Región</label>
+                        <ng-select [items]="regionFilter" placeholder="Región del {{this.profile.role.name}}"
+                            class="js-example-placeholder-multiple" formControlName="region" (ngModelChange)="this.onChangeRegionFilter()" (clear)="this.onClearRegionFilter()">
+                        </ng-select>
+                        <div *ngIf="companiesForm.controls.region.errors && companiesForm.controls.region.touched && companiesForm.controls.region.errors.required"
+                            class="text text-danger mt-1">
+                            Es requerido
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="col">
+                      <div class="form-group">
+                        <label>Comuna</label>
+                        <div class="flex flex-col flex-auto" *ngIf="disabledCommuneFilter">
+                            <h6 class="text-center">Cargando Comunas...</h6>
+                            <div class="loader-box">
+                              <div class="loader-3"></div>
+                            </div>
+                          </div>
+                        <ng-select [items]="communeFilter" placeholder="Comuna del {{this.profile.role.name}}" *ngIf="!disabledCommuneFilter"
+                            class="js-example-placeholder-multiple" formControlName="commune">
+                        </ng-select>
+                        <div *ngIf="companiesForm.controls.commune.errors && companiesForm.controls.commune.touched && companiesForm.controls.commune.errors.required"
+                            class="text text-danger mt-1">
+                            Es requerido
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="col">
                         <div class="form-group">
                             <label for="phone">Teléfono</label>
                             <input class="form-control btn-pill" id="phone" type="phone"

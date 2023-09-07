@@ -162,6 +162,36 @@ export class CompaniesService extends AbstractHttpService {
             })
         );
     }
+    findLocationsRegion() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http
+            .get<any>(
+                this.apiUrl + '/location/region', httpOptions)
+            .pipe(
+                map(response => {
+                    return response;
+            })
+        );
+    }
+    findLocationsCommuneByRegion(region: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http
+            .get<any>(
+                this.apiUrl + '/location/region/'+region+'/commune', httpOptions)
+            .pipe(
+                map(response => {
+                    return response;
+            })
+        );
+    }
 
     private completeZero(value){
         if (Number.parseInt(value) < 10){

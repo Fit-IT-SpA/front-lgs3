@@ -23,8 +23,11 @@ export class CompaniesAddComponent implements OnInit {
   private subscription: Subscription = new Subscription();
   public closeResult: string;
   public loading: boolean = true;
+  public disabledCommuneFilter: boolean = false;
   public companiesForm: FormGroup;
   public profile =  JSON.parse(localStorage.getItem('profile'));
+  public regionFilter: { value: string, label: string, job: string }[] = [];
+  public communeFilter: { value: string, label: string, job: string }[] = [];
   public makesFilter: { value: string, label: string, job: string }[] = [];
   public banksFilter: { value: string, label: string, job: string }[] = [
     { value: "BANCO ESTADO", label: "BANCO ESTADO", job: "" },
@@ -64,12 +67,15 @@ export class CompaniesAddComponent implements OnInit {
         rut: ['', [Validators.required]],
         name: ['', [Validators.required,Validators.maxLength(18)]],
         direction: ['', [Validators.required,Validators.maxLength(140)]],
+        region: [null, [Validators.required]],
+        commune: [null, [Validators.required]],
         phone: ['', [Validators.required,Validators.minLength(9),Validators.maxLength(9),mobileValidator,numberValidator]],
         accountNumber: ['', [Validators.required,numberValidator]],
         accountType: [null, [Validators.required]],
         bank: [null, [Validators.required]],
         make: [null, (this.profile.role.slug === 'comercio') ? [Validators.required] : []],
       });
+      this.companiesForm.get('commune').disable();
       this.getVehicleListMake();
     }
 
@@ -96,11 +102,83 @@ export class CompaniesAddComponent implements OnInit {
           })
         }
         //console.log(this.makesFilter); 
-        this.loading = false;
+        this.getRegion();
       }, (error) => {
         console.log(error);
       }
     ));
+  }
+  private getRegion() {
+    if (this.profile.role.slug === 'comercio') {
+      this.regionFilter.push({
+        value: "XIII Región Metropolitana",
+        label: "XIII Región Metropolitana",
+        job: ''
+      });
+      this.companiesForm.controls.region.setValue(this.regionFilter[0]);
+      this.getCommune();
+    } else {
+      this.subscription.add(this.srv.findLocationsRegion().subscribe(
+        response => {
+          console.log(response);
+          for (let location of response) {
+            this.regionFilter.push({
+              value: location.region,
+              label: location.region,
+              job: ''
+            });
+          }
+          this.loading = false;
+        }, error => {
+          console.log(error);
+        }
+      ));
+    }
+  }
+  private getCommune() {
+    this.subscription.add(this.srv.findLocationsCommuneByRegion(this.companiesForm.controls.region.value.value).subscribe(
+      response => {
+        for (let location of response) {
+          this.communeFilter.push({
+            value: location.commune,
+            label: location.commune,
+            job: ''
+          });
+        }
+        console.log(this.communeFilter);
+        this.loading = false;
+      }, error => {
+        console.log(error);
+      }
+    ));
+  }
+  public async onChangeRegionFilter() {
+    this.disabledCommuneFilter = true;
+    this.companiesForm.controls.commune.setValue(null);
+    this.companiesForm.get('commune').disable();
+    this.communeFilter = [];
+    try {
+      const response: {commune: string}[] = await this.srv.findLocationsCommuneByRegion(this.companiesForm.controls.region.value.value).toPromise();
+      if (response && response.length > 0) {
+        for (let location of response) {
+          this.communeFilter.push({
+            value: location.commune,
+            label: location.commune,
+            job: ''
+          });
+        }
+        this.disabledCommuneFilter = false;
+        this.companiesForm.get('commune').enable();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  public onClearRegionFilter() {
+    this.disabledCommuneFilter = false;
+    this.companiesForm.controls.commune.setValue(null);
+    this.companiesForm.get('commune').disable();
+    this.communeFilter = [];
   }
 
   add() {
@@ -137,6 +215,8 @@ export class CompaniesAddComponent implements OnInit {
       name: this.companiesForm.controls.name.value,
       status: 1,
       direction: this.companiesForm.controls.direction.value,
+      region: (this.companiesForm.controls.region.value) ? this.companiesForm.controls.region.value.value : '',
+      commune: (this.companiesForm.controls.commune.value) ? this.companiesForm.controls.commune.value.value : '',
       phone: this.companiesForm.controls.phone.value,
       accountNumber: Number(this.companiesForm.controls.accountNumber.value),
       accountType: (this.companiesForm.controls.accountType.value) ? this.companiesForm.controls.accountType.value.value : '',
