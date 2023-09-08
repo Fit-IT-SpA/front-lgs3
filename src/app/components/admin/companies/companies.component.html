@@ -7,19 +7,19 @@
 </div>
 <div class="container-fluid" *ngIf="!loading">
     <div class="text-right p-15" *ngIf="this.canWrite()">
-      <button class="btn btn-primary btn-pill" type="button" (click)="QuickViewCompaniesAdd.openModal(this.user)" >Agregar {{this.companyTitle}}</button>
+      <button class="btn btn-primary btn-pill" type="button" (click)="add()">Agregar {{this.companyTitle}}</button>
     </div>
    <div class="row">
     <div class="col-md-6 col-xl-4 box-col-6 xl-50" *ngFor="let company of companies">
         <div class="card custom-card">
           <div class="row">
               <div class="col-4 col-sm-4" *ngIf="this.canWrite()">
-                  <!--<button class="btn btn-primary" (click)="QuickViewCompaniesEdit.openModal(this.user, company.rut)">
+                  <button class="btn btn-primary" (click)="edit(company.id)">
                       <i class="fa fa-edit"></i>
-                  </button>-->
+                  </button>
               </div>
               <div class="col-4 col-sm-4" *ngIf="this.canWrite()">
-                  <!--<button class="btn btn-secondary" (click)="removeWithConfirmation(company.rut)">
+                  <!--<button class="btn btn-secondary" (click)="removeWithConfirmation(company.id)">
                       <i class="fa fa-trash"></i>
                   </button>-->
               </div>
@@ -36,6 +36,4 @@
     </div>
   </div>
 </div>
-<app-companies-add #quickViewCompaniesAdd></app-companies-add>
-<app-companies-edit #quickViewCompaniesEdit></app-companies-edit>
 <app-companies-view #quickViewCompaniesView></app-companies-view>

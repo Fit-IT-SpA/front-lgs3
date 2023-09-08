@@ -61,8 +61,8 @@ export class RegisterComponent implements OnInit {
 
   showPassword() {
     this.show = !this.show;
-    console.log(this.loginForm.controls.confirmPassword.value);
-    console.log(this.loginForm.controls.password.value)
+    //console.log(this.loginForm.controls.confirmPassword.value);
+    //console.log(this.loginForm.controls.password.value)
   }
   
   // Login With Google
@@ -119,7 +119,7 @@ export class RegisterComponent implements OnInit {
             typeUser: this.loginForm.controls.typeUser.value,
             password: this.loginForm.controls.confirmPassword.value
         }
-        console.log(credentials);
+        //console.log(credentials);
         this.subscription.add(this._authSrv.register(credentials).subscribe(
             response => {
                 this._router.navigate(['/auth/login']);
