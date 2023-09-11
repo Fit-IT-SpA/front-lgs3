@@ -88,17 +88,17 @@ export class CompaniesComponent implements OnInit{
         );
     }
     private async remove(id: string) {
-        await this.subscription.add(
-            this.srv.remove(id).subscribe(
-                (response) => {
-                    return response;
-                },
-                (error) => {
-                    return false;
-                }
-            )
-        );
-        return false;
+        try {
+            const response = await this.srv.remove(id).toPromise();
+            console.log(response);
+            return 'success';
+        } catch (error) {
+            if (error.error.error.message === 'ofertas pendientes') {
+                return error.error.error.message;
+            } else {
+                return 'error';
+            }
+        }
     }
     removeWithConfirmation(rut: string) {
         Swal.fire({
@@ -110,16 +110,24 @@ export class CompaniesComponent implements OnInit{
           cancelButtonColor: '#d33',
           confirmButtonText: 'Si, quiero hacerlo!',
           cancelButtonText: 'No, cancelar!'
-        }).then((result) => {
+        }).then(async (result) => {
           if (result.value) {
-            let confirm = this.remove(rut);
-            if (confirm) {
+            let confirm = await this.remove(rut);
+            console.log(confirm);
+            if (confirm === 'success') {
+                this.loading = true;
                 Swal.fire(
                     'Eliminado!',
                     'Tu '+this.profile.role.name+' se a eliminado.',
                     'success'
                 )
                 this.getCount();
+            } else if (confirm === 'ofertas pendientes') {
+                Swal.fire(
+                    'Todavía tiene ofertas pendientes por confirmar',
+                    'Tu '+this.profile.role.name+' no se a eliminado.',
+                    'error'
+                )
             } else {
                 Swal.fire(
                     'Ups.. algo salio mal!',
