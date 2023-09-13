@@ -43,8 +43,7 @@
                   <div class="product-hover">
                     <ul>
                       <!--<li>
-                        <button class="btn" type="button" (click)="QuickViewOrdersEdit.openModal(this.order, this.user.companies)"><i class="fa fa-edit"></i></button>
-                        <button class="btn" type="button"><i class="fa fa-edit"></i></button>
+                        <button class="btn" type="button"><i class="fa fa-edit" (click)="edit(order.id)"></i></button>
                       </li>-->
                       <li>
                         <button class="btn" type="button" data-toggle="modal" data-target="#exampleModalCenter22" (click)="this.orderView(order.id)"><i class="icon-eye"></i></button>
@@ -68,4 +67,3 @@
 </div>
 
 <app-orders-view #quickViewOrdersView></app-orders-view>
-<app-orders-edit #quickViewOrdersEdit></app-orders-edit>

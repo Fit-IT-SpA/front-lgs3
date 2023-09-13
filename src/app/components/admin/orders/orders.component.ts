@@ -4,16 +4,13 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ServiceTypeService } from '../../../shared/services/service-type.service';
 import { UserService } from '../../../shared/services/user.service';
 import { CompaniesService } from '../companies/companies.service';
-import { User } from '../../../shared/model/user';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { validate, clean, format } from 'rut.js';
-import { OrdersAddComponent } from './orders-add/orders-add.component';
 import { OrdersViewComponent } from './orders-view/orders-view.component';
 import { Router } from '@angular/router';
 import { OrderService } from 'src/app/shared/services/order.service';
 import { Order } from 'src/app/shared/model/order.model';
-import { OrdersEditComponent } from './orders-edit/orders-edit.component';
 import { ConstantService } from 'src/app/shared/services/constant.service';
 import { Companies } from 'src/app/shared/model/companies.model';
 declare var require;
@@ -44,7 +41,6 @@ export class OrdersComponent implements OnInit {
   
   // Ventanas Popup
   @ViewChild("quickViewOrdersView") QuickViewOrdersView: OrdersViewComponent;
-  @ViewChild("quickViewOrdersEdit") QuickViewOrdersEdit: OrdersEditComponent;
 
   constructor(
     private modalService: NgbModal,
@@ -189,6 +185,9 @@ export class OrdersComponent implements OnInit {
   }
   add() {
     this.router.navigate(['/admin/orders/add']);
+  }
+  edit(id: string) {
+    this.router.navigate(['/admin/orders/edit/'+id]);
   }
 
 }
