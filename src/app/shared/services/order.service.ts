@@ -99,6 +99,18 @@ export class OrderService extends AbstractHttpService {
             })
         );
     }
+    updateOrderById(order: OrderAdd, id: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http.put<any>(`${this.apiUrl}/order/update/`+id, order, httpOptions).pipe(
+            map(response => {
+                return response;
+            })
+        );
+    }
     remove(id: string) {
         const httpOptions = {
             headers: new HttpHeaders({

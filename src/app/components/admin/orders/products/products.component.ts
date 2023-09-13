@@ -120,7 +120,7 @@ export class ProductsComponent implements OnInit {
     this.router.navigate(['/admin/orders/'+this.order.id+'/products/add']);
     
   }
-  public removeWithConfirmation(id: string, product: Product) {
+  public removeWithConfirmation(id: string) {
     Swal.fire({
       title: 'Estas seguro que deseas eliminar tu repuesto?',
       text: "No podras revertir esto despues!",
@@ -136,7 +136,7 @@ export class ProductsComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.loading = true;
-        let confirm = this.removeProduct(id, product);
+        let confirm = this.removeProduct(id);
         if (confirm) {
             Swal.fire({
               title: 'Repuesto eliminado',
@@ -259,8 +259,8 @@ export class ProductsComponent implements OnInit {
     ));
     return false;
   }
-  private async removeProduct(id: string, product: Product) {
-    this.subscription.add(this.srv.remove(id, product).subscribe(
+  private async removeProduct(id: string) {
+    this.subscription.add(this.srv.remove(id).subscribe(
       response => {
         return true;
       }, error => {
@@ -290,6 +290,9 @@ export class ProductsComponent implements OnInit {
   }
   public view(id: string) {
     this.router.navigate(['/admin/orders/'+this.order.id+'/products/view/'+id]);
+  }
+  public edit(id: string) {
+    this.router.navigate(['/admin/orders/'+this.order.id+'/products/edit/'+id]);
   }
   public ngOnDestroy() {
     if (this.subscription) this.subscription.unsubscribe();

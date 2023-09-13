@@ -1,0 +1,57 @@
+<app-breadcrumb [title]="'Agregar Repuesto'"></app-breadcrumb>
+<div class="flex flex-col flex-auto" *ngIf="loading">
+  <h6 class="text-center">Procesando...</h6>
+  <div class="loader-box">
+    <div class="loader-3"></div>
+  </div>
+</div>
+<div class="col-sm-12" *ngIf="!loading">
+    <div class="card">
+        <div class="card-body">
+            <form [formGroup]="productForm">
+                <div class="form-row">
+                  <div class="col mb-3">
+                    <div class="form-group">
+                      <label>Nombre Repuesto</label>
+                      <input class="form-control" type="text" placeholder="(*) Nombre Repuesto" formControlName="description">
+                      <div *ngIf="productForm.controls.description.touched && productForm.controls.description.errors?.minlength"
+                        class="text text-danger mt-1">
+                          Debe tener minimo de 3 caracteres
+                        </div>
+                      <div *ngIf="productForm.controls.description.touched && productForm.controls.description.errors?.maxlength"
+                        class="text text-danger mt-1">
+                          Debe tener un maximo de 40 caracteres
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col mb-3">
+                    <fieldset>
+                      <label>Cantidad:</label>
+                      <div class="input-group bootstrap-touchspin">
+                        <button class="btn btn-primary btn-square bootstrap-touchspin-down" type="button" (click)=decrement()>
+                          <i class="fa fa-minus"></i>
+                        </button>
+                        <input class="touchspin form-control" type="text" value={{counter}}>
+                        <div class="input-group-append ml-0">
+                          <button class="btn btn-primary btn-square bootstrap-touchspin-up" type="button" (click)=increment()>
+                            <i class="fa fa-plus"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </fieldset>
+                  </div>
+                </div>
+              <div class="flex align-middle font-medium text-md mt-1 mb-3">
+                  <i class="flex align-middle" data-feather="info"></i>
+                  <span class="font-semibold ml-1 text-base">Los campos marcados con (*) son de caracter obligatorio.</span>
+              </div>
+              <div class="mt-1">
+                  <button class="btn btn-pill btn-primary m-r-15" type="button" [disabled]="productForm.invalid" (click)="save()">Guardar</button>
+                  <button class="btn btn-pill btn-info" type="button" (click)="goBack()">Volver</button>
+              </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -31,8 +31,9 @@
                             <th scope="col">Repuesto</th>
                             <th scope="col">Cantidad</th>
                             <th scope="col" *ngIf="this.order.status != 0">Ofertas</th>
-                            <!--<th scope="col">Eliminar</th>-->
                             <th scope="col">Ver Detalle</th>
+                            <!--<th scope="col">Editar</th>
+                            <th scope="col">Eliminar</th>-->
                         </tr>
                     </thead>
                     <tbody>
@@ -40,8 +41,9 @@
                             <td>{{product.title}}</td>
                             <td>{{product.originalQty}}</td>
                             <td *ngIf="this.order.status != 0">{{this.findQtyOffer(product.id)}}</td>
-                            <!--<td><i class="icofont icofont-trash" (click)="removeWithConfirmation(product.id, product)"></i></td>-->
                             <td><i class="icon-eye" (click)="view(product.id)"></i></td>
+                            <!--<td><i class="fa fa-edit" (click)="edit(product.id)"></i></td>
+                            <td><i class="fa fa-trash-o" (click)="removeWithConfirmation(product.id)"></i></td>-->
                         </tr>
                     </tbody>
                 </table>

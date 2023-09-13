@@ -10,6 +10,7 @@ import { OrdersAddComponent } from './orders-add/orders-add.component';
 import { OrdersEditComponent } from './orders-edit/orders-edit.component';
 import { OrdersViewComponent } from './orders-view/orders-view.component';
 import { ProductsAddComponent } from './products/products-add/products-add.component';
+import { ProductsEditComponent } from './products/products-edit/products-edit.component';
 import { ProductsViewComponent } from './products/products-view/products-view.component';
 import { ProductsComponent } from './products/products.component';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -33,6 +34,7 @@ import { SalesComponent} from './sales/sales.component';
         OrdersEditComponent,
         OrdersViewComponent,
         ProductsAddComponent,
+        ProductsEditComponent,
         ProductsViewComponent,
         ProductsComponent,
         OffersComponent,

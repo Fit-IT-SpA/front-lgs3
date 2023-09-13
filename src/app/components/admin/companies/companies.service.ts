@@ -128,6 +128,36 @@ export class CompaniesService extends AbstractHttpService {
             })
         );
     }
+    findVehicleListModel() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http
+            .get<any>(
+                this.apiUrl + '/vehicle-list/model', httpOptions)
+            .pipe(
+                map(response => {
+                    return response;
+            })
+        );
+    }
+    findVehicleListYear() {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http
+            .get<any>(
+                this.apiUrl + '/vehicle-list/year', httpOptions)
+            .pipe(
+                map(response => {
+                    return response;
+            })
+        );
+    }
     findVehicleListModelByMake(make: string) {
         const httpOptions = {
             headers: new HttpHeaders({
