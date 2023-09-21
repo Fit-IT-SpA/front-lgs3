@@ -14,11 +14,8 @@ import { AdminRoutingModule } from './admin-routing.module';
 
 import { MyProfileComponent } from './my-profile/my-profile.component';
 import {DesconectarComponent} from './desconectar/desconectar.component';
-import {CompaniesComponent} from './companies/companies.component';
-import {CompaniesAddComponent} from './companies/companies-add/companies-add.component';
-import {CompaniesEditComponent} from './companies/companies-edit/companies-edit.component';
-import {CompaniesViewComponent} from './companies/companies-view/companies-view.component';
 import { OrdersModule } from './orders/orders.module';
+import { OffersModule } from './offers/offers.module';
 import { FormsRoutingModule } from '../forms/forms-routing.module';
 import { UserModule } from './users/user/user.module';
 import { RoleModule } from './users/role/role.module';
@@ -40,6 +37,7 @@ import { CartModule } from './cart/cart.module';
         PrivilegeModule,
         SalesManagementModule,
         OrdersModule,
+        OffersModule,
         CompaniesModule,
         ChartistModule,
         ChartsModule,

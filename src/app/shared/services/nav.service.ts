@@ -109,10 +109,13 @@ export class NavService implements OnDestroy {
 		{
 			id: 'mis-pedidos-lectura', title: 'Mis Pedidos', icon: 'package', type: 'link', active: false, path: '/admin/orders'
 		},
-                {
+        {
 			id: 'mis-ofertas-lectura', title: 'Mi Mesón Virtual', icon: 'tool', type: 'link', active: false, path: '/admin/orders/offers'
 		},
-                {
+		{
+			id: 'mis-ofertas-lectura', title: 'Mis Ofertas', icon: 'tool', type: 'link', active: false, path: '/admin/offers'
+		},
+        {
 			id: 'mis-ventas-lectura', title: 'Mis Ventas', icon: 'dollar-sign', type: 'link', active: false, path: '/admin/orders/sales'
 		},
 		{

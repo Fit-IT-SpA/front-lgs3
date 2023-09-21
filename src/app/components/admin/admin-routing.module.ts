@@ -50,6 +50,11 @@ const routes: Routes = [
             {
                 path: '',
                 canActivate: [AdminGuard],
+                loadChildren: () => import('./offers/offers.module').then(m => m.OffersModule)
+            },
+            {
+                path: '',
+                canActivate: [AdminGuard],
                 loadChildren: () => import('./cart/cart.module').then(m => m.CartModule)
             },
 
