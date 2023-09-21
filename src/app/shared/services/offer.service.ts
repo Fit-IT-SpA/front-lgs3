@@ -52,6 +52,35 @@ export class OfferService extends AbstractHttpService {
             })
         );
     }
+    getCountOffersByEmail(email: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http.get<any>(`${this.apiUrl}/offer/count/byemail/${email}`, httpOptions).pipe(
+            map(response => {
+                return response;
+            })
+        );
+    }
+    getOffersByEmail(email: string, page : number) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        page--;
+        let skip: number = 0;
+        if (page > 0) {
+            skip = ConstantService.paginationDesktop * page;
+        }
+        return this.http.get<any>(`${this.apiUrl}/offer/byemail/${email}/skip/${skip}/limit/${ConstantService.paginationDesktop}`, httpOptions).pipe(
+            map(response => {
+                return response;
+            })
+        );
+    }
    
     updateById(offer: Offer, id: string) {
         const httpOptions = {
