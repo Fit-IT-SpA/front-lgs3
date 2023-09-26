@@ -1,0 +1,40 @@
+<app-breadcrumb [title]="'Detalle de Oferta'"></app-breadcrumb>
+<div class="container-fluid">
+    <div class="flex flex-col flex-auto" *ngIf="loading">
+        <div class="loader-box">
+          <div class="loader-3"></div>
+        </div>
+    </div>
+    <div class="modal-content" *ngIf="!loading">
+        <div class="modal-header product-modal">
+          <div class="product-box row">
+            <div class="product-img col-md-6" *ngIf="!offer.order.photo"><img class="img-fluid" src="assets/images/ecommerce/01.jpg"></div>
+            <div class="product-img col-md-6" *ngIf="offer.order.photo"><img class="img-fluid" src="{{offer.order.photo}}" alt=""></div>
+            <div class="product-details col-md-6 text-left">
+              <h4>{{offer.order.brand}} {{offer.order.model}} {{offer.order.year}}</h4>
+              <h4>{{offer.order.chassis}}</h4>
+              <div class="product-view">
+                <h6 class="f-w-600">Detalles de la Oferta</h6>
+                <p class="mb-0">{{offer.product.title}}</p>
+                <p class="mb-0">{{offer.offer.origen}} {{offer.offer.estado}}</p>
+                <p class="mb-0" *ngIf="offer.offer.make && offer.offer.make !== ''">{{offer.offer.make}}</p>
+                <p class="mb-0">Precio unitario: ${{(offer.offer.price).toLocaleString('es-CL')}}</p>
+                <p class="mb-0">Cantidad: {{offer.offer.qtyOfferAccepted}}</p>
+                <div>
+                    <p class="" *ngIf="offer.offer.status == -2">Estado: <span class="text-secondary">Rechazado</span></p>
+                    <p class="" *ngIf="offer.offer.status == 2">Estado: <span class="text-primary">Publicado</span></p>
+                    <p class="" *ngIf="offer.offer.status == 3">Estado: <span class="text-info">Adjudicado</span></p>
+                    <p class="" *ngIf="offer.offer.status == 4">Estado: <span class="text-success">Proceso de compra</span></p>
+                </div>
+                <div *ngIf="offer.offer.price" class="product-price">Precio total: ${{(offer.offer.price * offer.offer.qtyOfferAccepted).toLocaleString('es-CL')}}</div>
+                <div style="text-align: center" class="addcart-btn">
+                    <button class="btn btn-pill btn-info" (click)="goBack()" type="button">Volver</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="close" (click)="edit()" *ngIf="offer.offer.status === 2"><i class="fa fa-edit"></i></button>
+          <button class="close" (click)="removeWithConfirmation()" *ngIf="offer.offer.status === 2"><i class="fa fa-trash-o"></i></button>
+        </div>
+      </div>
+</div>

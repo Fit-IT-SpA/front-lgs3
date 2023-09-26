@@ -32,8 +32,8 @@
                             <th scope="col">Cantidad</th>
                             <th scope="col" *ngIf="this.order.status != 0">Ofertas</th>
                             <th scope="col">Ver Detalle</th>
-                            <!--<th scope="col">Editar</th>
-                            <th scope="col">Eliminar</th>-->
+                            <th scope="col">Editar</th>
+                            <th scope="col">Eliminar</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -41,9 +41,19 @@
                             <td>{{product.title}}</td>
                             <td>{{product.originalQty}}</td>
                             <td *ngIf="this.order.status != 0">{{this.findQtyOffer(product.id)}}</td>
-                            <td><i class="icon-eye" (click)="view(product.id)"></i></td>
-                            <!--<td><i class="fa fa-edit" (click)="edit(product.id)"></i></td>
-                            <td><i class="fa fa-trash-o" (click)="removeWithConfirmation(product.id)"></i></td>-->
+                            <td>
+                                <i *ngIf="product.status < 3" class="icon-eye" (click)="view(product.id)"></i>
+                                <button *ngIf="product.status == 3" class="btn btn-pill btn-success btn-xs">En caja</button>
+                                <button *ngIf="product.status > 3" class="btn btn-pill btn-primary btn-xs">Procesando compra</button>
+                            </td>
+                            <td>
+                                <i class="fa fa-edit" *ngIf="product.status === 0" (click)="edit(product.id)"></i>
+                                <span *ngIf="product.status > 0">-</span>
+                            </td>
+                            <td>
+                                <i class="fa fa-trash-o" *ngIf="product.status === 0 || product.status === 1" (click)="removeWithConfirmation(product.id)"></i>
+                                <span *ngIf="product.status > 1">-</span>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -52,8 +62,8 @@
                 <button class="btn btn-pill btn-primary m-r-15 mb-3" (click)="saveOrder()" *ngIf="this.products && this.products.length > 0 && this.order.status == 0">
                     Publicar Pedido
                 </button>
-                <button class="btn btn-pill btn-info mb-3" (click)="cancelOrder()" *ngIf="this.order.status == 0">Cancelar Pedido</button>
-                <button class="btn btn-pill btn-info mb-3" (click)="goBack()" *ngIf="this.order.status != 0">Volver</button>
+                <!--<button class="btn btn-pill btn-info m-r-15 mb-3" (click)="cancelOrder()" *ngIf="this.order.status == 0">Cancelar Pedido</button>-->
+                <button class="btn btn-pill btn-info mb-3" (click)="goBack()">Volver</button>
             </div>
         </div>
     </div>

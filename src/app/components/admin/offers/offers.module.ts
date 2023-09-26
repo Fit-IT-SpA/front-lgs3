@@ -10,13 +10,17 @@ import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { OffersRoutingModule } from './offers.routing';
 import { ArchwizardModule } from 'angular-archwizard';
-import {OffersComponent  } from './offers.component';
+import { OffersComponent } from './offers.component';
+import { OffersViewComponent } from './offers-view/offers-view.component';
+import { OffersEditComponent } from './offers-edit/offers-edit.component';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 
 @NgModule({
     declarations: [
-        OffersComponent
+        OffersComponent,
+        OffersViewComponent,
+        OffersEditComponent
     ],
     imports: [
         CommonModule,

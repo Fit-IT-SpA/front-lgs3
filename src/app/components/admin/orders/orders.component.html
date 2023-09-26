@@ -39,18 +39,23 @@
         <div [class]="'col-xl-'+col+' col-sm-'+col" [class.col-xl-12]="listView" *ngFor="let order of orders">
             <div class="card">
               <div class="product-box">
-                <div class="product-img"><img class="img-fluid" src="{{order.photo}}" alt="">
+                <div class="product-img">
+                  <div *ngIf="order.status == 0" class="ribbon ribbon-info">Pendiente</div>
+                  <div *ngIf="order.status == 1" class="ribbon ribbon-primary">Publicado</div>
+                  <div *ngIf="order.status == 2" class="ribbon ribbon-success">En caja</div>
+                  <div *ngIf="order.status == 2" class="ribbon ribbon-success">Pagado</div>
+                  <img class="img-fluid" src="{{order.photo}}" alt="">
                   <div class="product-hover">
                     <ul>
-                      <!--<li>
+                      <li *ngIf="order.status === 0">
                         <button class="btn" type="button"><i class="fa fa-edit" (click)="edit(order.id)"></i></button>
-                      </li>-->
+                      </li>
                       <li>
                         <button class="btn" type="button" data-toggle="modal" data-target="#exampleModalCenter22" (click)="this.orderView(order.id)"><i class="icon-eye"></i></button>
                       </li>
-                      <!--<li>
+                      <li *ngIf="order.status === 0 || order.status === 1">
                         <button class="btn" type="button" (click)="removeWithConfirmation(order.id)"><i class="fa fa-trash-o"></i></button>
-                      </li>-->
+                      </li>
                     </ul>
                   </div>
                 </div>
