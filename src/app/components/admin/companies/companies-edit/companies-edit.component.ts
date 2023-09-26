@@ -94,6 +94,7 @@ export class CompaniesEditComponent implements OnInit {
           bank: [{ value: response.bank, label: response.bank, job: "" }, [Validators.required]],
           make: [this.makesFilter, (this.profile.role.slug === 'comercio') ? [Validators.required] : []],
         });
+        this.companiesForm.get('rut').disable();
         this.findMakesOfCompany();
       }, error => {
         console.log(error);
@@ -259,7 +260,12 @@ export class CompaniesEditComponent implements OnInit {
           },
           (error) => {
             console.log(error);
-            this.toster.error('Se ha producido un error al intentar editar el '+this.profile.role.name);
+            this.loading = false;
+            if (error.error.error.message == 'rut repetido') {
+              this.toster.error('El rut ingresado ya se encuentra registrado dentro del sistema, intente con un rut distinto');
+            } else {
+              this.toster.error('Se ha producido un error al intentar editar el '+this.profile.role.name);
+            }
           }
       )
     );
