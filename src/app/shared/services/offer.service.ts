@@ -81,7 +81,18 @@ export class OfferService extends AbstractHttpService {
             })
         );
     }
-   
+    getOfferById(id: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http.get<any>(`${this.apiUrl}/offer/byid/${id}`, httpOptions).pipe(
+            map(response => {
+                return response;
+            })
+        );
+    }
     updateById(offer: Offer, id: string) {
         const httpOptions = {
             headers: new HttpHeaders({

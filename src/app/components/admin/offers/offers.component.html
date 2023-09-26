@@ -24,21 +24,26 @@
                                     <th scope="col">Precio</th>
                                     <th class="text-center" scope="col">Cantidad</th>
                                     <th scope="col">Status</th>
+                                    <!--<th scope="col">Editar</th>
+                                    <th scope="col">Eliminar</th>-->
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr (click)="onCellClick(offer)" *ngFor="let offer of offers; index as i"  >
-                                    <td>{{offer.product.title}}</td>
-                                    <td>{{offer.order.brand}} - {{offer.order.model}}</td>
-                                    <td [innerHTML]="offer.origen"></td>
-                                    <td>{{offer.estado}}</td>
-                                    <td>$ {{offer.price | number:'1.0-0'}}</td>
-                                    <td class="text-center">{{offer.qtyOfferAccepted | number:'1.0-0'}}</td>
-                                    <td>
-                                        <button *ngIf="offer.status == 2" class="btn btn-pill btn-primary btn-xs">Publicado</button>
-                                        <button *ngIf="offer.status == 3" class="btn btn-pill btn-info btn-xs">Adjudicado</button>
-                                        <button *ngIf="offer.status == 4" class="btn btn-pill btn-success btn-xs">Proceso de compra</button>
-                                    </td>
+                                    <tr (click)="onCellClick(offer.id)" *ngFor="let offer of offers; index as i"  >
+                                        <td>{{offer.product.title}}</td>
+                                        <td>{{offer.order.brand}} - {{offer.order.model}}</td>
+                                        <td [innerHTML]="offer.origen"></td>
+                                        <td>{{offer.estado}}</td>
+                                        <td>$ {{offer.price | number:'1.0-0'}}</td>
+                                        <td class="text-center">{{offer.qtyOfferAccepted | number:'1.0-0'}}</td>
+                                        <td>
+                                            <button *ngIf="offer.status == -2" class="btn btn-pill btn-secondary btn-xs">Rechazado</button>
+                                            <button *ngIf="offer.status == 2" class="btn btn-pill btn-primary btn-xs">Publicado</button>
+                                            <button *ngIf="offer.status == 3" class="btn btn-pill btn-info btn-xs">Adjudicado</button>
+                                            <button *ngIf="offer.status == 4" class="btn btn-pill btn-success btn-xs">Proceso de compra</button>
+                                        </td>
+                                        <!--<td><button class="btn btn-pill btn-primary btn-xs" [disabled]="offer.status !== 2">Editar</button></td>
+                                        <td><button class="btn btn-pill btn-secondary btn-xs" [disabled]="offer.status !== 2" (click)="removeWithConfirmation(offer.id)">Eliminar</button></td>-->
                                     </tr>
                                 </tbody>
                             </table>

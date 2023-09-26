@@ -1,13 +1,13 @@
 import { Component, OnInit, TemplateRef, ViewChild, HostListener } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { ServiceTypeService } from '../../../shared/services/service-type.service';
-import { UserService } from '../../../shared/services/user.service';
-import { CompaniesService } from '../companies/companies.service';
-import { User } from '../../../shared/model/user';
+import { ServiceTypeService } from '../../../../shared/services/service-type.service';
+import { UserService } from '../../../../shared/services/user.service';
+import { CompaniesService } from '../../companies/companies.service';
+import { User } from '../../../../shared/model/user';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { validate, clean, format } from 'rut.js';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from 'src/app/shared/services/order.service';
 import { Order } from 'src/app/shared/model/order.model';
 import { Product } from 'src/app/shared/model/product.model';
@@ -22,21 +22,22 @@ declare var require;
 const Swal = require('sweetalert2');
 
 @Component({
-  selector: 'app-offers',
-  templateUrl: './offers.component.html',
-  styleUrls: ['./offers.component.scss'],
+  selector: 'app-offers-view',
+  templateUrl: './offers-view.component.html',
+  styleUrls: ['./offers-view.component.scss'],
   providers: [ServiceTypeService, UserService, OfferService]
 })
-export class OffersComponent implements OnInit {
+export class OffersViewComponent implements OnInit {
   
   private subscription: Subscription = new Subscription();
   public closeResult: string;
   public modalOpen: boolean = false;
-  public offers : Offer[];
+  public offer : Offer;
   public pageSize: number = ConstantService.paginationDesktop;
   public currentPage: number = 0;
   public totalElements: number;
   public profile =  JSON.parse(localStorage.getItem('profile'));
+  private offerId: string;
   public listView: boolean = true;
   public loading: boolean = true;
   public col: string = '3';
@@ -51,6 +52,7 @@ export class OffersComponent implements OnInit {
     public formBuilder: FormBuilder,
     private router: Router,
     private utilSrv: UtilService,
+    private activatedRoute: ActivatedRoute,
     private srv: OfferService,
     public toster: ToastrService,) {
       this.screenType = utilSrv.getScreenSize();
@@ -79,7 +81,10 @@ export class OffersComponent implements OnInit {
   }
   ngOnInit(): void {
     if (this.haveAccess()) {
-        this.getCount();
+        this.subscription.add(this.activatedRoute.params.subscribe(params => {
+            this.offerId = params['id'];
+            this.findOffer();
+        }));
     }
   }
   private haveAccess() {
@@ -93,37 +98,17 @@ export class OffersComponent implements OnInit {
         return false;
     }
   }
-  private getCount() {
-    this.subscription.add(this.srv.getCountOffersByEmail(this.profile.email).subscribe(
+  private findOffer() {
+    this.subscription.add(this.srv.getOfferById(this.offerId).subscribe(
         response => {
             console.log(response);
-            this.totalElements = response.count;
-            this.getOffers();
-        }, error => {
-            console.log(error);
-            this.loading = false;
-        }
-    ));
-  }
-  private getOffers() {
-    console.log("currentPage");
-    console.log(this.currentPage);
-    this.subscription.add(this.srv.getOffersByEmail(this.profile.email, this.currentPage).subscribe(
-        response => {
-            console.log(response);
-            this.offers = response;
+            this.offer = response;
             this.loading = false;
         }, error => {
             console.log(error);
             this.loading = false;
         }
-    ));
-  }
-  onPageFired(event: any) {
-    this.loading = true;
-    this.currentPage = event;
-    this.pageSize = this.pageSize;
-    this.getCount();
+    ))
   }
   /**
    * metodo para convertir cadena de caraceres en formato rut (puntos y guion)
@@ -158,14 +143,19 @@ export class OffersComponent implements OnInit {
     }
   }
   private async remove(id: string) {
-    this.subscription.add(this.srv.remove(id).subscribe(
-      response => {
-        return response;
+    try {
+      const response = await this.srv.remove(id).toPromise();
+      console.log(response);
+      return 'success';
+    } catch (error) {
+      if (error.error.error.message === 'product con ofertas') {
+        return error.error.error.message;
+      } else {
+        return 'error';
       }
-    ))
-    return false;
-}
-  removeWithConfirmation(id: string) {
+    }
+  }
+  removeWithConfirmation() {
     Swal.fire({
       title: 'Estas seguro que deseas eliminar tu oferta?',
       text: "No podras revertir esto despues!",
@@ -175,28 +165,36 @@ export class OffersComponent implements OnInit {
       cancelButtonColor: '#d33',
       confirmButtonText: 'Si, quiero hacerlo!',
       cancelButtonText: 'No, cancelar!'
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.value) {
-        let confirm = this.remove(id);
+        this.loading = true;
+        let confirm = await this.remove(this.offerId);
+        console.log(confirm);
         if (confirm) {
             Swal.fire(
                 'Eliminado!',
                 'Tu oferta se a eliminado.',
                 'success'
             )
-            this.getCount();
+            this.loading = false;
+            this.goBack();
         } else {
             Swal.fire(
                 'Ups.. algo salio mal!',
                 'Tu oferta no se a eliminado.',
                 'error'
             )
+            this.loading = false;
         }
         
       }
     })
   }
-  public onCellClick(id: string) {
-    this.router.navigate(['/admin/offers/view/'+id]);
+  public goBack() {
+    this.router.navigate(['/admin/offers']);
+    //console.log(this.form);
+  }
+  public edit() {
+    this.router.navigate(['/admin/offers/edit/'+this.offerId]);
   }
 }
