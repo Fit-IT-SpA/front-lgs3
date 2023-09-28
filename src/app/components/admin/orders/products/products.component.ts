@@ -133,14 +133,14 @@ export class ProductsComponent implements OnInit {
         confirmButton: 'btn btn-pill btn-primary', // Agrega tu clase CSS personalizada aquí
         cancelButton: 'btn btn-pill btn-info', // Agrega tu clase CSS personalizada aquí
       }
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.value) {
         this.loading = true;
-        let confirm = this.removeProduct(id);
-        if (confirm) {
+        let confirm = await this.removeProduct(id);
+        if (confirm === 'success') {
             Swal.fire({
               title: 'Repuesto eliminado',
-              text: 'Tu repuesto a sido eliminado.',
+              text: 'Tu repuesto ha sido eliminado.',
               type: 'success',
               buttonsStyling: false,
               customClass: {
@@ -148,16 +148,28 @@ export class ProductsComponent implements OnInit {
               }
             });
             this.ngOnInit();
+        } else if (confirm === 'product con ofertas') {
+          Swal.fire({
+            title: 'Repuesto contiene ofertas',
+            text: 'No se puede eliminar el repuesto porque tiene ofertas.',
+            type: 'error',
+            buttonsStyling: false,
+            customClass: {
+              confirmButton: 'btn btn-pill btn-primary', // Agrega tu clase CSS personalizada aquí
+            }
+          });
+          this.loading = false;
         } else {
-            Swal.fire({
-                title: 'Ups.. algo salio mal!',
-                text: 'Tu repuesto no se pudo eliminar.',
-                type: 'error',
-                buttonsStyling: false,
-                customClass: {
-                  confirmButton: 'btn btn-pill btn-primary', // Agrega tu clase CSS personalizada aquí
-                }
-            });
+          Swal.fire({
+              title: 'Ups.. algo salio mal!',
+              text: 'Tu repuesto no se pudo eliminar.',
+              type: 'error',
+              buttonsStyling: false,
+              customClass: {
+                confirmButton: 'btn btn-pill btn-primary', // Agrega tu clase CSS personalizada aquí
+              }
+          });
+          this.loading = false;
         }
         
       }
@@ -260,15 +272,17 @@ export class ProductsComponent implements OnInit {
     return false;
   }
   private async removeProduct(id: string) {
-    this.subscription.add(this.srv.remove(id).subscribe(
-      response => {
-        return true;
-      }, error => {
-        console.log(error);
-        return false;
+    try {
+      const response = await this.srv.remove(id).toPromise();
+      console.log(response);
+      return 'success';
+    } catch (error) {
+      if (error.error.error.message === 'product con ofertas') {
+        return error.error.error.message;
+      } else {
+        return 'error';
       }
-    ));
-    return false;
+    }
   }
   public goBack() {
     this.router.navigate(['/admin/orders']);

@@ -141,19 +141,24 @@ export class OrdersComponent implements OnInit {
     }
   }
   private async remove(id: string) {
-    this.subscription.add(this.srv.remove(id).subscribe(
-      response => {
-        return response;
+    try {
+      const response = await this.srv.remove(id).toPromise();
+      console.log(response);
+      return 'success';
+    } catch (error) {
+      if (error.error.error.message === 'products con ofertas') {
+        return error.error.error.message;
+      } else {
+        return 'error';
       }
-    ))
-    return false;
+    }
   }
   orderView(id: string) {
     this.router.navigate(['/admin/orders/'+id+'/products']);
   }
   removeWithConfirmation(id: string) {
     Swal.fire({
-      title: 'Estas seguro que deseas cancelar tu pedido?',
+      title: 'Estas seguro que deseas eliminar tu pedido?',
       text: "No podras revertir esto despues!",
       type: 'warning',
       showCancelButton: true,
@@ -161,25 +166,33 @@ export class OrdersComponent implements OnInit {
       cancelButtonColor: '#d33',
       confirmButtonText: 'Si, quiero hacerlo!',
       cancelButtonText: 'No, cancelar!'
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.value) {
         this.loading = true;
-        let confirm = this.remove(id);
-        if (confirm) {
-            Swal.fire(
-                'Pedido cancelado',
-                'Tu pedido se a cancelado.',
-                'success'
-            )
-            this.ngOnInit();
+        let confirm = await this.remove(id);
+        console.log(confirm);
+        if (confirm === 'success') {
+          Swal.fire(
+              'Pedido eliminado',
+              'Tu pedido se ha eliminado.',
+              'success'
+          )
+          this.ngOnInit();
+        } else if (confirm === 'products con ofertas') {
+          Swal.fire(
+            'Pedido con ofertas',
+            'Tu pedido no se ha eliminado porque contiene ofertas pendientes.',
+            'error'
+          )
+          this.loading = false;
         } else {
-            Swal.fire(
-                'Ups.. algo salio mal!',
-                'Tu pedido no se a cancelado.',
-                'error'
-            )
+          Swal.fire(
+              'Ups.. algo salio mal!',
+              'Tu pedido no se ha eliminado.',
+              'error'
+          )
+          this.loading = false;
         }
-        
       }
     })
   }
