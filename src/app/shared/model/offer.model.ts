@@ -2,6 +2,8 @@ import { Order } from "./order.model";
 import { Product } from "./product.model";
 export interface Offer {
     id?:string,
+    createdAt?: Date,
+    updatedAt?: Date,
     idOffer: string,
     createBy: string,
     company: string,
@@ -18,6 +20,11 @@ export interface Offer {
     origen: string,
     idOrder: string,
     idProduct: string,
+    timerVigency?: Date | null,
+    timerPaymentWorkshop?: Date | null,
+    count?: number;
+    countSeconds?: number;
+    countMinutes?: number;
     product?: Product[],
     order?: Order[]
 }
