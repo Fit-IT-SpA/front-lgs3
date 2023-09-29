@@ -13,7 +13,13 @@
                         <div class="card-header">
                             <h6>Listado de ofertas creadas en el sistema.</h6>
                         </div>
-                        <div class="table-responsive">
+                        <div class="flex flex-col flex-auto" *ngIf="loadingOffers">
+                            <h6 class="text-center">Cargando ofertas...</h6>
+                            <div class="loader-box">
+                              <div class="loader-3"></div>
+                            </div>
+                        </div>
+                        <div class="table-responsive" *ngIf="!loadingOffers">
                             <table id="table-ventas" class="table table-hover table-border-horizonta">
                                 <thead>
                                     <tr>
@@ -37,6 +43,7 @@
                                         <td>$ {{offer.price | number:'1.0-0'}}</td>
                                         <td class="text-center">{{offer.qtyOfferAccepted | number:'1.0-0'}}</td>
                                         <td>
+                                            <button *ngIf="offer.status == -3" class="btn btn-pill btn-secondary btn-xs">Expirado</button>
                                             <button *ngIf="offer.status == -2" class="btn btn-pill btn-secondary btn-xs">Rechazado</button>
                                             <button *ngIf="offer.status == 2" class="btn btn-pill btn-primary btn-xs">Publicado</button>
                                             <button *ngIf="offer.status == 3" class="btn btn-pill btn-info btn-xs">Adjudicado</button>

@@ -7,7 +7,8 @@ import { CompaniesService } from '../../../companies/companies.service';
 import { User } from '../../../../../shared/model/user';
 import { Order } from '../../../../../shared/model/order.model';
 import { Offer } from '../../../../../shared/model/offer.model';
-import { Subscription } from 'rxjs';
+import { Subscription, interval } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { validate, clean, format } from 'rut.js';
 import { Companies } from 'src/app/shared/model/companies.model';
@@ -33,7 +34,6 @@ export class ProductsViewComponent implements OnInit {
   public modalOpen: boolean = false;
   public perfil =  JSON.parse(localStorage.getItem('profile'));
   private orderId: string;
-  private productAdd: ProductAdd;
   private product: Product;
   private order: Order;
   private offers: Offer[] = [];
@@ -47,6 +47,7 @@ export class ProductsViewComponent implements OnInit {
   public filePath: string;
   public imgFile: any;
   public loading: boolean = true;
+  public loadingOffers: boolean = false;
   public brandFilter: { value: string, label: string, job: string }[] = [
     { value: "CHEVROLET", label: "CHEVROLET", job: "" },
     { value: "HYUNDAI", label: "HYUNDAI", job: "" },
@@ -103,6 +104,7 @@ export class ProductsViewComponent implements OnInit {
       }, error => {
           console.log(error);
           this.loading = false;
+          this.loadingOffers = false;
       }
     ));
   }
@@ -111,12 +113,62 @@ export class ProductsViewComponent implements OnInit {
       response => {
         this.offers = response;
         console.log(this.offers);
-        this.loading = false;
+        this.getTimers();
       }, error => {
         console.log(error);
         this.loading = false;
+        this.loadingOffers = false;
       }
     ));
+  }
+  private getTimers() {
+    for (let offer of this.offers) {
+      offer.count = Number(new Date(offer.timerVigency).getTime() - new Date().getTime())
+      offer.countMinutes = Math.floor(offer.count / (1000 * 60));
+      offer.countSeconds = Math.floor((offer.count % (1000 * 60)) / 1000);
+      offer.count = offer.count / 1000;
+      let intervalId = setInterval(() => {
+        offer.count--;
+        if (offer.count > 0) {
+          if (offer.countSeconds <= 0) {
+            offer.countSeconds = 59;
+            offer.countMinutes--;
+          } else {
+            offer.countSeconds--;
+          }
+        } else {
+          // Detiene el intervalo cuando alcanza 0 minutos y 0 segundos
+          this.loadingOffers = true;
+          this.getOffers();
+          clearInterval(intervalId);
+        }
+      }, 1000);
+      /*interval(1000)
+         .pipe(
+             take(offer.count),
+         )
+         .subscribe(() => {
+                offer.count--;
+                if (offer.countSeconds <= 0) {
+                  offer.countSeconds = 59;
+                  offer.countMinutes--;
+                } else {
+                  offer.countSeconds--;
+                }
+             },
+             () => {
+             },
+             () => {
+                this.loading = true;
+                this.getOffers();
+             }
+         );*/
+    }
+    this.loading = false;
+    this.loadingOffers = false;
+  }
+  private offerExpired(id: string) {
+    console.log(id);
   }
   private getProduct(id: string) {
     this.subscription.add(this.srv.findById(id).subscribe(

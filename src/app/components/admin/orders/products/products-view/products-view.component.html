@@ -29,8 +29,15 @@
         <div class="card-header">
           <h5>Detalles de la oferta</h5>
         </div>
-        <div class="card-body">
+        <div class="flex flex-col flex-auto" *ngIf="loadingOffers">
+          <h6 class="text-center">Cargando ofertas...</h6>
+          <div class="loader-box">
+            <div class="loader-3"></div>
+          </div>
+        </div>
+        <div class="card-body" *ngIf="!loadingOffers">
             <div>
+                <span *ngIf="this.offers && this.offers.length <= 0">Sin ofertas disponibles</span>
                 <span *ngIf="this.offers && this.offers.length > 0">Puede comprar hasta {{this.counter}} item(s) de este producto</span>
                 <div id="offer_{{i}}" class="social-chat" *ngFor="let off of this.offers; index as i">
                   <div class="your-msg" *ngIf="off.status == 2">
@@ -39,6 +46,7 @@
                               <img class="img-100 img-fluid pull-right" alt=""
                               src="{{off.photo}}">
                         <p>Cantidad ofrecida: {{off.qty}} Unidades</p>
+                        <p>Tiempo: {{off.countMinutes.toLocaleString().padStart(2, '0')}} : {{off.countSeconds.toLocaleString().padStart(2, '0')}}</p>
                         <fieldset>
                           <p>Cantidad:</p>
                           <div class="input-group bootstrap-touchspin">
@@ -74,7 +82,7 @@
                     
                     
                 </div>
-              <h5>Total a pagar: ${{this.totalConfirm.toLocaleString('es-CL')}} | Productos: {{countQtyOffers}}</h5>
+              <h5 *ngIf="this.offers && this.offers.length > 0">Total a pagar: ${{this.totalConfirm.toLocaleString('es-CL')}} | Productos: {{countQtyOffers}}</h5>
               <div class="mt-1">
                   <button *ngIf="this.offers && this.offers.length > 0" class="btn btn-pill btn-primary m-r-15 mb-3" type="button" (click)="add()" [disabled]="this.countQtyOffers > this.counter || this.countQtyOffers <= 0">Aceptar Oferta</button>
                   <button class="btn btn-pill btn-info mb-3" type="button" (click)="goBack()">Volver</button>

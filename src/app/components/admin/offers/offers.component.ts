@@ -39,6 +39,7 @@ export class OffersComponent implements OnInit {
   public profile =  JSON.parse(localStorage.getItem('profile'));
   public listView: boolean = true;
   public loading: boolean = true;
+  public loadingOffers: boolean = true;
   public col: string = '3';
   public companiesName = this.profile.role.slug == 'taller' ? 'Talleres' : this.profile.role.slug == 'comercio' ? 'Comercios' : 'No posee';
   public screenType: string = "";
@@ -102,22 +103,50 @@ export class OffersComponent implements OnInit {
         }, error => {
             console.log(error);
             this.loading = false;
+            this.loadingOffers = false;
         }
     ));
   }
   private getOffers() {
-    console.log("currentPage");
-    console.log(this.currentPage);
     this.subscription.add(this.srv.getOffersByEmail(this.profile.email, this.currentPage).subscribe(
         response => {
             console.log(response);
             this.offers = response;
-            this.loading = false;
+            this.getTimers();
         }, error => {
             console.log(error);
             this.loading = false;
+            this.loadingOffers = false;
         }
     ));
+  }
+  private getTimers() {
+    for (let offer of this.offers) {
+      if (offer.status === 2) {
+        offer.count = Number(new Date(offer.timerVigency).getTime() - new Date().getTime())
+        offer.countMinutes = Math.floor(offer.count / (1000 * 60));
+        offer.countSeconds = Math.floor((offer.count % (1000 * 60)) / 1000);
+        offer.count = offer.count / 1000;
+        let intervalId = setInterval(() => {
+          offer.count--;
+          if (offer.count > 0) {
+            if (offer.countSeconds <= 0) {
+              offer.countSeconds = 59;
+              offer.countMinutes--;
+            } else {
+              offer.countSeconds--;
+            }
+          } else {
+            // Detiene el intervalo cuando alcanza 0 minutos y 0 segundos
+            this.loadingOffers = true;
+            this.getCount();
+            clearInterval(intervalId);
+          }
+        }, 1000);
+      }
+    }
+    this.loading = false;
+    this.loadingOffers = false;
   }
   onPageFired(event: any) {
     this.loading = true;
