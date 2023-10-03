@@ -20,7 +20,7 @@ export interface OrderOffer {
   productWithOffers: {
     product: Product, 
     offers: Offer[],
-  },
+  }[],
 }
 
 @Component({
@@ -36,6 +36,7 @@ export class CartComponent implements OnInit {
     public loading: boolean = true;
     public products: Product[] = [];
     public orderOffer: OrderOffer[] = [];
+    private intervalsId: number[] = [];
     @ViewChild("quickViewCartConfirmPayment") QuickViewCartConfirmPayment: CartConfirmPaymentComponent;
 
     constructor(
@@ -53,18 +54,57 @@ export class CartComponent implements OnInit {
         this.router.navigate(['/admin/unauthorized']);
         }
     }
-    private getProductsInCart() {
+    private async getProductsInCart() {
+      /*const response: OrderOffer[] = await this.srv.findByEmail(this.profile.email).toPromise();
+      this.orderOffer = response;
+      console.log(this.orderOffer);
+      this.getTimers();*/
         this.subscription.add(this.srv.findByEmail(this.profile.email).subscribe(
             response => {
                 this.orderOffer = response;
                 console.log(this.orderOffer);
-                this.loading = false;
+                this.getTimers();
                 //this.getOrderOfferModel();
             }, error => {
                 console.log(error);
                 this.loading = false;
             }
         ));
+    }
+    private getTimers() {
+      for (let data of this.orderOffer) {
+        for (let product of data.productWithOffers) {
+          for (let offer of product.offers) {
+            offer.count = Number(new Date(offer.timerPaymentWorkshop).getTime() - new Date().getTime())
+            offer.countMinutes = Math.floor(offer.count / (1000 * 60));
+            offer.countSeconds = Math.floor((offer.count % (1000 * 60)) / 1000);
+            offer.count = offer.count / 1000;
+            if (offer.count > 0) {
+              let intervalId = setInterval(() => {
+                offer.count--;
+                if (offer.count > 0) {
+                  if (offer.countSeconds <= 0) {
+                    offer.countSeconds = 59;
+                    offer.countMinutes--;
+                  } else {
+                    offer.countSeconds--;
+                  }
+                } else {
+                  // Detiene el intervalo cuando alcanza 0 minutos y 0 segundos
+                  this.loading = true;
+                  this.ngOnInit();
+                  for (let intervalId of this.intervalsId) {
+                    clearInterval(intervalId);
+                  }
+                  
+                }
+              }, 1000);
+              this.intervalsId.push(intervalId);
+            }
+          }
+        }
+      }
+      this.loading = false;
     }
     private haveAccess() {
         let permissions = JSON.parse(localStorage.getItem("profile")).privilege;
@@ -135,5 +175,8 @@ export class CartComponent implements OnInit {
     }
     public ngOnDestroy() {
         if (this.subscription) this.subscription.unsubscribe();
-      }
+        for (let intervalId of this.intervalsId) {
+          clearInterval(intervalId);
+        }
+    }
 }

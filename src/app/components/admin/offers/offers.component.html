@@ -43,7 +43,7 @@
                                         <td>$ {{offer.price | number:'1.0-0'}}</td>
                                         <td class="text-center">{{offer.qtyOfferAccepted | number:'1.0-0'}}</td>
                                         <td>
-                                            <button *ngIf="offer.status == -3" class="btn btn-pill btn-secondary btn-xs">Expirado</button>
+                                            <button *ngIf="offer.status == -3 || offer.status == -4" class="btn btn-pill btn-secondary btn-xs">Expirado</button>
                                             <button *ngIf="offer.status == -2" class="btn btn-pill btn-secondary btn-xs">Rechazado</button>
                                             <button *ngIf="offer.status == 2" class="btn btn-pill btn-primary btn-xs">Publicado</button>
                                             <button *ngIf="offer.status == 3" class="btn btn-pill btn-info btn-xs">Adjudicado</button>
