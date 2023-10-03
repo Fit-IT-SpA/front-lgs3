@@ -6,7 +6,7 @@
         <div class="card-header">
           <h5>Ofertas Recepcionadas</h5>
         </div>
-        <div class="flex flex-col flex-auto" *ngIf="loading">
+        <div class="flex flex-col flex-auto" *ngIf="this.loading">
           <h6 class="text-center">Procesando...</h6>
           <div class="loader-box">
             <div class="loader-3"></div>
@@ -34,6 +34,7 @@
                   <thead>
                     <tr>
                       <th style="text-align: left">Oferta</th>
+                      <th>Tiempo</th>
                       <th>Estado</th>
                       <th>Origen</th>
                       <th>Cantidad</th>
@@ -46,6 +47,7 @@
                     <tr *ngFor="let off of product.offers">
                       <!--<td *ngIf="off.status == 3"><img class="img-fluid img-40" src="{{off.photo}}" alt="#"></td>-->
                       <td style="text-align: left" *ngIf="off.status == 3">{{product.product.title}}</td>
+                      <td>{{off.countMinutes.toLocaleString().padStart(2, '0')}} : {{off.countSeconds.toLocaleString().padStart(2, '0')}}</td>
                       <td *ngIf="off.status == 3">
                           <div class="product-name"><a href="javascript:void(0);">{{off.estado}}</a></div>
                       </td>

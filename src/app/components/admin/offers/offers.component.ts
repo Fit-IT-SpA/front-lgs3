@@ -45,6 +45,7 @@ export class OffersComponent implements OnInit {
   public screenType: string = "";
   public filterHidden: boolean = false;
   public filterButton: string = "Filtrar";
+  private intervalsId: number[] = [];
   
   //@ViewChild("quickViewOrdersEdit") QuickViewOrdersEdit: OrdersEditComponent;
 
@@ -140,9 +141,12 @@ export class OffersComponent implements OnInit {
             // Detiene el intervalo cuando alcanza 0 minutos y 0 segundos
             this.loadingOffers = true;
             this.getCount();
-            clearInterval(intervalId);
+            for (let intervalId of this.intervalsId) {
+              clearInterval(intervalId);
+            }
           }
         }, 1000);
+        this.intervalsId.push(intervalId);
       }
     }
     this.loading = false;
@@ -227,5 +231,11 @@ export class OffersComponent implements OnInit {
   }
   public onCellClick(id: string) {
     this.router.navigate(['/admin/offers/view/'+id]);
+  }
+  public ngOnDestroy() {
+    if (this.subscription) this.subscription.unsubscribe();
+    for (let intervalId of this.intervalsId) {
+      clearInterval(intervalId);
+    }
   }
 }
