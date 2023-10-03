@@ -37,6 +37,7 @@ export class ProductsViewComponent implements OnInit {
   private product: Product;
   private order: Order;
   private offers: Offer[] = [];
+  private intervalsId: number[] = [];
   public form: FormGroup;
   public companies: Companies[];
   public counter: number = 1;
@@ -140,9 +141,12 @@ export class ProductsViewComponent implements OnInit {
           // Detiene el intervalo cuando alcanza 0 minutos y 0 segundos
           this.loadingOffers = true;
           this.getOffers();
-          clearInterval(intervalId);
+          for (let intervalId of this.intervalsId) {
+            clearInterval(intervalId);
+          }
         }
       }, 1000);
+      this.intervalsId.push(intervalId);
       /*interval(1000)
          .pipe(
              take(offer.count),
@@ -279,6 +283,13 @@ export class ProductsViewComponent implements OnInit {
   public goBack() {
     this.router.navigate(['/admin/orders/'+this.orderId+'/products']);
     //console.log(this.form);
+  }
+
+  public ngOnDestroy() {
+    if (this.subscription) this.subscription.unsubscribe();
+    for (let intervalId of this.intervalsId) {
+      clearInterval(intervalId);
+    }
   }
 
 }
