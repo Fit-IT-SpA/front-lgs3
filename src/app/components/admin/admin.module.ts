@@ -23,6 +23,7 @@ import { PrivilegeModule } from './users/privilege/privilege.module';
 import { SalesManagementModule } from './users/sales-management/sales-management.module';
 import { CompaniesModule } from './companies/companies.module';
 import { CartModule } from './cart/cart.module';
+import { DeliveryModule } from './users/delivery/delivery.module';
 
 
 @NgModule({
@@ -36,6 +37,7 @@ import { CartModule } from './cart/cart.module';
         RoleModule,
         PrivilegeModule,
         SalesManagementModule,
+        DeliveryModule,
         OrdersModule,
         OffersModule,
         CompaniesModule,
