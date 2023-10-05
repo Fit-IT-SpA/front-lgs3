@@ -125,7 +125,10 @@ export class NavService implements OnDestroy {
 			id: 'mis-compras-lectura', title: 'Mis Compras', icon: 'shopping-bag', type: 'link', active: false, path: '/admin/purchases'
 		},
 		{ 
-			id: 'gestion-de-ventas-admin-escritura', path: '/admin/users/sales-management', title: 'Gestión de ventas', icon: 'shopping-bag', type: 'link', active: false 
+			id: 'gestion-de-ventas-admin-escritura', path: '/admin/users/sales-management', title: 'Podio ventas', icon: 'shopping-bag', type: 'link', active: false 
+		},
+		{ 
+			id: 'gestion-de-ventas-admin-escritura', path: '/admin/users/delivery', title: 'Delivery', icon: 'truck', type: 'link', active: false 
 		},
 		{
 			id: 'usuario-admin-escritura', title: 'Administracion', icon: 'edit', type: 'sub', active: false, children: [
