@@ -1,0 +1,93 @@
+<app-breadcrumb [title]="'Detalles Delivery'"></app-breadcrumb>
+<div class="container-fluid credit-card" *ngIf="!loading">
+  <div class="row">
+    <div class="col-xl-8 box-col-12">
+      <div class="card">
+        <div class="card-header py-4">
+          <h5>Datos del producto </h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-7">
+              <form class="theme-form mega-form">
+                <h4>{{data.order.brand}} {{data.order.model}} {{data.order.year}}</h4>
+                <h4>{{data.order.chassis}}</h4>
+                <div class="product-view">
+                    <h6 class="f-w-600">Detalles de la Oferta</h6>
+                    <p class="mb-0">{{data.product.title}}</p>
+                    <p class="mb-0">{{data.origen}} {{data.estado}}</p>
+                    <p class="mb-0" *ngIf="data.make && data.make !== ''">{{data.make}}</p>
+                    <p class="mb-0">Precio unitario: ${{(data.price).toLocaleString('es-CL')}}</p>
+                    <p class="mb-0">Cantidad: {{data.qtyOfferAccepted}}</p>
+                    <div>
+                        <p class="" *ngIf="data.status == 6">Estado: <span class="text-primary">Disponible para retirar</span></p>
+                        <p class="" *ngIf="data.status == 7">Estado: <span class="text-info">Esperando confirmación del taller</span></p>
+                        <p class="" *ngIf="data.status == 8">Estado: <span class="text-success">Producto entregado</span></p>
+                    </div>
+                    <div *ngIf="data.price" class="product-price mb-3">Precio total: ${{(data.price * data.qtyOfferAccepted).toLocaleString('es-CL')}}</div>
+                    <div style="text-align: center" class="addcart-btn mb-3">
+                      <button *ngIf="data.status === 6" class="btn btn-pill btn-primary m-r-15" type="button" (click)="confirmWithdrawal()">Confirmar entrega</button>
+                      <button class="btn btn-pill btn-info" (click)="goBack()" type="button">Volver</button>
+                    </div>
+                </div>
+              </form>
+            </div>
+            <div class="col-md-5 text-center"><img class="img-fluid" src="{{data.order.photo}}" alt=""></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-4 col-lg-6 box-col-6 debit-card">
+      <div class="card">
+        <div class="card-header py-4">
+          <h5>Comprobante Del Aministrador </h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <button *ngIf="data.photoPaymentReceiptAtAdmin" class="btn btn-primary btn-block" type="button" title="" (click)="this.paymentReceipt(data.photoPaymentReceiptAtAdmin)">Comprobante</button>
+            <p *ngIf="!data.photoPaymentReceiptAtAdmin">No se encuentra comprobante</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-4 col-lg-6 box-col-6">
+      <div class="card">
+        <div class="card-header py-4">
+          <h5>Datos Taller</h5>
+        </div>
+        <div class="card-body">
+            <p>{{data.workshop.name}}</p>
+            <p>{{data.workshop.region}}</p>
+            <p>{{data.workshop.commune}}</p>
+            <p>{{data.workshop.direction}}</p>
+          <form class="theme-form row">
+            <div class="col-12">
+              <button class="btn btn-primary btn-block" type="button" title="" (click)="this.contactCompany(data.workshop,(data.price + data.price * data.commission) * data.qtyOfferAccepted)">Datos Bancarios</button>
+              <button class="btn btn-primary btn-block" type="button" title="" (click)="this.paymentReceipt(data.photoPaymentReceiptAtClaimant)">Comprobante</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- COD Ends-->
+    <!-- EMI Starts-->
+    <div class="col-xl-4 col-lg-6 box-col-6">
+      <div class="card">
+        <div class="card-header py-4">
+          <h5>Datos Comercio</h5>
+        </div>
+        <div class="card-body">
+            <p>{{data.commerce.name}}</p>
+            <p>{{data.commerce.region}}</p>
+            <p>{{data.commerce.commune}}</p>
+            <p>{{data.commerce.direction}}</p>
+          <form class="theme-form row">
+            <div class="col-12">
+              <button class="btn btn-primary btn-block" type="button" title="" (click)="this.contactCompany(data.commerce, data.price * data.qtyOfferAccepted)">Datos Bancarios</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

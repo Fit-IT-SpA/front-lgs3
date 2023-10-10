@@ -7,10 +7,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConstantService } from 'src/app/shared/services/constant.service';
 import { Product } from 'src/app/shared/model/product.model';
 import { Offer } from 'src/app/shared/model/offer.model';
-import { ProductsService } from '../../orders/products/products.service';
+import { ProductsService } from '../../../orders/products/products.service';
 import { OfferService } from 'src/app/shared/services/offer.service';
 import { Order } from 'src/app/shared/model/order.model';
-import { DeliveryService } from './delivery.service';
+import { DeliveryService } from '../delivery.service';
 import { User } from 'src/app/shared/model/user';
 import { OfferWithData } from 'src/app/shared/model/offer-with-data';
 import { Companies } from 'src/app/shared/model/companies.model';
@@ -20,29 +20,33 @@ const Swal = require('sweetalert2');
 
 @Component({
     selector: 'app-delivery',
-    templateUrl: './delivery.component.html',
-    styleUrls: ['./delivery.component.scss'],
+    templateUrl: './delivery-view.component.html',
+    styleUrls: ['./delivery-view.component.scss'],
     providers: [DeliveryService, ProductsService, OfferService],
 })
 
-export class DeliveryComponent implements OnInit {
+export class DeliveryViewComponent implements OnInit {
     private subscription: Subscription = new Subscription();
+    private offerId: string;
     public profile =  JSON.parse(localStorage.getItem('profile'));
     public loading: boolean = true;
-    public products: Product[] = [];
-    public orderOffer: OfferWithData[] = [];
+    public data: OfferWithData;
 
     constructor(
         private modalService: NgbModal,
         private fb: FormBuilder,
         private router: Router,
         private srv: DeliveryService,
+        private activatedRoute: ActivatedRoute,
         private srvProduct: ProductsService,
         private srvOffer: OfferService,
         public toster: ToastrService) {}
     ngOnInit(): void {
         if (this.haveAccess()) {
-            this.getOrders();
+            this.subscription.add(this.activatedRoute.params.subscribe(params => {
+                this.offerId = params['id'];
+                this.getOffer();
+            }));
         } else {
         this.router.navigate(['/admin/unauthorized']);
         }
@@ -58,14 +62,15 @@ export class DeliveryComponent implements OnInit {
         return false;
         }
     }
-    private getOrders(): void {
-        this.subscription.add(this.srv.findOrders().subscribe(
+    private getOffer() {
+        this.subscription.add(this.srv.findById(this.offerId).subscribe(
             response => {
                 console.log(response);
-                this.orderOffer = response;
+                this.data = response;
                 this.loading = false;
             }, error => {
                 console.log(error);
+                this.loading = false;
             }
         ));
     }
@@ -112,15 +117,10 @@ export class DeliveryComponent implements OnInit {
             }
         });
     }
-    public paymentReceipt(user: User, companyRut: string, receipt: string) {
-      let title: string = (user.role === 'taller') ? 'Comprobante de pago' : (user.role === 'comercio') ? 'Información de comercio' : '';
-      let subTitle: string = (user.role === 'taller') ? 'Revisar si el pago fue efectuado en su cuenta' 
-      : (user.role === 'comercio') ? 'Depositar a este contacto' : '';
+    public paymentReceipt(receipt: string) {
       Swal.fire({
           type: 'info',
-          title: title,
           html: 
-          '<div class="mb-3">'+subTitle+'</div>'+
           '<div class="row">'+
           '<div class="col">'+
             '<img src="'+receipt+'" class="row mb-3" style="max-width: 100%;height: auto;">'+
@@ -132,10 +132,42 @@ export class DeliveryComponent implements OnInit {
               confirmButton: 'btn btn-pill btn-info', // Agrega tu clase CSS personalizada aquí
           }
       });
-  }
-  public onCellClick(id: string) {
-    console.log(id);
-    this.router.navigate(['/admin/users/delivery/view/'+id]);
-  }
-
+    }
+    private save() {
+      this.subscription.add(this.srv.deliveryWithdrawal(this.offerId).subscribe(
+        response => {
+          console.log(response);
+          this.goBack();
+        }, error => {
+          console.log(error);
+        }
+      ));
+    }
+    public confirmWithdrawal() {
+      Swal.fire({
+        title: 'Estás seguro que deseas confirmar la entrega del producto?',
+        text: "Estás confirmando que el producto llego correctamente al taller",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, confirmar!',
+        cancelButtonText: 'No, cancelar!'
+      }).then((result) => {
+        if (result.value) {
+          this.save();
+          Swal.fire(
+            'Producto entregado',
+            'Esperar confirmación por parte del taller',
+            'success'
+          );
+        }
+      })
+    }
+    public goBack() {
+      console.log("goBack");
+      this.router.navigate(['/admin/users/delivery']);
+      //console.log(this.form);
+    }
+  
 }
