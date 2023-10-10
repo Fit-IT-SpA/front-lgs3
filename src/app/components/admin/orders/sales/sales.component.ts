@@ -115,9 +115,11 @@ export class SalesComponent implements OnInit {
                                 }else if (this.offers[i].status == 4) {
                                     status = "<span class='font-danger'>Pagado</span>";
                                 }else if (this.offers[i].status == 5) {
-                                    status = '<button class="btn btn-warning btn-xs" type="button" placement="top">Por confirmar</button>';
-                                }else if (this.offers[i].status == 6) {
-                                    status = '<button class="btn btn-success btn-xs type="button" placement="top">Confirmado</button>';
+                                    status = '<button class="btn btn-pill btn-primary btn-xs" type="button" placement="top">Por confirmar</button>';
+                                }else if (this.offers[i].status == 6 || this.offers[i].status == 7) {
+                                    status = '<button class="btn btn-pill btn-info btn-xs type="button" placement="top">En proceso de entrega</button>';
+                                } else if (this.offers[i].status == 8) {
+                                  status = '<button class="btn btn-pill btn-success btn-xs type="button" placement="top">Entregado</button>';
                                 } else {
                                     status = "<span class='font-warning'>Por Definir ("+this.offers[i].status+")</span>";
                                 }

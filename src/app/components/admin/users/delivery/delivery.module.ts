@@ -10,11 +10,13 @@ import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { DeliveryComponent } from './delivery.component';
+import { DeliveryViewComponent } from './delivery-view/delivery-view.component';
 import { DeliveryRoutingModule } from './delivery.routing';
 
 @NgModule({
     declarations: [
-        DeliveryComponent
+        DeliveryComponent,
+        DeliveryViewComponent
     ],
     imports: [
         CommonModule,

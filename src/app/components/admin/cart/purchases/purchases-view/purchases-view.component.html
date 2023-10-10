@@ -14,12 +14,13 @@
                 <p class="mb-0">Cantidad: {{offerData.qtyOfferAccepted}}</p>
                 <div>
                     <p class="" *ngIf="offerData.status == 4 || offerData.status == 5">Estatus: <span class="text-info">Procesando</span></p>
-                    <p class="" *ngIf="offerData.status == 6">Estatus: <span class="text-warning">Retirar</span></p>
-                    <p class="" *ngIf="offerData.status == 7">Estatus: <span class="text-success">Recibido</span></p>
+                    <p class="" *ngIf="offerData.status == 6">Estatus: <span class="text-warning">En preparación</span></p>
+                    <p class="" *ngIf="offerData.status == 7">Estatus: <span class="text-primary">Confirmar entrega</span></p>
+                    <p class="" *ngIf="offerData.status == 8">Estatus: <span class="text-success">Producto entregado</span></p>
                 </div>
                 <div *ngIf="offerData.price" class="product-price">Valor total: ${{((offerData.price + offerData.price / 10) * offerData.qtyOfferAccepted).toLocaleString('es-CL')}}</div>
                 <div style="text-align: center" class="addcart-btn">
-                    <button class="btn btn-pill btn-primary m-r-15" *ngIf="offerData.status == 6" (click)="this.confirmProductReceived(offerData._id)" type="button">Lo Recibí!</button>
+                    <button class="btn btn-pill btn-primary m-r-15" *ngIf="offerData.status == 7" (click)="this.confirmProductReceived(offerData._id)" type="button">Lo Recibí!</button>
                     <button class="btn btn-pill btn-info" (click)="modal.dismiss('Cross click')" type="button">Volver</button>
                 </div>
               </div>

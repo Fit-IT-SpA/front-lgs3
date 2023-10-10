@@ -36,8 +36,9 @@
                                 <td>${{(offer.price + offer.price / 10) * offer.qtyOfferAccepted | number:'1.0-0'}}</td>
                                 <td>
                                     <button class="btn btn-pill btn-info btn-xs" *ngIf="offer.status == 4 || offer.status == 5">Procesando</button>
-                                    <button class="btn btn-pill btn-warning btn-xs" *ngIf="offer.status == 6">Retirar</button>
-                                    <button class="btn btn-pill btn-success btn-xs" *ngIf="offer.status == 7">Recibido</button>
+                                    <button class="btn btn-pill btn-warning btn-xs" *ngIf="offer.status == 6">En preparación</button>
+                                    <button class="btn btn-pill btn-primary btn-xs" *ngIf="offer.status == 7">Confirmar entrega</button>
+                                    <button class="btn btn-pill btn-success btn-xs" *ngIf="offer.status == 8">Producto entregado</button>
                                 </td>
                               </tr>
                             </tbody>
