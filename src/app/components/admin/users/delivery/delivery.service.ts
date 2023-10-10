@@ -21,6 +21,18 @@ export class DeliveryService extends AbstractHttpService {
             })
         );
     }
+    findById(id: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http.get<any>(`${this.apiUrl}/delivery/offer/${id}`, httpOptions).pipe(
+            map(response => {
+                return response;
+            })
+        );
+    }
     confirmDelivered(offerId: string, productId: string, orderId: string, photo: string) {
         const httpOptions = {
             headers: new HttpHeaders({
@@ -28,6 +40,18 @@ export class DeliveryService extends AbstractHttpService {
             })
         };
         return this.http.put<any>(`${this.apiUrl}/delivery/order/${orderId}/product/${productId}/offer/${offerId}`, {photo: photo}, httpOptions).pipe(
+            map(response => {
+                return response;
+            })
+        );
+    }
+    deliveryWithdrawal(id: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http.put<any>(`${this.apiUrl}/delivery/offer/withdrawal/${id}`, httpOptions).pipe(
             map(response => {
                 return response;
             })
