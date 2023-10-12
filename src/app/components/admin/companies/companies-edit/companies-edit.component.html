@@ -1,4 +1,5 @@
-<app-breadcrumb [title]="'Editar '+this.profile.role.name"></app-breadcrumb>
+<app-breadcrumb *ngIf="this.profile.role.slug === 'taller'" [title]="'Editar Facturación'"></app-breadcrumb>
+<app-breadcrumb *ngIf="this.profile.role.slug !== 'taller'" [title]="'Editar '+this.profile.role.name"></app-breadcrumb>
 <div>
     <div class="flex flex-col flex-auto" *ngIf="loading">
         <h6 class="text-center">Procesando...</h6>
@@ -9,6 +10,18 @@
   <div class="card" *ngIf="!loading">
       <form [formGroup]="companiesForm">
           <div class="card-body">
+              <div *ngIf="this.profile.role.slug === 'taller'">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="billing">Tipo Facturación</label>
+                        <div class="radio radio-primary" *ngFor="let billing of billingTypes; index as i">
+                            <input id="radio{{i}}" class="ml-3" type="radio" name="radio" value="{{billing.slug}}" (click)="this.clickBilling(billing.slug)"
+                            [checked]="billing.check">
+                            <label for="radio{{i}}" class="mb-2">{{billing.title}}</label>
+                        </div>
+                    </div>
+                </div>
+              </div>
               <div>
                   <div class="col">
                     <div class="form-group">
