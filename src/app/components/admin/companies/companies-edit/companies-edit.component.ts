@@ -96,7 +96,6 @@ export class CompaniesEditComponent implements OnInit {
           bank: [{ value: response.bank, label: response.bank, job: "" }, [Validators.required]],
           make: [this.makesFilter, (this.profile.role.slug === 'comercio') ? [Validators.required] : []],
         });
-        console.log(this.companiesForm.controls.billingType.value);
         this.companiesForm.get('rut').disable();
         this.findMakesOfCompany();
       }, error => {

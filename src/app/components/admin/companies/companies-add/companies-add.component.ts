@@ -64,7 +64,6 @@ export class CompaniesAddComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.haveAccess()) {
-      console.log(this.profile);
       this.companiesForm = this.fb.group({
         rut: ['', [Validators.required]],
         billingType: ['', (this.profile.role.slug === 'taller') ? [Validators.required] : []],

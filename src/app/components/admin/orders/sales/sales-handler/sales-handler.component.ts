@@ -1,5 +1,4 @@
 import { Component, OnInit, TemplateRef, ViewChild , EventEmitter } from '@angular/core';
-import { SalesComponent } from '../sales.component';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ServiceTypeService } from '../../../../../shared/services/service-type.service';
@@ -16,7 +15,8 @@ import { Companies } from 'src/app/shared/model/companies.model';
 import { OrderService } from 'src/app/shared/services/order.service';
 import { Product } from '../../../../../shared/model/product.model';
 import { OfferService } from 'src/app/shared/services/offer.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ConstantService } from 'src/app/shared/services/constant.service';
 declare var require;
 const Swal = require('sweetalert2');
 
@@ -27,54 +27,53 @@ const Swal = require('sweetalert2');
   providers: [ServiceTypeService, UserService, CompaniesService, OrderService, OfferService],
 })
 export class SalesHandlerComponent implements OnInit  {
-  @ViewChild("quickViewSalesHandler", { static: false }) QuickViewSalesHandler: TemplateRef<any>;
   private subscription: Subscription = new Subscription();
-  public closeResult: string;
-  public modalOpen: boolean = false;
-  public companiesForm: FormGroup;
-  public perfil =  JSON.parse(localStorage.getItem('profile'));
-  private user: User;
-  private offer: Offer;
-  private order: Order;
-  private product: Product;
-  public offersFormGroup: FormGroup;
-  public secondFormGroup: FormGroup;
-  public thirdFormGroup: FormGroup;
-  public companies: Companies[];
-  public counter: number = 1;
-  public filePath: string;
-  public imgFile: any;
-  public idOrder: string
-  public maxQty: number;
-  public priceMask: number = 0;
-  public idProduct: string;
-  public estado : string;
-  public status : string;
+  public profile =  JSON.parse(localStorage.getItem('profile'));
+  public data: {offer: Offer, order: Order, product: Product};
+  private offerId: string;
+  public loading: boolean = true;
 
   constructor(
-    public componentePadre: SalesComponent,
     private modalService: NgbModal,
     private fb: FormBuilder,
-    private userSrv: UserService,
-    private sanitizer: DomSanitizer,
-    private srv: OrderService,
-    private srvOffer: OfferService,
+    private srv: OfferService,
+    private activatedRoute: ActivatedRoute,
     private router: Router,
     public toster: ToastrService,) {
     }
         
   ngOnInit(): void {
+    if (this.haveAccess()) {
+      this.subscription.add(this.activatedRoute.params.subscribe(params => {
+          this.offerId = params['id'];
+          this.getOffer();
+      }));
+    }
   }
-
-  ejecutarOnInitPadre() {
-    this.componentePadre.ejecutarOnInitPadre();
+  private haveAccess() {
+    let permissions = JSON.parse(localStorage.getItem("profile")).privilege;
+    if (permissions) {
+        let access = permissions.filter((perm: string) => {
+            return perm === ConstantService.PERM_MIS_OFERTAS_LECTURA;
+        });
+        return access.length > 0;
+    } else {
+        return false;
+    }
   }
-  
-  /**
-   * open Dialog CUBA
-   * @param user 
-   */
-  openModal(obj: any, user : User) {
+  private getOffer() {
+    this.subscription.add(this.srv.getOfferById(this.offerId).subscribe(
+      response => {
+          console.log(response);
+          this.data = response;
+          this.loading = false;
+      }, error => {
+          console.log(error);
+          this.loading = false;
+      }
+  ))
+  }
+  /*openModal(obj: any, user : User) {
     this.user = user;
     this.offer = obj;
     this.status = obj.statusClean;
@@ -102,9 +101,9 @@ export class SalesHandlerComponent implements OnInit  {
       }, (reason) => {
         this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
       });
-  }
+  }*/
 
-  confirmarPago(offer){
+  public confirmarPago(){
       const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
               confirmButton: 'btn btn-pill btn-primary mr-2',
@@ -114,32 +113,48 @@ export class SalesHandlerComponent implements OnInit  {
           });   
         swalWithBootstrapButtons.fire({
         title: 'Confirmación de Pago',
-        text: "Repuesto: "+offer.product.title,
+        text: "Repuesto: "+this.data.product.title,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Estoy seguro',
         cancelButtonText: 'Cancelar'
       }).then((result) => {
         if (result.isConfirmed) { 
-           this.srvOffer.updateStatusById(this.offer.id,6).subscribe(
+          this.loading = true;
+          this.srv.updateStatusById(this.data.offer.id,6).subscribe(
             (response) => {
                 this.modalService.dismissAll();
                 Swal.fire(
                     {title:'Pago confirmado',
                     icon: 'success'
                 });
-               
-                this.ejecutarOnInitPadre();
-                
+                this.goBack();
             },   
             (error) => {
                 Swal.fire(
                 {title:'Error al confirmar pago',
                 icon: 'error'
                 });
+                this.loading = false;
             });
         }
       });
+  }
+  public paymentReceipt(receipt: string) {
+    Swal.fire({
+        type: 'info',
+        html: 
+        '<div class="row">'+
+        '<div class="col">'+
+          '<img src="'+receipt+'" class="row mb-3" style="max-width: 100%;height: auto;">'+
+        '</div>'+
+      '</div>',
+        showConfirmButton: true,
+        buttonsStyling: false,
+        customClass: {
+            confirmButton: 'btn btn-pill btn-info', // Agrega tu clase CSS personalizada aquí
+        }
+    });
   }
   
   /**
@@ -153,19 +168,8 @@ export class SalesHandlerComponent implements OnInit  {
             return format(rut);
     return 'rut incorrecto';    
   }
-  /**
-   * metodo que se dispara al hacer click en un botón radio
-   * guarda el rut dentro del formulario
-   * @param rut rut del taller que hará el pedido
-   */
-  
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+  public goBack() {
+    this.router.navigate(['/admin/orders/sales']);
+    //console.log(this.form);
   }
 }

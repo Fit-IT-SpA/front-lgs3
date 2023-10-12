@@ -66,8 +66,6 @@ export class SalesComponent implements OnInit {
     { name: 'Company' }
   ];
 
-  @ViewChild("quickViewSalesHandler") QuickViewSalesHandler: SalesHandlerComponent;
-
   constructor(
     private modalService: NgbModal,
     private fb: FormBuilder,
@@ -115,7 +113,7 @@ export class SalesComponent implements OnInit {
                                 }else if (this.offers[i].status == 4) {
                                     status = "<span class='font-danger'>Pagado</span>";
                                 }else if (this.offers[i].status == 5) {
-                                    status = '<button class="btn btn-pill btn-primary btn-xs" type="button" placement="top">Por confirmar</button>';
+                                    status = '<button class="btn btn-pill btn-primary btn-xs" type="button" placement="top">Pagado</button>';
                                 }else if (this.offers[i].status == 6 || this.offers[i].status == 7) {
                                     status = '<button class="btn btn-pill btn-info btn-xs type="button" placement="top">En proceso de entrega</button>';
                                 } else if (this.offers[i].status == 8) {
@@ -155,14 +153,8 @@ export class SalesComponent implements OnInit {
       
 
   }
-  
-  public customCellTemplate(row: any) {
-    return `<div class="icon-button" (click)="onCellClick(${row.id})">
-              <i class="fa fa-edit"></i>
-            </div>`;
-  }  
-  onCellClick(offer) {
-      this.QuickViewSalesHandler.openModal(offer,this.user) 
+  onCellClick(id: string) {
+    this.router.navigate(['/admin/orders/sales/'+id]);
   }
   public canWrite() {
     return true;
