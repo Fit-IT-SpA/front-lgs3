@@ -26,10 +26,11 @@ export class CompaniesComponent implements OnInit{
     public count: number;
     public user: User;
     public companies: Companies[];
+    public addOption: boolean = true;
     public loading: boolean = true;
     public profile =  JSON.parse(localStorage.getItem('profile'));
-    public companiesTitle = this.profile.role.slug == 'taller' ? 'Talleres' : this.profile.role.slug == 'comercio' ? 'Comercios' : 'Negocios';
-    public companyTitle = this.profile.role.slug == 'taller' ? 'Taller' : this.profile.role.slug == 'comercio' ? 'Comercio' : 'Negocio';
+    public companiesTitle = this.profile.role.slug == 'taller' ? 'Facturación' : this.profile.role.slug == 'comercio' ? 'Comercios' : 'Negocios';
+    public companyTitle = this.profile.role.slug == 'taller' ? 'Facturación' : this.profile.role.slug == 'comercio' ? 'Comercio' : 'Negocio';
     @ViewChild("quickViewCompaniesView") QuickViewCompaniesView: CompaniesViewComponent;
 
     constructor(
@@ -77,6 +78,9 @@ export class CompaniesComponent implements OnInit{
                     this.companies = response;
                     if (this.companies && this.companies.length < 1) {
                         this.toster.info('Para interactuar con el sistema, debe tener 1 o varios '+this.companiesTitle);   
+                    }
+                    if (this.profile.role.slug === 'taller' && this.companies.length > 0 && this.companies[0].billingType && this.companies[0].billingType === 'boleta') {
+                        this.addOption = false;
                     }
                     this.loading = false;
                 },
