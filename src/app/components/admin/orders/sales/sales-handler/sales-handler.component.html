@@ -1,34 +1,72 @@
-<ng-template #quickViewSalesHandler let-modal>
-    <div class="col-sm-12">
-        <div class="card">
-          <div class="card-body">
-            <div class="new-users-social">
-              <div class="media">
-                <div class="media-body">
-                  <h6 class="mb-0 f-w-700">{{estado}} | {{offer.order.brand}} - {{offer.order.model}}</h6>
-                  <p>Repuesto: {{offer.product.title}} ({{offer.product.originalQty}} Cant. original)</p>
-                </div><span class="pull-right mt-0"><i data-feather="more-vertical"></i></span>
+<app-breadcrumb [title]="'Detalle de la venta'"></app-breadcrumb>
+<div class="container-fluid">
+  <div class="flex flex-col flex-auto" *ngIf="loading">
+      <div class="loader-box">
+        <div class="loader-3"></div>
+      </div>
+  </div>
+  <div class="modal-content" *ngIf="!loading">
+      <div class="modal-header product-modal">
+        <div class="product-box row">
+          <div class="product-img col-md-6" *ngIf="!data.order.photo"><img class="img-fluid" src="assets/images/ecommerce/01.jpg"></div>
+          <div class="product-img col-md-6" *ngIf="data.order.photo"><img class="img-fluid" src="{{data.order.photo}}" alt=""></div>
+          <div class="product-details col-md-6 text-left">
+            <h4>{{data.order.brand}} {{data.order.model}} {{data.order.year}}</h4>
+            <h4>{{data.order.chassis}}</h4>
+            <div class="product-view">
+              <h6 class="f-w-600">Detalles de la Oferta</h6>
+              <p class="f-w-500 mb-0">{{data.product.title}}</p>
+              <p class="mb-0">{{data.offer.origen}} {{data.offer.estado}}</p>
+              <p class="mb-0" *ngIf="data.offer.make && data.offer.make !== ''">{{data.offer.make}}</p>
+              <p class="mb-0">Precio unitario: ${{(data.offer.price).toLocaleString('es-CL')}}</p>
+              <p class="mb-0">Cantidad: {{data.offer.qtyOfferAccepted}}</p>
+              <div>
+                  <p class="mb-0" *ngIf="data.offer.status == 5">Estado: <span class="text-primary">Pagado</span></p>
+                  <p class="mb-0" *ngIf="data.offer.status == 6 || data.offer.status == 7">Estado: <span class="text-info">En proceso de entrega</span></p>
+                  <p class="mb-0" *ngIf="data.offer.status == 8">Estado: <span class="text-success">Entregado</span></p>
+              </div>
+              <p class="mb-0">Fecha pago: {{data.offer.confirmedAtAdmin | date:'dd-MM-yyyy HH:mm'}}</p>
+              <p class="mb-0" *ngIf="data.offer.photoPaymentReceiptAtAdmin"><button (click)="paymentReceipt(data.offer.photoPaymentReceiptAtAdmin)" class="btn btn-pill btn-info btn-xs" type="button">Comprobante administrador</button></p>
+              <div *ngIf="data.offer.price" class="product-price">Precio total: ${{(data.offer.price * data.offer.qtyOfferAccepted).toLocaleString('es-CL')}}</div>
+              <div style="text-align: center" class="addcart-btn">
+                  <button *ngIf="data.offer.status == 5" (click)="confirmarPago()" class="btn btn-pill btn-primary m-r-15 mb-3" type="button">Confirmar Pago</button>
+                  <button class="btn btn-pill btn-info mb-3" (click)="goBack()" type="button">Volver</button>
               </div>
             </div>
-            <div class="timeline-content">
-              <hr>
-              <h6>Oferta {{offer.idOffer}}</h6>
-              
-              <div class="product-price">$ {{offer.price | number:'1.0-0'}}</div>
-              <p>
-                Cantidad unidades ofertadas: {{offer.qtyOfferAccepted}}
-              </p>
-              <p [innerHTML]="offer.origen"></p>
-              <p>
-                Condición {{offer.estado}}
-              </p>
-            </div>
           </div>
-            <div *ngIf="this.status == 5"  this.status  class="card-footer">
-                <div class="input-group bootstrap-touchspin">
-                    <button (click)=confirmarPago(offer) class="btn btn-pill btn-primary" type="button">Confirmar Pago</button>
-                </div>
-            </div>
         </div>
+      </div>
     </div>
-</ng-template>
+</div>
+<!--<div class="col-sm-12">
+  <div class="card">
+    <div class="card-body">
+      <div class="new-users-social">
+        <div class="media">
+          <div class="media-body">
+            <h6 class="mb-0 f-w-700">{{estado}} | {{offer.order.brand}} - {{offer.order.model}}</h6>
+            <p>Repuesto: {{offer.product.title}} ({{offer.product.originalQty}} Cant. original)</p>
+          </div><span class="pull-right mt-0"><i data-feather="more-vertical"></i></span>
+        </div>
+      </div>
+      <div class="timeline-content">
+        <hr>
+        <h6>Oferta {{offer.idOffer}}</h6>
+        
+        <div class="product-price">$ {{offer.price | number:'1.0-0'}}</div>
+        <p>
+          Cantidad unidades ofertadas: {{offer.qtyOfferAccepted}}
+        </p>
+        <p [innerHTML]="offer.origen"></p>
+        <p>
+          Condición {{offer.estado}}
+        </p>
+      </div>
+    </div>
+      <div *ngIf="this.status == 5"  this.status  class="card-footer">
+          <div class="input-group bootstrap-touchspin">
+              <button (click)=confirmarPago(offer) class="btn btn-pill btn-primary" type="button">Confirmar Pago</button>
+          </div>
+      </div>
+  </div>
+</div>-->

@@ -104,7 +104,7 @@ export class NavService implements OnDestroy {
 			id: 'mis-comercios-lectura', path: '/admin/companies', title: 'Comercios', icon: 'home', type: 'link'
 		},
 		{
-			id: 'mis-talleres-lectura', path: '/admin/companies', title: 'Talleres', icon: 'home', type: 'link'
+			id: 'mis-talleres-lectura', path: '/admin/companies', title: 'Facturación', icon: 'home', type: 'link'
 		},
 		{
 			id: 'mis-pedidos-lectura', title: 'Mis Pedidos', icon: 'package', type: 'link', active: false, path: '/admin/orders'

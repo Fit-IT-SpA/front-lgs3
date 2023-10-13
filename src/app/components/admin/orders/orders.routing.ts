@@ -8,6 +8,7 @@ import { ProductsViewComponent } from './products/products-view/products-view.co
 import { ProductsComponent } from './products/products.component';
 import { OffersComponent } from './offers/offers.component';
 import { SalesComponent } from './sales/sales.component';
+import { SalesHandlerComponent } from './sales/sales-handler/sales-handler.component';
 import { AdminGuard } from 'src/app/shared/guard/admin.guard';
 import { OffersAddComponent } from './offers/offers-add/offers-add.component';
 import { OrdersEditComponent } from './orders-edit/orders-edit.component';
@@ -69,6 +70,11 @@ export const routes: Routes = [
                 path: 'orders/sales',
                 canActivate: [AdminGuard],
                 component: SalesComponent
+            },
+            {
+                path: 'orders/sales/:id',
+                canActivate: [AdminGuard],
+                component: SalesHandlerComponent
             }
         ],
     }

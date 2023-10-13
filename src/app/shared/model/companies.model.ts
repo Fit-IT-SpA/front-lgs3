@@ -1,5 +1,6 @@
 export interface Companies {
     rut: string,
+    billingType?: string,
     type: string,
     createBy: string,
     name: string,

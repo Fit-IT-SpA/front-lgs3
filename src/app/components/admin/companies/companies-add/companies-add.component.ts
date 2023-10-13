@@ -26,6 +26,7 @@ export class CompaniesAddComponent implements OnInit {
   public disabledCommuneFilter: boolean = false;
   public companiesForm: FormGroup;
   public profile =  JSON.parse(localStorage.getItem('profile'));
+  public billingTypes: {title: string, slug: string, check: boolean}[] = [];
   public regionFilter: { value: string, label: string, job: string }[] = [];
   public communeFilter: { value: string, label: string, job: string }[] = [];
   public makesFilter: { value: string, label: string, job: string }[] = [];
@@ -65,6 +66,7 @@ export class CompaniesAddComponent implements OnInit {
     if (this.haveAccess()) {
       this.companiesForm = this.fb.group({
         rut: ['', [Validators.required]],
+        billingType: ['', (this.profile.role.slug === 'taller') ? [Validators.required] : []],
         name: ['', [Validators.required,Validators.maxLength(18)]],
         direction: ['', [Validators.required,Validators.maxLength(140)]],
         region: [null, [Validators.required]],
@@ -75,8 +77,11 @@ export class CompaniesAddComponent implements OnInit {
         bank: [null, [Validators.required]],
         make: [null, (this.profile.role.slug === 'comercio') ? [Validators.required] : []],
       });
-      this.companiesForm.get('commune').disable();
-      this.getVehicleListMake();
+      if (this.profile.role.slug === 'comercio') {
+        this.getVehicleListMake();
+      } else {
+        this.getRegion();
+      }
     }
 
   }
@@ -118,6 +123,7 @@ export class CompaniesAddComponent implements OnInit {
       this.companiesForm.controls.region.setValue(this.regionFilter[0]);
       this.getCommune();
     } else {
+      this.companiesForm.get('commune').disable();
       this.subscription.add(this.srv.findLocationsRegion().subscribe(
         response => {
           console.log(response);
@@ -128,7 +134,7 @@ export class CompaniesAddComponent implements OnInit {
               job: ''
             });
           }
-          this.loading = false;
+          this.getBilling();
         }, error => {
           console.log(error);
         }
@@ -151,6 +157,20 @@ export class CompaniesAddComponent implements OnInit {
         console.log(error);
       }
     ));
+  }
+  private getBilling() {
+    this.billingTypes.push({title: 'Factura', slug: 'factura', check: true});
+    this.billingTypes.push({title: 'Boleta', slug: 'boleta', check: false});
+    console.log(this.billingTypes);
+    this.loading = false;
+  }
+  public clickBilling(slug: string) {
+    this.companiesForm.controls.billingType.setValue(slug);
+    if (slug === 'boleta') {
+      this.companiesForm.controls.name.setValue(this.profile.name);
+    } else {
+      this.companiesForm.controls.name.setValue("");
+    }
   }
   public async onChangeRegionFilter() {
     this.disabledCommuneFilter = true;
@@ -210,6 +230,7 @@ export class CompaniesAddComponent implements OnInit {
   createCompany() {
     return {
       rut: clean(this.companiesForm.controls.rut.value),
+      billingType: this.companiesForm.controls.billingType.value,
       createBy: this.profile.email,
       type: this.profile.role.slug,
       name: this.companiesForm.controls.name.value,

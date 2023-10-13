@@ -23,6 +23,7 @@ export class CompaniesEditComponent implements OnInit {
   public profile: Session =  JSON.parse(localStorage.getItem('profile'));
   public companiesForm: FormGroup;
   private companyId: string;
+  public billingTypes: {title: string, slug: string, check: boolean}[] = [];
   public regionFilter: { value: string, label: string, job: string }[] = [];
   public communeFilter: { value: string, label: string, job: string }[] = [];
   public makesFilter: { value: string, label: string, job: string }[] = [];
@@ -84,6 +85,7 @@ export class CompaniesEditComponent implements OnInit {
         console.log(this.company);
         this.companiesForm = this.fb.group({
           rut: [format(response.rut), [Validators.required]],
+          billingType: [(response.billingType) ? response.billingType : '', (this.profile.role.slug === 'taller') ? [Validators.required] : []],
           name: [response.name, [Validators.required,Validators.maxLength(18)]],
           direction: [response.direction, [Validators.required,Validators.maxLength(140)]],
           region: [{ value: response.region, label: response.region, job: "" }, [Validators.required]],
@@ -102,15 +104,15 @@ export class CompaniesEditComponent implements OnInit {
     ));
   }
   private findMakesOfCompany() {
-    for (let vehicle of this.company.make) {
-      this.makesFilter.push({
-        value: vehicle,
-        label: vehicle,
-        job: ''
-      });
-    }
     //console.log(this.makesFilter);
     if (this.company.type === 'comercio') {
+      for (let vehicle of this.company.make) {
+        this.makesFilter.push({
+          value: vehicle,
+          label: vehicle,
+          job: ''
+        });
+      }
       this.getVehicleListMake();
     } else {
       this.getRegion();
@@ -153,11 +155,25 @@ export class CompaniesEditComponent implements OnInit {
               job: ''
             });
           }
-          this.loading = false;
+          this.getBilling();
         }, error => {
           console.log(error);
         }
       ));
+    }
+  }
+  private getBilling() {
+    this.billingTypes.push({title: 'Factura', slug: 'factura', check: (this.companiesForm.controls.billingType.value === 'factura') ? true : false});
+    this.billingTypes.push({title: 'Boleta', slug: 'boleta', check: (this.companiesForm.controls.billingType.value === 'boleta') ? true : false});
+    console.log(this.billingTypes);
+    this.loading = false;
+  }
+  public clickBilling(slug: string) {
+    this.companiesForm.controls.billingType.setValue(slug);
+    if (slug === 'boleta') {
+      this.companiesForm.controls.name.setValue(this.profile.name);
+    } else {
+      this.companiesForm.controls.name.setValue("");
     }
   }
   private getCommune() {
@@ -233,6 +249,7 @@ export class CompaniesEditComponent implements OnInit {
   private updateUser() {
     return {
       rut: clean(this.companiesForm.controls.rut.value),
+      billingType: this.companiesForm.controls.billingType.value,
       createBy: this.profile.email,
       type: this.profile.role.slug,
       name: this.companiesForm.controls.name.value,

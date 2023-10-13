@@ -27,7 +27,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr (click)="onCellClick(offer)" *ngFor="let offer of offersFormat; index as i"  >
+                        <tr (click)="onCellClick(offer.id)" *ngFor="let offer of offersFormat; index as i"  >
                           <td>{{offer.product.title}}</td>
                           <td>{{offer.order.brand}} - {{offer.order.model}}</td>
                           <td [innerHTML]="offer.origen"></td>
@@ -45,7 +45,6 @@
                 </div>
               </div>      
             </div>
-            <app-sales-handler #quickViewSalesHandler></app-sales-handler>
         </div>
     </div>
 </div>

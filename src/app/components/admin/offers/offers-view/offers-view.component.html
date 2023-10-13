@@ -21,8 +21,8 @@
                 <p class="mb-0">Precio unitario: ${{(offer.offer.price).toLocaleString('es-CL')}}</p>
                 <p class="mb-0">Cantidad: {{offer.offer.qtyOfferAccepted}}</p>
                 <div>
-                    <p class="" *ngIf="offer.status == -3 || offer.status == -4">Estado: <span class="text-secondary">Expirado</span></p>
-                    <p class="" *ngIf="offer.offer.status == -2">Estado: <span class="text-secondary">Rechazado</span></p>
+                    <p class="" *ngIf="offer.offer.status == -3 || offer.offer.status == -4">Estado: <span class="text-danger">Expirado</span></p>
+                    <p class="" *ngIf="offer.offer.status == -2">Estado: <span class="text-danger">Rechazado</span></p>
                     <p class="" *ngIf="offer.offer.status == 2">Estado: <span class="text-primary">Publicado</span></p>
                     <p class="" *ngIf="offer.offer.status == 3">Estado: <span class="text-info">Adjudicado</span></p>
                     <p class="" *ngIf="offer.offer.status == 4">Estado: <span class="text-success">Proceso de compra</span></p>
