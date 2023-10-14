@@ -3,7 +3,7 @@
         <div class="modal-header product-modal">
           <div class="product-box row">
             <div class="product-img col-md-6" *ngIf="!offerData.order.photo"><img class="img-fluid" src="assets/images/ecommerce/01.jpg" alt=""></div>
-            <div class="product-img col-md-6" *ngIf="offerData.order.photo"><img class="img-fluid" src="{{offerData.order.photo}}" alt=""></div>
+            <div class="product-img col-md-6" *ngIf="offerData.order.photo"><img class="img-fluid" src="{{this.srv.apiUrl + '/files/' + offerData.order.photo}}" alt=""></div>
             <div class="product-details col-md-6 text-left">
               <h4>{{offerData.order.brand}} {{offerData.order.model}} {{offerData.order.year}}</h4>
               <div class="product-view">
@@ -22,7 +22,7 @@
                       </div>
                     </div>
                     <div *ngIf="!loadingImg">
-                      <img src="{{url}}" class="row mb-3" id="image_service">
+                      <img *ngIf="this.url && this.url !== ''" src="{{this.srv.apiUrl + '/files/' + url}}" class="row mb-3" id="image_service">
                       <button class="btn btn-info mb-3" (click)="fileInput.click()" type="button">
                         <i class="flex align-middle" data-feather="download"></i>
                         Cargar Imagen

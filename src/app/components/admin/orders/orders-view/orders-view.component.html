@@ -15,7 +15,7 @@
                   <p>Disponible hasta: {{order.closingDate}}</p>
                 </div><span class="pull-right mt-0"><i data-feather="more-vertical"></i></span>
               </div>
-            </div><img class="img-fluid" alt="" src="{{order.photo}}">
+            </div><img class="img-fluid" alt="" src="{{this.srv.apiUrl + '/files/' + order.photo}}">
             <div class="timeline-content">
               <hr>
               <h6>{{order.productBrand}}</h6>

@@ -9,7 +9,7 @@
   <div class="card-body">
     <div class="product-box row">
       <div class="product-img col-md-6" *ngIf="!data.order.photo"><img class="img-fluid" src="assets/images/ecommerce/01.jpg" alt=""></div>
-      <div class="product-img col-md-6" *ngIf="data.order.photo"><img class="img-fluid" src="{{data.order.photo}}" alt=""></div>
+      <div class="product-img col-md-6" *ngIf="data.order.photo"><img class="img-fluid" src="{{this.srv.apiUrl + '/files/' + data.order.photo}}" alt=""></div>
       <div class="product-details col-md-6 text-left">
         <h4>Repuesto Requerido</h4>
         <div class="product-view">

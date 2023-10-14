@@ -32,7 +32,7 @@
                 </div>
               </form>
             </div>
-            <div class="col-md-5 text-center"><img class="img-fluid" src="{{data.order.photo}}" alt=""></div>
+            <div class="col-md-5 text-center"><img class="img-fluid" src="{{this.srv.apiUrl + '/files/' + data.order.photo}}" alt=""></div>
           </div>
         </div>
       </div>
@@ -44,7 +44,7 @@
         </div>
         <div class="card-body">
           <div class="row">
-            <button *ngIf="data.photoPaymentReceiptAtAdmin" class="btn btn-primary btn-block" type="button" title="" (click)="this.paymentReceipt(data.photoPaymentReceiptAtAdmin)">Comprobante</button>
+            <button *ngIf="data.photoPaymentReceiptAtAdmin" class="btn btn-primary btn-block" type="button" title="" (click)="this.paymentReceipt(this.srv.apiUrl + '/files/' + data.photoPaymentReceiptAtAdmin)">Comprobante</button>
             <p *ngIf="!data.photoPaymentReceiptAtAdmin">No se encuentra comprobante</p>
           </div>
         </div>
@@ -63,7 +63,7 @@
           <form class="theme-form row">
             <div class="col-12">
               <button class="btn btn-primary btn-block" type="button" title="" (click)="this.contactCompany(data.workshop,(data.price + data.price * data.commission) * data.qtyOfferAccepted)">Datos Bancarios</button>
-              <button class="btn btn-primary btn-block" type="button" title="" (click)="this.paymentReceipt(data.photoPaymentReceiptAtClaimant)">Comprobante</button>
+              <button class="btn btn-primary btn-block" type="button" title="" (click)="this.paymentReceipt(this.srv.apiUrl + '/files/' + data.photoPaymentReceiptAtClaimant)">Comprobante</button>
             </div>
           </form>
         </div>

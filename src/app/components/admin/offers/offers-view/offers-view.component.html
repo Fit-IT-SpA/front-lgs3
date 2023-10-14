@@ -9,7 +9,7 @@
         <div class="modal-header product-modal">
           <div class="product-box row">
             <div class="product-img col-md-6" *ngIf="!offer.order.photo"><img class="img-fluid" src="assets/images/ecommerce/01.jpg"></div>
-            <div class="product-img col-md-6" *ngIf="offer.order.photo"><img class="img-fluid" src="{{offer.order.photo}}" alt=""></div>
+            <div class="product-img col-md-6" *ngIf="offer.order.photo"><img class="img-fluid" src="{{this.srv.apiUrl + '/files/' + offer.order.photo}}" alt=""></div>
             <div class="product-details col-md-6 text-left">
               <h4>{{offer.order.brand}} {{offer.order.model}} {{offer.order.year}}</h4>
               <h4>{{offer.order.chassis}}</h4>
