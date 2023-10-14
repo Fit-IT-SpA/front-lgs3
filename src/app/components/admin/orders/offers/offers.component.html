@@ -68,7 +68,7 @@
               <div class="card">
                 <div class="product-box">
                   <div class="product-img">
-                    <img class="img-fluid" *ngIf="data.order.photo" src="{{data.order.photo}}" alt="">
+                    <img class="img-fluid" *ngIf="data.order.photo" src="{{this.srv.apiUrl + '/files/' + data.order.photo}}" alt="">
                     <img class="img-fluid" *ngIf="!data.order.photo" src="assets/images/nophoto.png" alt="">
                     <div class="product-hover">
                       <ul>
