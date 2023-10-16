@@ -21,7 +21,7 @@
                     <div class="media">
                         <div class="media-body">
                             <span class="f-w-500">{{order.order.brand}} {{order.order.model}} {{order.order.year}}</span>
-                            <img class="img-100 img-fluid pull-right" alt="" src="{{order.order.photo}}">
+                            <img class="img-100 img-fluid pull-right" alt="" src="{{this.srv.apiUrl + '/files/' + order.order.photo}}">
                             <p>VIN: {{order.order.chassis}}</p>
                             <p>ID Pedido: {{order.order.idOrder}}</p>
                         </div>

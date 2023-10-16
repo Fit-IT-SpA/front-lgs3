@@ -9,7 +9,7 @@
       <div class="modal-header product-modal">
         <div class="product-box row">
           <div class="product-img col-md-6" *ngIf="!data.order.photo"><img class="img-fluid" src="assets/images/ecommerce/01.jpg"></div>
-          <div class="product-img col-md-6" *ngIf="data.order.photo"><img class="img-fluid" src="{{data.order.photo}}" alt=""></div>
+          <div class="product-img col-md-6" *ngIf="data.order.photo"><img class="img-fluid" src="{{this.srv.apiUrl + '/files/' + data.order.photo}}" alt=""></div>
           <div class="product-details col-md-6 text-left">
             <h4>{{data.order.brand}} {{data.order.model}} {{data.order.year}}</h4>
             <h4>{{data.order.chassis}}</h4>
@@ -26,7 +26,7 @@
                   <p class="mb-0" *ngIf="data.offer.status == 8">Estado: <span class="text-success">Entregado</span></p>
               </div>
               <p class="mb-0">Fecha pago: {{data.offer.confirmedAtAdmin | date:'dd-MM-yyyy HH:mm'}}</p>
-              <p class="mb-0" *ngIf="data.offer.photoPaymentReceiptAtAdmin"><button (click)="paymentReceipt(data.offer.photoPaymentReceiptAtAdmin)" class="btn btn-pill btn-info btn-xs" type="button">Comprobante administrador</button></p>
+              <p class="mb-0" *ngIf="data.offer.photoPaymentReceiptAtAdmin"><button (click)="paymentReceipt(this.srv.apiUrl + '/files/' + data.offer.photoPaymentReceiptAtAdmin)" class="btn btn-pill btn-info btn-xs" type="button">Comprobante administrador</button></p>
               <div *ngIf="data.offer.price" class="product-price">Precio total: ${{(data.offer.price * data.offer.qtyOfferAccepted).toLocaleString('es-CL')}}</div>
               <div style="text-align: center" class="addcart-btn">
                   <button *ngIf="data.offer.status == 5" (click)="confirmarPago()" class="btn btn-pill btn-primary m-r-15 mb-3" type="button">Confirmar Pago</button>

@@ -298,7 +298,7 @@ export class OrdersEditComponent implements OnInit {
         response => {
           this.loadingImg = false;
           let archivo = response;
-          this.filePath = this.srv.apiUrl + "/files/" + archivo.files[0].originalname;
+          this.filePath = archivo.files[0].originalname;
           this.url = this.filePath;
           this.formOrder.controls.photo.setValue(this.url);
           this.toster.success('¡Imagen subida correctamente!');

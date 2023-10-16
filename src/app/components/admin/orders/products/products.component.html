@@ -17,7 +17,7 @@
                     <div class="media">
                         <div class="media-body">
                             <span class="f-w-500">{{order.brand}} {{order.model}} {{order.year}}</span>
-                            <img class="img-100 img-fluid pull-right" alt="" src="{{order.photo}}">
+                            <img class="img-100 img-fluid pull-right" alt="" src="{{this.srv.apiUrl + '/files/' + order.photo}}">
                             <p>{{order.chassis}}</p>
                         </div>
                     </div>
