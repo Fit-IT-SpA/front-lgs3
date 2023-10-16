@@ -143,7 +143,13 @@ export class CompaniesEditComponent implements OnInit {
         job: ''
       });
       this.companiesForm.controls.region.setValue(this.regionFilter[0]);
-      this.getCommune();
+      this.communeFilter.push({
+        value: "Santiago",
+        label: "Santiago",
+        job: ''
+      })
+      this.companiesForm.controls.commune.setValue(this.communeFilter[0]);
+      this.loading = false;
     } else {
       this.subscription.add(this.srv.findLocationsRegion().subscribe(
         response => {
