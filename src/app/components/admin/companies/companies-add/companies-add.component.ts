@@ -121,7 +121,13 @@ export class CompaniesAddComponent implements OnInit {
         job: ''
       });
       this.companiesForm.controls.region.setValue(this.regionFilter[0]);
-      this.getCommune();
+      this.communeFilter.push({
+        value: "Santiago",
+        label: "Santiago",
+        job: ''
+      })
+      this.companiesForm.controls.commune.setValue(this.communeFilter[0]);
+      this.loading = false;
     } else {
       this.companiesForm.get('commune').disable();
       this.subscription.add(this.srv.findLocationsRegion().subscribe(
