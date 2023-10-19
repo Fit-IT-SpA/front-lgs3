@@ -172,21 +172,40 @@ export class OrderService extends AbstractHttpService {
                 })
             );
     }
-    
-    findOfferByMail(email: string, brand: string) {
+    countProcutsNotOfferByMail(email: string, parameters: {date: string, brand: string[]}) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
             })
         };
         return this.http
-            .get<any>(
-                this.apiUrl + '/product/byemail/filter/'+email+'/'+brand, httpOptions)
+            .post<any>(
+                this.apiUrl + '/product/count/not-offer/byemail/{email}'+email, parameters, httpOptions)
             .pipe(
                 map(response => {
                     return response;
                 })
-            );
+        );
+    }
+    findProductsNotOfferByMail(email: string, page: number, parameters: {date: string, brand: string[]}) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        page--;
+        let skip: number = 0;
+        if (page > 0) {
+            skip = ConstantService.paginationDesktop * page;
+        }
+        return this.http
+            .post<any>(
+                this.apiUrl + '/product/not-offer/byemail/{email}'+email+'/skip/'+skip+'/limit/'+ConstantService.paginationDesktop, parameters, httpOptions)
+            .pipe(
+                map(response => {
+                    return response;
+                })
+        );
     }
     findProductById(id: string) {
         const httpOptions = {

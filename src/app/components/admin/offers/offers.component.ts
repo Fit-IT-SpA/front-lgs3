@@ -41,6 +41,12 @@ export class OffersComponent implements OnInit {
   public loading: boolean = true;
   public loadingOffers: boolean = true;
   public col: string = '3';
+  public filterForm: FormGroup;
+  public periods: string[] = [];
+  public parameters: {date: string, status: string} = {
+    date: "",
+    status: ""
+  }
   public companiesName = this.profile.role.slug == 'taller' ? 'Talleres' : this.profile.role.slug == 'comercio' ? 'Comercios' : 'No posee';
   public screenType: string = "";
   public filterHidden: boolean = false;
@@ -81,8 +87,34 @@ export class OffersComponent implements OnInit {
   }
   ngOnInit(): void {
     if (this.haveAccess()) {
-        this.getCount();
+      this.filterForm = this.formBuilder.group({
+        status: "",
+        date: ""
+      });
+      this.parameters.date = (new Date()).toISOString().
+      replace(/T/, ' ').      // replace T with a space
+      replace(/\..+/, '')     // delete the dot and everything after
+      this.getPeriods();
     }
+  }
+  private getPeriods() {
+    const months = [
+      "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+      "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ];
+    
+    const actualDate = new Date();
+    const actualMonth = months[actualDate.getMonth()];
+    const actualYear = actualDate.getFullYear();
+    
+    actualDate.setMonth(actualDate.getMonth() - 1);
+    const previousMonth = months[actualDate.getMonth()];
+    const previousYear = actualDate.getFullYear();
+    this.periods.push(actualMonth + " " + actualYear);
+    this.periods.push(previousMonth + " " + previousYear);
+    this.filterForm.controls.date.setValue(this.periods[0]);
+    this.parameters.date = this.periods[0];
+    this.getCount();
   }
   private haveAccess() {
     let permissions = JSON.parse(localStorage.getItem("profile")).privilege;
@@ -96,7 +128,7 @@ export class OffersComponent implements OnInit {
     }
   }
   private getCount() {
-    this.subscription.add(this.srv.getCountOffersByEmail(this.profile.email).subscribe(
+    this.subscription.add(this.srv.getCountOffersByEmail(this.profile.email, this.parameters).subscribe(
         response => {
             console.log(response);
             this.totalElements = response.count;
@@ -109,7 +141,7 @@ export class OffersComponent implements OnInit {
     ));
   }
   private getOffers() {
-    this.subscription.add(this.srv.getOffersByEmail(this.profile.email, this.currentPage).subscribe(
+    this.subscription.add(this.srv.getOffersByEmail(this.profile.email, this.currentPage, this.parameters).subscribe(
         response => {
             console.log(response);
             this.offers = response;
@@ -189,6 +221,13 @@ export class OffersComponent implements OnInit {
     } else {
         return false;
     }
+  }
+  public changeFilter() {
+    this.loading = true;
+    this.parameters.status = this.filterForm.controls.status.value;
+    this.parameters.date = this.filterForm.controls.date.value;
+    console.log(this.parameters);
+    this.getCount();
   }
   private async remove(id: string) {
     this.subscription.add(this.srv.remove(id).subscribe(
