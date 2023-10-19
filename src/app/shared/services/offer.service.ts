@@ -39,32 +39,19 @@ export class OfferService extends AbstractHttpService {
             })
         );
     }
-    
-    getOffersByCompaniesAndEmail(email:string,companies: any) {
+    getCountSalesByEmail(email:string, parameters: {date: string, status: string}) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
             })
         };
-        return this.http.post<any>(`${this.apiUrl}/offer/active/byemail/`, {email,companies}, httpOptions).pipe(
+        return this.http.post<any>(`${this.apiUrl}/offer/sales/count/byemail/${email}`, parameters, httpOptions).pipe(
             map(response => {
                 return response;
             })
         );
     }
-    getCountOffersByEmail(email: string) {
-        const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json'
-            })
-        };
-        return this.http.get<any>(`${this.apiUrl}/offer/count/byemail/${email}`, httpOptions).pipe(
-            map(response => {
-                return response;
-            })
-        );
-    }
-    getOffersByEmail(email: string, page : number) {
+    getSalesByEmail(email:string, parameters: {date: string, status: string}, page: number) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
@@ -75,7 +62,36 @@ export class OfferService extends AbstractHttpService {
         if (page > 0) {
             skip = ConstantService.paginationDesktop * page;
         }
-        return this.http.get<any>(`${this.apiUrl}/offer/byemail/${email}/skip/${skip}/limit/${ConstantService.paginationDesktop}`, httpOptions).pipe(
+        return this.http.post<any>(`${this.apiUrl}/offer/sales/byemail/${email}/skip/${skip}/limit/${ConstantService.paginationDesktop}`, parameters, httpOptions).pipe(
+            map(response => {
+                return response;
+            })
+        );
+    }
+    getCountOffersByEmail(email: string, parameters: {date: string, status: string}) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http.post<any>(`${this.apiUrl}/offer/count/byemail/${email}`, parameters, httpOptions).pipe(
+            map(response => {
+                return response;
+            })
+        );
+    }
+    getOffersByEmail(email: string, page : number, parameters: {date: string, status: string}) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        page--;
+        let skip: number = 0;
+        if (page > 0) {
+            skip = ConstantService.paginationDesktop * page;
+        }
+        return this.http.post<any>(`${this.apiUrl}/offer/byemail/${email}/skip/${skip}/limit/${ConstantService.paginationDesktop}`, parameters, httpOptions).pipe(
             map(response => {
                 return response;
             })

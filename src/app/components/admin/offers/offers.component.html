@@ -6,6 +6,41 @@
 	</div>
     </div>
     <div class="main" *ngIf="!loading">
+        <div class="card" *ngIf="!filterHidden">
+            <div class="card-body">
+                <form [formGroup]="filterForm" class="needs-validation">
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label>Estado</label>
+                                <select formControlName="status" class="form-control btn-pill">
+                                    <option class="mat-select-placeholder" value="">Todos los Estados</option>
+                                    <option value="-3-4">Expirado</option>
+                                    <option value="-2">Rechazado</option>
+                                    <option value="2">Publicado</option>
+                                    <option value="3">Adjudicado</option>
+                                    <option value="4">Proceso de compra</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label>Periodo</label>
+                                <select formControlName="date" class="form-control btn-pill">
+                                    <option class="flex-grow-1" *ngFor="let period of this.periods" value="{{period}}" >{{period}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="col">
+                    <button class="btn btn-pill btn-primary" type="button" (click)="changeFilter()" >Buscar</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3" *ngIf="listView">
+            <button class="btn btn-pill btn-info" (click)="this.showFilter()" type="button" >{{this.filterButton}}</button>
+        </div>
         <div class="content">
             <div class="row">
                 <div class="col-sm-12">
