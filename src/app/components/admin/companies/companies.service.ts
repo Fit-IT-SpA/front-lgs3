@@ -56,6 +56,21 @@ export class CompaniesService extends AbstractHttpService {
                 })
         );
     }
+    findCompaniesMakesByEmail(email: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http
+            .get<any>(
+                this.apiUrl + '/companies/brands/'+email, httpOptions)
+            .pipe(
+                map(response => {
+                    return response;
+                })
+        );
+    }
     findById(id: string) {
         const httpOptions = {
             headers: new HttpHeaders({

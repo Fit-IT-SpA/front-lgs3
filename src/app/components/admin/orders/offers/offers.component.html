@@ -21,11 +21,21 @@
                     <ng-select 
                         [items]="brandsFilter" 
                         placeholder="Marcas"
-                        class="js-example-placeholder-multiple" 
+                        class="js-example-placeholder-multiple btn-pill" 
                         [multiple]="true"
                         formControlName="brand">
                     </ng-select>
                 </div>
+            </div>
+            <div class="form-row">
+              <div class="col mb-3">
+                  <div class="form-group">
+                      <label>Periodo</label>
+                      <select formControlName="date" class="form-control btn-pill">
+                          <option class="flex-grow-1" *ngFor="let period of this.periods" value="{{period}}" >{{period}}</option>
+                      </select>
+                  </div>
+              </div>
             </div>
         </form>
         <div class="col">
@@ -98,6 +108,30 @@
 </div>
 <app-offers-view #quickViewOffersView></app-offers-view>
 <app-offers-detail #quickViewOffersDetail></app-offers-detail>
+<ngb-pagination 
+    *ngIf="!listView"
+    class="d-flex justify-content-center mb-3" 
+    [collectionSize]="totalElements" 
+    [pageSize]="50"
+    [boundaryLinks]="true"
+    [(page)]="currentPage"
+    [maxSize]="5" 
+    [rotate]="true" 
+    (pageChange)="onPageFired($event)"
+    aria-label="Default pagination">
+</ngb-pagination>
+<ngb-pagination 
+    *ngIf="listView"
+    class="d-flex justify-content-center mb-3" 
+    [collectionSize]="totalElements" 
+    [pageSize]="50"
+    [boundaryLinks]="true"
+    [(page)]="currentPage"
+    [maxSize]="3" 
+    [rotate]="true" 
+    (pageChange)="onPageFired($event)"
+    aria-label="Default pagination">
+</ngb-pagination>
 </div>
 </div>
 </div>
