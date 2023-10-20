@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, HostListener } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -16,6 +16,7 @@ import { OfferWithData } from 'src/app/shared/model/offer-with-data';
 import { Companies } from 'src/app/shared/model/companies.model';
 import { validate, clean, format } from 'rut.js';
 import { SalesManagementViewComponent } from './sales-management-view/sales-management-view.component';
+import { UtilService } from 'src/app/shared/services/util.service';
 declare var require;
 const Swal = require('sweetalert2');
 
@@ -33,21 +34,83 @@ export class SalesManagementComponent implements OnInit {
     public loading: boolean = true;
     public products: Product[] = [];
     public orderOffer: OfferWithData[] = [];
+    public filterForm: FormGroup;
+    public periods: string[] = [];
+    public parameters: {date: string, status: string} = {
+      date: "",
+      status: ""
+    }
+    public pageSize: number = ConstantService.paginationDesktop;
+    public currentPage: number = 0;
+    public totalElements: number;
+    public screenType: string = "";
+    public filterHidden: boolean = false;
+    public filterButton: string = "Filtrar";
+    public listView: boolean = false;
 
     constructor(
         private modalService: NgbModal,
-        private fb: FormBuilder,
+        private formBuilder: FormBuilder,
+        private utilSrv: UtilService,
         private router: Router,
         private srv: SalesManagementService,
-        private srvProduct: ProductsService,
-        private srvOffer: OfferService,
-        public toster: ToastrService) {}
+        public toster: ToastrService) {
+          this.screenType = utilSrv.getScreenSize();
+          if (window.innerWidth < 575) {
+            this.listView = true;
+            this.filterButton = "Filtrar";
+            this.filterHidden = true;
+          } else {
+            this.filterButton = "Ocultar";
+            this.filterHidden = false;
+            this.listView = false;
+          }
+        }
+    @HostListener('window:resize', ['$event'])
+    onWindowResize(event: any) {
+      //console.log('Resolución actual: ' + window.innerWidth + ' x ' + window.innerHeight);
+      if (window.innerWidth < 575) {
+        this.filterButton = "Filtrar";
+        this.listView = true;
+        this.filterHidden = true;
+      } else {
+        this.filterButton = "Ocultar";
+        this.filterHidden = false;
+        this.listView = false;
+      }
+    }
     ngOnInit(): void {
         if (this.haveAccess()) {
-            this.getOrders();
+          this.filterForm = this.formBuilder.group({
+            status: "",
+            date: ""
+          });
+          this.parameters.date = (new Date()).toISOString().
+          replace(/T/, ' ').      // replace T with a space
+          replace(/\..+/, '')     // delete the dot and everything after
+          this.getPeriods();
         } else {
         this.router.navigate(['/admin/unauthorized']);
         }
+    }
+    private getPeriods() {
+      const months = [
+        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+      ];
+      
+      const actualDate = new Date();
+      const actualMonth = months[actualDate.getMonth()];
+      const actualYear = actualDate.getFullYear();
+      
+      actualDate.setMonth(actualDate.getMonth() - 1);
+      const previousMonth = months[actualDate.getMonth()];
+      const previousYear = actualDate.getFullYear();
+      this.periods.push(actualMonth + " " + actualYear);
+      this.periods.push(previousMonth + " " + previousYear);
+      this.filterForm.controls.date.setValue(this.periods[0]);
+      this.parameters.date = this.periods[0];
+      this.getCount();
     }
     private haveAccess() {
         let permissions = JSON.parse(localStorage.getItem("profile")).privilege;
@@ -60,19 +123,29 @@ export class SalesManagementComponent implements OnInit {
         return false;
         }
     }
+    private getCount(): void {
+      this.subscription.add(this.srv.countOrdersSales(this.parameters).subscribe(
+        response => {
+            console.log(response);
+            this.totalElements = response.count;
+            this.getOrders();
+        }, error => {
+            console.log(error);
+            this.loading = false;
+        }
+      ));
+    }
     private getOrders(): void {
-        this.subscription.add(this.srv.findOrders().subscribe(
+        this.subscription.add(this.srv.findOrdersSales(this.parameters, this.currentPage).subscribe(
             response => {
                 console.log(response);
                 this.orderOffer = response;
                 this.loading = false;
             }, error => {
                 console.log(error);
+                this.loading = false;
             }
         ));
-    }
-    public refusePayment() {
-
     }
     public contactCompany(company: Companies, total: number) {
         let title: string = (company.type === 'taller') ? 'Pago hecho por taller' : (company.type === 'comercio') ? 'Información de comercio' : '';
@@ -135,5 +208,21 @@ export class SalesManagementComponent implements OnInit {
           }
       });
   }
-
+  public showFilter() {
+    this.filterButton = (this.filterButton == "Filtrar") ? "Ocultar" : "Filtrar";
+    this.filterHidden = (this.filterHidden) ? false : true;
+  }
+  public changeFilter() {
+    this.loading = true;
+    this.parameters.status = this.filterForm.controls.status.value;
+    this.parameters.date = this.filterForm.controls.date.value;
+    console.log(this.parameters);
+    this.getCount();
+  }
+  public onPageFired(event: any) {
+    this.loading = true;
+    this.currentPage = event;
+    this.pageSize = this.pageSize;
+    this.getCount();
+  }
 }
