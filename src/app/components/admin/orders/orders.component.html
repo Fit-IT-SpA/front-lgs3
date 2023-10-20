@@ -6,6 +6,40 @@
   </div>
 </div>
 <div class="product-grid" *ngIf="!loading">
+    <div class="card" *ngIf="!filterHidden">
+      <div class="card-body">
+          <form [formGroup]="filterForm" class="needs-validation">
+              <div class="form-row">
+                  <div class="col-md-6 mb-3">
+                      <div class="form-group">
+                          <label>Estado</label>
+                          <select formControlName="status" class="form-control btn-pill">
+                              <option class="mat-select-placeholder" value="">Todos los Estados</option>
+                              <option value="0">Pendiente</option>
+                              <option value="1">Publicado</option>
+                              <option value="2">En caja</option>
+                              <!--<option value="3">Pagado</option>-->
+                          </select>
+                      </div>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                      <div class="form-group">
+                          <label>Periodo</label>
+                          <select formControlName="date" class="form-control btn-pill">
+                              <option class="flex-grow-1" *ngFor="let period of this.periods" value="{{period}}" >{{period}}</option>
+                          </select>
+                      </div>
+                  </div>
+              </div>
+          </form>
+          <div class="col">
+              <button class="btn btn-pill btn-primary" type="button" (click)="changeFilter()" >Buscar</button>
+          </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3" *ngIf="listView">
+      <button class="btn btn-pill btn-info" (click)="this.showFilter()" type="button" >{{this.filterButton}}</button>
+    </div>
     <div class="feature-products">
         <div class="row">
             <div class="col-md-6 products-total">
@@ -43,7 +77,7 @@
                   <div *ngIf="order.status == 0" class="ribbon ribbon-info">Pendiente</div>
                   <div *ngIf="order.status == 1" class="ribbon ribbon-primary">Publicado</div>
                   <div *ngIf="order.status == 2" class="ribbon ribbon-success">En caja</div>
-                  <div *ngIf="order.status == 2" class="ribbon ribbon-success">Pagado</div>
+                  <div *ngIf="order.status == 3" class="ribbon ribbon-success">Pagado</div>
                   <img class="img-fluid" src="{{this.srv.apiUrl + '/files/' + order.photo}}" alt="">
                   <div class="product-hover">
                     <ul>
@@ -69,6 +103,30 @@
             </div>
         </div>
     </div>
+    <ngb-pagination 
+      *ngIf="!listView"
+      class="d-flex justify-content-center mb-3" 
+      [collectionSize]="totalElements" 
+      [pageSize]="50"
+      [boundaryLinks]="true"
+      [(page)]="currentPage"
+      [maxSize]="5" 
+      [rotate]="true" 
+      (pageChange)="onPageFired($event)"
+      aria-label="Default pagination">
+    </ngb-pagination>
+    <ngb-pagination 
+      *ngIf="listView"
+      class="d-flex justify-content-center mb-3" 
+      [collectionSize]="totalElements" 
+      [pageSize]="50"
+      [boundaryLinks]="true"
+      [(page)]="currentPage"
+      [maxSize]="3" 
+      [rotate]="true" 
+      (pageChange)="onPageFired($event)"
+      aria-label="Default pagination">
+    </ngb-pagination>
 </div>
 
 <app-orders-view #quickViewOrdersView></app-orders-view>
