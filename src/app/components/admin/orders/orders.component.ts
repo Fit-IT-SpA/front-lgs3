@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, HostListener } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ServiceTypeService } from '../../../shared/services/service-type.service';
@@ -13,6 +13,7 @@ import { OrderService } from 'src/app/shared/services/order.service';
 import { Order } from 'src/app/shared/model/order.model';
 import { ConstantService } from 'src/app/shared/services/constant.service';
 import { Companies } from 'src/app/shared/model/companies.model';
+import { UtilService } from 'src/app/shared/services/util.service';
 declare var require;
 const Swal = require('sweetalert2');
 
@@ -28,36 +29,96 @@ export class OrdersComponent implements OnInit {
   public closeResult: string;
   public modalOpen: boolean = false;
   public companiesForm: FormGroup;
-  public perfil =  JSON.parse(localStorage.getItem('profile'));
+  public profile =  JSON.parse(localStorage.getItem('profile'));
   public count: number;
   public companies: Companies[];
   public uniqueId = (new Date()).getTime().toString();
   public openSidebar: boolean = false;
   public listView: boolean = false;
   public col: string = '3';
-  public companiesName = this.perfil.role.slug == 'taller' ? 'Talleres' : this.perfil.role.slug == 'comercio' ? 'Comercios' : 'Negocios';
+  public companiesName = this.profile.role.slug == 'taller' ? 'Talleres' : this.profile.role.slug == 'comercio' ? 'Comercios' : 'Negocios';
   public orders: Order[];
   public loading: boolean = true;
-  
+  public filterForm: FormGroup;
+  public periods: string[] = [];
+  public parameters: {date: string, status: string} = {
+    date: "",
+    status: ""
+  }
+  public pageSize: number = ConstantService.paginationDesktop;
+  public currentPage: number = 0;
+  public totalElements: number;
+  public screenType: string = "";
+  public filterHidden: boolean = false;
+  public filterButton: string = "Filtrar";
   // Ventanas Popup
   @ViewChild("quickViewOrdersView") QuickViewOrdersView: OrdersViewComponent;
 
   constructor(
     private modalService: NgbModal,
-    private fb: FormBuilder,
+    private formBuilder: FormBuilder,
+    private utilSrv: UtilService,
     private router: Router,
     private userSrv: UserService,
     private srv: OrderService,
     public toster: ToastrService,
     private companiesSrv: CompaniesService) {
+      this.screenType = utilSrv.getScreenSize();
+      if (window.innerWidth < 575) {
+        this.listView = true;
+        this.filterButton = "Filtrar";
+        this.filterHidden = true;
+      } else {
+        this.filterButton = "Ocultar";
+        this.filterHidden = false;
+        this.listView = false;
+      }
      }
-
+  @HostListener('window:resize', ['$event'])
+  onWindowResize(event: any) {
+    //console.log('Resolución actual: ' + window.innerWidth + ' x ' + window.innerHeight);
+    if (window.innerWidth < 575) {
+      this.filterButton = "Filtrar";
+      this.listView = true;
+      this.filterHidden = true;
+    } else {
+      this.filterButton = "Ocultar";
+      this.filterHidden = false;
+      this.listView = false;
+    }
+  }
   ngOnInit(): void {
     if (this.haveAccess()) {
-      this.getUser();
+      this.filterForm = this.formBuilder.group({
+        status: "",
+        date: ""
+      });
+      this.parameters.date = (new Date()).toISOString().
+      replace(/T/, ' ').      // replace T with a space
+      replace(/\..+/, '')     // delete the dot and everything after
+      this.getPeriods();
     } else {
       this.router.navigate(['/admin/unauthorized']);
     }
+  }
+  private getPeriods() {
+    const months = [
+      "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+      "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ];
+    
+    const actualDate = new Date();
+    const actualMonth = months[actualDate.getMonth()];
+    const actualYear = actualDate.getFullYear();
+    
+    actualDate.setMonth(actualDate.getMonth() - 1);
+    const previousMonth = months[actualDate.getMonth()];
+    const previousYear = actualDate.getFullYear();
+    this.periods.push(actualMonth + " " + actualYear);
+    this.periods.push(previousMonth + " " + previousYear);
+    this.filterForm.controls.date.setValue(this.periods[0]);
+    this.parameters.date = this.periods[0];
+    this.getCompanies();
   }
   private haveAccess() {
     let permissions = JSON.parse(localStorage.getItem("profile")).privilege;
@@ -72,7 +133,7 @@ export class OrdersComponent implements OnInit {
   }
   checkStatusUser() {
     this.subscription.add(
-        this.companiesSrv.checkStatusUser(this.perfil.email).subscribe(
+        this.companiesSrv.checkStatusUser(this.profile.email).subscribe(
             (response) => {
                 if (response == 0) {
                     this.router.navigate(['/admin/companies']);
@@ -81,15 +142,15 @@ export class OrdersComponent implements OnInit {
         )
     );
   }
-  private getUser() {
+  private getCompanies() {
     this.subscription.add(
-        this.companiesSrv.findByEmail(this.perfil.email).subscribe(
+        this.companiesSrv.findByEmail(this.profile.email).subscribe(
             (response) => {
                 this.companies = response;
                 if (this.companies && this.companies.length < 1) {
                   this.router.navigate(['/admin/companies']);
                 } else {
-                  this.findOrders();
+                  this.getCount();
                 }
             },
             (error) => {
@@ -99,8 +160,21 @@ export class OrdersComponent implements OnInit {
         )
     );
   }
+  private getCount() {
+    this.subscription.add(this.srv.countByEmail(this.profile.email, this.parameters).subscribe(
+      response => {
+        console.log(response);
+        this.totalElements = response.count;
+        this.findOrders();
+      }, error => {
+        console.log(error);
+        this.toster.error('Se a producido un error al intentar buscar los pedidos');
+        this.loading = false;
+      }
+    ));
+  }
   private findOrders() {
-    this.subscription.add(this.srv.findByEmail(this.perfil.email).subscribe(
+    this.subscription.add(this.srv.findByEmail(this.profile.email, this.parameters, this.currentPage).subscribe(
       response => {
         this.orders = response;
         console.log(this.orders);
@@ -128,6 +202,10 @@ export class OrdersComponent implements OnInit {
   }
   gridColumn(val) {
     this.col = val;
+  }
+  showFilter() {
+    this.filterButton = (this.filterButton == "Filtrar") ? "Ocultar" : "Filtrar";
+    this.filterHidden = (this.filterHidden) ? false : true;
   }
   canWrite() {
     let permissions = JSON.parse(localStorage.getItem("profile")).privilege;
@@ -201,6 +279,19 @@ export class OrdersComponent implements OnInit {
   }
   edit(id: string) {
     this.router.navigate(['/admin/orders/edit/'+id]);
+  }
+  public changeFilter() {
+    this.loading = true;
+    this.parameters.status = this.filterForm.controls.status.value;
+    this.parameters.date = this.filterForm.controls.date.value;
+    console.log(this.parameters);
+    this.getCount();
+  }
+  public onPageFired(event: any) {
+    this.loading = true;
+    this.currentPage = event;
+    this.pageSize = this.pageSize;
+    this.getPeriods();
   }
 
 }

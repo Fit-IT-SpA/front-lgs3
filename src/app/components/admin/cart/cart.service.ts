@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AbstractHttpService } from '../../../shared/services/abstract-http.service';
 import { map } from 'rxjs/operators';
+import { ConstantService } from 'src/app/shared/services/constant.service';
 
 
 @Injectable()
@@ -21,13 +22,30 @@ export class CartService extends AbstractHttpService {
             })
         );
     }
-    findPurchases(email: string) {
+    countPurchasesByEmail(email: string, parameters: {date: string, status: string}) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
             })
         };
-        return this.http.get<any>(`${this.apiUrl}/cart/purchases/orders/${email}`, httpOptions).pipe(
+        return this.http.post<any>(`${this.apiUrl}/cart/purchases/orders/count/${email}`, parameters, httpOptions).pipe(
+            map(response => {
+                return response;
+            })
+        );
+    }
+    findPurchasesByEmail(email: string, parameters: {date: string, status: string}, page: number) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        page--;
+        let skip: number = 0;
+        if (page > 0) {
+            skip = ConstantService.paginationDesktop * page;
+        }
+        return this.http.post<any>(`${this.apiUrl}/cart/purchases/orders/${email}/skip/${skip}/limit/${ConstantService.paginationDesktop}`, parameters, httpOptions).pipe(
             map(response => {
                 return response;
             })
