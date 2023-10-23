@@ -163,6 +163,6 @@ export class PurchasesComponent implements OnInit {
         this.loading = true;
         this.currentPage = event;
         this.pageSize = this.pageSize;
-        this.getPeriods();
+        this.getCount();
       }
 }
