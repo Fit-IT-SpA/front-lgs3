@@ -26,16 +26,36 @@ export class OrderService extends AbstractHttpService {
             })
         );
     }
-
-    findByEmail(email: string) {
+    countByEmail(email: string, parameters: {date: string, status: string}) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
             })
         };
         return this.http
-            .get<any>(
-                this.apiUrl + '/order/email/'+email, httpOptions)
+            .post<any>(
+                this.apiUrl + '/order/count/email/'+email, parameters, httpOptions)
+            .pipe(
+                map(response => {
+                    return response;
+                })
+            );
+    }
+    
+    findByEmail(email: string, parameters: {date: string, status: string}, page: number) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        page--;
+        let skip: number = 0;
+        if (page > 0) {
+            skip = ConstantService.paginationDesktop * page;
+        }
+        return this.http
+            .post<any>(
+                this.apiUrl + '/order/email/'+email+'/skip/'+skip+'/limit/'+ConstantService.paginationDesktop, parameters, httpOptions)
             .pipe(
                 map(response => {
                     return response;

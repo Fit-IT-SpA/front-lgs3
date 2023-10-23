@@ -1,15 +1,49 @@
 <app-breadcrumb [title]="'Delivery'"></app-breadcrumb>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-12">
+        <div class="flex flex-col flex-auto" *ngIf="loading">
+          <h6 class="text-center">Procesando...</h6>
+          <div class="loader-box">
+            <div class="loader-3"></div>
+          </div>
+        </div>
+        <div class="col-sm-12" *ngIf="!this.loading">
+            <div class="card" *ngIf="!filterHidden">
+              <div class="card-body">
+                  <form [formGroup]="filterForm" class="needs-validation">
+                      <div class="form-row">
+                          <div class="col-md-6 mb-3">
+                              <div class="form-group">
+                                  <label>Estado</label>
+                                  <select formControlName="status" class="form-control btn-pill">
+                                      <option class="mat-select-placeholder" value="">Todos los Estados</option>
+                                      <option value="6">Confirmar producto entregado</option>
+                                      <option value="7">Esperando respuesta taller</option>
+                                      <option value="8">Recibido por taller</option>
+                                      <!--<option value="3">Pagado</option>-->
+                                  </select>
+                              </div>
+                          </div>
+                          <div class="col-md-6 mb-3">
+                              <div class="form-group">
+                                  <label>Periodo</label>
+                                  <select formControlName="date" class="form-control btn-pill">
+                                      <option class="flex-grow-1" *ngFor="let period of this.periods" value="{{period}}" >{{period}}</option>
+                                  </select>
+                              </div>
+                          </div>
+                      </div>
+                  </form>
+                  <div class="col">
+                      <button class="btn btn-pill btn-primary" type="button" (click)="changeFilter()" >Buscar</button>
+                  </div>
+              </div>
+            </div>
+            <div class="col-md-4 mb-3" *ngIf="listView">
+              <button class="btn btn-pill btn-info" (click)="this.showFilter()" type="button" >{{this.filterButton}}</button>
+            </div>
             <div class="card">
-                <div class="flex flex-col flex-auto" *ngIf="loading">
-                    <h6 class="text-center">Procesando...</h6>
-                    <div class="loader-box">
-                      <div class="loader-3"></div>
-                    </div>
-                </div>
-                <div class="card-body" *ngIf="!this.loading">
+                <div class="card-body">
                     <div *ngIf="!orderOffer || orderOffer.length <= 0">No hay ventas por gestionar</div>
                     <div *ngIf="orderOffer && orderOffer.length > 0">
                       <span style="color: #808080;">Nota: Valores con IVA incluido</span>
@@ -72,6 +106,30 @@
                   </div>
                 </div>
             </div>
+            <ngb-pagination 
+              *ngIf="!listView"
+              class="d-flex justify-content-center mb-3" 
+              [collectionSize]="totalElements" 
+              [pageSize]="50"
+              [boundaryLinks]="true"
+              [(page)]="currentPage"
+              [maxSize]="5" 
+              [rotate]="true" 
+              (pageChange)="onPageFired($event)"
+              aria-label="Default pagination">
+            </ngb-pagination>
+            <ngb-pagination 
+              *ngIf="listView"
+              class="d-flex justify-content-center mb-3" 
+              [collectionSize]="totalElements" 
+              [pageSize]="50"
+              [boundaryLinks]="true"
+              [(page)]="currentPage"
+              [maxSize]="3" 
+              [rotate]="true" 
+              (pageChange)="onPageFired($event)"
+              aria-label="Default pagination">
+            </ngb-pagination>
         </div>
     </div>
 </div>
