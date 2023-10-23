@@ -146,19 +146,19 @@ export class CartComponent implements OnInit {
             '<div class="col">'+
               '<form class="theme-form mega-form">'+
                 '<div class="form-group">'+
-                  '<input class="form-control" type="text" disabled="true" placeholder="Nombre: Planeta Tuerca SpA">'+
+                  '<input class="form-control" type="text" disabled="true" placeholder="Razón Social: Planeta Tuerca SpA">'+
                 '</div>'+
                 '<div class="form-group">'+
-                  '<input class="form-control" type="text" disabled="true" placeholder="Banco: Banco Talca">'+
+                  '<input class="form-control" type="text" disabled="true" placeholder="Banco: Santander">'+
                 '</div>'+
                 '<div class="form-group">'+
-                  '<input class="form-control" type="text" disabled="true" placeholder="RUT: 77123456-7">'+
+                  '<input class="form-control" type="text" disabled="true" placeholder="RUT: 77.835.672-4">'+
                 '</div>'+
                 '<div class="form-group">'+
-                  '<input class="form-control" type="text" disabled="true" placeholder="Cta Cte: 987654321">'+
+                  '<input class="form-control" type="text" disabled="true" placeholder="Cta Cte: 92663701">'+
                 '</div>'+
                 '<div class="form-group">'+
-                  '<input class="form-control" type="text" disabled="true" placeholder="Email: pagopedido@planetatuerca.cl">'+
+                  '<input class="form-control" type="text" disabled="true" placeholder="Email: facturacion@planetatuercas.cl">'+
                 '</div>'+
                 '<div class="form-group">'+
                   '<input class="form-control" type="text" disabled="true" placeholder="Total a pagar: $'+total.toLocaleString('es-CL')+'">'+
