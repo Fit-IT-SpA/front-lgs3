@@ -227,8 +227,10 @@ export class CompaniesAddComponent implements OnInit {
           console.log(error);
           if (error.error.error.message == 'rut repetido') {
             this.toster.error('El rut de la empresa ya esta ingresado dentro del sistema');
+            this.loading = false;
           } else {
             this.toster.error('Se ha producido un error al intentar agregar el '+this.profile.role.name);
+            this.loading = false;
           }
         }
     ));

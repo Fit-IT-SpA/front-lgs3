@@ -36,6 +36,12 @@ export class UserEditComponent implements OnInit, OnDestroy {
     access: boolean = false;
     maxDate: Date;
     public rolesFilter: { value: string, label: string, job: string }[] = [];
+    public statusFilter: { value: number, label: string, job: string }[] = [
+      {value: -1, label: "Eliminado", job: ""},
+      {value: 0, label: "Pendiente Activación", job: ""},
+      {value: 1, label: "Activo", job: ""},
+      {value: 2, label: "Bloqueado", job: ""},
+    ];
     //public countriesFilter: { value: string, label: string, job: string }[] = [];
 
     constructor(private activatedRoute: ActivatedRoute, private utilSrv : UtilService, private roleSrv : RoleService,
@@ -92,7 +98,9 @@ export class UserEditComponent implements OnInit, OnDestroy {
             //email: this.formBuilder.control({value: response.email, disabled: true}),
             //phone: [response.phone, [ Validators.minLength(9),Validators.maxLength(9), mobileValidator ]],
             //nationality: this.formBuilder.control({value: this.searchNationality(response.nationality), disabled: false}), 
-            role: this.formBuilder.control({value: this.searchRole(response.role), disabled: false}), 
+            role: [this.searchRole(response.role), [ Validators.required]],
+            status: [this.searchStatus(response.status), [ Validators.required]],
+            //role: this.formBuilder.control({value: this.searchRole(response.role), disabled: false}), 
           });
           this.loading = false;
         }, error => {
@@ -117,6 +125,14 @@ export class UserEditComponent implements OnInit, OnDestroy {
         }
         return null;
     }
+    private searchStatus(id: number): { value: number, label: string, job: string } | null {
+      for (let status of this.statusFilter) {
+          if (status.value === id) {
+            return status;
+          }
+      }
+      return null;
+  }
 
     /*private getCountries(){
       this.subscription.add(this.countrySrv.findAll()
@@ -183,7 +199,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
     }
     
     private save(){
-      this.subscription.add(this.srv.update(this.formEdit.controls.email.value, this.updatedFinalUser()).subscribe(
+      this.subscription.add(this.srv.update(this.user.email, this.updatedFinalUser()).subscribe(
         response => {
           //this.getCurrentUser();
           this.loading = false;
@@ -223,6 +239,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
         //nationality: (this.formEdit.controls.nationality.value) ? this.formEdit.controls.nationality.value.value : '',
         //phone: this.formEdit.controls.phone.value,
         role: (this.formEdit.controls.role.value) ? this.formEdit.controls.role.value.value : "",
+        status: (this.formEdit.controls.status.value) ? this.formEdit.controls.status.value.value : "",
       }
       return user;
     }

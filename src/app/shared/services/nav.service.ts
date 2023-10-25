@@ -101,6 +101,13 @@ export class NavService implements OnDestroy {
 			id: 'menu', headTitle1: 'Menu',
 		},
 		{
+			id: 'usuario-admin-escritura', title: 'Administracion', icon: 'edit', type: 'sub', active: false, children: [
+				{ id: 'usuario-admin-escritura', path: '/admin/users/user', title: 'Usuario', type: 'link' },
+				{ id: 'perfil-admin-escritura', path: '/admin/users/role', title: 'Perfil', type: 'link' },
+				{ id: 'privilegio-admin-escritura', path: '/admin/users/privilege', title: 'Privilegio', type: 'link' },
+			]
+		},
+		{
 			id: 'mis-comercios-lectura', path: '/admin/companies', title: 'Comercios', icon: 'home', type: 'link'
 		},
 		{
@@ -129,13 +136,6 @@ export class NavService implements OnDestroy {
 		},
 		{ 
 			id: 'gestion-de-ventas-admin-escritura', path: '/admin/users/delivery', title: 'Delivery', icon: 'truck', type: 'link', active: false 
-		},
-		{
-			id: 'usuario-admin-escritura', title: 'Administracion', icon: 'edit', type: 'sub', active: false, children: [
-				{ id: 'usuario-admin-escritura', path: '/admin/users/user', title: 'Usuario', type: 'link' },
-				{ id: 'perfil-admin-escritura', path: '/admin/users/role', title: 'Perfil', type: 'link' },
-				{ id: 'privilegio-admin-escritura', path: '/admin/users/privilege', title: 'Privilegio', type: 'link' },
-			]
 		},
 		/*{
 			title: 'Referidos', icon: 'users', type: 'sub', active: true, children: [
