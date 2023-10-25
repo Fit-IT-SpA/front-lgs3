@@ -186,7 +186,7 @@ export class UserComponent implements OnInit, OnDestroy {
   }
   removeWithConfirmation(id: string, name: string) {
     Swal.fire({
-      title: '¿Estas seguro que deseas eliminar a '+name+'?',
+      title: '¿Estás seguro que deseas eliminar a '+name+'?',
       text: "No podras revertir esto despues!",
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -200,7 +200,7 @@ export class UserComponent implements OnInit, OnDestroy {
         if (confirm) {
             Swal.fire(
                 'Eliminado!',
-                name+' a sido eliminado.',
+                name+' ha sido eliminado.',
                 'success'
             )
             this.loading = true;
