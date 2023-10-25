@@ -14,7 +14,7 @@
                         <div class="form-row">
                             <div class="col-md-4 mb-3">
                                 <label>Nombre</label>
-                                <input class="form-control" required="true" type="text" placeholder="(*) Nombre" formControlName="name">
+                                <input class="form-control btn-pill" required="true" type="text" placeholder="(*) Nombre" formControlName="name">
                                 <div *ngIf="formEdit.controls.name.errors && formEdit.controls.name.touched && formEdit.controls.name.errors.required"
                                     class="text text-danger mt-1">
                                     Es requerido
@@ -22,7 +22,7 @@
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label>Apellido Paterno</label>
-                                <input class="form-control" required="true" type="text" placeholder="(*) Apellido Paterno" formControlName="lastName">
+                                <input class="form-control btn-pill" required="true" type="text" placeholder="(*) Apellido Paterno" formControlName="lastName">
                                 <div *ngIf="formEdit.controls.lastName.errors && formEdit.controls.lastName.touched && formEdit.controls.lastName.errors.required"
                                     class="text text-danger mt-1">
                                     Es requerido
@@ -30,7 +30,7 @@
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label>Apellido Materno</label>
-                                <input class="form-control" required="true" type="text" placeholder="(*) Apellido Materno" formControlName="secondLastName">
+                                <input class="form-control btn-pill" required="true" type="text" placeholder="(*) Apellido Materno" formControlName="secondLastName">
                                 <div *ngIf="formEdit.controls.secondLastName.errors && formEdit.controls.secondLastName.touched && formEdit.controls.secondLastName.errors.required"
                                     class="text text-danger mt-1">
                                     Es requerido
@@ -86,9 +86,9 @@
                                     class="js-example-placeholder-multiple" formControlName="nationality">
                                 </ng-select>
                             </div>-->
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label>Email</label>
-                                <input class="form-control" required="true" type="text" placeholder="(*) Email" formControlName="email" required email>
+                                <input class="form-control btn-pill" required="true" type="text" placeholder="(*) Email" formControlName="email" required email>
                                 <div *ngIf="formEdit.controls.email.errors && formEdit.controls.email.touched && formEdit.controls.email.errors.required"
                                     class="text text-danger mt-1">
                                     Es requerido
@@ -98,13 +98,22 @@
                                     Formato invalido
                                 </div>
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label>Perfil</label>
                                 <ng-select 
                                     [items]="rolesFilter" 
                                     placeholder="(*) Seleccionar Perfil"
-                                    class="js-example-placeholder-multiple" 
+                                    class="js-example-placeholder-multiple btn-pill" 
                                     formControlName="role">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label>Estado</label>
+                                <ng-select 
+                                    [items]="statusFilter" 
+                                    placeholder="(*) Seleccionar Estado"
+                                    class="js-example-placeholder-multiple btn-pill" 
+                                    formControlName="status">
                                 </ng-select>
                             </div>
                         </div>
@@ -113,8 +122,8 @@
                             <span class="font-semibold ml-1 text-base">Los campos marcados con (*) son de caracter obligatorio.</span>
                           </div>
                           <div class="card-footer">
-                            <button class="btn btn-primary" type="button" [disabled]="formEdit.invalid" (click)="add()">Guardar</button>
-                            <button class="btn btn-info ml-1" type="button" (click)="goBack()">Volver</button>
+                            <button class="btn btn-primary btn-pill" type="button" [disabled]="formEdit.invalid" (click)="add()">Guardar</button>
+                            <button class="btn btn-info ml-1 btn-pill" type="button" (click)="goBack()">Volver</button>
                         </div>
                     </form>
                 </div>

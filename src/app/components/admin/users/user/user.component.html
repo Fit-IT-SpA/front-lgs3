@@ -78,6 +78,8 @@
 			<tr>
 				<th>Nombre</th>
 				<th>Email</th>
+				<th>Creación</th>
+				<th>Estado</th>
 				<th>Opciones</th>
 			</tr>
 		</thead>
@@ -85,9 +87,14 @@
 			<tr *ngFor="let user of users">
 				<td>{{ user.name + " " + user.lastName }}</td>
 				<td>{{ user.email }}</td>
+				<td>{{ user.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
+				<td *ngIf="user.status === -1">Eliminado</td>
+				<td *ngIf="user.status === 0">Pendiente Activación</td>
+				<td *ngIf="user.status === 1">Activo</td>
+				<td *ngIf="user.status === 2">Bloqueado</td>
 				<td class="options-column">
 					<button class="btn btn-primary" *ngIf="canWrite()" (click)="edit(user.email)">Editar</button>
-					<button class="btn btn-danger" *ngIf="canWrite()" (click)="removeWithConfirmation(user.email, user.name+' '+user.lastName)">
+					<button class="btn btn-danger" *ngIf="canWrite() && user.status !== -1" (click)="removeWithConfirmation(user.email, user.name+' '+user.lastName)">
 						Eliminar
 					</button>
 				</td>

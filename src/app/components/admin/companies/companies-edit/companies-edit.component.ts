@@ -100,6 +100,7 @@ export class CompaniesEditComponent implements OnInit {
         this.findMakesOfCompany();
       }, error => {
         console.log(error);
+        this.loading = false;
       }
     ));
   }
@@ -132,6 +133,7 @@ export class CompaniesEditComponent implements OnInit {
         this.getRegion();
       }, (error) => {
         console.log(error);
+        this.loading = false;
       }
     ));
   }
@@ -164,6 +166,7 @@ export class CompaniesEditComponent implements OnInit {
           this.getBilling();
         }, error => {
           console.log(error);
+          this.loading = false;
         }
       ));
     }
@@ -196,6 +199,7 @@ export class CompaniesEditComponent implements OnInit {
         this.loading = false;
       }, error => {
         console.log(error);
+        this.loading = false;
       }
     ));
   }
@@ -219,6 +223,7 @@ export class CompaniesEditComponent implements OnInit {
       }
     } catch (error) {
       console.log(error);
+      this.loading = false;
     }
   }
   public onClearRegionFilter() {
@@ -286,8 +291,10 @@ export class CompaniesEditComponent implements OnInit {
             this.loading = false;
             if (error.error.error.message == 'rut repetido') {
               this.toster.error('El rut ingresado ya se encuentra registrado dentro del sistema, intente con un rut distinto');
+              this.loading = false;
             } else {
               this.toster.error('Se ha producido un error al intentar editar el '+this.profile.role.name);
+              this.loading = false;
             }
           }
       )
