@@ -1,0 +1,135 @@
+<app-breadcrumb [title]="'Reporte Productos'"></app-breadcrumb>
+<div class="container-fluid">
+    <div class="flex flex-col flex-auto" *ngIf="loading">
+	<div class="loader-box">
+	  <div class="loader-3"></div>
+	</div>
+    </div>
+    <div class="main" *ngIf="!loading">
+        <div class="card" *ngIf="!filterHidden">
+            <div class="card-body">
+                <form [formGroup]="filterForm" class="needs-validation">
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label>Estado</label>
+                                <select formControlName="status" class="form-control btn-pill">
+                                    <option class="mat-select-placeholder" value="">Todos los Estados</option>
+                                    <option value="-1">Cancelado</option>
+                                    <option value="0">Ingresado</option>
+                                    <option value="1">Publicado</option>
+                                    <option value="2">Adjudicado parcial</option>
+                                    <option value="3">Adjudicado</option>
+                                    <option value="4">Pagado</option>
+                                    <option value="5">Pago confirmado Admin</option>
+                                    <option value="6">Pago confirmado Comercio</option>
+                                    <option value="7">Producto entregado</option>
+                                    <option value="8">Producto confirmado por comprador</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group">
+                                <label>Periodo</label>
+                                <select formControlName="date" class="form-control btn-pill">
+                                    <option class="flex-grow-1" *ngFor="let period of this.periods" value="{{period}}" >{{period}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="col">
+                    <button class="btn btn-pill btn-primary" type="button" (click)="changeFilter()" >Buscar</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3" *ngIf="listView">
+            <button class="btn btn-pill btn-info" (click)="this.showFilter()" type="button" >{{this.filterButton}}</button>
+        </div>
+        <div class="content">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="table-responsive">
+                            <table id="table-ventas" class="table table-hover table-border-horizonta">
+                                <thead>
+                                    <tr>
+                                    <th scope="col">Fecha</th>
+                                    <th scope="col">Marca / Modelo / Año</th>
+                                    <th scope="col">Producto</th>
+                                    <th scope="col">Estado</th>
+                                    <th scope="col">Cantidad original</th>
+                                    <th class="text-center" scope="col">Cantidad de Ofertas</th>
+                                    <th scope="col">Usuario</th>
+                                    <th scope="col">Rut</th>
+                                    <!--<th scope="col">Editar</th>
+                                    <th scope="col">Eliminar</th>-->
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr (click)="onCellClick(product.id)" *ngFor="let product of products; index as i"  >
+                                        <td>{{ product.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
+                                        <td>{{product.order.brand}} {{product.order.model}} {{product.order.year}}</td>
+                                        <td>{{product.title}}</td>
+                                        <td>
+                                            <button *ngIf="product.status == -1" class="btn btn-pill btn-secondary btn-xs">Rechazado</button>
+                                            <button *ngIf="product.status == 0" class="btn btn-pill btn-primary btn-xs">Ingresado</button>
+                                            <button *ngIf="product.status == 1" class="btn btn-pill btn-primary btn-xs">Publicado</button>
+                                            <button *ngIf="product.status == 2" class="btn btn-pill btn-info btn-xs">Adjudicado Parcial</button>
+                                            <button *ngIf="product.status == 3" class="btn btn-pill btn-info btn-xs">Adjudicado</button>
+                                            <button *ngIf="product.status == 4" class="btn btn-pill btn-success btn-xs">Pagado</button>
+                                            <button *ngIf="product.status == 5" class="btn btn-pill btn-success btn-xs">Pago confirmado Admin</button>
+                                            <button *ngIf="product.status == 6" class="btn btn-pill btn-success btn-xs">Pago confirmado Comercio</button>
+                                            <button *ngIf="product.status == 7" class="btn btn-pill btn-success btn-xs">Producto entregado</button>
+                                            <button *ngIf="product.status == 8" class="btn btn-pill btn-success btn-xs">Producto confirmado por comprador</button>
+                                        </td>
+                                        <td>{{product.originalQty}}</td>
+                                        <td>{{product.offer.length}}</td>
+                                        <td>{{product.createBy}}</td>
+                                        <td>{{product.company}}</td>
+                                        <!--<td>
+                                            <button *ngIf="offer.status == -3 || offer.status == -4" class="btn btn-pill btn-secondary btn-xs">Expirado</button>
+                                            <button *ngIf="offer.status == -2" class="btn btn-pill btn-secondary btn-xs">Rechazado</button>
+                                            <button *ngIf="offer.status == 2" class="btn btn-pill btn-primary btn-xs">Publicado</button>
+                                            <button *ngIf="offer.status == 3" class="btn btn-pill btn-info btn-xs">Adjudicado</button>
+                                            <button *ngIf="offer.status == 4" class="btn btn-pill btn-success btn-xs">Proceso de compra</button>
+                                        </td>-->
+                                        <!--<td><button class="btn btn-pill btn-primary btn-xs" [disabled]="offer.status !== 2">Editar</button></td>
+                                        <td><button class="btn btn-pill btn-secondary btn-xs" [disabled]="offer.status !== 2" (click)="removeWithConfirmation(offer.id)">Eliminar</button></td>-->
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--<div class="card-footer">
+                            Valores con IVA
+                        </div>-->
+                    </div>
+                </div>      
+            </div>
+        </div>
+        <ngb-pagination 
+            *ngIf="!listView"
+            class="d-flex justify-content-center mb-3" 
+            [collectionSize]="totalElements" 
+            [pageSize]="50"
+            [boundaryLinks]="true"
+            [(page)]="currentPage"
+            [maxSize]="5" 
+            [rotate]="true" 
+            (pageChange)="onPageFired($event)"
+            aria-label="Default pagination">
+        </ngb-pagination>
+        <ngb-pagination 
+            *ngIf="listView"
+            class="d-flex justify-content-center mb-3" 
+            [collectionSize]="totalElements" 
+            [pageSize]="50"
+            [boundaryLinks]="true"
+            [(page)]="currentPage"
+            [maxSize]="3" 
+            [rotate]="true" 
+            (pageChange)="onPageFired($event)"
+            aria-label="Default pagination">
+        </ngb-pagination>
+    </div>
+</div>
