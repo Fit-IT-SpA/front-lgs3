@@ -113,7 +113,7 @@ export class RegisterComponent implements OnInit {
         //this.message = null;
         //this.loginForm.disable();
         let credentials = {
-            email : this.loginForm.controls.email.value,
+            email : (this.loginForm.controls.email.value) ? this.loginForm.controls.email.value.toLowerCase() : '',
             name : this.loginForm.controls.name.value,
             lastName : this.loginForm.controls.lastName.value,
             typeUser: this.loginForm.controls.typeUser.value,

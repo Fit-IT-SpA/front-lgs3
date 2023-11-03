@@ -167,6 +167,7 @@ export class CompaniesAddComponent implements OnInit {
   private getBilling() {
     this.billingTypes.push({title: 'Factura', slug: 'factura', check: true});
     this.billingTypes.push({title: 'Boleta', slug: 'boleta', check: false});
+    this.companiesForm.controls.billingType.setValue('factura');
     console.log(this.billingTypes);
     this.loading = false;
   }
@@ -226,7 +227,7 @@ export class CompaniesAddComponent implements OnInit {
         (error) => {
           console.log(error);
           if (error.error.error.message == 'rut repetido') {
-            this.toster.error('El rut de la empresa ya esta ingresado dentro del sistema');
+            this.toster.error('El RUT ya existe, contacte a contacto@planetatuercas.cl');
             this.loading = false;
           } else {
             this.toster.error('Se ha producido un error al intentar agregar el '+this.profile.role.name);
