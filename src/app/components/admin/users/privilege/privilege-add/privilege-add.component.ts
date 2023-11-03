@@ -32,6 +32,7 @@ export class PrivilegeAddComponent implements OnInit, OnDestroy {
     { value: "Mis Compras", label: "Mis Compras", job: ""},
     { value: "Grupo Talleres", label: "Grupo Talleres", job: ""},
     { value: "Caja", label: "Caja", job: ""},
+    { value: "Reportes", label: "Reportes", job: ""},
     { value: "Usuario Admin", label: "Usuario Admin", job: ""},
     { value: "Perfil Admin", label: "Perfil Admin", job: ""},
     { value: "Privilegio Admin", label: "Privilegio Admin", job: ""},
