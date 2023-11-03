@@ -106,7 +106,7 @@ export class LoginComponent implements OnInit {
         //this.message = null;
         this.loginForm.disable();
         let credentials = {
-            email : this.loginForm.controls.email.value,
+            email : (this.loginForm.controls.email.value) ? this.loginForm.controls.email.value.toLowerCase() : '',
             password: this.loginForm.controls.password.value
         }
         this.subscription.add(this._authSrv.signIn(credentials).subscribe(
