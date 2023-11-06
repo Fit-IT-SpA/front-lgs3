@@ -108,6 +108,11 @@ export class NavService implements OnDestroy {
 			]
 		},
 		{
+			id: 'reportes-lectura', title: 'Reportes', icon: 'file-text', type: 'sub', active: false, children: [
+				{ id: 'reportes-lectura', path: '/admin/report/products', title: 'Productos', type: 'link' },
+			]
+		},
+		{
 			id: 'mis-comercios-lectura', path: '/admin/companies', title: 'Comercios', icon: 'home', type: 'link'
 		},
 		{

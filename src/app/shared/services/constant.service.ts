@@ -50,7 +50,6 @@ export class ConstantService {
     public static PERM_COORDINADOR_ESCRITURA             = "coordinador-escritura";
     public static PERM_RECURSOS_HUMANOS_LECTURA          = "recursos-humanos-lectura";
     public static PERM_RECURSOS_HUMANOS_ESCRITURA        = "recursos-humanos-escritura";
-    public static PERM_REPORTES_LECTURA                  = "reportes-lectura";
     public static PERM_REPORTES_EO_LECTURA               = "reporte-excepciones-operativas-lectura";
     public static PERM_REPORTES_PO_LECTURA               = "reporte-problemas-operativos-lectura";
     public static PERM_REFERIDOS_LECTURA                 = "referidos-lectura";
@@ -82,4 +81,6 @@ export class ConstantService {
     public static PERM_MIS_COMERCIOS_ESCRITURA            = "mis-comercios-escritura";
     public static PERM_CAJA_LECTURA            = "caja-lectura";
     public static PERM_CAJA_ESCRITURA            = "caja-escritura";
+    public static PERM_REPORTES_LECTURA            = "reportes-lectura";
+    public static PERM_REPORTES_ESCRITURA            = "reportes-escritura";
 }

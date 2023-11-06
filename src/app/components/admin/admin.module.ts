@@ -24,6 +24,7 @@ import { SalesManagementModule } from './users/sales-management/sales-management
 import { CompaniesModule } from './companies/companies.module';
 import { CartModule } from './cart/cart.module';
 import { DeliveryModule } from './users/delivery/delivery.module';
+import { ReportModule } from './report/report.module';
 
 
 @NgModule({
@@ -41,6 +42,7 @@ import { DeliveryModule } from './users/delivery/delivery.module';
         OrdersModule,
         OffersModule,
         CompaniesModule,
+        ReportModule,
         ChartistModule,
         ChartsModule,
         NgApexchartsModule,
