@@ -67,7 +67,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr (click)="onCellClick(product.id)" *ngFor="let product of products; index as i"  >
+                                    <tr *ngFor="let product of products; index as i"  >
                                         <td>{{ product.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
                                         <td>{{product.order.brand}} {{product.order.model}} {{product.order.year}}</td>
                                         <td>{{product.title}}</td>

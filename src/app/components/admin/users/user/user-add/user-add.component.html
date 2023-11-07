@@ -19,6 +19,14 @@
                                     class="text text-danger mt-1">
                                     Es requerido
                                 </div>
+                                <div *ngIf="formAdd.controls.name.touched && formAdd.controls.name.errors?.minlength"
+                                    class="text text-danger mt-1">
+                                    Debe tener minimo de 3 caracteres
+                                </div>
+                                <div *ngIf="formAdd.controls.name.touched && formAdd.controls.name.errors?.maxlength"
+                                    class="text text-danger mt-1">
+                                    Debe tener un maximo de 40 caracteres
+                                </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label>Apellido Paterno</label>
@@ -27,6 +35,14 @@
                                     class="text text-danger mt-1">
                                     Es requerido
                                 </div>
+                                <div *ngIf="formAdd.controls.lastName.touched && formAdd.controls.lastName.errors?.minlength"
+                                    class="text text-danger mt-1">
+                                    Debe tener minimo de 3 caracteres
+                                </div>
+                                <div *ngIf="formAdd.controls.lastName.touched && formAdd.controls.lastName.errors?.maxlength"
+                                    class="text text-danger mt-1">
+                                    Debe tener un maximo de 40 caracteres
+                                </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label>Apellido Materno</label>
@@ -34,6 +50,14 @@
                                 <div *ngIf="formAdd.controls.secondLastName.errors && formAdd.controls.secondLastName.touched && formAdd.controls.secondLastName.errors.required"
                                     class="text text-danger mt-1">
                                     Es requerido
+                                </div>
+                                <div *ngIf="formAdd.controls.secondLastName.touched && formAdd.controls.secondLastName.errors?.minlength"
+                                    class="text text-danger mt-1">
+                                    Debe tener minimo de 3 caracteres
+                                </div>
+                                <div *ngIf="formAdd.controls.secondLastName.touched && formAdd.controls.secondLastName.errors?.maxlength"
+                                    class="text text-danger mt-1">
+                                    Debe tener un maximo de 40 caracteres
                                 </div>
                             </div>
                         </div>
