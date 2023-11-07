@@ -17,6 +17,8 @@ import { emailValidator, justLetterValidatorLastAndFirstName,
     import { ConstantService } from '../../../../../shared/services/constant.service';
 import { SessionService } from '../../../../../shared/services/session.service';
 import { ToastrService } from 'ngx-toastr';
+import { CompaniesService } from '../../../companies/companies.service';
+import { Companies } from 'src/app/shared/model/companies.model';
 
 @Component({
   selector: 'app-user-edit',
@@ -34,7 +36,8 @@ export class UserEditComponent implements OnInit, OnDestroy {
     loading : boolean = true;
     formEdit: FormGroup;
     access: boolean = false;
-    maxDate: Date;
+    public maxDate: Date;
+    public companies: Companies[] = [];
     public rolesFilter: { value: string, label: string, job: string }[] = [];
     public statusFilter: { value: number, label: string, job: string }[] = [
       {value: -1, label: "Eliminado", job: ""},
@@ -46,7 +49,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
 
     constructor(private activatedRoute: ActivatedRoute, private utilSrv : UtilService, private roleSrv : RoleService,
       private router : Router, public i18n : I18nService, private countrySrv : CountryService, public toster: ToastrService,
-      private srv : UserService, private snack : MatSnackBar, public formBuilder: FormBuilder, private session : SessionService) {
+      private srv : UserService, private snack : MatSnackBar, public formBuilder: FormBuilder, private companySrv: CompaniesService) {
         const now = new Date();
         this.maxDate = new Date(now.getFullYear()-18, now.getMonth(), now.getDate());
     }
@@ -91,9 +94,9 @@ export class UserEditComponent implements OnInit, OnDestroy {
           console.log(this.user);
           this.formEdit = this.formBuilder.group({
             //rut   : [format(response.rut), [ Validators.required]],
-            name : [response.name, [ Validators.required, Validators.minLength(3),Validators.maxLength(40), justLetterValidatorLastAndFirstName]],
-            lastName: [response.lastName, [ Validators.required, Validators.minLength(3),Validators.maxLength(40), justLetterValidatorLastAndFirstName]],
-            secondLastName: [response.secondLastName, [Validators.required, Validators.minLength(3),Validators.maxLength(40), justLetterValidatorLastAndFirstName]],
+            name : [response.name, [ Validators.required, Validators.minLength(3),Validators.maxLength(40)/*,justLetterValidatorLastAndFirstName*/]],
+            lastName: [response.lastName, [ Validators.required, Validators.minLength(3),Validators.maxLength(40)/*, justLetterValidatorLastAndFirstName*/]],
+            secondLastName: [response.secondLastName, [Validators.required, Validators.minLength(3),Validators.maxLength(40)/*, justLetterValidatorLastAndFirstName*/]],
             email: [response.email, [ Validators.required, Validators.minLength(10), Validators.maxLength(40), emailValidator]],
             //email: this.formBuilder.control({value: response.email, disabled: true}),
             //phone: [response.phone, [ Validators.minLength(9),Validators.maxLength(9), mobileValidator ]],
@@ -102,10 +105,22 @@ export class UserEditComponent implements OnInit, OnDestroy {
             status: [this.searchStatus(response.status), [ Validators.required]],
             //role: this.formBuilder.control({value: this.searchRole(response.role), disabled: false}), 
           });
-          this.loading = false;
+          this.getCompanies();
         }, error => {
           this.loading = false;
           this.toster.error('Se ha producido un error al intentar conseguir el usuario.');
+        }
+      ));
+    }
+    private getCompanies() {
+      this.subscription.add(this.companySrv.findByEmail(this.user.email).subscribe(
+        response => {
+          console.log(response);
+          this.companies = response;
+          this.loading = false;
+        }, error => {
+          console.log(error);
+          this.loading = false;
         }
       ));
     }
@@ -132,6 +147,9 @@ export class UserEditComponent implements OnInit, OnDestroy {
           }
       }
       return null;
+  }
+  formatRut(rut : string){
+    return format(rut);
   }
 
     /*private getCountries(){

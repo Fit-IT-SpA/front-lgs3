@@ -134,9 +134,9 @@ export class UserAddComponent implements OnInit, OnDestroy {
   initForms(){
     this.formAdd = this.formBuilder.group({
         //rut   : ['', [ Validators.required]],
-        name : ['', [ Validators.required, Validators.minLength(3),Validators.maxLength(40), justLetterValidatorLastAndFirstName]],
-        lastName: ['', [ Validators.required, Validators.minLength(3),Validators.maxLength(40), justLetterValidatorLastAndFirstName]],
-        secondLastName: ['', [Validators.required, Validators.minLength(3),Validators.maxLength(40), justLetterValidatorLastAndFirstName]],
+        name : ['', [ Validators.required, Validators.minLength(3),Validators.maxLength(40)/*, justLetterValidatorLastAndFirstName*/]],
+        lastName: ['', [ Validators.required, Validators.minLength(3),Validators.maxLength(40)/*, justLetterValidatorLastAndFirstName*/]],
+        secondLastName: ['', [Validators.required, Validators.minLength(3),Validators.maxLength(40)/*, justLetterValidatorLastAndFirstName*/]],
         email: ['', [ Validators.required, Validators.minLength(10), Validators.maxLength(40), emailValidator]],
         //phone: ['', [ Validators.minLength(9),Validators.maxLength(9), mobileValidator ]],
         //nationality: [ { value: 'CL', label: "Chile", job: "" }, [Validators.required, selectAnOptionValidator ]],

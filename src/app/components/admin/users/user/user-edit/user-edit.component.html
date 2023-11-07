@@ -19,6 +19,14 @@
                                     class="text text-danger mt-1">
                                     Es requerido
                                 </div>
+                                <div *ngIf="formEdit.controls.name.touched && formEdit.controls.name.errors?.minlength"
+                                    class="text text-danger mt-1">
+                                    Debe tener minimo de 3 caracteres
+                                </div>
+                                <div *ngIf="formEdit.controls.name.touched && formEdit.controls.name.errors?.maxlength"
+                                    class="text text-danger mt-1">
+                                    Debe tener un maximo de 40 caracteres
+                                </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label>Apellido Paterno</label>
@@ -27,6 +35,14 @@
                                     class="text text-danger mt-1">
                                     Es requerido
                                 </div>
+                                <div *ngIf="formEdit.controls.lastName.touched && formEdit.controls.lastName.errors?.minlength"
+                                    class="text text-danger mt-1">
+                                    Debe tener minimo de 3 caracteres
+                                </div>
+                                <div *ngIf="formEdit.controls.lastName.touched && formEdit.controls.lastName.errors?.maxlength"
+                                    class="text text-danger mt-1">
+                                    Debe tener un maximo de 40 caracteres
+                                </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label>Apellido Materno</label>
@@ -34,6 +50,14 @@
                                 <div *ngIf="formEdit.controls.secondLastName.errors && formEdit.controls.secondLastName.touched && formEdit.controls.secondLastName.errors.required"
                                     class="text text-danger mt-1">
                                     Es requerido
+                                </div>
+                                <div *ngIf="formEdit.controls.secondLastName.touched && formEdit.controls.secondLastName.errors?.minlength"
+                                    class="text text-danger mt-1">
+                                    Debe tener minimo de 3 caracteres
+                                </div>
+                                <div *ngIf="formEdit.controls.secondLastName.touched && formEdit.controls.secondLastName.errors?.maxlength"
+                                    class="text text-danger mt-1">
+                                    Debe tener un maximo de 40 caracteres
                                 </div>
                             </div>
                         </div>
@@ -126,6 +150,39 @@
                             <button class="btn btn-info ml-1 btn-pill" type="button" (click)="goBack()">Volver</button>
                         </div>
                     </form>
+                </div>
+            </div>
+            <div *ngFor="let company of companies">
+                <div class="card">
+                    <div class="card-header py-4">
+                        <h5>Datos de {{company.name}}</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <form class="theme-form mega-form">
+                                    <p *ngIf="company.type === 'taller'" class="mb-0">Tipo facturación: {{company.billingType}}</p>
+                                    <p class="mb-0">Rut: {{formatRut(company.rut)}}</p>
+                                    <p class="mb-0">Dirección: {{company.direction}}</p>
+                                    <p class="mb-0">Teléfono: {{company.phone}}</p>
+                                    <p class="mb-0">Banco: {{company.bank}}</p>
+                                    <p class="mb-0">Número de cuenta banco: {{company.accountNumber}}</p>
+                                    <p class="mb-0">Tipo de cuenta banco: {{company.accountType}}</p>
+                                    <div>
+                                        <p *ngIf="company.status === -1">Estado: <button class="btn btn-pill btn-danger btn-xs">Eliminado</button></p>
+                                        <p *ngIf="company.status === 0">Estado: <button class="btn btn-pill btn-primary btn-xs">Pendiente Activación</button></p>
+                                        <p *ngIf="company.status === 1">Estado: <button class="btn btn-pill btn-success btn-xs">Activado</button></p>
+                                    </div>
+                                    <p class="mb-0">Región: {{company.region}}</p>
+                                    <p class="mb-3">Comuna: {{company.commune}}</p>
+                                    <h6 *ngIf="company.type === 'comercio'" class="f-w-600">Marcas que vende</h6>
+                                    <div *ngFor="let make of company.make">
+                                        <p>{{make}}</p>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

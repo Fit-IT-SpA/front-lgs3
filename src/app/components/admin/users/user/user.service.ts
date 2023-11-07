@@ -132,11 +132,17 @@ export class UserService extends AbstractHttpService {
 		  );
 	  }
 	
-	  private configureFilters(params : any){
+	  private configureFilters(params : {email: string, fullname: string, role: string, status: string}){
 		var filter = "";
 		let arrParams = [];
-		if (params.rut !== ''){
+		/*if (params.rut !== ''){
 		  arrParams.push({ field: 'rut', value : params.rut });
+		}*/
+		if (params.email !== '') {
+			arrParams.push({ field: 'email', value : { "like": params.email, options: "i"}});
+		}
+		if (params.status !== '') {
+			arrParams.push({ field: 'status', value : Number(params.status) });
 		}
 		if (params.role !== ''){
 		  arrParams.push({ field: 'role', value : params.role });
@@ -144,13 +150,13 @@ export class UserService extends AbstractHttpService {
 	
 		for (let i = 0; i < arrParams.length; i ++){
 		  if (arrParams.length > 1 && i < arrParams.length -1){
-			if (arrParams[i].field === 'createdAt'){
+			if (arrParams[i].field === 'email'){
 			  filter =  filter + '"' + arrParams[i].field + '": ' + JSON.stringify(arrParams[i].value) + ',';
 			} else {
 			  filter =  filter + '"' + arrParams[i].field + '": "' + arrParams[i].value + '",';
 			}
 		  } else {
-			if (arrParams[i].field === 'createdAt'){
+			if (arrParams[i].field === 'email'){
 			  filter =  filter + ' "' + arrParams[i].field + '": ' + JSON.stringify(arrParams[i].value) + '';
 			} else {
 			  filter =  filter + '"' + arrParams[i].field + '": "' + arrParams[i].value + '"';
@@ -161,7 +167,7 @@ export class UserService extends AbstractHttpService {
 		return filter;
 	  }
 	
-	  configureFullnameFilters(params : any){
+	  configureFullnameFilters(params : {email: string, fullname: string, role: string, status: string}){
 		var filter = "";
 		let arrParams = [];
 		
@@ -197,7 +203,7 @@ export class UserService extends AbstractHttpService {
 		return filter;
 	  }
 	
-	  findWithParams(params : any, page : number) {
+	  findWithParams(params : {email: string, fullname: string, role: string, status: string}, page : number) {
 		const httpOptions = {
 		  headers: new HttpHeaders({
 			'Content-Type': 'application/json'
