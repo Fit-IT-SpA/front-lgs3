@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, HostListener } from '@angular/core';
 import { UserService } from './user.service';
 import { Subscription } from 'rxjs';
 import { User } from 'src/app/shared/model/user';
@@ -37,23 +37,47 @@ export class UserComponent implements OnInit, OnDestroy {
   public rolesFilter: { value: string, label: string, job: string }[] = [];
   debounceTime:number = 200;
   recentlySearch:boolean=false;
-  parameters = {
+  parameters:{email: string, fullname: string, role: string, status: string} = {
     email : "",
-    rut: '',
     fullname: '',
     role: '',
-    phone: '',
-	status: ''
+	  status: ''
   }
   screenType: string;
   advancedFilter:boolean = false;
   access: boolean = false;
+  public filterHidden: boolean = false;
+  public filterButton: string = "Filtrar";
+  public listView: boolean = false;
+
   constructor(public formBuilder: FormBuilder, private roleSrv : RoleService,
     private srv : UserService, private snack : MatSnackBar, private router : Router, 
 	private utilSrv : UtilService) {
       this.screenType = utilSrv.getScreenSize();
+      this.screenType = utilSrv.getScreenSize();
+      if (window.innerWidth < 575) {
+        this.listView = true;
+        this.filterButton = "Filtrar";
+        this.filterHidden = true;
+      } else {
+        this.filterButton = "Ocultar";
+        this.filterHidden = false;
+        this.listView = false;
+      }
   }
-
+  @HostListener('window:resize', ['$event'])
+    onWindowResize(event: any) {
+      //console.log('Resolución actual: ' + window.innerWidth + ' x ' + window.innerHeight);
+      if (window.innerWidth < 575) {
+        this.filterButton = "Filtrar";
+        this.listView = true;
+        this.filterHidden = true;
+      } else {
+        this.filterButton = "Ocultar";
+        this.filterHidden = false;
+        this.listView = false;
+      }
+    }
   private haveAccess(){
     let permissions = JSON.parse(localStorage.getItem("profile")).privilege;
     if (permissions) {
@@ -67,7 +91,6 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
     let access = this.haveAccess();
     if (!access){
       this.router.navigate(['/admin/unauthorized']);
@@ -96,19 +119,19 @@ export class UserComponent implements OnInit, OnDestroy {
       .subscribe(
         response => {
           this.roles = response;
-		  this.rolesFilter.push({
+		      this.rolesFilter.push({
             value: "",
             label: "Todos los Tipos",
             job: ''
           });
-		  for (let role of this.roles) {
+		      for (let role of this.roles) {
             this.rolesFilter.push({
               value: role.slug,
               label: role.title,
               job: ''
             });
           }
-		  console.log(this.rolesFilter);
+		      console.log(this.rolesFilter);
           this.getCount();
         },
         error => {
@@ -126,6 +149,7 @@ export class UserComponent implements OnInit, OnDestroy {
       .subscribe(
         response => {
           this.totalElements = response;
+          console.log(this.totalElements);
           this.find();
         },
         error => {
@@ -144,7 +168,7 @@ export class UserComponent implements OnInit, OnDestroy {
       .subscribe(
         response => {
           this.users = response;
-		  console.log(this.users);
+		      console.log(this.users);
           this.loading = false;
           this.loadingSrv = false;
         },
@@ -227,15 +251,20 @@ export class UserComponent implements OnInit, OnDestroy {
     return format(rut);
   }
 
-  onFocusRut(){
+  public showFilter() {
+    this.filterButton = (this.filterButton == "Filtrar") ? "Ocultar" : "Filtrar";
+    this.filterHidden = (this.filterHidden) ? false : true;
+  }
+
+  /*onFocusRut(){
     this.filterForm.controls.rut.markAsPristine();
     if (this.filterForm.controls.rut.value != ''){
       this.filterForm.controls.rut.setValue(clean(this.filterForm.controls.rut.value));
     }
-  }
+  }*/
 
   
-  onBlurRut() {
+  /*onBlurRut() {
     if (this.filterForm.controls.rut.value != '') {
       if (this.filterForm.controls.rut.value.length > 7 && validate(this.filterForm.controls.rut.value) || this.filterForm.controls.rut.value.length == 8) {
         this.filterForm.controls.rut.setErrors(null);
@@ -247,18 +276,18 @@ export class UserComponent implements OnInit, OnDestroy {
       this.parameters.rut = "";
       this.getCount();
     }
-  }
+  }*/
 
   changeFilter(){
     this.loadingSrv = true;
-	this.loading = true;
-    this.parameters.rut = clean(this.filterForm.controls.rut.value);
+	  this.loading = true;
+    //this.parameters.rut = clean(this.filterForm.controls.rut.value);
     this.parameters.fullname = this.filterForm.controls.fullname.value;
     this.parameters.role = (this.filterForm.controls.role.value) ? this.filterForm.controls.role.value.value : "";
     this.parameters.email = this.filterForm.controls.email.value;
     this.parameters.status = this.filterForm.controls.status.value;
-    this.parameters.phone = this.filterForm.controls.phone.value;
-	console.log(this.parameters);
+    //this.parameters.phone = this.filterForm.controls.phone.value;
+	  console.log(this.parameters);
     this.getCount();
   }
 

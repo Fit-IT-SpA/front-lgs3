@@ -6,46 +6,46 @@
 	</div>
 </div>
 <div class="container-fluid" *ngIf="!loading">
-	<div class="card">
+	<div class="card" *ngIf="!filterHidden">
 		<div class="card-body">
 			<form [formGroup]="filterForm" class="needs-validation">
 				<div class="form-row">
-					<div class="col-md-4 mb-3">
+					<!--<div class="col-md-4 mb-3">
 						<label>Rut</label>
 						<div class="input-group">
 							<div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-credit-card"></i></span></div>
 							<input formControlName="rut" class="form-control" type="text" placeholder="Rut" (blur)="onBlurRut()" (focus)="onFocusRut()">
 						</div>
-					</div>
-					<div class="col-md-4 mb-3">
+					</div>-->
+					<div class="col-md-6 mb-3">
 					  <label>Nombre</label>
 					  <div class="input-group">
-						<div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-user"></i></span></div>
-						<input formControlName="fullname" class="form-control" type="text" placeholder="Nombre">
+						<div class="input-group-prepend"><span class="input-group-text btn-pill"><i class="fa fa-user"></i></span></div>
+						<input formControlName="fullname" class="form-control btn-pill" type="text" placeholder="Nombre">
 					  </div>
 					</div>
-					<div class="col-md-4 mb-3">
+					<div class="col-md-6 mb-3">
 						<label>Perfil</label>
 						<ng-select 
 							[items]="rolesFilter" 
 							placeholder="Perfil"
-							class="js-example-placeholder-multiple" 
+							class="js-example-placeholder-multiple btn-pill" 
 							formControlName="role">
 						</ng-select>
 					</div>
 				</div>
 				<div class="form-row">
-					<div class="col-md-4 mb-3">
+					<div class="col-md-6 mb-3">
 						<label>Email</label>
 						<div class="input-group">
-							<div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-user"></i></span></div>
-							<input formControlName="email" class="form-control" type="text" placeholder="Email">
+							<div class="input-group-prepend"><span class="input-group-text btn-pill"><i class="fa fa-user"></i></span></div>
+							<input formControlName="email" class="form-control btn-pill" type="text" placeholder="Email">
 						</div>
 					</div>
-					<div class="col-md-4 mb-3">
+					<div class="col-md-6 mb-3">
 						<div class="form-group">
 							<label>Estado</label>
-							<select formControlName="status" class="form-control">
+							<select formControlName="status" class="form-control btn-pill">
 								<option class="mat-select-placeholder" value="">Todos los Estados</option>
 								<option value="-1">Eliminado</option>
 								<option value="0">Pendiente Activación</option>
@@ -54,7 +54,7 @@
 							</select>
 						</div>
 					</div>
-					<div class="col-md-4 mb-3">
+					<!--<div class="col-md-4 mb-3">
 						<div class="form-group">
 							<label>Teléfono</label>
 							<div class="input-group">
@@ -62,18 +62,21 @@
 								<input formControlName="phone" class="form-control" type="text" placeholder="Teléfono">
 							</div>
 						</div>
-					</div>
+					</div>-->
 				</div>
 			</form>
-			<div class="col">
-                <button class="btn btn-primary" type="button" (click)="changeFilter()" >Buscar</button>
-            </div>
+			<div class="col text-right">
+				<button class="btn btn-success btn-pill" type="button" (click)="changeFilter()" >Buscar</button>
+			</div>
 		</div>
 	</div>
-	<div class="text-right mb-3" *ngIf="this.canWrite()">
-		<button class="btn btn-primary" type="button" (click)="add()">Agregar</button>
+	<div class="col-md-4 mb-3" *ngIf="listView">
+		<button class="btn btn-pill btn-info" (click)="this.showFilter()" type="button" >{{this.filterButton}}</button>
 	</div>
-	<table class="custom-table">
+	<div class="text-right mb-3" *ngIf="this.canWrite()">
+		<button class="btn btn-primary btn-pill" type="button" (click)="add()">Agregar</button>
+	</div>
+	<table class="custom-table mb-3">
 		<thead>
 			<tr>
 				<th>Nombre</th>
@@ -93,12 +96,36 @@
 				<td *ngIf="user.status === 1">Activo</td>
 				<td *ngIf="user.status === 2">Bloqueado</td>
 				<td class="options-column">
-					<button class="btn btn-primary" *ngIf="canWrite()" (click)="edit(user.email)">Editar</button>
-					<button class="btn btn-danger" *ngIf="canWrite() && user.status !== -1" (click)="removeWithConfirmation(user.email, user.name+' '+user.lastName)">
+					<button class="btn btn-primary btn-pill btn-xs" *ngIf="canWrite()" (click)="edit(user.email)">Editar</button>
+					<button class="btn btn-danger btn-pill btn-xs" *ngIf="canWrite() && user.status !== -1" (click)="removeWithConfirmation(user.email, user.name+' '+user.lastName)">
 						Eliminar
 					</button>
 				</td>
 			</tr>
 		</tbody>
 	</table>
+	<ngb-pagination 
+		*ngIf="!listView"
+		class="d-flex justify-content-center mb-3" 
+		[collectionSize]="totalElements" 
+		[pageSize]="50"
+		[boundaryLinks]="true"
+		[(page)]="currentPage"
+		[maxSize]="5" 
+		[rotate]="true" 
+		(pageChange)="onPageFired($event)"
+		aria-label="Default pagination">
+	</ngb-pagination>
+	<ngb-pagination 
+		*ngIf="listView"
+		class="d-flex justify-content-center mb-3" 
+		[collectionSize]="totalElements" 
+		[pageSize]="50"
+		[boundaryLinks]="true"
+		[(page)]="currentPage"
+		[maxSize]="3" 
+		[rotate]="true" 
+		(pageChange)="onPageFired($event)"
+		aria-label="Default pagination">
+	</ngb-pagination>
 </div>
