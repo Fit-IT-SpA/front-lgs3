@@ -51,7 +51,6 @@ export class CompaniesAddComponent implements OnInit {
     { value: "Cta Corriente", label: "Cta Corriente", job: "" },
     { value: "Cta Vista", label: "Cta Vista", job: "" },
   ];
-  private user: User;
 
   constructor(
     private modalService: NgbModal,

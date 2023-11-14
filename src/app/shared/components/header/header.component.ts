@@ -1,8 +1,9 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, HostListener } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { NavService } from '../../services/nav.service';
 import { LayoutService } from '../../services/layout.service';
 import { ConstantService } from '../../services/constant.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -13,13 +14,34 @@ export class HeaderComponent implements OnInit {
 
   public elem: any;
   public dark: boolean = this.layout.config.settings.layout_version == 'dark-only' ? true : false;
+  public addOrderButtonDesktopDisabled: boolean = true;
+  public addOrderButtonMobileDisabled: boolean = true;
+  public profile =  JSON.parse(localStorage.getItem('profile'));
 
   constructor(public layout: LayoutService,
     public navServices: NavService, 
+    private router: Router,
     @Inject(DOCUMENT) private document: any
   ) {
+    if (window.innerWidth < 575) {
+      this.addOrderButtonDesktopDisabled = false;
+      this.addOrderButtonMobileDisabled = true;
+    } else {
+      this.addOrderButtonDesktopDisabled = true;
+      this.addOrderButtonMobileDisabled = false;
+    }
   }
-
+  @HostListener('window:resize', ['$event'])
+    onWindowResize(event: any) {
+      //console.log('Resolución actual: ' + window.innerWidth + ' x ' + window.innerHeight);
+      if (window.innerWidth < 575) {
+        this.addOrderButtonDesktopDisabled = false;
+        this.addOrderButtonMobileDisabled = true;
+      } else {
+        this.addOrderButtonDesktopDisabled = true;
+        this.addOrderButtonMobileDisabled = false;
+      }
+    }
   ngOnInit() {
     this.elem = document.documentElement;
   }
@@ -84,6 +106,9 @@ export class HeaderComponent implements OnInit {
     return false;
     }
 }
+  goToAddOrder() {
+    this.router.navigate(['/admin/orders/add']);
+  }
 
 
 }

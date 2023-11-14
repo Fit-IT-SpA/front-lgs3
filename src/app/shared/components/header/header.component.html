@@ -18,10 +18,20 @@
     </div>
     <div class="nav-right col-8 pull-right right-header p-0">
       <ul class="nav-menus">
+        <button 
+          *ngIf="this.profile.role.slug === 'taller' && this.addOrderButtonDesktopDisabled!" 
+          class="btn btn-pill btn-outline-success"
+          (click)="goToAddOrder()">
+          Qué repuesto buscas?
+        </button>
+        <button 
+          *ngIf="this.profile.role.slug === 'taller' && this.addOrderButtonMobileDisabled!" 
+          class="btn btn-pill btn-outline-success btn-xs"
+          (click)="goToAddOrder()">
+          Ingresar Pedido
+        </button>
 
-<!--
-
-        <li class="language-nav" (click)="languageToggle()">
+        <!--<li class="language-nav" (click)="languageToggle()">
           <app-languages></app-languages>
         </li>
         <li>
