@@ -225,7 +225,7 @@ export class UserAddComponent implements OnInit, OnDestroy {
 
 
   private createUser(){
-    let user: UserAdd = {
+    let user: { email: string, name: string, lastName: string, typeUser: string, password: string, billingType: string, rut: string } = {
       email: this.formAdd.controls.email.value,
       name: this.formAdd.controls.name.value,
       lastName: this.formAdd.controls.lastName.value+' '+this.formAdd.controls.secondLastName.value,
@@ -233,7 +233,9 @@ export class UserAddComponent implements OnInit, OnDestroy {
       //nationality: (this.formAdd.controls.nationality.value) ? this.formAdd.controls.nationality.value.value : '',
       //phone: this.formAdd.controls.phone.value,
       typeUser: (this.formAdd.controls.role.value) ? this.formAdd.controls.role.value.value : "",
-      password: this.formAdd.controls.confirmPassword.value
+      password: this.formAdd.controls.confirmPassword.value,
+      billingType: '',
+      rut: ''
     }
     return user;
   }

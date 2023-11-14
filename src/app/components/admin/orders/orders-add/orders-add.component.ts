@@ -1,6 +1,6 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { NgbModal, ModalDismissReasons, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
 import { ServiceTypeService } from '../../../../shared/services/service-type.service';
 import { UserService } from '../../../../shared/services/user.service';
 import { CompaniesService } from '../../companies/companies.service';
@@ -14,7 +14,8 @@ import { Companies } from 'src/app/shared/model/companies.model';
 import { OrderService } from 'src/app/shared/services/order.service';
 import { Router } from '@angular/router';
 import { ConstantService } from 'src/app/shared/services/constant.service';
-import { numberValidator } from 'src/app/shared/validators/form-validators';
+import { mobileValidator, numberValidator } from 'src/app/shared/validators/form-validators';
+import { Product } from 'src/app/shared/model/product.model';
 
 @Component({
   selector: 'app-orders-add',
@@ -28,16 +29,15 @@ export class OrdersAddComponent implements OnInit {
   private subscription: Subscription = new Subscription();
   public closeResult: string;
   public modalOpen: boolean = false;
-  public companiesForm: FormGroup;
   public profile =  JSON.parse(localStorage.getItem('profile'));
   public companiesTitle = this.profile.role.slug == 'taller' ? 'Talleres' : this.profile.role.slug == 'comercio' ? 'Comercios' : 'Negocios';
   public url: ArrayBuffer | string;
-  private user: User;
   public orderAdd: OrderAdd;
   public order: Order;
-  public formOrder: FormGroup;
+  public firstFormGroup: FormGroup;
+  public secondFormGroup: FormGroup;
+  public thirdFormGroup: FormGroup;
   public companies: Companies[];
-  public counter: number = 1;
   public filePath: string;
   public imgFile: any;
   public loading: boolean = true;
@@ -45,8 +45,14 @@ export class OrdersAddComponent implements OnInit {
   public makesFilter: { value: string, label: string, job: string }[] = [];
   public modelFilter: { value: string, label: string, job: string }[] = [];
   public yearFilter: { value: string, label: string, job: string }[] = [];
+  public billingTypes: {title: string, slug: string, check: boolean}[] = [];
+  public regionFilter: { value: string, label: string, job: string }[] = [];
+  public communeFilter: { value: string, label: string, job: string }[] = [];
+  public counter: number[] = [1];
+  public disabledCommuneFilter: boolean = false;
   public disabledModelFilter: boolean = false;
   public disabledYearFilter: boolean = false;
+  public placeholderSecondForm: string = '';
 
   constructor(
     private modalService: NgbModal,
@@ -56,17 +62,15 @@ export class OrdersAddComponent implements OnInit {
     private router: Router,
     public toster: ToastrService,
     private companiesSrv: CompaniesService) {
-        this.formOrder = this.fb.group({
-            company: ['', Validators.required],
-            brand: [null, [Validators.required]],
-            model: [null, [Validators.required]],
-            chassis: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
-            photo: ['', [Validators.required]],
-            year: [null, [Validators.required]],
-            //engine: ['', Validators.required],
+        this.firstFormGroup = this.fb.group({
+          brand: [null, [Validators.required]],
+          model: [null, [Validators.required]],
+          chassis: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
+          photo: ['', [Validators.required]],
+          year: [null, [Validators.required]],
         });
-        this.formOrder.get('model').disable();
-        this.formOrder.get('year').disable();
+        this.firstFormGroup.get('model').disable();
+        this.firstFormGroup.get('year').disable();
      }
 
   ngOnInit(): void {
@@ -92,8 +96,33 @@ export class OrdersAddComponent implements OnInit {
       (response) => {
         console.log(response);
         this.companies = response;
-        this.formOrder.controls.company.setValue(this.companies[0].rut);
-        this.getVehicleListMake();
+        this.thirdFormGroup = this.fb.group({
+          products: this.fb.array([
+            this.fb.group({
+              description: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
+              qty: [1, [Validators.required]],
+            })
+          ])
+        });
+        if (this.companies[0].status === 0) {
+          this.placeholderSecondForm = (this.companies[0].billingType === 'boleta') ? '' : 'de empresa';
+          this.secondFormGroup = this.fb.group({
+            rut: [format(this.companies[0].rut), [Validators.required]],
+            billingType: [this.companies[0].billingType, [Validators.required]],
+            name: [(this.companies[0].billingType === 'boleta') ? this.profile.name: '', [Validators.required,Validators.maxLength(18)]],
+            direction: ['', [Validators.required,Validators.maxLength(140)]],
+            region: [null, [Validators.required]],
+            commune: [null, [Validators.required]],
+            phone: ['', [Validators.required,Validators.minLength(9),Validators.maxLength(9),mobileValidator,numberValidator]],
+          });
+          this.getRegion();
+        } else {
+          this.secondFormGroup = this.fb.group({
+            rut: [this.companies[0].rut, Validators.required],
+          })
+          this.getVehicleListMake();
+        }
+        
       }, (error) => {
         console.log(error);
         this.toster.error('Se ha producido un error al intentar buscar los '+this.companiesTitle+' del usuario');
@@ -117,17 +146,78 @@ export class OrdersAddComponent implements OnInit {
       }
     ));
   }
+  private getRegion() {
+    this.secondFormGroup.get('commune').disable();
+    this.subscription.add(this.companiesSrv.findLocationsRegion().subscribe(
+      response => {
+        console.log(response);
+        for (let location of response) {
+          this.regionFilter.push({
+            value: location.region,
+            label: location.region,
+            job: ''
+          });
+        }
+        this.getBilling();
+      }, error => {
+        console.log(error);
+      }
+    ));
+  }
+  private getBilling() {
+    this.billingTypes.push({title: 'Factura', slug: 'factura', check: (this.companies[0].billingType === 'factura') ? true : false});
+    this.billingTypes.push({title: 'Boleta', slug: 'boleta', check: (this.companies[0].billingType === 'boleta') ? true : false});
+    this.secondFormGroup.controls.billingType.setValue(this.companies[0].billingType);
+    console.log(this.billingTypes);
+    this.getVehicleListMake();
+  }
+  public async onChangeRegionFilter() {
+    this.disabledCommuneFilter = true;
+    this.secondFormGroup.controls.commune.setValue(null);
+    this.secondFormGroup.get('commune').disable();
+    this.communeFilter = [];
+    try {
+      const response: {commune: string}[] = await this.companiesSrv.findLocationsCommuneByRegion(this.secondFormGroup.controls.region.value.value).toPromise();
+      if (response && response.length > 0) {
+        for (let location of response) {
+          this.communeFilter.push({
+            value: location.commune,
+            label: location.commune,
+            job: ''
+          });
+        }
+        this.disabledCommuneFilter = false;
+        this.secondFormGroup.get('commune').enable();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  public onClearRegionFilter() {
+    this.disabledCommuneFilter = false;
+    this.secondFormGroup.controls.commune.setValue(null);
+    this.secondFormGroup.get('commune').disable();
+    this.communeFilter = [];
+  }
+  public clickBilling(slug: string) {
+    this.secondFormGroup.controls.billingType.setValue(slug);
+    if (slug === 'boleta') {
+      this.secondFormGroup.controls.name.setValue(this.profile.name);
+    } else {
+      this.secondFormGroup.controls.name.setValue("");
+    }
+  }
   public async onChangeMakeFilter() {
-    console.log("onChangeMakeFilter");
+    //console.log("onChangeMakeFilter");
     this.disabledModelFilter = true;
-    this.formOrder.controls.model.setValue(null);
-    this.formOrder.controls.year.setValue(null);
-    this.formOrder.get('model').disable();
-    this.formOrder.get('year').disable();
+    this.firstFormGroup.controls.model.setValue(null);
+    this.firstFormGroup.controls.year.setValue(null);
+    this.firstFormGroup.get('model').disable();
+    this.firstFormGroup.get('year').disable();
     this.modelFilter = [];
     this.yearFilter = [];
     try {
-      const response: {model: string}[] = await this.companiesSrv.findVehicleListModelByMake(this.formOrder.controls.brand.value.value).toPromise();
+      const response: {model: string}[] = await this.companiesSrv.findVehicleListModelByMake(this.firstFormGroup.controls.brand.value.value).toPromise();
       if (response && response.length > 0) {
         for (let vehicle of response) {
           this.modelFilter.push({
@@ -136,8 +226,9 @@ export class OrdersAddComponent implements OnInit {
             job: ''
           });
         }
+        console.log(this.modelFilter);
         this.disabledModelFilter = false;
-        this.formOrder.get('model').enable();
+        this.firstFormGroup.get('model').enable();
       }
     } catch (error) {
       console.log(error);
@@ -145,21 +236,37 @@ export class OrdersAddComponent implements OnInit {
   }
   public onClearMakeFilter() {
     this.disabledModelFilter = false;
-    this.formOrder.controls.model.setValue(null);
-    this.formOrder.controls.year.setValue(null);
-    this.formOrder.get('model').disable();
-    this.formOrder.get('year').disable();
+    this.firstFormGroup.controls.model.setValue(null);
+    this.firstFormGroup.controls.year.setValue(null);
+    this.firstFormGroup.get('model').disable();
+    this.firstFormGroup.get('year').disable();
     this.modelFilter = [];
     this.yearFilter = [];
   }
+  public increment(i: number) {
+    this.counter[i] += 1;
+    const control = this.thirdFormGroup.get('products') as FormArray;
+    const item = control.at(i);
+    item.get("qty").setValue(this.counter[i]);
+    //console.log(this.productsAddFormGroup.controls);
+  }
+
+  public decrement(i: number) {
+    if (this.counter[i] > 1) {
+      this.counter[i] -= 1;
+      const control = this.thirdFormGroup.get('products') as FormArray;
+      const item = control.at(i);
+      item.get("qty").setValue(this.counter[i]);
+    }
+  }
   public async onChangeModelFilter() {
-    console.log("onChangeModelFilter");
+    //console.log("onChangeModelFilter");
     this.disabledYearFilter = true;
-    this.formOrder.controls.year.setValue(null);
-    this.formOrder.get('year').disable();
+    this.firstFormGroup.controls.year.setValue(null);
+    this.firstFormGroup.get('year').disable();
     this.yearFilter = [];
     try {
-      const response: {year: string}[] = await this.companiesSrv.findVehicleListYearByMakeModel(this.formOrder.controls.brand.value.value, this.formOrder.controls.model.value.value).toPromise();
+      const response: {year: string}[] = await this.companiesSrv.findVehicleListYearByMakeModel(this.firstFormGroup.controls.brand.value.value, this.firstFormGroup.controls.model.value.value).toPromise();
       if (response && response.length > 0) {
         for (let vehicle of response) {
           this.yearFilter.push({
@@ -169,7 +276,7 @@ export class OrdersAddComponent implements OnInit {
           });
         }
         this.disabledYearFilter = false;
-        this.formOrder.get('year').enable();
+        this.firstFormGroup.get('year').enable();
       }
     } catch (error) {
       console.log(error);
@@ -177,42 +284,22 @@ export class OrdersAddComponent implements OnInit {
   }
   public onClearModelFilter() {
     this.disabledYearFilter = false;
-    this.formOrder.controls.year.setValue(null);
-    this.formOrder.get('year').disable();
+    this.firstFormGroup.controls.year.setValue(null);
+    this.firstFormGroup.get('year').disable();
     this.yearFilter = [];
   }
-  /**
-   * open Dialog CUBA
-   * @param user 
-   */
-  /*openModal(user: User) {
-    this.user = user;
-    this.companies = user.companies;
-    //console.log(this.user);
-    //console.log(this.companies);
-    this.modalOpen = true;
-      this.modalService.open(this.QuickViewOrdersAdd, { 
-        size: 'lg',
-        ariaLabelledBy: 'modal-basic-title',
-        centered: true,
-        windowClass: 'Quickview' 
-      }).result.then((result) => {
-        `Result ${result}`
-      }, (reason) => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      });
-  }*/
   add() {
-    this.orderAdd = this.createOrder();
-    console.log(this.orderAdd);
-    this.subscription.add(this.srv.add(this.orderAdd).subscribe(
+    this.loading = true;
+    console.log(this.createOrder());
+    this.subscription.add(this.srv.add(this.createOrder()).subscribe(
         response => {
             //console.log(response);
-            this.toster.success('Se creó correctamente su pedido');
-            this.formOrder.controls.company.setValue('');
-            this.product(response.id);
+            this.toster.success('Felicitaciones! Tu pedido ya ha sido publicado. Ahora espera ofertas pronto! Revisa en tu sección Mis Pedidos');
+            //this.product(response.id);
+            this.goBack();
         },
         error => {
+            this.loading = false;
             console.log(error);
             this.toster.error('No se pudo crear su Pedido :(');
         }
@@ -223,20 +310,56 @@ export class OrdersAddComponent implements OnInit {
     console.log(id);
     this.router.navigate(['/admin/orders/'+id+'/products']);
   }
-  createOrder() {
+  public addProduct() {
+    const control = this.thirdFormGroup.get('products') as FormArray;
+    control.push(this.fb.group({
+      description: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
+      qty: [1, [Validators.required]],
+    }));
+    this.counter.push(1);
+    console.log(this.thirdFormGroup);
+  }
+  public deleteProduct() {
+    const control = this.thirdFormGroup.get('products') as FormArray;
+    if (control.length > 1) { // Asegurarse de que siempre haya al menos un formulario
+      control.removeAt(control.length - 1);
+    }
+    this.counter.pop();
+  }
+  createOrder() : {order: OrderAdd, products: Product[], company: Companies}{
+    const control = this.thirdFormGroup.get('products') as FormArray;
     return {
-        idOrder: (new Date().getTime()).toString(),
-        createBy: this.profile.email,
-        company: this.formOrder.controls.company.value,
-        status: 0,
-        //closingDate: this.createClosingDateTime(),
-        brand: (this.formOrder.controls.brand.value) ? this.formOrder.controls.brand.value.value : '',
-        model: (this.formOrder.controls.model.value) ? this.formOrder.controls.model.value.value : '',
-        year: (this.formOrder.controls.year.value) ? this.formOrder.controls.year.value.value : '',
-        //engine: '',
-        chassis: (this.formOrder.controls.chassis.value) ? this.formOrder.controls.chassis.value : '',
-        photo: (this.formOrder.controls.photo.value) ? this.formOrder.controls.photo.value : '',
-        closingDate: new Date(),
+        order: {
+          idOrder: (new Date().getTime()).toString(),
+          createBy: this.profile.email,
+          company: clean(this.secondFormGroup.controls.rut.value),
+          status: 1,
+          //closingDate: this.createClosingDateTime(),
+          brand: (this.firstFormGroup.controls.brand.value) ? this.firstFormGroup.controls.brand.value.value : '',
+          model: (this.firstFormGroup.controls.model.value) ? this.firstFormGroup.controls.model.value.value : '',
+          year: (this.firstFormGroup.controls.year.value) ? this.firstFormGroup.controls.year.value.value : '',
+          //engine: '',
+          chassis: (this.firstFormGroup.controls.chassis.value) ? this.firstFormGroup.controls.chassis.value : '',
+          photo: (this.firstFormGroup.controls.photo.value) ? this.firstFormGroup.controls.photo.value : '',
+          closingDate: new Date(),
+        },
+        products: control.value,
+        company: {
+          rut: clean(this.secondFormGroup.controls.rut.value),
+          billingType: (this.secondFormGroup.controls.billingType) ? this.secondFormGroup.controls.billingType.value : '',
+          createBy: this.profile.email,
+          type: this.profile.role.slug,
+          name: (this.secondFormGroup.controls.name) ? this.secondFormGroup.controls.name.value : '',
+          status: this.companies[0].status,
+          direction: (this.secondFormGroup.controls.direction) ? this.secondFormGroup.controls.direction.value : '',
+          region: (this.secondFormGroup.controls.region) ? this.secondFormGroup.controls.region.value.value : '',
+          commune: (this.secondFormGroup.controls.commune) ? this.secondFormGroup.controls.commune.value.value : '',
+          phone: (this.secondFormGroup.controls.phone) ? this.secondFormGroup.controls.phone.value : '',
+          accountNumber: -1,
+          accountType: '',
+          bank: '',
+          make: [],
+        }
     }
 
   }
@@ -265,7 +388,7 @@ export class OrdersAddComponent implements OnInit {
           let archivo = response;
           this.filePath = archivo.files[0].originalname;
           this.url = this.filePath;
-          this.formOrder.controls.photo.setValue(this.url);
+          this.firstFormGroup.controls.photo.setValue(this.url);
           this.toster.success('¡Imagen subida correctamente!');
         }, error => {
             console.log(error);
@@ -278,16 +401,31 @@ export class OrdersAddComponent implements OnInit {
   public goBack() {
     this.router.navigate(['/admin/orders']);
   }
-  /*createClosingDateTime() {
-    let date: Date = new Date(
-        this.thirdFormGroup.controls.closingDate.value.year, 
-        this.thirdFormGroup.controls.closingDate.value.month - 1, 
-        this.thirdFormGroup.controls.closingDate.value.day,
-        this.thirdFormGroup.controls.closingTime.value.hour, this.thirdFormGroup.controls.closingTime.value.minute, 0, 0);
-    date.setSeconds(0);
-    date.setHours(date.getHours()-3);
-    return date;
-  }*/
+  public onFocusRut() {
+    this.secondFormGroup.controls.rut.markAsPristine();
+    if (this.secondFormGroup.controls.rut.value != "") {
+      this.secondFormGroup.controls.rut.setValue(
+        clean(this.secondFormGroup.controls.rut.value)
+      );
+    }
+  }
+
+  public onBlurRut() {
+    if (this.secondFormGroup.controls.rut.value != "") {
+      if (
+        this.secondFormGroup.controls.rut.value.length > 3 &&
+        validate(this.secondFormGroup.controls.rut.value)
+      ) {
+        this.secondFormGroup.controls.rut.setErrors(null);
+        this.secondFormGroup.controls.rut.setValue(
+          format(this.secondFormGroup.controls.rut.value)
+        );
+      } else {
+        this.secondFormGroup.controls.rut.setErrors({ rut: true });
+      }
+      this.secondFormGroup.controls.rut.markAsDirty();
+    }
+  }
   /**
    * metodo para convertir cadena de caraceres en formato rut (puntos y guion)
    * @param rut rut de los talleres del usuario
@@ -305,7 +443,7 @@ export class OrdersAddComponent implements OnInit {
    * @param rut rut del taller que hará el pedido
    */
   clickCompany(rut: string) {
-    this.formOrder.controls.company.setValue(rut);
+    this.secondFormGroup.controls.rut.setValue(rut);
     //console.log(this.formOrder.controls.company.value);
   }
   public finish() {

@@ -65,7 +65,7 @@ export class AuthServiceNielsen extends AbstractHttpService
           })
         );
     }
-    register(credentials: { email: string, name: string, lastName: string, typeUser: string, password: string }): Observable<any> {
+    register(credentials: { email: string, name: string, lastName: string, typeUser: string, password: string, billingType: string, rut: string }): Observable<any> {
         const httpOptions = {
             headers: new HttpHeaders({
               'Content-Type': 'application/json'

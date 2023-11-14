@@ -3,6 +3,7 @@ export interface Companies {
     billingType?: string,
     type: string,
     createBy: string,
+    status: number,
     name: string,
     direction: string,
     region: string,

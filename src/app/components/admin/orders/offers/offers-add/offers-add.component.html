@@ -77,11 +77,11 @@
                   <input class="form-control" type="text" placeholder="Marca" formControlName="make">
                   <div *ngIf="offersFormGroup.controls.make.touched && offersFormGroup.controls.make.errors?.maxlength"
                     class="text text-danger mt-1">
-                    La marca debe tener un maximo de 10 caracteres
+                    máx 20 caracteres
                   </div>
                   <div *ngIf="offersFormGroup.controls.make.touched && offersFormGroup.controls.make.errors?.pattern" 
                   class="text text-danger mt-1">
-                    Marca no admite números ni caracteres especiales
+                    No se admiten números ni caracteres especiales
                   </div>
                 </div>
             </div>
