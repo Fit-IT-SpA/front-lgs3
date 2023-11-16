@@ -49,8 +49,8 @@ export class RegisterComponent implements OnInit {
       public toster: ToastrService) {
       this.loginForm = this.fb.group({
         email: ['', [Validators.required]],
-        name: ['', [Validators.required]],
-        lastName: ['', [Validators.required]],
+        name: ['', [Validators.required,Validators.maxLength(35)]],
+        lastName: ['', [Validators.required,Validators.maxLength(70)]],
         typeUser: ['', [Validators.required]],
         rut: ['', [Validators.required]],
         billingType: ['', [Validators.required]],

@@ -35,6 +35,10 @@
                         class="text text-danger mt-1">
                         El Nombre es requerido
                     </div>
+                    <div *ngIf="loginForm.controls.name.touched && loginForm.controls.name.errors?.maxlength"
+                      class="text text-danger mt-1">
+                      máximo de 30 caracteres
+                  </div>
                 </div>
                 <div class="form-group">
                   <label class="col-form-label">Apellidos</label>
@@ -44,6 +48,10 @@
                         class="text text-danger mt-1">
                         Los Apellidos son requeridos
                     </div>
+                    <div *ngIf="loginForm.controls.lastName.touched && loginForm.controls.lastName.errors?.maxlength"
+                      class="text text-danger mt-1">
+                      máximo de 75 caracteres
+                  </div>
                 </div>
                 <div class="form-group">
                   <label class="col-form-label">Qué deseas hacer?</label>
@@ -63,11 +71,11 @@
                   </div>
                   <div *ngIf="loginForm.controls.password.touched && loginForm.controls.password.errors?.minlength"
                       class="text text-danger mt-1">
-                      La Contraseña debe tener minimo de 4 caracteres
+                      mínimo de 4 caracteres
                   </div>
                   <div *ngIf="loginForm.controls.password.touched && loginForm.controls.password.errors?.maxlength"
                       class="text text-danger mt-1">
-                      La Contraseña debe tener un maximo de 12 caracteres
+                      máximo de 12 caracteres
                   </div>
                 </div>
                 <div class="form-group">
@@ -81,11 +89,11 @@
                   </div>
                   <div *ngIf="loginForm.controls.confirmPassword.touched && loginForm.controls.confirmPassword.errors?.minlength"
                       class="text text-danger mt-1">
-                      La Contraseña debe tener minimo de 4 caracteres
+                      mínimo de 4 caracteres
                   </div>
                   <div *ngIf="loginForm.controls.confirmPassword.touched && loginForm.controls.confirmPassword.errors?.maxlength"
                       class="text text-danger mt-1">
-                      La Contraseña debe tener un maximo de 12 caracteres
+                      máximo de 12 caracteres
                   </div>
                 </div>
                 <div class="form-group" *ngIf="this.loginForm.controls.typeUser.value === 'taller'">

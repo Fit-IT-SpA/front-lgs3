@@ -13,13 +13,15 @@
         <aw-wizard navBarLayout="large-filled-symbols">
           <aw-wizard-step>
             <form [formGroup]="firstFormGroup">
-              <ng-template awWizardStepSymbol>
+              <ng-template class="mb-3" awWizardStepSymbol>
                 <div class="f1-step">
                   <div class="f1-step-icon"><i class="fa fa-car"></i></div>
                   <p>Auto</p>
                 </div>
               </ng-template>
               <div class="card-body">
+                <h6>1. Datos del vehículo</h6>
+                <hr>
                 <div class="card-block row">
                   <div class="col-sm-12 col-lg-12 col-xl-12">
                     <div class="form-row">
@@ -119,13 +121,15 @@
           </aw-wizard-step>
           <aw-wizard-step>
             <form [formGroup]="thirdFormGroup">
-              <ng-template awWizardStepSymbol>
+              <ng-template class="mb-3" awWizardStepSymbol>
                 <div class="f1-step">
                   <div class="f1-step-icon"><i class="fa fa-shopping-cart"></i></div>
                   <p>Repuestos</p>
                 </div>
               </ng-template>
               <div class="card-body" formArrayName="products">
+                <h6>2. Qué repuestos buscas?</h6>
+                <hr>
                 <div *ngFor="let item of thirdFormGroup.get('products').controls; let i = index;" [formGroupName]="i">
                   <div class="form-row">
                     <div class="col mb-2">
@@ -166,6 +170,7 @@
                   <div class="col mb-3">
                     <button class="btn btn-pill btn-danger m-r-15 mb-3" (click)="deleteProduct()" [disabled]="this.counter.length < 2"><i class="fa fa-minus-circle"></i></button>
                     <button class="btn btn-pill btn-success mb-3" (click)="addProduct()"><i class="fa fa-plus-circle"></i></button>
+                    <div class="mb-3">Eliminar / Agregar repuesto</div>
                   </div>
                 </div>
                 <div class="row mb-3">
@@ -178,13 +183,15 @@
           </aw-wizard-step>
           <aw-wizard-step>
             <form [formGroup]="secondFormGroup">
-              <ng-template awWizardStepSymbol>
+              <ng-template class="mb-3" awWizardStepSymbol>
                 <div class="f1-step">
                   <div class="f1-step-icon"><i class="fa fa-user"></i></div>
                   <p>Facturación</p>
                 </div>
               </ng-template>
               <div class="card-body">
+                <h6>3. Datos de facturación</h6>
+                <hr>
                 <div *ngIf="this.companies[0].status === 0">
                     <div class="col">
                         <div class="form-group">
