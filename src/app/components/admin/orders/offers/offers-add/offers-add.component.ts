@@ -89,7 +89,7 @@ export class OffersAddComponent implements OnInit {
           //photo: ['', Validators.required],
           estado: ['', Validators.required],
           origen: ['', Validators.required],
-          make: ['', [Validators.maxLength(20), Validators.pattern(/^[a-zA-Z\s]+$/)]],
+          make: ['', [Validators.maxLength(20), Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]+$/)]],
           price: [0, [Validators.required, Validators.min(200)]],
           cantidad: [1, [Validators.required, Validators.min(1), Validators.max(this.maxQty)]],
           despacho: ['retiro_tienda', Validators.required],

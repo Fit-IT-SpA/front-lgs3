@@ -43,7 +43,7 @@
             <div class="col">
               <div class="form-group">
                 <label>Condición de su producto</label>
-                <select class="form-control digits" formControlName="estado" placeholder="Condición de su producto">
+                <select class="form-control digits btn-pill" formControlName="estado" placeholder="Condición de su producto">
                     <option>Nuevo</option>
                     <option>Usado</option>
                 </select>
@@ -58,7 +58,7 @@
             <div class="col">
               <div class="form-group">
                 <label>Origen</label>
-                <select class="form-control digits" formControlName="origen" placeholder="Origen">
+                <select class="form-control digits btn-pill" formControlName="origen" placeholder="Origen">
                     <option>Original</option>
                     <option>Alternativo</option>
                     <option>Chino</option>
@@ -74,7 +74,7 @@
             <div class="col">
                 <div class="form-group">
                   <label>Marca</label>
-                  <input class="form-control" type="text" placeholder="Marca" formControlName="make">
+                  <input class="form-control btn-pill" type="text" placeholder="Ej: Valeo, Taiwan" formControlName="make">
                   <div *ngIf="offersFormGroup.controls.make.touched && offersFormGroup.controls.make.errors?.maxlength"
                     class="text text-danger mt-1">
                     máx 20 caracteres
@@ -91,12 +91,12 @@
               <fieldset>
                 <label>Cantidad: <i>(requeridos {{this.maxQty}})</i></label>
                 <div class="input-group bootstrap-touchspin">
-                  <button class="btn btn-primary btn-square bootstrap-touchspin-down" type="button" (click)=decrement()>
+                  <button class="btn btn-primary btn-square bootstrap-touchspin-down" style=" border-radius: 50px 0 0 50px;" type="button" (click)=decrement()>
                     <i class="fa fa-minus"></i>
                   </button>
-                  <input readonly="" formControlName="cantidad" class="touchspin form-control" type="text" value={{counter}}>
+                  <input [disabled]="true" readonly="" formControlName="cantidad" class="touchspin form-control" type="text" value={{counter}}>
                   <div class="input-group-append ml-0">
-                    <button class="btn btn-primary btn-square bootstrap-touchspin-up" type="button" (click)=increment()>
+                    <button class="btn btn-primary btn-square bootstrap-touchspin-up btn-pill" type="button" (click)=increment()>
                       <i class="fa fa-plus"></i>
                     </button>
                   </div>
@@ -108,7 +108,7 @@
             <div class="col">
                 <div class="form-group">
                     <label for="exampleFormControlInput1">Su precio por <b>Unidad</b> con IVA</label>
-                    <input (keyup)="sumaPrecio()"  formControlName="price" class="form-control" id="exampleFormControlInput1" type="number"
+                    <input (keyup)="sumaPrecio()"  formControlName="price" class="form-control btn-pill" id="exampleFormControlInput1" type="number"
                         placeholder="$">
                 </div>
             </div>

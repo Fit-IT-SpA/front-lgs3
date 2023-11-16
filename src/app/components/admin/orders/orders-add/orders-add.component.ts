@@ -96,33 +96,45 @@ export class OrdersAddComponent implements OnInit {
       (response) => {
         console.log(response);
         this.companies = response;
-        this.thirdFormGroup = this.fb.group({
-          products: this.fb.array([
-            this.fb.group({
-              description: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
-              qty: [1, [Validators.required]],
-            })
-          ])
-        });
-        if (this.companies[0].status === 0) {
-          this.placeholderSecondForm = (this.companies[0].billingType === 'boleta') ? '' : 'de empresa';
-          this.secondFormGroup = this.fb.group({
-            rut: [format(this.companies[0].rut), [Validators.required]],
-            billingType: [this.companies[0].billingType, [Validators.required]],
-            name: [(this.companies[0].billingType === 'boleta') ? this.profile.name: '', [Validators.required,Validators.maxLength(18)]],
-            direction: ['', [Validators.required,Validators.maxLength(140)]],
-            region: [null, [Validators.required]],
-            commune: [null, [Validators.required]],
-            phone: ['', [Validators.required,Validators.minLength(9),Validators.maxLength(9),mobileValidator,numberValidator]],
-          });
-          this.getRegion();
+        if (this.companies && this.companies.length < 1) {
+          if (this.profile.role.slug === "taller") {
+            this.toster.info("Para ingresar un pedido, favor indícanos el tipo de facturación que desees, Boleta o Factura", "", {timeOut: 6000});
+            this.router.navigate(['/admin/companies/add']);
+          } else if (this.profile.role.slug === "comercio") {
+            this.toster.info('Para interactuar con el sistema, debe tener 1 o varios comercios', "", {timeOut: 6000});
+            this.router.navigate(['/admin/companies/add']);
+          } else {
+            this.toster.info('Para interactuar con el sistema, debe tener 1 o varios negocios', "", {timeOut: 6000});
+            this.router.navigate(['/admin/companies/add']);
+          }
         } else {
-          this.secondFormGroup = this.fb.group({
-            rut: [this.companies[0].rut, Validators.required],
-          })
-          this.getVehicleListMake();
+          this.thirdFormGroup = this.fb.group({
+            products: this.fb.array([
+              this.fb.group({
+                description: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
+                qty: [1, [Validators.required]],
+              })
+            ])
+          });
+          if (this.companies[0].status === 0) {
+            this.placeholderSecondForm = (this.companies[0].billingType === 'boleta') ? '' : 'de empresa';
+            this.secondFormGroup = this.fb.group({
+              rut: [format(this.companies[0].rut), [Validators.required]],
+              billingType: [this.companies[0].billingType, [Validators.required]],
+              name: [(this.companies[0].billingType === 'boleta') ? this.profile.name: '', [Validators.required,Validators.maxLength(18)]],
+              direction: ['', [Validators.required,Validators.maxLength(140)]],
+              region: [null, [Validators.required]],
+              commune: [null, [Validators.required]],
+              phone: ['', [Validators.required,Validators.minLength(9),Validators.maxLength(9),mobileValidator,numberValidator]],
+            });
+            this.getRegion();
+          } else {
+            this.secondFormGroup = this.fb.group({
+              rut: [this.companies[0].rut, Validators.required],
+            })
+            this.getVehicleListMake();
+          }
         }
-        
       }, (error) => {
         console.log(error);
         this.toster.error('Se ha producido un error al intentar buscar los '+this.companiesTitle+' del usuario');

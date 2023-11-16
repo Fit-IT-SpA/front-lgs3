@@ -77,7 +77,14 @@ export class CompaniesComponent implements OnInit{
                 (response) => {
                     this.companies = response;
                     if (this.companies && this.companies.length < 1) {
-                        this.toster.info('Para interactuar con el sistema, debe tener 1 o varios '+this.companiesTitle);   
+                        if (this.profile.role.slug === "taller") {
+                            this.toster.info("Para ingresar un pedido, favor indícanos el tipo de facturación que desees, Boleta o Factura", "", {timeOut: 6000});
+                        } else if (this.profile.role.slug === "comercio") {
+                            this.toster.info('Para interactuar con el sistema, debe tener 1 o varios comercios', "", {timeOut: 6000});
+                        } else {
+                            this.toster.info('Para interactuar con el sistema, debe tener 1 o varios negocios', "", {timeOut: 6000});
+                        }
+                        //this.toster.info('Para interactuar con el sistema, debe tener 1 o varios '+this.companiesTitle);
                     }
                     if (this.profile.role.slug === 'taller' && this.companies.length > 0 && this.companies[0].billingType && this.companies[0].billingType === 'boleta') {
                         this.addOption = false;

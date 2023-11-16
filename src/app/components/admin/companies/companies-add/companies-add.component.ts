@@ -26,6 +26,7 @@ export class CompaniesAddComponent implements OnInit {
   public disabledCommuneFilter: boolean = false;
   public companiesForm: FormGroup;
   public profile =  JSON.parse(localStorage.getItem('profile'));
+  public companyType = (this.profile.role.slug === 'taller') ? 'cliente' : (this.profile.role.slug === 'comercio') ? 'local' : 'negocio';
   public billingTypes: {title: string, slug: string, check: boolean}[] = [];
   public regionFilter: { value: string, label: string, job: string }[] = [];
   public communeFilter: { value: string, label: string, job: string }[] = [];
@@ -71,9 +72,9 @@ export class CompaniesAddComponent implements OnInit {
         region: [null, [Validators.required]],
         commune: [null, [Validators.required]],
         phone: ['', [Validators.required,Validators.minLength(9),Validators.maxLength(9),mobileValidator,numberValidator]],
-        accountNumber: ['', [Validators.required,numberValidator]],
-        accountType: [null, [Validators.required]],
-        bank: [null, [Validators.required]],
+        accountNumber: ['', (this.profile.role.slug === 'comercio') ? [Validators.required,numberValidator] : []],
+        accountType: [null, (this.profile.role.slug === 'comercio') ? [Validators.required] : []],
+        bank: [null, (this.profile.role.slug === 'comercio') ? [Validators.required] : []],
         make: [null, (this.profile.role.slug === 'comercio') ? [Validators.required] : []],
       });
       if (this.profile.role.slug === 'comercio') {
@@ -213,7 +214,13 @@ export class CompaniesAddComponent implements OnInit {
     this.subscription.add(this.srv.add(this.createCompany()).subscribe(
         (response) => {
           this.loading = false;
-          this.toster.success('Se agregó correctamente su '+this.profile.role.name+'!');
+          if (this.profile.role.slug === 'taller') {
+            this.toster.success('Se agregó correctamente sus datos de facturación');
+          } else if (this.profile.role.slug === 'comercio'){
+            this.toster.success('Se agregó correctamente los datos de su local');
+          } else {
+            this.toster.success('Se agregó correctamente los datos de su negocio');
+          }
           this.companiesForm.controls.rut.setValue('');
           this.companiesForm.controls.name.setValue('');
           this.companiesForm.controls.direction.setValue('');
@@ -247,7 +254,7 @@ export class CompaniesAddComponent implements OnInit {
       region: (this.companiesForm.controls.region.value) ? this.companiesForm.controls.region.value.value : '',
       commune: (this.companiesForm.controls.commune.value) ? this.companiesForm.controls.commune.value.value : '',
       phone: this.companiesForm.controls.phone.value,
-      accountNumber: Number(this.companiesForm.controls.accountNumber.value),
+      accountNumber: (this.companiesForm.controls.accountNumber.value) ? Number(this.companiesForm.controls.accountNumber.value) : -1,
       accountType: (this.companiesForm.controls.accountType.value) ? this.companiesForm.controls.accountType.value.value : '',
       make: (this.companiesForm.controls.make.value) ? (this.companiesForm.controls.make.value).map((object: { value: string; label: string; job: string }) => object.value) : [],
       bank: (this.companiesForm.controls.bank.value) ? this.companiesForm.controls.bank.value.value : ''

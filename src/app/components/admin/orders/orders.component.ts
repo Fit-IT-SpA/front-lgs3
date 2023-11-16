@@ -148,7 +148,16 @@ export class OrdersComponent implements OnInit {
             (response) => {
                 this.companies = response;
                 if (this.companies && this.companies.length < 1) {
-                  this.router.navigate(['/admin/companies']);
+                  if (this.profile.role.slug === "taller") {
+                    this.toster.info("Para ingresar un pedido, favor indícanos el tipo de facturación que desees, Boleta o Factura", "", {timeOut: 6000});
+                    this.router.navigate(['/admin/companies/add']);
+                  } else if (this.profile.role.slug === "comercio") {
+                    this.toster.info('Para interactuar con el sistema, debe tener 1 o varios comercios', "", {timeOut: 6000});
+                    this.router.navigate(['/admin/companies/add']);
+                  } else {
+                    this.toster.info('Para interactuar con el sistema, debe tener 1 o varios negocios', "", {timeOut: 6000});
+                    this.router.navigate(['/admin/companies/add']);
+                  }
                 } else {
                   this.getCount();
                 }

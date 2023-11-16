@@ -1,7 +1,8 @@
 <div class="media profile-media" (click)="toggleMyAccount()">
   <img class="b-r-10" src="assets/images/User.jpg" alt="">
   <div class="media-body"><span>{{perfil.name}}</span>
-      <p class="mb-0 font-roboto">{{perfil.role.name}} <i class="middle fa fa-angle-down"></i></p>
+      <p *ngIf="perfil.role.slug === 'taller'" class="mb-0 font-roboto">Cliente <i class="middle fa fa-angle-down"></i></p>
+      <p *ngIf="perfil.role.slug !== 'taller'" class="mb-0 font-roboto">{{perfil.role.name}} <i class="middle fa fa-angle-down"></i></p>
   </div>
 </div>
 <ul class="profile-dropdown onhover-show-div" [class.active]="openMyAccount">
