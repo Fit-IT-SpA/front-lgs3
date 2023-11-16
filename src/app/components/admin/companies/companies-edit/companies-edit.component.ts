@@ -21,6 +21,7 @@ export class CompaniesEditComponent implements OnInit {
   public loading: boolean = true;
   public disabledCommuneFilter: boolean = false;
   public profile: Session =  JSON.parse(localStorage.getItem('profile'));
+  public companyType = (this.profile.role.slug === 'taller') ? 'cliente' : (this.profile.role.slug === 'comercio') ? 'local' : 'negocio';
   public companiesForm: FormGroup;
   private companyId: string;
   public billingTypes: {title: string, slug: string, check: boolean}[] = [];
@@ -91,9 +92,9 @@ export class CompaniesEditComponent implements OnInit {
           region: [{ value: response.region, label: response.region, job: "" }, [Validators.required]],
           commune: [{ value: response.commune, label: response.commune, job: "" }, [Validators.required]],
           phone: [response.phone, [Validators.required,Validators.minLength(9),Validators.maxLength(9),mobileValidator,numberValidator]],
-          accountNumber: [response.accountNumber, [Validators.required, numberValidator]],
-          accountType: [{ value: response.accountType, label: response.accountType, job: "" }, [Validators.required]],
-          bank: [{ value: response.bank, label: response.bank, job: "" }, [Validators.required]],
+          accountNumber: [response.accountNumber, (this.profile.role.slug === 'comercio') ? [Validators.required, numberValidator] : []],
+          accountType: [{ value: response.accountType, label: response.accountType, job: "" }, (this.profile.role.slug === 'comercio') ? [Validators.required] : []],
+          bank: [{ value: response.bank, label: response.bank, job: "" }, (this.profile.role.slug === 'comercio') ? [Validators.required] : []],
           make: [this.makesFilter, (this.profile.role.slug === 'comercio') ? [Validators.required] : []],
         });
         this.companiesForm.get('rut').disable();
@@ -283,7 +284,13 @@ export class CompaniesEditComponent implements OnInit {
       this.srv.updateByRut(this.companyId, this.updateUser()).subscribe(
           (response) => {
             this.loading = false;
-            this.toster.success('Se editó correctamente su '+this.profile.role.name+'!');
+            if (this.profile.role.slug === 'taller') {
+              this.toster.success('Se modificó correctamente sus datos de facturación');
+            } else if (this.profile.role.slug === 'comercio'){
+              this.toster.success('Se modificó correctamente los datos de su local');
+            } else {
+              this.toster.success('Se modificó correctamente los datos de su negocio');
+            }
             this.goBack();
           },
           (error) => {

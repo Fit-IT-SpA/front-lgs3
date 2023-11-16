@@ -15,7 +15,7 @@
 
                 <div class="form-group">
                   <label class="col-form-label">Email</label>
-                  <input class="form-control" type="email" required email 
+                  <input class="form-control btn-pill" type="email" required email 
                          autocomplete="new-password"
                           placeholder="Escriba su email" formControlName="email">
                     <div *ngIf="loginForm.controls.email.errors && loginForm.controls.email.touched && loginForm.controls.email.errors.required"
@@ -29,32 +29,40 @@
                 </div>
                 <div class="form-group">
                   <label class="col-form-label">Nombre</label>
-                  <input class="form-control" type="text"
-                          placeholder="" formControlName="name">
+                  <input class="form-control btn-pill" type="text"
+                          placeholder="Escriba su nombre" formControlName="name">
                     <div *ngIf="loginForm.controls.name.errors && loginForm.controls.name.touched && loginForm.controls.name.errors.required"
                         class="text text-danger mt-1">
                         El Nombre es requerido
                     </div>
+                    <div *ngIf="loginForm.controls.name.touched && loginForm.controls.name.errors?.maxlength"
+                      class="text text-danger mt-1">
+                      máximo de 30 caracteres
+                  </div>
                 </div>
                 <div class="form-group">
                   <label class="col-form-label">Apellidos</label>
-                  <input class="form-control" type="text"
-                          placeholder="" formControlName="lastName">
+                  <input class="form-control btn-pill" type="text"
+                          placeholder="Escriba sus apellidos" formControlName="lastName">
                     <div *ngIf="loginForm.controls.lastName.errors && loginForm.controls.lastName.touched && loginForm.controls.lastName.errors.required"
                         class="text text-danger mt-1">
                         Los Apellidos son requeridos
                     </div>
+                    <div *ngIf="loginForm.controls.lastName.touched && loginForm.controls.lastName.errors?.maxlength"
+                      class="text text-danger mt-1">
+                      máximo de 75 caracteres
+                  </div>
                 </div>
                 <div class="form-group">
                   <label class="col-form-label">Qué deseas hacer?</label>
-                  <select class="form-control" formControlName="typeUser">
+                  <select placeholder="Escoger" class="form-control btn-pill" formControlName="typeUser" (change)="chooseTypeUser()">
                       <option value="taller">Quiero comprar</option>
                       <option value="comercio">Vender repuestos</option>
                   </select>
                 </div>
                 <div class="form-group">
                   <label class="col-form-label">Contraseña</label>
-                  <input class="form-control" [type]="show ? 'text' : 'password'" formControlName="password" required="" placeholder="">
+                  <input class="form-control btn-pill" [type]="show ? 'text' : 'password'" formControlName="password" required="" placeholder="Escriba su contraseña">
                   <div class="show-hide" (click)="showPassword()" *ngIf="!show"><span class="show"></span></div>
                   <div class="show-hide" (click)="showPassword()" *ngIf="show"><span class="Hide"></span></div>
                   <div *ngIf="loginForm.controls.password.touched && loginForm.controls.password.errors?.required"
@@ -63,16 +71,16 @@
                   </div>
                   <div *ngIf="loginForm.controls.password.touched && loginForm.controls.password.errors?.minlength"
                       class="text text-danger mt-1">
-                      La Contraseña debe tener minimo de 4 caracteres
+                      mínimo de 4 caracteres
                   </div>
                   <div *ngIf="loginForm.controls.password.touched && loginForm.controls.password.errors?.maxlength"
                       class="text text-danger mt-1">
-                      La Contraseña debe tener un maximo de 12 caracteres
+                      máximo de 12 caracteres
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-form-label">Confirmar Contraseña</label>
-                  <input class="form-control" [type]="show ? 'text' : 'password'" formControlName="confirmPassword" required="" placeholder="">
+                  <input class="form-control btn-pill" [type]="show ? 'text' : 'password'" formControlName="confirmPassword" required="" placeholder="Escriba su contraseña de nuevo">
                   <div class="show-hide" (click)="showPassword()" *ngIf="!show"><span class="show"></span></div>
                   <div class="show-hide" (click)="showPassword()" *ngIf="show"><span class="Hide"></span></div>
                   <div *ngIf="loginForm.controls.confirmPassword.touched && loginForm.controls.confirmPassword.errors?.required || loginForm.controls.confirmPassword.value != loginForm.controls.password.value"
@@ -81,11 +89,32 @@
                   </div>
                   <div *ngIf="loginForm.controls.confirmPassword.touched && loginForm.controls.confirmPassword.errors?.minlength"
                       class="text text-danger mt-1">
-                      La Contraseña debe tener minimo de 4 caracteres
+                      mínimo de 4 caracteres
                   </div>
                   <div *ngIf="loginForm.controls.confirmPassword.touched && loginForm.controls.confirmPassword.errors?.maxlength"
                       class="text text-danger mt-1">
-                      La Contraseña debe tener un maximo de 12 caracteres
+                      máximo de 12 caracteres
+                  </div>
+                </div>
+                <div class="form-group" *ngIf="this.loginForm.controls.typeUser.value === 'taller'">
+                  <label for="billing">Necesita boleta o factura?</label>
+                  <div class="radio radio-primary" *ngFor="let billing of billingTypes; index as i">
+                      <input id="radio{{i}}" class="ml-3" type="radio" name="radio" value="{{billing.slug}}" (click)="this.clickBilling(billing.slug)"
+                      [checked]="billing.check">
+                      <label for="radio{{i}}" class="mb-2">{{billing.title}}</label>
+                  </div>
+                </div>
+                <div class="form-group" *ngIf="this.loginForm.controls.typeUser.value === 'taller'">
+                  <label for="rut">Rut</label>
+                  <input class="form-control btn-pill" id="rut" type="rut" minlength="8" maxlength="12"
+                      placeholder="{{this.placeholderRut}}" formControlName="rut" (blur)="onBlurRut()" (focus)="onFocusRut()">  
+                  <div *ngIf="loginForm.controls.rut.errors && loginForm.controls.rut.touched && loginForm.controls.rut.errors.required"
+                      class="text text-danger mt-1">
+                      Es requerido
+                  </div>
+                  <div *ngIf="loginForm.controls.rut.errors && loginForm.controls.rut.touched && loginForm.controls.rut.errors?.rut"
+                      class="text text-danger mt-1">
+                      Formato invalido
                   </div>
                 </div>
                 <div class="form-group mt-4">

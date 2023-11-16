@@ -33,6 +33,9 @@ export class RegisterComponent implements OnInit {
   //public userData: any;
   //public user: firebase.User;
   public showLoader: boolean = false;
+  public billingTypes: {title: string, slug: string, check: boolean}[] = [];
+  public loading: boolean = true;
+  public placeholderRut: string = '';
 
   private subscription: Subscription = new Subscription();
 
@@ -46,17 +49,25 @@ export class RegisterComponent implements OnInit {
       public toster: ToastrService) {
       this.loginForm = this.fb.group({
         email: ['', [Validators.required]],
-        name: ['', [Validators.required]],
-        lastName: ['', [Validators.required]],
+        name: ['', [Validators.required,Validators.maxLength(35)]],
+        lastName: ['', [Validators.required,Validators.maxLength(70)]],
         typeUser: ['', [Validators.required]],
+        rut: ['', [Validators.required]],
+        billingType: ['', [Validators.required]],
         password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(12)]],
         confirmPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(12)]]
-      },
-    );
+      });
+      this.loginForm.get('rut').disable();
+      this.loginForm.get('billingType').disable();
   }
 
   ngOnInit() {
-
+    this.getBilling();
+  }
+  getBilling() {
+    this.billingTypes.push({title: 'Factura', slug: 'factura', check: false});
+    this.billingTypes.push({title: 'Boleta', slug: 'boleta', check: false});
+    this.loading = false;
   }
 
   showPassword() {
@@ -88,36 +99,43 @@ export class RegisterComponent implements OnInit {
     
   }
   
-  onFocusRut(){
-        this.loginForm.controls.email.markAsPristine();
-        if (this.loginForm.controls.email.value != ''){
-            this.loginForm.controls.email.setValue(clean(this.loginForm.controls.email.value));
-        }
+  onFocusRut() {
+    this.loginForm.controls.rut.markAsPristine();
+    if (this.loginForm.controls.rut.value != "") {
+      this.loginForm.controls.rut.setValue(
+        clean(this.loginForm.controls.rut.value)
+      );
     }
+  }
 
-    
-    onBlurRut() {
-        if (this.loginForm.controls.email.value != '') {
-            if (this.loginForm.controls.email.value.length > 3 && validate(this.loginForm.controls.email.value)) {
-            this.loginForm.controls.email.setErrors(null);
-            this.loginForm.controls.email.setValue(format(this.loginForm.controls.email.value));
-            
-            } else {
-            this.loginForm.controls.email.setErrors({'incorrect': true});
-            }
-            this.loginForm.controls.email.markAsDirty();
-        }
+  onBlurRut() {
+    if (this.loginForm.controls.rut.value != "") {
+      if (
+        this.loginForm.controls.rut.value.length > 3 &&
+        validate(this.loginForm.controls.rut.value)
+      ) {
+        this.loginForm.controls.rut.setErrors(null);
+        this.loginForm.controls.rut.setValue(
+          format(this.loginForm.controls.rut.value)
+        );
+      } else {
+        this.loginForm.controls.rut.setErrors({ rut: true });
+      }
+      this.loginForm.controls.rut.markAsDirty();
     }
+  }
     doLogin(){
         //this.loadingSrv = true;
         //this.message = null;
         //this.loginForm.disable();
-        let credentials = {
+        let credentials: { email: string, name: string, lastName: string, typeUser: string, password: string, billingType: string, rut: string } = {
             email : (this.loginForm.controls.email.value) ? this.loginForm.controls.email.value.toLowerCase() : '',
             name : this.loginForm.controls.name.value,
             lastName : this.loginForm.controls.lastName.value,
             typeUser: this.loginForm.controls.typeUser.value,
-            password: this.loginForm.controls.confirmPassword.value
+            password: this.loginForm.controls.confirmPassword.value,
+            billingType: (this.loginForm.controls.billingType.value) ? this.loginForm.controls.billingType.value : '', 
+            rut: (this.loginForm.controls.rut.value) ? clean(this.loginForm.controls.rut.value) : ''
         }
         //console.log(credentials);
         this.subscription.add(this._authSrv.register(credentials).subscribe(
@@ -130,24 +148,24 @@ export class RegisterComponent implements OnInit {
             })
         );
     }
-    
-    // Set user
-  /*SetUserData(user) {
-      console.log(user);
-    const userRef:  AngularFirestoreDocument<any> =  this.afs.doc(`users/${user.token}`);
-    console.log(userRef);
-    const userData: User = {
-      email: user.email,
-      displayName: user.name,
-      uid: user.token,
-      photoURL: user.photoURL || 'assets/dashboeard/boy-2.png',
-      emailVerified: user.email
-    };
-    userRef.delete().then(function () {})
-          .catch(function (error) {});
-    return userRef.set(userData, {
-      merge: true
-    });
-  }*/
+    chooseTypeUser() {
+      console.log(this.loginForm.controls.typeUser.value);
+      if (this.loginForm.controls.typeUser.value === "taller") {
+        this.loginForm.get('rut').enable();
+        this.loginForm.get('billingType').enable();
+      } else {
+        this.loginForm.get('rut').disable();
+        this.loginForm.get('billingType').disable();
+        this.placeholderRut = '';
+      }
+    }
+    public clickBilling(slug: string) {
+      this.loginForm.controls.billingType.setValue(slug);
+      if (slug === 'boleta') {
+        this.placeholderRut = 'Ingrese su rut';
+      } else {
+        this.placeholderRut = 'Ingrese rut de su empresa';
+      }
+    }
 
 }

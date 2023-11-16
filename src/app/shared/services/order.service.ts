@@ -6,6 +6,8 @@ import { ConstantService } from './constant.service';
 import { User } from '../model/user';
 import { Order } from '../model/order.model';
 import { OrderAdd } from '../model/order-add.model';
+import { Product } from '../model/product.model';
+import { Companies } from '../model/companies.model';
 
 
 @Injectable()
@@ -14,13 +16,13 @@ export class OrderService extends AbstractHttpService {
     constructor(protected http: HttpClient) {
         super(http);
     }
-    add(order: OrderAdd) {
+    add(addOrder: {order: OrderAdd, products: Product[], company: Companies}) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
             })
         };
-        return this.http.post<any>(`${this.apiUrl}/order`, order, httpOptions).pipe(
+        return this.http.post<any>(`${this.apiUrl}/order`, addOrder, httpOptions).pipe(
             map(response => {
                 return response;
             })

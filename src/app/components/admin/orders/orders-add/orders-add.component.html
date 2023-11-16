@@ -9,18 +9,333 @@
   <div class="row">
     <div class="col-sm-12">
       <div class="card">
-        <form [formGroup]="formOrder">
-        <div class="card-header">
+        <!--<form [formGroup]="formOrder">-->
+        <aw-wizard navBarLayout="large-filled-symbols">
+          <aw-wizard-step>
+            <form [formGroup]="firstFormGroup">
+              <ng-template class="mb-3" awWizardStepSymbol>
+                <div class="f1-step">
+                  <div class="f1-step-icon"><i class="fa fa-car"></i></div>
+                  <p>Auto</p>
+                </div>
+              </ng-template>
+              <div class="card-body">
+                <h6>1. Datos del vehículo</h6>
+                <hr>
+                <div class="card-block row">
+                  <div class="col-sm-12 col-lg-12 col-xl-12">
+                    <div class="form-row">
+                      <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                          <label>Marca</label>
+                          <ng-select [items]="makesFilter" placeholder="(*) Marca"
+                              class="js-example-placeholder-multiple btn-pill" formControlName="brand" (change)="this.onChangeMakeFilter()" (clear)="this.onClearMakeFilter()">
+                          </ng-select>
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                          <label>Modelo</label>
+                          <div class="flex flex-col flex-auto" *ngIf="disabledModelFilter">
+                            <h6 class="text-center">Cargando...</h6>
+                            <div class="loader-box">
+                              <div class="loader-3"></div>
+                            </div>
+                          </div>
+                          <ng-select [items]="modelFilter" placeholder="(*) Modelo" (change)="this.onChangeModelFilter()" *ngIf="!disabledModelFilter"
+                              class="js-example-placeholder-multiple btn-pill" formControlName="model" (clear)="this.onClearModelFilter()">
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                          <label>Año</label>
+                          <div class="flex flex-col flex-auto" *ngIf="disabledYearFilter">
+                            <h6 class="text-center">Cargando...</h6>
+                            <div class="loader-box">
+                              <div class="loader-3"></div>
+                            </div>
+                          </div>
+                          <ng-select [items]="yearFilter" placeholder="(*) Año" *ngIf="!disabledYearFilter"
+                              class="js-example-placeholder-multiple btn-pill" formControlName="year">
+                          </ng-select>
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                          <label>Chasis/VIN</label>
+                          <input class="form-control btn-pill" type="text" placeholder="(*) Chasis/VIN" formControlName="chassis">
+                          <div *ngIf="firstFormGroup.controls.chassis.errors && firstFormGroup.controls.chassis.touched && firstFormGroup.controls.chassis.errors.required"
+                              class="text text-danger mt-1">
+                              Es requerido
+                          </div>
+                          <div *ngIf="firstFormGroup.controls.chassis.touched && firstFormGroup.controls.chassis.errors?.minlength"
+                            class="text text-danger mt-1">
+                              Debe tener minimo de 3 caracteres
+                            </div>
+                          <div *ngIf="firstFormGroup.controls.chassis.touched && firstFormGroup.controls.chassis.errors?.maxlength"
+                            class="text text-danger mt-1">
+                              Debe tener un maximo de 40 caracteres
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mb-4">
+                      <div class="mb-3">
+                        <h6>Agrega una foto del padrón del auto</h6>
+                        <span class="m-r-10">Por qué pedimos esto?</span>
+                        <a class="badge badge-pill badge-primary" 
+                          ngbTooltip="Queremos asegurarnos de encontrar el repuesto exacto para tu auto, el VIN en el padrón de tu auto nos será de gran ayuda"
+                          triggers="click:blur" 
+                          tooltipClass="my-custom-class"
+                          href="javascript:void(0)">
+                          <i class="fa fa-info-circle"></i>
+                        </a>
+                        <!--<span>(Donde aparezca el VIN del auto, para asegurar que recibas ofertas precisas a lo que buscas)</span>-->
+                        <span style="display: block;">No tienes el padrón a mano? consulta tu patente en <a href="https://www.patentechile.com/" target="_blank">patenteschile.com</a> y nos mandas una foto del VIN</span>
+                      </div>
+                      <div class="col-md-3" *ngIf="loadingImg">
+                        <h6 class="mb-0 text-center">Cargando foto...</h6>
+                        <div class="loader-box">
+                          <div class="loader-3"></div>
+                        </div>
+                      </div>
+                      <div *ngIf="!loadingImg">
+                        <img *ngIf="this.url && this.url !== ''" src="{{this.srv.apiUrl + '/files/' + this.url}}" class="row mb-3" id="image_service">
+                        <button class="btn btn-info mb-3 btn-pill" (click)="fileInput.click()" type="button">
+                          <i class="fa fa-download"></i>
+                          Cargar Imagen
+                        </button>
+                        <input class="btn btn-outline-primary" type="file" #fileInput (change)="fileChangeEvent($event)" hidden >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <button class="btn btn-pill btn-info m-r-15 mb-3" type="button" (click)="goBack()">Volver</button>
+                <button class="btn btn-pill btn-success mb-3" type="submit" awNextStep [disabled]="!firstFormGroup.valid">Siguiente</button>
+                <!--<button class="btn btn-pill btn-primary mb-3" type="submit" awNextStep>Siguiente</button>-->
+              </div>
+            </form>
+          </aw-wizard-step>
+          <aw-wizard-step>
+            <form [formGroup]="thirdFormGroup">
+              <ng-template class="mb-3" awWizardStepSymbol>
+                <div class="f1-step">
+                  <div class="f1-step-icon"><i class="fa fa-shopping-cart"></i></div>
+                  <p>Repuestos</p>
+                </div>
+              </ng-template>
+              <div class="card-body" formArrayName="products">
+                <h6>2. Qué repuestos buscas?</h6>
+                <hr>
+                <div *ngFor="let item of thirdFormGroup.get('products').controls; let i = index;" [formGroupName]="i">
+                  <div class="form-row">
+                    <div class="col mb-2">
+                      <div class="form-group">
+                        <label>Nombre Repuesto</label>
+                        <input class="form-control btn-pill" type="text" placeholder="(*) Nombre Repuesto" formControlName="description">
+                        <div *ngIf="item.controls.description.touched && item.controls.description.errors?.minlength"
+                          class="text text-danger mt-1">
+                            Debe tener minimo de 3 caracteres
+                          </div>
+                        <div *ngIf="item.controls.description.touched && item.controls.description.errors?.maxlength"
+                          class="text text-danger mt-1">
+                            Debe tener un maximo de 40 caracteres
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="col mb-3">
+                      <fieldset>
+                        <label>Cantidad:</label>
+                        <div class="input-group bootstrap-touchspin">
+                          <button class="btn btn-primary btn-square bootstrap-touchspin-down" type="button" style=" border-radius: 50px 0 0 50px;" (click)="decrement(i)">
+                            <i class="fa fa-minus"></i>
+                          </button>
+                          <input [disabled]="true" class="touchspin form-control btn-pill" type="text" value={{counter[i]}}>
+                          <div class="input-group-append ml-0">
+                            <button class="btn btn-primary btn-square bootstrap-touchspin-up btn-pill" type="button" (click)="increment(i)">
+                              <i class="fa fa-plus"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </fieldset>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col mb-3">
+                    <button class="btn btn-pill btn-danger m-r-15 mb-3" (click)="deleteProduct()" [disabled]="this.counter.length < 2"><i class="fa fa-minus-circle"></i></button>
+                    <button class="btn btn-pill btn-success mb-3" (click)="addProduct()"><i class="fa fa-plus-circle"></i></button>
+                    <div class="mb-3">Eliminar / Agregar repuesto</div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <button class="btn btn-pill btn-info m-r-15 mb-3" type="button" awPreviousStep>Anterior</button>
+                  <!--<button class="btn btn-pill btn-primary mb-3" type="submit" awNextStep>Siguiente</button>-->
+                  <button class="btn btn-pill btn-success mb-3" type="submit" awNextStep [disabled]="!thirdFormGroup.valid">Siguiente</button>
+                </div>
+              </div>
+            </form>
+          </aw-wizard-step>
+          <aw-wizard-step>
+            <form [formGroup]="secondFormGroup">
+              <ng-template class="mb-3" awWizardStepSymbol>
+                <div class="f1-step">
+                  <div class="f1-step-icon"><i class="fa fa-user"></i></div>
+                  <p>Facturación</p>
+                </div>
+              </ng-template>
+              <div class="card-body">
+                <h6>3. Datos de facturación</h6>
+                <hr>
+                <div *ngIf="this.companies[0].status === 0">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="billing">Tipo Facturación</label>
+                            <div class="radio radio-primary" *ngFor="let billing of billingTypes; index as i">
+                                <input id="radio{{i}}" class="ml-3" type="radio" name="radio" value="{{billing.slug}}" (click)="this.clickBilling(billing.slug)"
+                                [checked]="billing.check">
+                                <label for="radio{{i}}" class="mb-2">{{billing.title}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="this.companies[0].status === 0">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="rut">Rut</label>
+                            <input class="form-control btn-pill" id="rut" type="rut" minlength="8" maxlength="12"
+                                placeholder="Ingresar rut" formControlName="rut" (blur)="onBlurRut()" (focus)="onFocusRut()">  
+                            <div *ngIf="secondFormGroup.controls.rut.errors && secondFormGroup.controls.rut.touched && secondFormGroup.controls.rut.errors.required"
+                                class="text text-danger mt-1">
+                                Es requerido
+                            </div>
+                            <div *ngIf="secondFormGroup.controls.rut.errors && secondFormGroup.controls.rut.touched && secondFormGroup.controls.rut.errors?.rut"
+                                class="text text-danger mt-1">
+                                Formato invalido
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="this.companies[0].status === 0">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="name">Nombre</label>
+                            <input class="form-control btn-pill" id="name" type="name"
+                                placeholder="Ingresar nombre" formControlName="name">  
+                            <div *ngIf="secondFormGroup.controls.name.errors && secondFormGroup.controls.name.touched && secondFormGroup.controls.name.errors.required"
+                                class="text text-danger mt-1">
+                                Es requerido
+                            </div>
+                            <div *ngIf="secondFormGroup.controls.name.touched && secondFormGroup.controls.name.errors?.maxlength"
+                                class="text text-danger mt-1">
+                                Debe tener un maximo de 18 caracteres
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="this.companies[0].status === 0">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="direction">Dirección</label>
+                            <input class="form-control btn-pill" id="direction" type="direction"
+                                placeholder="Ingresar dirección" formControlName="direction">
+                            <div *ngIf="secondFormGroup.controls.direction.errors && secondFormGroup.controls.direction.touched && secondFormGroup.controls.direction.errors.required"
+                                class="text text-danger mt-1">
+                                Es requerido
+                            </div>
+                            <div *ngIf="secondFormGroup.controls.direction.touched && secondFormGroup.controls.direction.errors?.maxlength"
+                                class="text text-danger mt-1">
+                                Debe tener un maximo de 140 caracteres
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="this.companies[0].status === 0">
+                    <div class="col">
+                      <div class="form-group">
+                        <label>Región</label>
+                        <ng-select [items]="regionFilter" placeholder="Ingresar Región"
+                            class="js-example-placeholder-multiple btn-pill" formControlName="region" (ngModelChange)="this.onChangeRegionFilter()" (clear)="this.onClearRegionFilter()">
+                        </ng-select>
+                        <div *ngIf="secondFormGroup.controls.region.errors && secondFormGroup.controls.region.touched && secondFormGroup.controls.region.errors.required"
+                            class="text text-danger mt-1">
+                            Es requerido
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <div *ngIf="this.companies[0].status === 0">
+                    <div class="col">
+                      <div class="form-group">
+                        <label>Comuna</label>
+                        <div class="flex flex-col flex-auto" *ngIf="disabledCommuneFilter">
+                            <h6 class="text-center">Cargando Comunas...</h6>
+                            <div class="loader-box">
+                              <div class="loader-3"></div>
+                            </div>
+                          </div>
+                        <ng-select [items]="communeFilter" placeholder="Ingresar comuna" *ngIf="!disabledCommuneFilter"
+                            class="js-example-placeholder-multiple btn-pill" formControlName="commune">
+                        </ng-select>
+                        <div *ngIf="secondFormGroup.controls.commune.errors && secondFormGroup.controls.commune.touched && secondFormGroup.controls.commune.errors.required"
+                            class="text text-danger mt-1">
+                            Es requerido
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <div *ngIf="this.companies[0].status === 0">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="phone">Teléfono</label>
+                            <input class="form-control btn-pill" id="phone" type="phone"
+                                placeholder="Ingresar teléfono" formControlName="phone">
+                            <div *ngIf="secondFormGroup.controls.phone.errors && secondFormGroup.controls.phone.touched && secondFormGroup.controls.phone.errors.required"
+                                class="text text-danger mt-1">
+                                Es requerido
+                            </div>
+                            <div *ngIf="secondFormGroup.controls.phone.errors && secondFormGroup.controls.phone.touched && secondFormGroup.controls.phone.errors?.invalidMobileNumber"
+                                class="text text-danger mt-1">
+                                Formato invalido, ejemplo: 912341234
+                            </div>
+                            <div *ngIf="secondFormGroup.controls.phone.errors && secondFormGroup.controls.phone.touched && secondFormGroup.controls.phone.errors?.invalidNumber"
+                                class="text text-danger mt-1">
+                                Solo se admiten números
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-bordered radio-first-col-width mb-3" *ngIf="this.companies[0].status === 1">
+                  <tbody>
+                    <tr *ngFor="let company of companies; index as i">
+                        <td *ngIf="this.formatRut(company.rut) != 'rut incorrecto'" >{{company.name}} 
+                            <div class="radio radio-primary">
+                                <input id="radio{{i}}" class="ml-2" type="radio" name="radio" value="{{company.rut}}" (click)="this.clickCompany(company.rut)"
+                                [checked]="i === 0">
+                                <label for="radio{{i}}" class="mb-0">{{this.formatRut(company.rut)}}</label>
+                            </div>
+                        </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <button class="btn btn-pill btn-info m-r-15 mb-3" type="button" awPreviousStep>Anterior</button>
+                <!--<button class="btn btn-pill btn-primary mb-3" type="submit" awNextStep (click)="add()">Guardar</button>-->
+                <button class="btn btn-pill btn-success mb-3" type="submit" awNextStep [disabled]="!secondFormGroup.valid" (click)="add()">Publicar</button>
+              </div>
+            </form>
+          </aw-wizard-step>
+        </aw-wizard>
+        <!--<div class="card-header">
           <h5>Datos auto</h5>
         </div>
         <div class="card-body">
-        
-          <!--company-->
           <div class="card-block row">
               <div class="col-sm-12 col-lg-12 col-xl-12">
-                <!--<div class="mb-3">
-                  <h5>Datos de auto</h5>
-                </div>--->
                 <div class="form-row">
                   <div class="col-md-6 mb-3">
                     <div class="form-group">
@@ -43,18 +358,6 @@
                           class="js-example-placeholder-multiple" formControlName="model" (clear)="this.onClearModelFilter()">
                       </ng-select>
                     </div>
-                    <!--<div class="form-group">
-                      <label>Modelo</label>
-                      <input class="form-control" type="text" placeholder="Modelo" formControlName="model">
-                      <div *ngIf="formOrder.controls.model.touched && formOrder.controls.model.errors?.minlength"
-                      class="text text-danger mt-1">
-                        Debe tener minimo de 3 caracteres
-                      </div>
-                      <div *ngIf="formOrder.controls.model.touched && formOrder.controls.model.errors?.maxlength"
-                      class="text text-danger mt-1">
-                        Debe tener un maximo de 40 caracteres
-                      </div>
-                    </div>-->
                   </div>
                 </div>
                 <div class="form-row">
@@ -71,26 +374,6 @@
                           class="js-example-placeholder-multiple" formControlName="year">
                       </ng-select>
                     </div>
-                    <!--<div class="form-group">
-                      <label>Año</label>
-                      <input class="form-control" placeholder="(*) Año" formControlName="year">
-                      <div *ngIf="formOrder.controls.year.errors && formOrder.controls.year.touched && formOrder.controls.year.errors.required"
-                          class="text text-danger mt-1">
-                          Es requerido
-                      </div>
-                      <div *ngIf="formOrder.controls.year.errors && formOrder.controls.year.touched && formOrder.controls.year.errors?.invalidNumber"
-                          class="text text-danger mt-1">
-                          Solo se admiten números
-                      </div>
-                      <div *ngIf="formOrder.controls.year.touched && formOrder.controls.year.errors?.minlength"
-                        class="text text-danger mt-1">
-                          Debe tener mínimo de 4 dígitos
-                        </div>
-                      <div *ngIf="formOrder.controls.year.touched && formOrder.controls.year.errors?.maxlength"
-                        class="text text-danger mt-1">
-                          Debe tener un máximo de 4 dígitos
-                      </div>
-                    </div>-->
                   </div>
                   <div class="col-md-6 mb-3">
                     <div class="form-group">
@@ -162,8 +445,7 @@
             <button class="btn btn-pill btn-primary m-r-15 mb-3" type="submit" (click)="add()" [disabled]="formOrder.invalid">Crear Pedido</button>
             <button class="btn btn-pill btn-info mb-3" type="button" (click)="goBack()">Volver</button>
           </div>
-        </div>
-      </form>
+        </div>-->
       </div>
     </div>
   </div>

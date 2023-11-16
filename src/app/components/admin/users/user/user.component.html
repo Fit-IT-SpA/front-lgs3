@@ -76,36 +76,40 @@
 	<div class="text-right mb-3" *ngIf="this.canWrite()">
 		<button class="btn btn-primary btn-pill" type="button" (click)="add()">Agregar</button>
 	</div>
-	<table class="custom-table mb-3">
-		<thead>
-			<tr>
-				<th>Nombre</th>
-				<th>Email</th>
-				<th>Creación</th>
-				<th>Estado</th>
-				<th>Prefil</th>
-				<th>Opciones</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr *ngFor="let user of users">
-				<td>{{ user.name + " " + user.lastName }}</td>
-				<td>{{ user.email }}</td>
-				<td>{{ user.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
-				<td *ngIf="user.status === -1">Eliminado</td>
-				<td *ngIf="user.status === 0">Pendiente Activación</td>
-				<td *ngIf="user.status === 1">Activo</td>
-				<td *ngIf="user.status === 2">Bloqueado</td>
-				<td>{{ user.role }}</td>
-				<td class="options-column">
-					<button class="btn btn-primary btn-pill btn-xs" *ngIf="canWrite()" (click)="edit(user.email)">Editar</button>
-					<button class="btn btn-danger btn-pill btn-xs" *ngIf="canWrite() && user.status !== -1" (click)="removeWithConfirmation(user.email, user.name+' '+user.lastName)">
-						Eliminar
-					</button>
-				</td>
-			</tr>
-		</tbody>
-	</table>
+	<div class="card">
+		<div class="order-history table-responsive wishlist">
+			<table class="table table-bordered mb-3">
+				<thead>
+					<tr>
+						<th style="text-align: left">Nombre</th>
+						<th>Email</th>
+						<th>Creación</th>
+						<th>Estado</th>
+						<th>Prefil</th>
+						<th>Opciones</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="let user of users">
+						<td style="text-align: left">{{ user.name + " " + user.lastName }}</td>
+						<td>{{ user.email }}</td>
+						<td>{{ user.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
+						<td *ngIf="user.status === -1">Eliminado</td>
+						<td *ngIf="user.status === 0">Pendiente Activación</td>
+						<td *ngIf="user.status === 1">Activo</td>
+						<td *ngIf="user.status === 2">Bloqueado</td>
+						<td>{{ user.role }}</td>
+						<td class="options-column">
+							<button class="btn btn-primary btn-pill btn-xs" *ngIf="canWrite()" (click)="edit(user.email)">Editar</button>
+							<button class="btn btn-danger btn-pill btn-xs" *ngIf="canWrite() && user.status !== -1" (click)="removeWithConfirmation(user.email, user.name+' '+user.lastName)">
+								Eliminar
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
 	<ngb-pagination 
 		*ngIf="!listView"
 		class="d-flex justify-content-center mb-3" 

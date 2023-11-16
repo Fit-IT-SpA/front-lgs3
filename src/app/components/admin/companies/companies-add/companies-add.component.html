@@ -27,7 +27,7 @@
                         <div class="form-group">
                             <label for="rut">Rut</label>
                             <input class="form-control btn-pill" id="rut" type="rut" minlength="8" maxlength="12"
-                                placeholder="Rut del {{this.profile.role.name}}" formControlName="rut" (blur)="onBlurRut()" (focus)="onFocusRut()">  
+                                placeholder="Rut del {{this.companyType}}" formControlName="rut" (blur)="onBlurRut()" (focus)="onFocusRut()">  
                             <div *ngIf="companiesForm.controls.rut.errors && companiesForm.controls.rut.touched && companiesForm.controls.rut.errors.required"
                                 class="text text-danger mt-1">
                                 Es requerido
@@ -44,7 +44,7 @@
                         <div class="form-group">
                             <label for="name">Nombre</label>
                             <input class="form-control btn-pill" id="name" type="name"
-                                placeholder="Nombre del {{this.profile.role.name}}" formControlName="name">  
+                                placeholder="Nombre del {{this.companyType}}" formControlName="name">  
                             <div *ngIf="companiesForm.controls.name.errors && companiesForm.controls.name.touched && companiesForm.controls.name.errors.required"
                                 class="text text-danger mt-1">
                                 Es requerido
@@ -61,7 +61,7 @@
                         <div class="form-group">
                             <label for="direction">Dirección</label>
                             <input class="form-control btn-pill" id="direction" type="direction"
-                                placeholder="Dirección del {{this.profile.role.name}}" formControlName="direction">
+                                placeholder="Dirección del {{this.companyType}}" formControlName="direction">
                             <div *ngIf="companiesForm.controls.direction.errors && companiesForm.controls.direction.touched && companiesForm.controls.direction.errors.required"
                                 class="text text-danger mt-1">
                                 Es requerido
@@ -77,8 +77,8 @@
                     <div class="col">
                       <div class="form-group">
                         <label>Región</label>
-                        <ng-select [items]="regionFilter" placeholder="Región del {{this.profile.role.name}}"
-                            class="js-example-placeholder-multiple" formControlName="region" (ngModelChange)="this.onChangeRegionFilter()" (clear)="this.onClearRegionFilter()">
+                        <ng-select [items]="regionFilter" placeholder="Región del {{this.companyType}}"
+                            class="js-example-placeholder-multiple btn-pill" formControlName="region" (ngModelChange)="this.onChangeRegionFilter()" (clear)="this.onClearRegionFilter()">
                         </ng-select>
                         <div *ngIf="companiesForm.controls.region.errors && companiesForm.controls.region.touched && companiesForm.controls.region.errors.required"
                             class="text text-danger mt-1">
@@ -97,8 +97,8 @@
                               <div class="loader-3"></div>
                             </div>
                           </div>
-                        <ng-select [items]="communeFilter" placeholder="Comuna del {{this.profile.role.name}}" *ngIf="!disabledCommuneFilter"
-                            class="js-example-placeholder-multiple" formControlName="commune">
+                        <ng-select [items]="communeFilter" placeholder="Comuna del {{this.companyType}}" *ngIf="!disabledCommuneFilter"
+                            class="js-example-placeholder-multiple btn-pill" formControlName="commune">
                         </ng-select>
                         <div *ngIf="companiesForm.controls.commune.errors && companiesForm.controls.commune.touched && companiesForm.controls.commune.errors.required"
                             class="text text-danger mt-1">
@@ -112,7 +112,7 @@
                         <div class="form-group">
                             <label for="phone">Teléfono</label>
                             <input class="form-control btn-pill" id="phone" type="phone"
-                                placeholder="Teléfono del {{this.profile.role.name}}" formControlName="phone">  
+                                placeholder="Teléfono del {{this.companyType}}" formControlName="phone">  
                             <div *ngIf="companiesForm.controls.phone.errors && companiesForm.controls.phone.touched && companiesForm.controls.phone.errors.required"
                                 class="text text-danger mt-1">
                                 Es requerido
@@ -128,12 +128,12 @@
                         </div>
                     </div>
                 </div>
-                <div>
+                <div *ngIf="this.profile.role.slug === 'comercio'">
                     <div class="col">
                         <div class="form-group">
                             <label for="accountNumber">Número de Cuenta Banco</label>
                             <input class="form-control btn-pill" id="accountNumber" type="accountNumber"
-                                placeholder="Número de Cuenta del {{this.profile.role.name}}" formControlName="accountNumber">
+                                placeholder="Número de Cuenta del {{this.companyType}}" formControlName="accountNumber">
                             <div *ngIf="companiesForm.controls.accountNumber.errors && companiesForm.controls.accountNumber.touched && companiesForm.controls.accountNumber.errors.required"
                                 class="text text-danger mt-1">
                                 Es requerido
@@ -145,14 +145,14 @@
                         </div>
                     </div>
                 </div>
-                <div>
+                <div *ngIf="this.profile.role.slug === 'comercio'">
                     <div class="col">
                         <div class="form-group">
                             <label>Tipo de Cuenta</label>
                             <ng-select 
                                 [items]="accountTypesFilter" 
-                                placeholder="Tipo de Cuenta del {{this.profile.role.name}}"
-                                class="js-example-placeholder-multiple"
+                                placeholder="Tipo de Cuenta del {{this.companyType}}"
+                                class="js-example-placeholder-multiple btn-pill"
                                 [multiple]="false"
                                 formControlName="accountType">
                             </ng-select>
@@ -163,14 +163,14 @@
                         </div>
                     </div>
                 </div>
-                <div>
+                <div *ngIf="this.profile.role.slug === 'comercio'">
                     <div class="col">
                         <div class="form-group">
                             <label>Banco</label>
                             <ng-select 
                                 [items]="banksFilter" 
-                                placeholder="Banco del {{this.profile.role.name}}"
-                                class="js-example-placeholder-multiple" 
+                                placeholder="Banco del {{this.companyType}}"
+                                class="js-example-placeholder-multiple btn-pill" 
                                 [multiple]="false"
                                 formControlName="bank">
                             </ng-select>
@@ -187,7 +187,7 @@
                         <ng-select 
                             [items]="makesFilter" 
                             placeholder="Marcas que vende su comercio"
-                            class="js-example-placeholder-multiple" 
+                            class="js-example-placeholder-multiple btn-pill" 
                             [multiple]="true"
                             formControlName="make">
                         </ng-select>
