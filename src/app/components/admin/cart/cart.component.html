@@ -76,11 +76,24 @@
                 </table>
               </div>
               <span>Ten a mano tu comprobante de pago del banco, te lo pediremos en el siguiente paso</span>
-              <div class="mt-1">
-                  <!--<button class="btn btn-pill btn-success" (click)="confirmPayment(order.order.idOrder)">Confirmar Pago</button>-->
-                  <button class="btn btn-pill btn-success" (click)="this.QuickViewCartConfirmPayment.openModal(order)">Confirmar Pago</button>
-              </div>
-              <hr class="border-top:3px" >
+              <form [formGroup]="cartForm">
+                <div class="form-group">
+                  <div class="form-check">
+                    <div class="animate-chk p-0">
+                      <input class="form-check-input" id="invalidCheck" type="checkbox" formControlName="termsAndConditions">
+                      <label class="form-check-label" for="invalidCheck" style="font-size:small;">Acepto <b class="text-info" (click)="termsAndConditionsInfo()">Condiciones</b> y <b class="text-info" (click)="privacyPoliciesInfo()">Políticas de privacidad</b> del comercio</label>
+                    </div>
+                    <div *ngIf="cartForm.get('termsAndConditions').invalid && cartForm.get('termsAndConditions').touched" class="text text-danger mt-1">
+                      Debes aceptar los términos y condiciones.
+                    </div>
+                  </div>
+                </div>
+                <div class="mt-1">
+                    <!--<button class="btn btn-pill btn-success" (click)="confirmPayment(order.order.idOrder)">Confirmar Pago</button>-->
+                    <button class="btn btn-pill btn-success" [disabled]="!cartForm.valid" (click)="this.QuickViewCartConfirmPayment.openModal(order)">Confirmar Pago</button>
+                </div>
+                <hr class="border-top:3px" >
+              </form>
           </div>
         </div>
       </div>
