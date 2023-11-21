@@ -46,16 +46,17 @@
                               <img class="img-100 img-fluid pull-right" alt=""
                               src="{{off.photo}}">
                         <p>Cantidad ofrecida: {{off.qty}} Unidades</p>
-                        <p>Tiempo: {{off.countMinutes.toLocaleString().padStart(2, '0')}} : {{off.countSeconds.toLocaleString().padStart(2, '0')}}</p>
+                        <b class="text-danger f-w-500">Validez de la Oferta: {{off.countMinutes.toLocaleString().padStart(2, '0')}} : {{off.countSeconds.toLocaleString().padStart(2, '0')}}</b> 
+                        <p>Oferta por tiempo limitado, reserva tu unidad!</p>
                         <fieldset>
                           <p>Cantidad:</p>
                           <div class="input-group bootstrap-touchspin">
-                            <button class="btn btn-primary btn-square bootstrap-touchspin-down" type="button" (click)="decrement(off, i)">
+                            <button class="btn btn-primary btn-square bootstrap-touchspin-down" style=" border-radius: 50px 0 0 50px;" type="button" (click)="decrement(off, i)">
                               <i class="fa fa-minus"></i>
                             </button>
                             <input class="touchspin form-control" type="text" value={{off.qtyOfferAccepted}}>
                             <div class="input-group-append ml-0">
-                              <button class="btn btn-primary btn-square bootstrap-touchspin-up" type="button" (click)="increment(off, i)">
+                              <button class="btn btn-primary btn-square bootstrap-touchspin-up btn-pill" type="button" (click)="increment(off, i)">
                                 <i class="fa fa-plus"></i>
                               </button>
                             </div>
@@ -84,8 +85,9 @@
                 </div>
               <h5 *ngIf="this.offers && this.offers.length > 0">Total a pagar: ${{this.totalConfirm.toLocaleString('es-CL')}} | Productos: {{countQtyOffers}}</h5>
               <div class="mt-1">
-                  <button *ngIf="this.offers && this.offers.length > 0" class="btn btn-pill btn-primary m-r-15 mb-3" type="button" (click)="add()" [disabled]="this.countQtyOffers > this.counter || this.countQtyOffers <= 0">Aceptar Oferta</button>
-                  <button class="btn btn-pill btn-info mb-3" type="button" (click)="goBack()">Volver</button>
+                  <button class="btn btn-pill btn-info m-r-15 mb-3" type="button" (click)="goBack()">Volver</button>
+                  <button *ngIf="this.offers && this.offers.length > 0" class="btn btn-pill btn-success mb-3" type="button" (click)="add()" [disabled]="this.countQtyOffers > this.counter || this.countQtyOffers <= 0">Aceptar Oferta</button>
+                  
               </div>
               <div *ngIf="this.countQtyOffers > this.counter"class="text text-danger mt-1">
                 La confirmación de ofertas no puede exceder la cantidad del producto pedido ({{this.counter}})
