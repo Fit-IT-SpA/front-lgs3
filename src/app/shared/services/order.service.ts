@@ -202,7 +202,7 @@ export class OrderService extends AbstractHttpService {
         };
         return this.http
             .post<any>(
-                this.apiUrl + '/product/count/not-offer/byemail/{email}'+email, parameters, httpOptions)
+                this.apiUrl + '/product/count/not-offer/byemail/'+email, parameters, httpOptions)
             .pipe(
                 map(response => {
                     return response;
@@ -222,7 +222,7 @@ export class OrderService extends AbstractHttpService {
         }
         return this.http
             .post<any>(
-                this.apiUrl + '/product/not-offer/byemail/{email}'+email+'/skip/'+skip+'/limit/'+ConstantService.paginationDesktop, parameters, httpOptions)
+                this.apiUrl + '/product/not-offer/byemail/'+email+'/skip/'+skip+'/limit/'+ConstantService.paginationDesktop, parameters, httpOptions)
             .pipe(
                 map(response => {
                     return response;

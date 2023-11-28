@@ -209,6 +209,7 @@ export class UserService extends AbstractHttpService {
 			'Content-Type': 'application/json'
 		  })
 		};
+		page--;
 		let skip = 0;
 		if (page > 0) {
 		  skip = ConstantService.paginationDesktop * page;
