@@ -241,9 +241,10 @@ export class UserComponent implements OnInit, OnDestroy {
     })
   }
 
-  onPageFired(event : any){
-    this.currentPage = event.pageIndex;
-    this.pageSize = event.pageSize;
+  onPageFired(event: any) {
+    this.loading = true;
+    this.currentPage = event;
+    this.pageSize = this.pageSize;
     this.getCount();
   }
 
