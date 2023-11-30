@@ -129,9 +129,10 @@ export class ProductsComponent implements OnInit {
       confirmButtonText: 'Si, quiero hacerlo!',
       cancelButtonText: 'No, cancelar!',
       buttonsStyling: false,
+      reverseButtons: true,
       customClass: {
-        confirmButton: 'btn btn-pill btn-primary', // Agrega tu clase CSS personalizada aquí
-        cancelButton: 'btn btn-pill btn-info', // Agrega tu clase CSS personalizada aquí
+        confirmButton: 'btn btn-pill btn-success mb-3', // Agrega tu clase CSS personalizada aquí
+        cancelButton: 'btn btn-pill btn-info m-r-15 mb-3', // Agrega tu clase CSS personalizada aquí
       }
     }).then(async (result) => {
       if (result.value) {
@@ -184,9 +185,10 @@ export class ProductsComponent implements OnInit {
       confirmButtonText: 'Si, quiero hacerlo!',
       cancelButtonText: 'No, cancelar!',
       buttonsStyling: false,
+      reverseButtons: true,
       customClass: {
-        confirmButton: 'btn btn-pill btn-primary', // Agrega tu clase CSS personalizada aquí
-        cancelButton: 'btn btn-pill btn-info', // Agrega tu clase CSS personalizada aquí
+        confirmButton: 'btn btn-pill btn-success mb-3', // Agrega tu clase CSS personalizada aquí
+        cancelButton: 'btn btn-pill btn-info m-r-15 mb-3', // Agrega tu clase CSS personalizada aquí
       }
     }).then((result) => {
       if (result.value) {
@@ -226,9 +228,10 @@ export class ProductsComponent implements OnInit {
       confirmButtonText: 'Si, quiero hacerlo!',
       cancelButtonText: 'No, cancelar!',
       buttonsStyling: false,
+      reverseButtons: true,
       customClass: {
-        confirmButton: 'btn btn-pill btn-primary', // Agrega tu clase CSS personalizada aquí
-        cancelButton: 'btn btn-pill btn-info', // Agrega tu clase CSS personalizada aquí
+        confirmButton: 'btn btn-pill btn-success mb-3', // Agrega tu clase CSS personalizada aquí
+        cancelButton: 'btn btn-pill btn-info m-r-15 mb-3', // Agrega tu clase CSS personalizada aquí
       }
     }).then((result) => {
       if (result.value) {

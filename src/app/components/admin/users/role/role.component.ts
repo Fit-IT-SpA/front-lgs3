@@ -117,10 +117,14 @@ export class RoleComponent implements OnInit, OnDestroy {
       title: '¿Estas seguro que deseas eliminar este perfil?',
       text: "No podras revertir esto despues!",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      buttonsStyling: false,
       confirmButtonText: 'Si, quiero hacerlo!',
-      cancelButtonText: 'No, cancelar!'
+      cancelButtonText: 'No, cancelar!',
+      reverseButtons: true,
+      customClass: {
+        confirmButton: 'btn btn-pill btn-success mb-3', // Agrega tu clase CSS personalizada aquí
+        cancelButton: 'btn btn-pill btn-info m-r-15 mb-3', // Agrega tu clase CSS personalizada aquí
+      }
     }).then((result) => {
       if (result.value) {
         let confirm = this.remove(id);

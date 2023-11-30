@@ -149,10 +149,14 @@ export class DeliveryViewComponent implements OnInit {
         text: "Estás confirmando que el producto llego correctamente al taller",
         type: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
+        buttonsStyling: false,
         confirmButtonText: 'Si, confirmar!',
-        cancelButtonText: 'No, cancelar!'
+        cancelButtonText: 'No, cancelar!',
+        reverseButtons: true,
+        customClass: {
+          confirmButton: 'btn btn-pill btn-success mb-3', // Agrega tu clase CSS personalizada aquí
+          cancelButton: 'btn btn-pill btn-info m-r-15 mb-3', // Agrega tu clase CSS personalizada aquí
+        }
       }).then((result) => {
         if (result.value) {
           this.save();

@@ -106,8 +106,8 @@ export class SalesHandlerComponent implements OnInit  {
   public confirmarPago(){
       const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
-              confirmButton: 'btn btn-pill btn-primary mr-2',
-              cancelButton: 'btn btn-pill btn-info ml-2'
+              confirmButton: 'btn btn-pill btn-success mb-3', // Agrega tu clase CSS personalizada aquí
+              cancelButton: 'btn btn-pill btn-info m-r-15 mb-3', // Agrega tu clase CSS personalizada aquí
             },
             buttonsStyling: false,
           });   
@@ -117,7 +117,8 @@ export class SalesHandlerComponent implements OnInit  {
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Estoy seguro',
-        cancelButtonText: 'Cancelar'
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true
       }).then((result) => {
         if (result.isConfirmed) { 
           this.loading = true;

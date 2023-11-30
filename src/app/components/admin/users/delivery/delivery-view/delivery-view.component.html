@@ -26,8 +26,8 @@
                     </div>
                     <div *ngIf="data.price" class="product-price mb-3">Precio total: ${{(data.price * data.qtyOfferAccepted).toLocaleString('es-CL')}}</div>
                     <div style="text-align: center" class="addcart-btn mb-3">
-                      <button *ngIf="data.status === 6" class="btn btn-pill btn-primary m-r-15" type="button" (click)="confirmWithdrawal()">Confirmar entrega</button>
-                      <button class="btn btn-pill btn-info" (click)="goBack()" type="button">Volver</button>
+                      <button class="btn btn-pill btn-info m-r-15 mb-3" (click)="goBack()" type="button">Volver</button>
+                      <button *ngIf="data.status === 6" class="btn btn-pill btn-success mb-3" type="button" (click)="confirmWithdrawal()">Confirmar entrega</button>
                     </div>
                 </div>
               </form>
