@@ -31,8 +31,8 @@
                     </div>
                 </div>
                 <div style="text-align: center" class="addcart-btn">
-                    <button class="btn btn-pill btn-primary m-r-15" [disabled]="form.invalid" (click)="this.confirmPayment(offerData.order.idOrder)" type="button">Confirmar Pago</button>
-                    <button class="btn btn-pill btn-info" (click)="modal.dismiss('Cross click')" type="button">Volver</button>
+                    <button class="btn btn-pill btn-info m-r-15 mb-3" (click)="modal.dismiss('Cross click')" type="button">Volver</button>
+                    <button class="btn btn-pill btn-success mb-3" [disabled]="form.invalid" (click)="this.confirmPayment(offerData.order.idOrder)" type="button">Confirmar Pago</button>
                 </div>
               </div>
             </div>

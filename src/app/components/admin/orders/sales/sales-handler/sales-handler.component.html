@@ -29,8 +29,8 @@
               <p class="mb-0" *ngIf="data.offer.photoPaymentReceiptAtAdmin"><button (click)="paymentReceipt(this.srv.apiUrl + '/files/' + data.offer.photoPaymentReceiptAtAdmin)" class="btn btn-pill btn-info btn-xs" type="button">Comprobante administrador</button></p>
               <div *ngIf="data.offer.price" class="product-price">Precio total: ${{(data.offer.price * data.offer.qtyOfferAccepted).toLocaleString('es-CL')}}</div>
               <div style="text-align: center" class="addcart-btn">
-                  <button *ngIf="data.offer.status == 5" (click)="confirmarPago()" class="btn btn-pill btn-primary m-r-15 mb-3" type="button">Confirmar Pago</button>
-                  <button class="btn btn-pill btn-info mb-3" (click)="goBack()" type="button">Volver</button>
+                  <button class="btn btn-pill btn-info m-r-15 mb-3" (click)="goBack()" type="button">Volver</button>
+                  <button *ngIf="data.offer.status == 5" (click)="confirmarPago()" class="btn btn-pill btn-success mb-3" type="button">Confirmar Pago</button>
               </div>
             </div>
           </div>

@@ -100,9 +100,11 @@
 						<td *ngIf="user.status === 2">Bloqueado</td>
 						<td>{{ user.role }}</td>
 						<td class="options-column">
-							<button class="btn btn-primary btn-pill btn-xs" *ngIf="canWrite()" (click)="edit(user.email)">Editar</button>
+							<button class="btn btn-primary btn-pill btn-xs" *ngIf="canWrite()" (click)="edit(user.email)">
+								<i class="fa fa-edit"></i>
+							</button>
 							<button class="btn btn-danger btn-pill btn-xs" *ngIf="canWrite() && user.status !== -1" (click)="removeWithConfirmation(user.email, user.name+' '+user.lastName)">
-								Eliminar
+								<i class="fa fa-trash-o"></i>
 							</button>
 						</td>
 					</tr>

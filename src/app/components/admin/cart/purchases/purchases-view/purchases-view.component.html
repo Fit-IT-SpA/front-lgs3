@@ -20,8 +20,9 @@
                 </div>
                 <div *ngIf="offerData.price" class="product-price">Valor total: ${{((offerData.price + offerData.price / 10) * offerData.qtyOfferAccepted).toLocaleString('es-CL')}}</div>
                 <div style="text-align: center" class="addcart-btn">
-                    <button class="btn btn-pill btn-primary m-r-15" *ngIf="offerData.status == 7" (click)="this.confirmProductReceived(offerData._id)" type="button">Lo Recibí!</button>
-                    <button class="btn btn-pill btn-info" (click)="modal.dismiss('Cross click')" type="button">Volver</button>
+                    <button class="btn btn-pill btn-info m-r-15 mb-3" (click)="modal.dismiss('Cross click')" type="button">Volver</button>
+                    <button class="btn btn-pill btn-success mb-3" *ngIf="offerData.status == 7" (click)="this.confirmProductReceived(offerData._id)" type="button">Lo Recibí!</button>
+                    
                 </div>
               </div>
             </div>
