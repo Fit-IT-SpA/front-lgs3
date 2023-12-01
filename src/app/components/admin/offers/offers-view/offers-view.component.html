@@ -15,6 +15,7 @@
               <h4>{{offer.order.chassis}}</h4>
               <div class="product-view">
                 <h6 class="f-w-600">Detalles de la Oferta</h6>
+                <p class="mb-0">Fecha: {{offer.offer.createdAt | date:'dd-MM-yyyy HH:mm'}}</p>
                 <p class="mb-0">{{offer.product.title}}</p>
                 <p class="mb-0">{{offer.offer.origen}} {{offer.offer.estado}}</p>
                 <p class="mb-0" *ngIf="offer.offer.make && offer.offer.make !== ''">{{offer.offer.make}}</p>

@@ -58,19 +58,21 @@
                             <table id="table-ventas" class="table table-hover table-border-horizonta">
                                 <thead>
                                     <tr>
-                                    <th scope="col">Repuesto</th>
-                                    <th scope="col">Marca / Modelo</th>
-                                    <th scope="col">Origen</th>
-                                    <th scope="col">Condición</th>
-                                    <th scope="col">Precio</th>
-                                    <th class="text-center" scope="col">Cantidad</th>
-                                    <th scope="col">Status</th>
-                                    <!--<th scope="col">Editar</th>
-                                    <th scope="col">Eliminar</th>-->
+                                        <th scope="col">Fecha</th>
+                                        <th scope="col">Repuesto</th>
+                                        <th scope="col">Marca / Modelo</th>
+                                        <th scope="col">Origen</th>
+                                        <th scope="col">Condición</th>
+                                        <th scope="col">Precio</th>
+                                        <th class="text-center" scope="col">Cantidad</th>
+                                        <th scope="col">Status</th>
+                                        <!--<th scope="col">Editar</th>
+                                        <th scope="col">Eliminar</th>-->
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr (click)="onCellClick(offer.id)" *ngFor="let offer of offers; index as i"  >
+                                        <td>{{offer.createdAt | date:'dd-MM-yyyy HH:mm'}}</td>
                                         <td>{{offer.product.title}}</td>
                                         <td>{{offer.order.brand}} - {{offer.order.model}}</td>
                                         <td [innerHTML]="offer.origen"></td>
