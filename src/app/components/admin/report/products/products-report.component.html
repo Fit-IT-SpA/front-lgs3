@@ -68,7 +68,7 @@
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let product of products; index as i"  >
-                                        <td>{{ product.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
+                                        <td>{{ product.createdAt | date:'dd-MM-yyyy HH:mm'}}</td>
                                         <td>{{product.order.brand}} {{product.order.model}} {{product.order.year}}</td>
                                         <td>{{product.title}}</td>
                                         <td>

@@ -93,7 +93,7 @@
 					<tr *ngFor="let user of users">
 						<td style="text-align: left">{{ user.name + " " + user.lastName }}</td>
 						<td>{{ user.email }}</td>
-						<td>{{ user.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
+						<td>{{ user.createdAt | date:'dd-MM-yyyy HH:mm'}}</td>
 						<td *ngIf="user.status === -1">Eliminado</td>
 						<td *ngIf="user.status === 0">Pendiente Activación</td>
 						<td *ngIf="user.status === 1">Activo</td>

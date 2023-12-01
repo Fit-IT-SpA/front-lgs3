@@ -64,8 +64,8 @@
                               <tr (click)="this.onCellClick(offer)" *ngFor="let offer of orderOffer; index as i"  >
                                 <td>{{offer.order.brand}} {{offer.order.model}} {{offer.order.year}}</td>
                                 <td>{{offer.product.title}}</td>
-                                <td>{{offer.order.createdAt | date:'yyyy-MM-dd HH:mm'}}</td>
-                                <td>{{offer.confirmedAtClaimant | date:'yyyy-MM-dd HH:mm'}}</td>
+                                <td>{{offer.order.createdAt | date:'dd-MM-yyyy HH:mm'}}</td>
+                                <td>{{offer.confirmedAtClaimant | date:'dd-MM-yyyy HH:mm'}}</td>
                                 <td>${{(offer.price + offer.price / 10) | number:'1.0-0'}}</td>
                                 <td class="text-center">{{offer.qtyOfferAccepted | number:'1.0-0'}}</td>
                                 <td>${{(offer.price + offer.price / 10) * offer.qtyOfferAccepted | number:'1.0-0'}}</td>
