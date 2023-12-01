@@ -10,43 +10,38 @@
         <div class="content" *ngIf="roles !== null">
             <div class="main-actions mb-4">
                 <!-- Add contact button -->
-                <button class="btn btn-primary" *ngIf="canWrite()" [color]="'primary'" (click)="add()">
+                <button class="btn btn-primary btn-pill" *ngIf="canWrite()" (click)="add()">
                     Agregar
                 </button>
             </div>
             <div class="row-container">
                 <div *ngFor="let role of roles; let i = index" class="custom-card mb-4">
-                            <div>
-                                <a routerLink="/admin/users/role/view/{{role.slug}}">
-                                    <div class="text-2xl font-semibold leading-tight">
-                                        {{ role.title }}
-                                    </div>
-                                </a>
-                                <div class="text-secondary font-medium text-md mt-1">
-                                    {{role.description}}
-                                </div>
+                    <div>
+                        <a routerLink="/admin/users/role/view/{{role.slug}}">
+                            <div class="text-2xl font-semibold leading-tight">
+                                {{ role.title }}
                             </div>
-                            <div class="ml-auto">
-                                <button 
-                                    (click)="edit(role.slug)" 
-                                    *ngIf="canWrite()" 
-                                    class="btn btn-primary rounded mr-4">
-                                    Editar
-                                </button>
-                                <button 
-                                    (click)="removeWithConfirmation(role.slug)" 
-                                    *ngIf="canWrite()" 
-                                    class="btn btn-primary rounded">
-                                    Eliminar
-                                </button>
-                            </div>
-                    <mat-paginator 
-                        *ngIf="roles.length > 0"
-                        [length]="totalElements"
-                        [pageIndex]="currentPage"
-                        [pageSize]="pageSize"
-                        (page)="onPageFired($event)">
-                    </mat-paginator>
+                        </a>
+                        <div class="text-secondary font-medium text-md mt-1">
+                            {{role.description}}
+                        </div>
+                    </div>
+                    <div class="custom-button-group">
+                        <!--<button 
+                            (click)="edit(role.slug)" 
+                            *ngIf="canWrite()" 
+                            class="btn btn-primary rounded mr-4">
+                            Editar
+                        </button>
+                        <button 
+                            (click)="removeWithConfirmation(role.slug)" 
+                            *ngIf="canWrite()" 
+                            class="btn btn-primary rounded">
+                            Eliminar
+                        </button>-->
+                        <button class="btn btn-pill btn-primary mb-3" (click)="edit(role.slug)"><i class="fa fa-edit"></i></button>
+                        <button class="btn btn-pill btn-danger mb-3" (click)="removeWithConfirmation(role.slug)"><i class="fa fa-trash-o"></i></button>
+                    </div>
                 </div>
             </div>
         </div>

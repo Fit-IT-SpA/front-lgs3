@@ -117,10 +117,14 @@ export class CompaniesComponent implements OnInit{
           text: "No podras revertir esto despues!",
           type: 'warning',
           showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
+          buttonsStyling: false,
+          reverseButtons: true,
           confirmButtonText: 'Si, quiero hacerlo!',
-          cancelButtonText: 'No, cancelar!'
+          cancelButtonText: 'No, cancelar!',
+          customClass: {
+            confirmButton: 'btn btn-pill btn-success mb-3', // Agrega tu clase CSS personalizada aquí
+            cancelButton: 'btn btn-pill btn-info m-r-15 mb-3', // Agrega tu clase CSS personalizada aquí
+          }
         }).then(async (result) => {
           if (result.value) {
             let confirm = await this.remove(rut);
