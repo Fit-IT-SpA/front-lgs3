@@ -1,0 +1,139 @@
+<app-breadcrumb [title]="'Logs'"></app-breadcrumb>
+<div class="flex flex-col flex-auto" *ngIf="loading">
+	<h6 class="text-center">Procesando...</h6>
+	<div class="loader-box">
+	  <div class="loader-3"></div>
+	</div>
+</div>
+<div class="container-fluid" *ngIf="!loading">
+    <div class="card" *ngIf="!filterHidden">
+        <div class="card-body">
+            <form [formGroup]="filterForm" class="needs-validation">
+                <div class="form-row">
+                    <div class="col-md-6 mb-3">
+                        <label>Módulo</label>
+                        <ng-select 
+                            [items]="modulesFilter" 
+                            placeholder="Módulo"
+                            class="js-example-placeholder-multiple btn-pill" 
+                            (change)="this.onChangeModuleFilter()"
+                            (clear)="this.onClearModuleFilter()"
+                            formControlName="module">
+                        </ng-select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label>Tipo Transacción</label>
+                        <div class="flex flex-col flex-auto" *ngIf="disabledTrxTypeFilter">
+                            <h6 class="text-center">Cargando...</h6>
+                            <div class="loader-box">
+                              <div class="loader-3"></div>
+                            </div>
+                        </div>
+                        <ng-select 
+                            [items]="trxTypesFilter" 
+                            *ngIf="!disabledTrxTypeFilter"
+                            placeholder="Tipo Transacción"
+                            class="js-example-placeholder-multiple btn-pill" 
+                            formControlName="trxType">
+                        </ng-select>
+                    </div>
+                </div>
+                <!--<div class="form-row">
+                    <div class="card-body mutliple-datepicker">
+                        <ngb-datepicker #dp (select)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t"
+                          outsideDays="hidden">
+                        </ngb-datepicker>
+                        <ng-template #t let-date let-focused="focused">
+                          <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)"
+                            [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date"
+                            (mouseleave)="hoveredDate = null">
+                            {{ date.day }}
+                          </span>
+                        </ng-template>
+                        <hr>
+                    </div>
+                </div>-->
+                <div class="form-row">
+                    <div class="card-body mutliple-datepicker">
+                        <ngb-datepicker 
+                            #dp 
+                            (select)="onDateSelection($event)" 
+                            [displayMonths]="2" 
+                            [dayTemplate]="t"
+                            outsideDays="hidden">
+                        </ngb-datepicker>
+                        <ng-template #t let-date let-focused="focused">
+                          <span 
+                            class="custom-day" 
+                            [class.focused]="focused" 
+                            [class.range]="isRange(date)"
+                            [class.faded]="isHovered(date) || isInside(date)" 
+                            (mouseenter)="hoveredDate = date"
+                            (mouseleave)="hoveredDate = null">
+                            {{ date.day }}
+                          </span>
+                        </ng-template>
+                        <!--<span class="d-block">From: {{ fromDate | json }} </span>
+                        <span class="d-block">To: {{ toDate | json }} </span>-->
+                    </div>
+                </div>
+            </form>
+            <div class="col text-right">
+				<button class="btn btn-success btn-pill" type="button" (click)="changeFilter()" >Buscar</button>
+			</div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3" *ngIf="listView">
+        <button class="btn btn-pill btn-info m-r-15 mb-3" (click)="this.showFilter()" type="button" >{{this.filterButton}}</button>
+    </div>
+    <button class="btn btn-pill btn-success mb-3" (click)="this.exportexcel()" type="button" >Descargar Excel</button>
+    <div class="card">
+        <div class="card-header">
+            <h5>Total de registros: {{this.totalElements}}</h5>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-xs">
+                <thead>
+					<tr>
+						<th style="text-align: left">Módulo</th>
+						<th>Tipo transacción</th>
+						<th>Fecha</th>
+						<th>Detalles</th>
+					</tr>
+				</thead>
+                <tbody>
+                    <tr *ngFor="let log of logs">
+                        <td style="text-align: left">{{log.module}}</td>
+                        <td>{{log.trxType}}</td>
+                        <td>{{log.createdAt | date:'dd-MM-yyyy HH:mm:ss'}}</td>
+                        <td style="text-align: left">{{log.details}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <ngb-pagination 
+		*ngIf="!listView"
+		class="d-flex justify-content-center mb-3" 
+		[collectionSize]="totalElements" 
+		[pageSize]="50"
+		[boundaryLinks]="true"
+		[(page)]="currentPage"
+		[maxSize]="5" 
+		[rotate]="true" 
+		(pageChange)="onPageFired($event)"
+		aria-label="Default pagination">
+	</ngb-pagination>
+	<ngb-pagination 
+		*ngIf="listView"
+		class="d-flex justify-content-center mb-3" 
+		[collectionSize]="totalElements" 
+		[pageSize]="50"
+		[boundaryLinks]="true"
+		[(page)]="currentPage"
+		[maxSize]="3" 
+		[rotate]="true" 
+		(pageChange)="onPageFired($event)"
+		aria-label="Default pagination">
+	</ngb-pagination>
+</div>

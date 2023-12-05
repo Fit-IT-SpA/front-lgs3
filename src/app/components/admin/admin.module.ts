@@ -25,6 +25,7 @@ import { CompaniesModule } from './companies/companies.module';
 import { CartModule } from './cart/cart.module';
 import { DeliveryModule } from './users/delivery/delivery.module';
 import { ReportModule } from './report/report.module';
+import { TrxLogsModule } from './system/trxlogs/trx-logs.module';
 
 
 @NgModule({
@@ -37,6 +38,7 @@ import { ReportModule } from './report/report.module';
         UserModule,
         RoleModule,
         PrivilegeModule,
+        TrxLogsModule,
         SalesManagementModule,
         DeliveryModule,
         OrdersModule,

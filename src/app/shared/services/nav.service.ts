@@ -108,6 +108,11 @@ export class NavService implements OnDestroy {
 			]
 		},
 		{
+			id: 'sistema-lectura', title: 'Sistema', icon: 'monitor', type: 'sub', active: false, children: [
+				{ id: 'sistema-lectura', path: '/admin/system/trx-logs', title: 'TrxLogs', type: 'link' },
+			]
+		},
+		{
 			id: 'reportes-lectura', title: 'Reportes', icon: 'file-text', type: 'sub', active: false, children: [
 				{ id: 'reportes-lectura', path: '/admin/report/products', title: 'Productos', type: 'link' },
 			]
