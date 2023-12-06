@@ -83,4 +83,6 @@ export class ConstantService {
     public static PERM_CAJA_ESCRITURA            = "caja-escritura";
     public static PERM_REPORTES_LECTURA            = "reportes-lectura";
     public static PERM_REPORTES_ESCRITURA            = "reportes-escritura";
+    public static PERM_SISTEMA_LECTURA                  = "sistema-lectura";
+    public static PERM_SISTEMA_ESCRITURA                  = "sistema-escritura";
 }
