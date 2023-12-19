@@ -13,7 +13,7 @@
                   <div class="col mb-3">
                     <div class="form-group">
                       <label>Nombre Repuesto</label>
-                      <input class="form-control" type="text" placeholder="(*) Nombre Repuesto" formControlName="description">
+                      <input class="form-control btn-pill" type="text" placeholder="(*) Nombre Repuesto" formControlName="description">
                       <div *ngIf="productsAddFormGroup.controls.description.touched && productsAddFormGroup.controls.description.errors?.minlength"
                         class="text text-danger mt-1">
                           Debe tener minimo de 3 caracteres
@@ -30,12 +30,12 @@
                     <fieldset>
                       <label>Cantidad:</label>
                       <div class="input-group bootstrap-touchspin">
-                        <button class="btn btn-primary btn-square bootstrap-touchspin-down" type="button" (click)=decrement()>
+                        <button class="btn btn-primary btn-square bootstrap-touchspin-down" style=" border-radius: 50px 0 0 50px;" type="button" (click)=decrement()>
                           <i class="fa fa-minus"></i>
                         </button>
                         <input class="touchspin form-control" type="text" value={{counter}}>
                         <div class="input-group-append ml-0">
-                          <button class="btn btn-primary btn-square bootstrap-touchspin-up" type="button" (click)=increment()>
+                          <button class="btn btn-primary btn-square bootstrap-touchspin-up btn-pill" type="button" (click)=increment()>
                             <i class="fa fa-plus"></i>
                           </button>
                         </div>
@@ -48,8 +48,8 @@
                   <span class="font-semibold ml-1 text-base">Los campos marcados con (*) son de caracter obligatorio.</span>
               </div>
               <div class="mt-1">
-                  <button class="btn btn-pill btn-primary m-r-15" type="button" [disabled]="productsAddFormGroup.invalid" (click)="add()">Guardar</button>
-                  <button class="btn btn-pill btn-info" type="button" (click)="goBack()">Volver</button>
+                <button class="btn btn-pill btn-info m-r-15" type="button" (click)="goBack()">Volver</button>
+                <button class="btn btn-pill btn-success" type="button" [disabled]="productsAddFormGroup.invalid" (click)="add()">Guardar</button>
               </div>
             </form>
         </div>

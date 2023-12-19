@@ -89,8 +89,7 @@
                   </div>
                 </div>
                 <div class="mt-1">
-                    <!--<button class="btn btn-pill btn-success" (click)="confirmPayment(order.order.idOrder)">Confirmar Pago</button>-->
-                    <button class="btn btn-pill btn-success" [disabled]="!cartForm.valid" (click)="this.QuickViewCartConfirmPayment.openModal(order)">Confirmar Pago</button>
+                    <button class="btn btn-pill btn-success" [disabled]="!cartForm.valid" (click)="goToConfirmPayment(order.order.id)">Pagar</button>
                 </div>
                 <hr class="border-top:3px" >
               </form>
@@ -100,4 +99,3 @@
     </div>
   </div>
 </div>
-<app-cart-confirm-payment #quickViewCartConfirmPayment></app-cart-confirm-payment>

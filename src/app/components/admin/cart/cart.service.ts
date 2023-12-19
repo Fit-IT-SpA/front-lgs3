@@ -22,6 +22,18 @@ export class CartService extends AbstractHttpService {
             })
         );
     }
+    findByOrder(id: string) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http.get<any>(`${this.apiUrl}/cart/order/${id}`, httpOptions).pipe(
+            map(response => {
+                return response;
+            })
+        );
+    }
     countPurchasesByEmail(email: string, parameters: {date: string, status: string}) {
         const httpOptions = {
             headers: new HttpHeaders({
@@ -51,13 +63,13 @@ export class CartService extends AbstractHttpService {
             })
         );
     }
-    confirmedPayment(id: string, photo: string) {
+    confirmedPayment(id: string, parameters: {delivery: string, region: string, commune: string, avenue: string, recipientName: string, recipientLastName: string, photo: string}) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
             })
         };
-        return this.http.put<any>(`${this.apiUrl}/cart/confirmed-payment/${id}`, {photo: photo}, httpOptions).pipe(
+        return this.http.put<any>(`${this.apiUrl}/cart/confirmed-payment/${id}`, parameters, httpOptions).pipe(
             map(response => {
                 return response;
             })
