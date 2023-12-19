@@ -1,43 +1,256 @@
-<ng-template #quickViewCartConfirmPayment let-modal>
-    <div class="modal-content">
-        <div class="modal-header product-modal">
-          <div class="product-box row">
-            <div class="product-img col-md-6" *ngIf="!offerData.order.photo"><img class="img-fluid" src="assets/images/ecommerce/01.jpg" alt=""></div>
-            <div class="product-img col-md-6" *ngIf="offerData.order.photo"><img class="img-fluid" src="{{this.srv.apiUrl + '/files/' + offerData.order.photo}}" alt=""></div>
-            <div class="product-details col-md-6 text-left">
-              <h4>{{offerData.order.brand}} {{offerData.order.model}} {{offerData.order.year}}</h4>
-              <div class="product-view">
-                <h6 class="f-w-600">Detalles de la Compra</h6>
-                <div class="product-price">Total a pago: ${{(this.totalOrder(offerData.productWithOffers)).toLocaleString('es-CL')}}</div>
-                <div class="mb-4">
-                    <div class="mb-3">
-                      <h6>Agrega una foto del comprobante</h6>
-                      <!--<span>(Donde aparezca el VIN del auto, para asegurar que recibas ofertas precisas a lo que buscas)</span>-->
-                      <!--<span style="display: block;">(No tienes el padrón a mano? Busca tu VIN por tu patente en <a href="https://www.patentechile.com/" target="_blank">patenteschile.com</a> y nos subes esa foto)</span>-->
-                    </div>
-                    <div class="col-md-3" *ngIf="loadingImg">
-                      <h6 class="mb-0 text-center">Cargando foto...</h6>
-                      <div class="loader-box">
-                        <div class="loader-3"></div>
+<app-breadcrumb [title]="'Proceso de pago'"></app-breadcrumb>
+<div>
+  <div class="flex flex-col flex-auto" *ngIf="loading">
+    <h6 class="text-center">Procesando...</h6>
+    <div class="loader-box">
+      <div class="loader-3"></div>
+    </div>
+  </div>
+  <div *ngIf="!loading" class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card">
+          <aw-wizard navBarLayout="large-filled-symbols">
+            <aw-wizard-step>
+              <form [formGroup]="firstFormGroup">
+                <ng-template class="mb-3" awWizardStepSymbol>
+                  <div class="f1-step">
+                    <div class="f1-step-icon"><i class="fa fa-truck"></i></div>
+                    <p>Entrega</p>
+                  </div>
+                </ng-template>
+                <div class="card-body">
+                  <h6>1. Tipo de entrega</h6>
+                  <span>Indícanos cómo quieres recibir tus productos</span>
+                  <hr>
+                  <div class="card-block row">
+                    <div class="col-sm-12 col-lg-12 col-xl-12">
+                      <div class="form-row">
+                        <div class="form-group">
+                          <div class="row">
+                            <div class="col">
+                              <div class="card">
+                                <div class="media p-20">
+                                  <div class="radio radio-primary mr-3 ml-2">
+                                    <input id="radio1" type="radio" name="radio" value="retiro_bodega" (click)="selectDelivery('retiro_bodega')">
+                                    <label for="radio1"></label>
+                                  </div>
+                                  <div class="media-body">
+                                    <h6 class="mt-0 mega-title-badge">Retiro en Bodega</h6>
+                                    <p>San Isidro 720, Santiago, Barrio 10 de Julio</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col">
+                              <div class="card">
+                                <div class="media p-20">
+                                  <div class="radio radio-primary mr-3 ml-2">
+                                    <input id="radio2" type="radio" name="radio" value="despacho_domicilio" (click)="selectDelivery('despacho_domicilio')">
+                                    <label for="radio2"></label>
+                                  </div>
+                                  <div class="media-body">
+                                    <h6 class="mt-0 mega-title-badge">Despacho a domicilio</h6>
+                                    <p>Pedido puede ser entregado en un domicilio</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div *ngIf="!loadingImg">
-                      <img *ngIf="url && url !== ''" src="{{this.srv.apiUrl + '/files/' + url}}" class="row mb-3" id="image_service">
-                      <button class="btn btn-info mb-3" (click)="fileInput.click()" type="button">
-                        <i class="flex align-middle" data-feather="download"></i>
-                        Cargar Imagen
-                      </button>
-                      <input class="btn btn-outline-primary" type="file" #fileInput (change)="fileChangeEvent($event)" hidden >
+                  </div>
+                  <div class="mb-3" *ngIf="this.showNewFields">
+                    <span>Indícanos la dirección de envío</span>
+                  </div>
+                  <div class="col-sm-12 col-lg-12 col-xl-12">
+                    <div class="form-row" *ngIf="this.showNewFields">
+                      <div class="col-md-4 mb-3">
+                        <div class="form-group">
+                          <label>Región</label>
+                          <ng-select [items]="regionFilter" placeholder="Ingresar Región"
+                              class="js-example-placeholder-multiple btn-pill" formControlName="region" (ngModelChange)="this.onChangeRegionFilter()" (clear)="this.onClearRegionFilter()">
+                          </ng-select>
+                          <div *ngIf="firstFormGroup.controls.region.errors && firstFormGroup.controls.region.touched && firstFormGroup.controls.region.errors.required"
+                              class="text text-danger mt-1">
+                              Es requerido
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4 mb-3">
+                        <div class="form-group">
+                          <label>Comuna</label>
+                          <div class="flex flex-col flex-auto" *ngIf="disabledCommuneFilter">
+                              <h6 class="text-center">Cargando Comunas...</h6>
+                              <div class="loader-box">
+                                <div class="loader-3"></div>
+                              </div>
+                            </div>
+                          <ng-select [items]="communeFilter" placeholder="Ingresar comuna" *ngIf="!disabledCommuneFilter"
+                              class="js-example-placeholder-multiple btn-pill" formControlName="commune">
+                          </ng-select>
+                          <div *ngIf="firstFormGroup.controls.commune.errors && firstFormGroup.controls.commune.touched && firstFormGroup.controls.commune.errors.required"
+                              class="text text-danger mt-1">
+                              Es requerido
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4 mb-3">
+                        <div class="form-group">
+                          <label for="direction">Número y calle</label>
+                          <input class="form-control btn-pill" id="direction" type="direction"
+                              placeholder="Ingresar dirección" formControlName="avenue">
+                          <div *ngIf="firstFormGroup.controls.avenue.errors && firstFormGroup.controls.avenue.touched && firstFormGroup.controls.avenue.errors.required"
+                              class="text text-danger mt-1">
+                              Es requerido
+                          </div>
+                          <div *ngIf="firstFormGroup.controls.avenue.touched && firstFormGroup.controls.avenue.errors?.maxlength"
+                              class="text text-danger mt-1">
+                              Debe tener un maximo de 140 caracteres
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                          <label for="name">Nombre de quien recibe</label>
+                          <input class="form-control btn-pill" id="name" type="name"
+                              placeholder="Ingresar Nombre" formControlName="recipientName">
+                          <div *ngIf="firstFormGroup.controls.recipientName.errors && firstFormGroup.controls.recipientName.touched && firstFormGroup.controls.recipientName.errors.required"
+                              class="text text-danger mt-1">
+                              Es requerido
+                          </div>
+                          <div *ngIf="firstFormGroup.controls.recipientName.touched && firstFormGroup.controls.recipientName.errors?.maxlength"
+                              class="text text-danger mt-1">
+                              Debe tener un maximo de 30 caracteres
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                          <label for="lastName">Apellido de quien recibe</label>
+                          <input class="form-control btn-pill" id="lastName" type="lastName"
+                              placeholder="Ingresar Apellido" formControlName="recipientLastName">
+                          <div *ngIf="firstFormGroup.controls.recipientLastName.errors && firstFormGroup.controls.recipientLastName.touched && firstFormGroup.controls.recipientLastName.errors.required"
+                              class="text text-danger mt-1">
+                              Es requerido
+                          </div>
+                          <div *ngIf="firstFormGroup.controls.recipientLastName.touched && firstFormGroup.controls.recipientLastName.errors?.maxlength"
+                              class="text text-danger mt-1">
+                              Debe tener un maximo de 30 caracteres
+                          </div>
+                        </div>
+                      </div>
                     </div>
+                  </div>
+                  <button class="btn btn-pill btn-info m-r-15 mb-3" type="button" (click)="goBack()">Volver</button>
+                  <button class="btn btn-pill btn-success mb-3" type="submit" awNextStep [disabled]="!firstFormGroup.valid">Siguiente</button>
                 </div>
-                <div style="text-align: center" class="addcart-btn">
-                    <button class="btn btn-pill btn-info m-r-15 mb-3" (click)="modal.dismiss('Cross click')" type="button">Volver</button>
-                    <button class="btn btn-pill btn-success mb-3" [disabled]="form.invalid" (click)="this.confirmPayment(offerData.order.idOrder)" type="button">Confirmar Pago</button>
+              </form>
+            </aw-wizard-step>
+            <aw-wizard-step>
+              <form [formGroup]="secondFormGroup">
+                <ng-template class="mb-3" awWizardStepSymbol>
+                  <div class="f1-step">
+                    <div class="f1-step-icon"><i class="fa fa-credit-card"></i></div>
+                    <p>Pago</p>
+                  </div>
+                </ng-template>
+                <div class="card-body">
+                  <h6>1. Datos del pago</h6>
+                  <hr>
+                  <div class="card-block row">
+                    <div class="col-sm-12 col-lg-12 col-xl-12">
+                      <div class="form-row">
+                        <div class="product-img col-md-6" *ngIf="!data[0].order.photo"><img class="img-fluid" src="assets/images/ecommerce/01.jpg" alt=""></div>
+                        <div class="product-img col-md-6" *ngIf="data[0].order.photo"><img class="img-fluid" src="{{this.srv.apiUrl + '/files/' + data[0].order.photo}}" alt=""></div>
+                        <div class="product-details col-md-6 text-left">
+                          <h4>{{data[0].order.brand}} {{data[0].order.model}} {{data[0].order.year}}</h4>
+                          <table class="table table-bordered radio-first-col-width mb-3">
+                            <tbody>
+                              <tr *ngFor="let offer of data">
+                                  <td >{{offer.product.title}} 
+                                      <div>
+                                          <p class="mb-0">Oferta: ${{((offer.price + offer.price * offer.commission) * offer.qtyOfferAccepted).toLocaleString('es-CL')}}</p>
+                                          <p class="mb-0">Cantidad ofrecida: {{offer.qtyOfferAccepted}}</p>
+                                          <p *ngIf="offer.make && offer.make !== ''" class="mb-0">Caracteristicas: {{offer.estado}}, {{offer.origen}}, Marca: {{offer.make}}</p>
+                                          <p *ngIf="!offer.make || offer.make === ''" class="mb-0">Caracteristicas: {{offer.estado}}, {{offer.origen}}</p>
+                                      </div>
+                                  </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <div class="product-price">Total a pago: ${{(this.totalOrder()).toLocaleString('es-CL')}}</div>
+                          <hr>
+                          <div class="mb-4">
+                            <div class="mb-3">
+                              <h6>Agrega una foto del comprobante</h6>
+                              <label style="font-size:small;">Para completar el pago de su pedido debe <b class="text-info" (click)="contactTransferInfo()">usar una forma de pago</b></label>
+                            </div>
+                            <div class="col-md-3" *ngIf="loadingImg">
+                              <h6 class="mb-0 text-center">Cargando foto...</h6>
+                              <div class="loader-box">
+                                <div class="loader-3"></div>
+                              </div>
+                            </div>
+                            <div *ngIf="!loadingImg">
+                              <img *ngIf="url && url !== ''" src="{{this.srv.apiUrl + '/files/' + url}}" class="row mb-3" id="image_service">
+                              <button class="btn btn-pill btn-info mb-3" (click)="fileInput.click()" type="button">
+                                <i class="flex align-middle" data-feather="download"></i>
+                                Agregar Comprobante
+                              </button>
+                              <input class="btn btn-outline-primary" type="file" #fileInput (change)="fileChangeEvent($event)" hidden >
+                            </div>
+                        </div>
+                          <button class="btn btn-pill btn-info m-r-15 mb-3" type="button" awPreviousStep>Anterior</button>
+                          <button class="btn btn-pill btn-success mb-3" type="submit" (click)="confirmPayment(data[0].order.idOrder)" [disabled]="!secondFormGroup.valid">Confirmar pago</button>
+                        </div>
+                      </div>
+                    </div>
+                    
+                  </div>
                 </div>
-              </div>
-            </div>
-          </div>
-          <button class="close" (click)="modal.dismiss('Cross click')"><span aria-hidden="true">×</span></button>
+              </form>
+            </aw-wizard-step>
+          </aw-wizard>
         </div>
       </div>
-</ng-template>
+    </div>
+  </div>
+</div>
+<!--<div class="product-box row">
+  <div class="product-img col-md-6" *ngIf="!offerData.order.photo"><img class="img-fluid" src="assets/images/ecommerce/01.jpg" alt=""></div>
+  <div class="product-img col-md-6" *ngIf="offerData.order.photo"><img class="img-fluid" src="{{this.srv.apiUrl + '/files/' + offerData.order.photo}}" alt=""></div>
+  <div class="product-details col-md-6 text-left">
+    <h4>{{offerData.order.brand}} {{offerData.order.model}} {{offerData.order.year}}</h4>
+    <div class="product-view">
+      <h6 class="f-w-600">Detalles de la Compra</h6>
+      <div class="product-price">Total a pago: ${{(this.totalOrder(offerData.productWithOffers)).toLocaleString('es-CL')}}</div>
+      <div class="mb-4">
+          <div class="mb-3">
+            <h6>Agrega una foto del comprobante</h6>
+          </div>
+          <div class="col-md-3" *ngIf="loadingImg">
+            <h6 class="mb-0 text-center">Cargando foto...</h6>
+            <div class="loader-box">
+              <div class="loader-3"></div>
+            </div>
+          </div>
+          <div *ngIf="!loadingImg">
+            <img *ngIf="url && url !== ''" src="{{this.srv.apiUrl + '/files/' + url}}" class="row mb-3" id="image_service">
+            <button class="btn btn-info mb-3" (click)="fileInput.click()" type="button">
+              <i class="flex align-middle" data-feather="download"></i>
+              Cargar Imagen
+            </button>
+            <input class="btn btn-outline-primary" type="file" #fileInput (change)="fileChangeEvent($event)" hidden >
+          </div>
+      </div>
+      <div style="text-align: center" class="addcart-btn">
+          <button class="btn btn-pill btn-info m-r-15 mb-3" (click)="goBack()" type="button">Volver</button>
+          <button class="btn btn-pill btn-success mb-3" [disabled]="form.invalid" (click)="this.confirmPayment(offerData.order.idOrder)" type="button">Confirmar Pago</button>
+      </div>
+    </div>
+  </div>
+</div>-->
