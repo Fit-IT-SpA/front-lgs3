@@ -270,7 +270,7 @@ export class UserService extends AbstractHttpService {
 		  })
 		};
 		const filter =
-		  '{ "where" : {"and" : [{ "email": "' + email + '"}, {"status": {"ne": -1}}] }}';
+		  '{ "where" : {"and" : [{ "email": "' + email + '"}] }}';
 		return this.http
 		  .get<any>(
 			this.apiUrl + '/users?filter=' + encodeURIComponent(filter),

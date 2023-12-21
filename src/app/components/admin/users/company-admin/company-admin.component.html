@@ -1,0 +1,112 @@
+<app-breadcrumb [title]="'Gestionar Negocios'"></app-breadcrumb>
+<div class="container-fluid">
+    <div class="flex flex-col flex-auto" *ngIf="loading">
+        <div class="loader-box">
+          <div class="loader-3"></div>
+        </div>
+    </div>
+    <div class="card" *ngIf="!filterHidden">
+        <div class="card-body">
+            <form [formGroup]="filterForm" class="needs-validation">
+                <div class="form-row">
+                    <div class="col-md-6 mb-3">
+                        <label>Rut</label>
+                        <input class="form-control btn-pill" type="text" placeholder="Rut de negocio" formControlName="rut">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label>Nombre</label>
+                        <input class="form-control btn-pill" type="text" placeholder="Nombre de negocio" formControlName="name">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label>Estado</label>
+                        <select formControlName="status" class="form-control btn-pill">
+                            <option class="mat-select-placeholder" value="">Todos los Estados</option>
+                            <option value="-1">Eliminado</option>
+                            <option value="0">Pendiente Activación</option>
+                            <option value="1">Activo</option>
+                            <option value="2">Bloqueado</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label>Tipos</label>
+                        <select formControlName="type" class="form-control btn-pill">
+                            <option class="mat-select-placeholder" value="">Todos los Tipos</option>
+                            <option value="taller">Taller</option>
+                            <option value="comercio">Comercio</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+            <div class="col text-right">
+				<button class="btn btn-success btn-pill" type="button" (click)="changeFilter()" >Buscar</button>
+			</div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3" *ngIf="listView">
+        <button class="btn btn-pill btn-info m-r-15 mb-3" (click)="this.showFilter()" type="button" >{{this.filterButton}}</button>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <h5>Total de registros: {{this.totalElements}}</h5>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-xs">
+                <thead>
+                    <tr>
+                        <th style="text-align: left">Rut</th>
+                        <th>Nombre</th>
+                        <th>Estado</th>
+                        <th>Tipo</th>
+                        <th>Fecha creación</th>
+                        <th>Teléfono</th>
+                        <th>Región</th>
+                        <th>Comuna</th>
+                        <th>Dirección</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr (click)="onCellClick(company._id)" *ngFor="let company of companies">
+                        <td style="text-align: left">{{this.formatRut(company.rut)}}</td>
+                        <td>{{company.name}}</td>
+                        <td>
+                            <button *ngIf="company.status === -1" class="btn btn-pill btn-danger btn-xs">Eliminado</button>
+                            <button *ngIf="company.status === 0" class="btn btn-pill btn-primary btn-xs">Pendiente Activación</button>
+                            <button *ngIf="company.status === 1" class="btn btn-pill btn-success btn-xs">Activado</button>
+                            <button *ngIf="company.status === 2" class="btn btn-pill btn-info btn-xs">Bloqueado</button>
+                        </td>
+                        <td>{{company.type}}</td>
+                        <td>{{company.createdAt | date:'dd-MM-yyyy HH:mm:ss'}}</td>
+                        <td>{{company.phone}}</td>
+                        <td>{{company.region}}</td>
+                        <td>{{company.commune}}</td>
+                        <td>{{company.direction}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <ngb-pagination 
+		*ngIf="!listView"
+		class="d-flex justify-content-center mb-3" 
+		[collectionSize]="totalElements" 
+		[pageSize]="50"
+		[boundaryLinks]="true"
+		[(page)]="currentPage"
+		[maxSize]="5" 
+		[rotate]="true" 
+		(pageChange)="onPageFired($event)"
+		aria-label="Default pagination">
+	</ngb-pagination>
+	<ngb-pagination 
+		*ngIf="listView"
+		class="d-flex justify-content-center mb-3" 
+		[collectionSize]="totalElements" 
+		[pageSize]="50"
+		[boundaryLinks]="true"
+		[(page)]="currentPage"
+		[maxSize]="3" 
+		[rotate]="true" 
+		(pageChange)="onPageFired($event)"
+		aria-label="Default pagination">
+	</ngb-pagination>
+</div>

@@ -45,6 +45,11 @@ const routes: Routes = [
             {
                 path: '',
                 canActivate: [AdminGuard],
+                loadChildren: () => import('./users/company-admin/company-admin.module').then(m => m.CompanyAdminModule)
+            },
+            {
+                path: '',
+                canActivate: [AdminGuard],
                 loadChildren: () => import('./system/trxlogs/trx-logs.module').then(m => m.TrxLogsModule)
             },
             {
