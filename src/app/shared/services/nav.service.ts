@@ -105,6 +105,7 @@ export class NavService implements OnDestroy {
 				{ id: 'usuario-admin-escritura', path: '/admin/users/user', title: 'Usuario', type: 'link' },
 				{ id: 'perfil-admin-escritura', path: '/admin/users/role', title: 'Perfil', type: 'link' },
 				{ id: 'privilegio-admin-escritura', path: '/admin/users/privilege', title: 'Privilegio', type: 'link' },
+				{ id: 'gestionar-negocios-admin-lectura', path: '/admin/users/company', title: 'Gestionar Negocios', type: 'link' },
 			]
 		},
 		{

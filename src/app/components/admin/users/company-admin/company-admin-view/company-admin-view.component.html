@@ -1,0 +1,198 @@
+<app-breadcrumb [title]="'Detalle del Negocio'"></app-breadcrumb>
+<div class="flex flex-col flex-auto" *ngIf="loading">
+    <div class="loader-box">
+      <div class="loader-3"></div>
+    </div>
+</div>
+<div class="card" *ngIf="!loading">
+    <div class="card-body">
+        <div class="row mb-3">
+            <h6>Datos del negocio</h6>
+            <hr>
+            <form [formGroup]="formCompany">
+                <div class="form-row">
+                    <div class="col-md-4 mb-3" *ngIf="this.user && this.user.role === 'taller'">
+                        <label for="billing">Tipo Facturación</label>
+                        <input class="form-control btn-pill" id="billing" type="billing"
+                            placeholder="Ingresar tipo facturación" formControlName="billingType">  
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="rut">Rut</label>
+                        <input class="form-control btn-pill" id="rut" type="rut" minlength="8" maxlength="12"
+                            placeholder="Ingresar rut" formControlName="rut" (blur)="onBlurRut()" (focus)="onFocusRut()">  
+                        <div *ngIf="formCompany.controls.rut.errors && formCompany.controls.rut.touched && formCompany.controls.rut.errors.required"
+                            class="text text-danger mt-1">
+                            Es requerido
+                        </div>
+                        <div *ngIf="formCompany.controls.rut.errors && formCompany.controls.rut.touched && formCompany.controls.rut.errors?.rut"
+                            class="text text-danger mt-1">
+                            Formato invalido
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="name">Nombre</label>
+                        <input class="form-control btn-pill" id="name" type="name"
+                            placeholder="Ingresar nombre" formControlName="name">  
+                        <div *ngIf="formCompany.controls.name.errors && formCompany.controls.name.touched && formCompany.controls.name.errors.required"
+                            class="text text-danger mt-1">
+                            Es requerido
+                        </div>
+                        <div *ngIf="formCompany.controls.name.touched && formCompany.controls.name.errors?.maxlength"
+                            class="text text-danger mt-1">
+                            Debe tener un maximo de 18 caracteres
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label>Región</label>
+                        <ng-select [items]="regionFilter" placeholder="Ingresar Región"
+                            class="js-example-placeholder-multiple btn-pill" formControlName="region" (ngModelChange)="this.onChangeRegionFilter()" (clear)="this.onClearRegionFilter()">
+                        </ng-select>
+                        <div *ngIf="formCompany.controls.region.errors && formCompany.controls.region.touched && formCompany.controls.region.errors.required"
+                            class="text text-danger mt-1">
+                            Es requerido
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label>Comuna</label>
+                        <div class="flex flex-col flex-auto" *ngIf="disabledCommuneFilter">
+                            <h6 class="text-center">Cargando Comunas...</h6>
+                            <div class="loader-box">
+                            <div class="loader-3"></div>
+                            </div>
+                        </div>
+                        <ng-select [items]="communeFilter" placeholder="Ingresar comuna" *ngIf="!disabledCommuneFilter"
+                            class="js-example-placeholder-multiple btn-pill" formControlName="commune">
+                        </ng-select>
+                        <div *ngIf="formCompany.controls.commune.errors && formCompany.controls.commune.touched && formCompany.controls.commune.errors.required"
+                            class="text text-danger mt-1">
+                            Es requerido
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="direction">Dirección</label>
+                        <input class="form-control btn-pill" id="direction" type="direction"
+                            placeholder="Ingresar dirección" formControlName="direction">
+                        <div *ngIf="formCompany.controls.direction.errors && formCompany.controls.direction.touched && formCompany.controls.direction.errors.required"
+                            class="text text-danger mt-1">
+                            Es requerido
+                        </div>
+                        <div *ngIf="formCompany.controls.direction.touched && formCompany.controls.direction.errors?.maxlength"
+                            class="text text-danger mt-1">
+                            Debe tener un maximo de 140 caracteres
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="phone">Teléfono</label>
+                        <input class="form-control btn-pill" id="phone" type="phone"
+                            placeholder="Ingresar teléfono" formControlName="phone">
+                        <div *ngIf="formCompany.controls.phone.errors && formCompany.controls.phone.touched && formCompany.controls.phone.errors.required"
+                            class="text text-danger mt-1">
+                            Es requerido
+                        </div>
+                        <div *ngIf="formCompany.controls.phone.errors && formCompany.controls.phone.touched && formCompany.controls.phone.errors?.invalidMobileNumber"
+                            class="text text-danger mt-1">
+                            Formato invalido, ejemplo: 912341234
+                        </div>
+                        <div *ngIf="formCompany.controls.phone.errors && formCompany.controls.phone.touched && formCompany.controls.phone.errors?.invalidNumber"
+                            class="text text-danger mt-1">
+                            Solo se admiten números
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3" *ngIf="this.user && this.user.role === 'comercio'">
+                        <label for="accountNumber">Número de Cuenta Banco</label>
+                        <input class="form-control btn-pill" id="accountNumber" type="accountNumber"
+                            placeholder="Número de Cuenta del {{this.companyType}}" formControlName="accountNumber">
+                        <div *ngIf="formCompany.controls.accountNumber.errors && formCompany.controls.accountNumber.touched && formCompany.controls.accountNumber.errors.required"
+                            class="text text-danger mt-1">
+                            Es requerido
+                        </div>
+                        <div *ngIf="formCompany.controls.accountNumber.errors && formCompany.controls.accountNumber.touched && formCompany.controls.accountNumber.errors?.invalidNumber"
+                            class="text text-danger mt-1">
+                            Solo se admiten números
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3" *ngIf="this.user && this.user.role === 'comercio'">
+                        <label>Tipo de Cuenta</label>
+                        <ng-select 
+                            [items]="accountTypesFilter" 
+                            placeholder="Tipo de Cuenta del {{this.companyType}}"
+                            class="js-example-placeholder-multiple btn-pill"
+                            [multiple]="false"
+                            formControlName="accountType">
+                        </ng-select>
+                        <div *ngIf="formCompany.controls.accountType.errors && formCompany.controls.accountType.touched && formCompany.controls.accountType.errors.required"
+                            class="text text-danger mt-1">
+                            Es requerido
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3" *ngIf="this.user && this.user.role === 'comercio'">
+                        <label>Banco</label>
+                        <ng-select 
+                            [items]="banksFilter" 
+                            placeholder="Banco del {{this.companyType}}"
+                            class="js-example-placeholder-multiple btn-pill" 
+                            [multiple]="false"
+                            formControlName="bank">
+                        </ng-select>
+                        <div *ngIf="formCompany.controls.bank.errors && formCompany.controls.bank.touched && formCompany.controls.bank.errors.required"
+                            class="text text-danger mt-1">
+                            Es requerido
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label>Fecha de creación</label>
+                        <input class="form-control btn-pill" 
+                            placeholder="Fecha de creación" value="{{this.company.createdAt | date:'dd-MM-yyyy HH:mm:ss'}}" [disabled]="true">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label>Tipo de negocio</label>
+                        <input class="form-control btn-pill"
+                            placeholder="Tipo de negocio" value="{{this.company.type}}" [disabled]="true">
+                    </div>
+                    <div class="col-md-12 mb-3" *ngIf="this.user && this.user.role === 'comercio'">
+                        <label>Marcas</label>
+                        <ng-select 
+                            [items]="makesFilter" 
+                            placeholder="Marcas que vende su comercio"
+                            class="js-example-placeholder-multiple btn-pill" 
+                            [multiple]="true"
+                            formControlName="make">
+                        </ng-select>
+                        <div *ngIf="formCompany.controls.make.errors && formCompany.controls.make.touched && formCompany.controls.make.errors.required"
+                            class="text text-danger mt-1">
+                            Es requerido
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label>Estado</label>
+                        <ng-select 
+                            [items]="statusCompanyFilter" 
+                            placeholder="(*) Seleccionar Estado"
+                            class="js-example-placeholder-multiple btn-pill" 
+                            formControlName="status">
+                        </ng-select>
+                        <div *ngIf="formCompany.controls.status.errors && formCompany.controls.status.touched && formCompany.controls.status.errors.required"
+                            class="text text-danger mt-1">
+                            Es requerido
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <h6 *ngIf="user">Usuario creador</h6>
+        <div class="product-view mb-3"> 
+            <p class="mb-0">Email: {{user.email}}</p>
+            <p class="mb-0">Nombre: {{user.name}} {{user.lastName}} {{user.secondLastName}}</p>
+            <p class="mb-0">Fecha creación: {{user.createdAt | date:'dd-MM-yyyy HH:mm:ss'}}</p>
+            <p class="mb-0">Perfil: {{user.role}}</p>
+            <div>
+                <p *ngIf="user.status === -1">Estado: <button class="btn btn-pill btn-danger btn-xs">Eliminado</button></p>
+                <p *ngIf="user.status === 0">Estado: <button class="btn btn-pill btn-primary btn-xs">Pendiente Activación</button></p>
+                <p *ngIf="user.status === 1">Estado: <button class="btn btn-pill btn-success btn-xs">Activado</button></p>
+                <p *ngIf="user.status === 2">Estado: <button class="btn btn-pill btn-info btn-xs">Bloqueado</button></p>
+            </div>
+        </div>
+        <button class="btn btn-pill btn-info m-r-15 mb-3" (click)="goBack()">Volver</button>
+        <button class="btn btn-success btn-pill mb-3" type="button" [disabled]="formCompany.invalid" (click)="save()">Guardar</button>
+    </div>
+</div>
