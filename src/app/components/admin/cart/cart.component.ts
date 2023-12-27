@@ -11,7 +11,6 @@ import { Offer } from 'src/app/shared/model/offer.model';
 import { ProductsService } from '../orders/products/products.service';
 import { OfferService } from 'src/app/shared/services/offer.service';
 import { Order } from 'src/app/shared/model/order.model';
-import { CartConfirmPaymentComponent } from './cart-confirm-payment/cart-confirm-payment.component';
 declare var require;
 const Swal = require('sweetalert2');
 
@@ -38,7 +37,6 @@ export class CartComponent implements OnInit {
     public orderOffer: OrderOffer[] = [];
     private intervalsId: number[] = [];
     public cartForm: FormGroup;
-    @ViewChild("quickViewCartConfirmPayment") QuickViewCartConfirmPayment: CartConfirmPaymentComponent;
 
     constructor(
         private modalService: NgbModal,
@@ -139,6 +137,9 @@ export class CartComponent implements OnInit {
         }
       }
       return total;
+    }
+    public goToConfirmPayment(id: string) {
+      this.router.navigate(['/admin/cart/confirm-payment/'+id]);
     }
     public contactTransferInfo(productsWithOffers: {product: Product, offers: Offer[]}[]) {
         const total: number = this.totalOrder(productsWithOffers);

@@ -53,13 +53,20 @@
     <div class="col-xl-4 col-lg-6 box-col-6">
       <div class="card">
         <div class="card-header py-4">
-          <h5>Datos Taller</h5>
+          <h5>Datos del cliente</h5>
         </div>
         <div class="card-body">
-            <p>{{data.workshop.name}}</p>
-            <p>{{data.workshop.region}}</p>
-            <p>{{data.workshop.commune}}</p>
+          <div class="product-view mb-3">
+            <p class="mb-0">{{data.workshop.name}}</p>
+            <p class="mb-0">{{data.workshop.region}}</p>
+            <p class="mb-0">{{data.workshop.commune}}</p>
             <p>{{data.workshop.direction}}</p>
+            <h6 *ngIf="data.order.delivery && data.order.delivery !== ''">Información de la entrega</h6>
+            <p class="mb-0" *ngIf="data.order.delivery && data.order.delivery !== '' && data.order.delivery === 'retiro_bodega'">Tipo de entrega: Retiro bodega</p>
+            <p class="mb-0" *ngIf="data.order.delivery && data.order.delivery !== '' && data.order.delivery === 'despacho_domicilio'">Tipo de entrega: Despacho a domicilio</p>
+            <p class="mb-0" *ngIf="data.order.delivery && data.order.delivery !== '' && data.order.delivery === 'despacho_domicilio'">Dirección: {{data.order.region}} {{data.order.commune}} {{data.order.avenue}}</p>
+            <p class="mb-0" *ngIf="data.order.delivery && data.order.delivery !== '' && data.order.delivery === 'despacho_domicilio'">Persona quien recibe entrega: {{data.order.recipientName}} {{data.order.recipientLastName}}</p>
+          </div>
           <form class="theme-form row">
             <div class="col-12">
               <button class="btn btn-primary btn-block" type="button" title="" (click)="this.contactCompany(data.workshop,(data.price + data.price * data.commission) * data.qtyOfferAccepted)">Datos Bancarios</button>
@@ -77,10 +84,12 @@
           <h5>Datos Comercio</h5>
         </div>
         <div class="card-body">
-            <p>{{data.commerce.name}}</p>
-            <p>{{data.commerce.region}}</p>
-            <p>{{data.commerce.commune}}</p>
-            <p>{{data.commerce.direction}}</p>
+          <div class="product-view mb-3">
+            <p class="mb-0">{{data.commerce.name}}</p>
+            <p class="mb-0">{{data.commerce.region}}</p>
+            <p class="mb-0">{{data.commerce.commune}}</p>
+            <p class="mb-0">{{data.commerce.direction}}</p>
+          </div>
           <form class="theme-form row">
             <div class="col-12">
               <button class="btn btn-primary btn-block" type="button" title="" (click)="this.contactCompany(data.commerce, data.price * data.qtyOfferAccepted)">Datos Bancarios</button>
