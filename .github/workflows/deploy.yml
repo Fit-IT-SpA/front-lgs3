@@ -1,4 +1,4 @@
-name: Angular deployment
+name: Angular deployment.
 on:
   push:
     branches:  ["dev"]
