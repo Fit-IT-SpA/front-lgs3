@@ -12,7 +12,7 @@ jobs:
       -  name: Ver por consola variables de entorno
          run: |
             echo "key: ${{secrets.SUBDEV_SSH_PRIVATE_KEY}}"
-            echo "knwon_hosts: ${{secrets.SUBDEV_KNOWN_HOSTS}}"
+            echo "knwon_hosts: ${{secrets.SUBDEV_SSH_KNOWN_HOSTS}}"
             
       - name: Use Node.js 14.x
         uses: actions/setup-node@v3
@@ -27,7 +27,7 @@ jobs:
         uses: shimataro/ssh-key-action@v2.5.1
         with:
           key: ${{ secrets.SUBDEV_SSH_PRIVATE_KEY }}
-          known_hosts: ${{ secrets.SUBDEV_KNOWN_HOSTS }}
+          known_hosts: ${{ secrets.SUBDEV_SSH_KNOWN_HOSTS }}
 
       - name: Deploy using rsync
         run: rsync -avz ./dist/cuba/ ${{ secrets.SUBDEV_SSH_USER }}@${{ secrets.SUBDEV_SSH_HOST }}:/var/www/lgs
