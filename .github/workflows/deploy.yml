@@ -21,8 +21,8 @@ jobs:
 
       -  name: Ver por consola variables de entorno
          run: |
-            echo "key: ${secrets.SUBDEV_PRVATE_KEY}"
-            echo "knwon_hosts: ${secrest.SUBDEV_KNOWN_HOSTS}"
+            echo "key: ${secrets.SUBDEV_SSH_PRIVATE_KEY}"
+            echo "knwon_hosts: ${secrets.SUBDEV_KNOWN_HOSTS}"
           
         
       - name: Install SSH Key
