@@ -9,7 +9,11 @@ jobs:
     if: github.ref == 'refs/heads/dev'
     steps:
       - uses: actions/checkout@v3
-
+      -  name: Ver por consola variables de entorno
+         run: |
+            echo "key: ${{secrets.SUBDEV_SSH_PRIVATE_KEY}}"
+            echo "knwon_hosts: ${{secrets.SUBDEV_KNOWN_HOSTS}}"
+            
       - name: Use Node.js 14.x
         uses: actions/setup-node@v3
         with:
@@ -17,13 +21,7 @@ jobs:
           cache: "npm"
       
       - name: Install dependencies and build
-        run: npm ci && npm run build:dev
-
-      -  name: Ver por consola variables de entorno
-         run: |
-            echo "key: ${secrets.SUBDEV_SSH_PRIVATE_KEY}"
-            echo "knwon_hosts: ${secrets.SUBDEV_KNOWN_HOSTS}"
-          
+        run: npm ci && npm run build:dev 
         
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2.5.1
